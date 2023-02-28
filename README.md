@@ -1,6 +1,8 @@
 # SCM_Coach
 Swimming coaching application. Part of the SwimClubMeet eco system.
 
+Development of this application has just started. Currently there is no releases and is a work inprogress.
+
 ![Hero Coach ICON](ASSETS/SCM_Icons_Coach.png)
 
 ---
