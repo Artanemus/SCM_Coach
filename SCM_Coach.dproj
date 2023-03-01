@@ -110,6 +110,10 @@
             <Form>SessionNew</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="dlgSquadNew.pas">
+            <Form>SquadNew</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

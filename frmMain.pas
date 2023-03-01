@@ -9,7 +9,7 @@ uses
   System.Actions, Vcl.ActnList, Vcl.ActnMan, Vcl.PlatformVclStylesActnCtrls,
   Vcl.ToolWin, Vcl.ActnCtrls, Vcl.ActnMenus, System.ImageList, Vcl.ImgList,
   Vcl.VirtualImageList, Vcl.BaseImageCollection, Vcl.ImageCollection,
-  Vcl.StdCtrls, Vcl.ComCtrls;
+  Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.WinXCtrls;
 
 type
   TMain = class(TForm)
@@ -34,11 +34,34 @@ type
     Stats_Swimmer: TAction;
     Stats_Session: TAction;
     Stats_Performance: TAction;
-    ListView1: TListView;
-    Label1: TLabel;
     Programs_New: TAction;
-    btnNewSession: TButton;
     Tools_Pools: TAction;
+    Tools_Dictionary: TAction;
+    Tools_Drills: TAction;
+    Tools_Intensity: TAction;
+    Tools_PoolEquipment: TAction;
+    Tools_Distance: TAction;
+    Tools_Strokes: TAction;
+    Programs_Edit: TAction;
+    Programs_Delete: TAction;
+    Programs_Clone: TAction;
+    Tools_StopWatches: TAction;
+    Tools_Timed: TAction;
+    Reports_Session: TAction;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    Label1: TLabel;
+    ListView1: TListView;
+    btnNewSession: TButton;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    TabSheet2: TTabSheet;
+    RelativePanel1: TRelativePanel;
+    Splitter1: TSplitter;
+    Memo2: TMemo;
+    RichEdit1: TRichEdit;
     procedure FormCreate(Sender: TObject);
     procedure btnNewSessionClick(Sender: TObject);
   private

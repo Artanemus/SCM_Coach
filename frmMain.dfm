@@ -2,8 +2,8 @@ object Main: TMain
   Left = 0
   Top = 0
   Caption = 'SwimClubMeet Coach'
-  ClientHeight = 844
-  ClientWidth = 1239
+  ClientHeight = 996
+  ClientWidth = 1355
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,25 +13,10 @@ object Main: TMain
   Position = poMainFormCenter
   OnCreate = FormCreate
   TextHeight = 21
-  object Label1: TLabel
-    Left = 0
-    Top = 56
-    Width = 45
-    Height = 141
-    Alignment = taRightJustify
-    Caption = 'SESSIONS'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -32
-    Font.Name = 'Segoe UI'
-    Font.Orientation = 900
-    Font.Style = []
-    ParentFont = False
-  end
   object ActionMainMenuBar1: TActionMainMenuBar
     Left = 0
     Top = 0
-    Width = 1239
+    Width = 1355
     Height = 42
     UseSystemFont = False
     ActionManager = ActionManager1
@@ -47,24 +32,165 @@ object Main: TMain
     Font.Name = 'Segoe UI'
     Font.Style = []
     Spacing = 10
-    ExplicitWidth = 1235
+    ExplicitWidth = 780
   end
-  object ListView1: TListView
-    Left = 56
-    Top = 56
-    Width = 361
-    Height = 617
-    Columns = <>
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 42
+    Width = 1355
+    Height = 954
+    ActivePage = TabSheet2
+    Align = alClient
     TabOrder = 1
-  end
-  object btnNewSession: TButton
-    Left = 432
-    Top = 56
-    Width = 121
-    Height = 33
-    Caption = 'New Session'
-    TabOrder = 2
-    OnClick = btnNewSessionClick
+    ExplicitWidth = 946
+    ExplicitHeight = 668
+    object TabSheet1: TTabSheet
+      Caption = 'Sessions'
+      object Label1: TLabel
+        Left = 0
+        Top = 56
+        Width = 45
+        Height = 141
+        Alignment = taRightJustify
+        Caption = 'SESSIONS'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -32
+        Font.Name = 'Segoe UI'
+        Font.Orientation = 900
+        Font.Style = []
+        ParentFont = False
+      end
+      object ListView1: TListView
+        Left = 56
+        Top = 15
+        Width = 361
+        Height = 617
+        Columns = <>
+        TabOrder = 0
+      end
+      object btnNewSession: TButton
+        Left = 432
+        Top = 56
+        Width = 121
+        Height = 33
+        Caption = 'New Session'
+        TabOrder = 1
+        OnClick = btnNewSessionClick
+      end
+      object Button1: TButton
+        Left = 432
+        Top = 112
+        Width = 121
+        Height = 33
+        Caption = 'Edit Session'
+        TabOrder = 2
+        OnClick = btnNewSessionClick
+      end
+      object Button2: TButton
+        Left = 432
+        Top = 164
+        Width = 121
+        Height = 33
+        Caption = 'Delete Session'
+        TabOrder = 3
+        OnClick = btnNewSessionClick
+      end
+      object Button3: TButton
+        Left = 432
+        Top = 224
+        Width = 121
+        Height = 33
+        Caption = 'Clone Session'
+        TabOrder = 4
+        OnClick = btnNewSessionClick
+      end
+      object Button4: TButton
+        Left = 432
+        Top = 288
+        Width = 121
+        Height = 33
+        Caption = 'Session Report'
+        TabOrder = 5
+        OnClick = btnNewSessionClick
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Programs'
+      ImageIndex = 1
+      object RelativePanel1: TRelativePanel
+        Left = 0
+        Top = 0
+        Width = 1347
+        Height = 918
+        ControlCollection = <
+          item
+            Control = Splitter1
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = False
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+            Below = RichEdit1
+          end
+          item
+            Control = Memo2
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = False
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+          end
+          item
+            Control = RichEdit1
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = False
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+          end>
+        Align = alClient
+        TabOrder = 0
+        ExplicitLeft = 152
+        ExplicitTop = 216
+        ExplicitWidth = 185
+        ExplicitHeight = 41
+        object Splitter1: TSplitter
+          Left = 1
+          Top = 369
+          Width = 1410
+          Height = 16
+          Align = alNone
+        end
+        object Memo2: TMemo
+          Left = 1
+          Top = 738
+          Width = 1410
+          Height = 179
+          Lines.Strings = (
+            'Memo1')
+          TabOrder = 0
+        end
+        object RichEdit1: TRichEdit
+          Left = 1
+          Top = 1
+          Width = 1345
+          Height = 368
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          Lines.Strings = (
+            'RichEdit1')
+          ParentFont = False
+          TabOrder = 1
+        end
+      end
+    end
   end
   object ActionManager1: TActionManager
     ActionBars = <
@@ -118,6 +244,8 @@ object Main: TMain
                 Caption = 'E&xit'
               end>
             Caption = '&File'
+            ImageIndex = 0
+            ImageName = 'MenuDots'
           end
           item
             Items = <
@@ -137,6 +265,8 @@ object Main: TMain
                 Caption = '&Preferences...'
               end>
             Caption = '&Edit'
+            ImageIndex = 0
+            ImageName = 'MenuDots'
           end
           item
             Items = <
@@ -157,6 +287,8 @@ object Main: TMain
                 Caption = '&Clone Session...'
               end>
             Caption = '&Session'
+            ImageIndex = 0
+            ImageName = 'MenuDots'
           end
           item
             Items = <
@@ -173,14 +305,37 @@ object Main: TMain
                 Caption = '&Delete Squad...'
               end>
             Caption = 'S&quads'
+            ImageIndex = 0
+            ImageName = 'MenuDots'
           end
           item
             Items = <
               item
                 Action = Programs_New
                 Caption = '&New Program...'
+              end
+              item
+                Action = Programs_Edit
+                Caption = '&Edit Program...'
+              end
+              item
+                Action = Programs_Delete
+                Caption = '&Delete Program...'
+              end
+              item
+                Action = Programs_Clone
+                Caption = '&Clone Program...'
               end>
             Caption = '&Programs'
+            ImageIndex = 0
+            ImageName = 'MenuDots'
+          end
+          item
+            Items = <
+              item
+                Action = Reports_Session
+              end>
+            Caption = 'Rep&orts'
             ImageIndex = 0
             ImageName = 'MenuDots'
           end
@@ -205,17 +360,56 @@ object Main: TMain
           item
             Items = <
               item
+                Action = Tools_Drills
+                Caption = '&Drills...'
+              end
+              item
+                Action = Tools_Intensity
+                Caption = '&Intensity and Pace...'
+              end
+              item
+                Action = Tools_PoolEquipment
+                Caption = '&Pool_Equipment...'
+              end
+              item
+                Action = Tools_Distance
+                Caption = 'Di&stances...'
+              end
+              item
+                Action = Tools_Strokes
+                Caption = 'S&trokes...'
+              end>
+            Caption = 'Te&rms'
+            ImageIndex = 0
+            ImageName = 'MenuDots'
+          end
+          item
+            Items = <
+              item
                 Action = Tools_Pools
                 Caption = '&Pools...'
+              end
+              item
+                Action = Tools_Dictionary
+                Caption = '&Dictionary...'
+              end
+              item
+                Action = Tools_StopWatches
+                Caption = '&Stop Watches...'
+              end
+              item
+                Action = Tools_Timed
+                Caption = '&Timed Events...'
               end>
             Caption = '&Tools'
+            ImageIndex = 0
             ImageName = 'MenuDots'
           end>
         ActionBar = ActionMainMenuBar1
       end>
     Images = virtImageListMenu
-    Left = 632
-    Top = 120
+    Left = 664
+    Top = 368
     StyleName = 'Platform Default'
     object File_Coaches: TAction
       Category = 'Edit'
@@ -297,6 +491,54 @@ object Main: TMain
       Category = 'Tools'
       Caption = 'Pools...'
     end
+    object Tools_Dictionary: TAction
+      Category = 'Tools'
+      Caption = 'Dictionary...'
+    end
+    object Tools_Drills: TAction
+      Category = 'Terms'
+      Caption = 'Drills...'
+    end
+    object Tools_Intensity: TAction
+      Category = 'Terms'
+      Caption = 'Intensity and Pace...'
+    end
+    object Tools_PoolEquipment: TAction
+      Category = 'Terms'
+      Caption = 'Pool_Equipment...'
+    end
+    object Tools_Distance: TAction
+      Category = 'Terms'
+      Caption = 'Distances...'
+    end
+    object Tools_Strokes: TAction
+      Category = 'Terms'
+      Caption = 'Strokes...'
+    end
+    object Programs_Edit: TAction
+      Category = 'Programs'
+      Caption = 'Edit Program...'
+    end
+    object Programs_Delete: TAction
+      Category = 'Programs'
+      Caption = 'Delete Program...'
+    end
+    object Programs_Clone: TAction
+      Category = 'Programs'
+      Caption = 'Clone Program...'
+    end
+    object Tools_StopWatches: TAction
+      Category = 'Tools'
+      Caption = 'Stop Watches...'
+    end
+    object Tools_Timed: TAction
+      Category = 'Tools'
+      Caption = 'Timed Events...'
+    end
+    object Reports_Session: TAction
+      Category = 'Reports'
+      Caption = 'Session'
+    end
   end
   object ImageCollectionMenu: TImageCollection
     Images = <
@@ -372,8 +614,8 @@ object Main: TMain
               000049454E44AE426082}
           end>
       end>
-    Left = 632
-    Top = 200
+    Left = 664
+    Top = 448
   end
   object virtImageListMenu: TVirtualImageList
     Images = <
@@ -395,7 +637,7 @@ object Main: TMain
     ImageCollection = ImageCollectionMenu
     Width = 32
     Height = 32
-    Left = 632
-    Top = 280
+    Left = 664
+    Top = 528
   end
 end

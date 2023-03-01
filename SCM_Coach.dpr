@@ -6,7 +6,8 @@ uses
   Vcl.PlatformVclStylesActnCtrls in 'Vcl.PlatformVclStylesActnCtrls.pas',
   Vcl.Themes,
   Vcl.Styles,
-  frmSessionNew in 'frmSessionNew.pas' {SessionNew};
+  frmSessionNew in 'frmSessionNew.pas' {SessionNew},
+  dlgSquadNew in 'dlgSquadNew.pas' {SquadNew};
 
 {$R *.res}
 
