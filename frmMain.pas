@@ -9,7 +9,7 @@ uses
   System.Actions, Vcl.ActnList, Vcl.ActnMan, Vcl.PlatformVclStylesActnCtrls,
   Vcl.ToolWin, Vcl.ActnCtrls, Vcl.ActnMenus, System.ImageList, Vcl.ImgList,
   Vcl.VirtualImageList, Vcl.BaseImageCollection, Vcl.ImageCollection,
-  Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.WinXCtrls;
+  Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.WinXCtrls, Vcl.VirtualImage;
 
 type
   TMain = class(TForm)
@@ -28,7 +28,7 @@ type
     File_Import: TAction;
     File_Export: TAction;
     Edit_Preferences: TAction;
-    ImageCollectionMenu: TImageCollection;
+    ImageCollectionCoach: TImageCollection;
     virtImageListMenu: TVirtualImageList;
     File_Connect: TAction;
     Stats_Swimmer: TAction;
@@ -52,16 +52,29 @@ type
     TabSheet1: TTabSheet;
     Label1: TLabel;
     ListView1: TListView;
-    btnNewSession: TButton;
-    Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
-    Button4: TButton;
     TabSheet2: TTabSheet;
-    RelativePanel1: TRelativePanel;
+    Label2: TLabel;
+    PageControl2: TPageControl;
+    TabSheet3: TTabSheet;
+    TabSheet4: TTabSheet;
+    Panel1: TPanel;
+    relpnlPrgBuilderToolBar: TRelativePanel;
+    RichEdit2: TRichEdit;
+    VirtualImage1: TVirtualImage;
+    VirtualImage2: TVirtualImage;
     Splitter1: TSplitter;
-    Memo2: TMemo;
-    RichEdit1: TRichEdit;
+    virtImageListPrgBuilder: TVirtualImageList;
+    VirtualImage3: TVirtualImage;
+    Help_About: TAction;
+    FlowPanel1: TFlowPanel;
+    ListView2: TListView;
+    ListView3: TListView;
+    ListView4: TListView;
+    ListView5: TListView;
+    ListView6: TListView;
+    VirtualImage4: TVirtualImage;
+    VirtualImage5: TVirtualImage;
+    VirtualImage6: TVirtualImage;
     procedure FormCreate(Sender: TObject);
     procedure btnNewSessionClick(Sender: TObject);
   private
