@@ -75,6 +75,9 @@ type
     VirtualImage4: TVirtualImage;
     VirtualImage5: TVirtualImage;
     VirtualImage6: TVirtualImage;
+    Programs_Open: TAction;
+    Programs_Save: TAction;
+    Programs_SaveAs: TAction;
     procedure FormCreate(Sender: TObject);
     procedure btnNewSessionClick(Sender: TObject);
   private
@@ -103,6 +106,8 @@ end;
 
 procedure TMain.FormCreate(Sender: TObject);
 begin
+
+  Application.ShowHint := true;
   {
     Sort out the menubar font height - so tiny!
 

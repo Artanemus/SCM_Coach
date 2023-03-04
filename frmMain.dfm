@@ -18,6 +18,7 @@ object Main: TMain
     Top = 0
     Width = 1355
     Height = 42
+    UseSystemFont = False
     ActionManager = ActionManager1
     Caption = 'ActionMainMenuBar1'
     Color = clMenuBar
@@ -26,7 +27,7 @@ object Main: TMain
     ColorMap.BtnSelectedFont = clBlack
     ColorMap.UnusedColor = clWhite
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Segoe UI'
     Font.Style = []
@@ -38,9 +39,11 @@ object Main: TMain
     Top = 42
     Width = 1355
     Height = 954
-    ActivePage = TabSheet2
+    ActivePage = TabSheet1
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 1351
+    ExplicitHeight = 953
     object TabSheet1: TTabSheet
       Caption = 'Sessions'
       object Label1: TLabel
@@ -152,6 +155,8 @@ object Main: TMain
         ActivePage = TabSheet3
         Align = alBottom
         TabOrder = 0
+        ExplicitTop = 724
+        ExplicitWidth = 1343
         object TabSheet3: TTabSheet
           Caption = 'Output'
         end
@@ -169,7 +174,8 @@ object Main: TMain
         BevelOuter = bvNone
         Caption = 'Panel1'
         TabOrder = 1
-        ExplicitLeft = 24
+        ExplicitWidth = 1343
+        ExplicitHeight = 704
         object relpnlPrgBuilderToolBar: TRelativePanel
           Left = 0
           Top = 0
@@ -233,6 +239,7 @@ object Main: TMain
           Align = alLeft
           BevelOuter = bvNone
           TabOrder = 0
+          ExplicitHeight = 704
           DesignSize = (
             97
             705)
@@ -327,11 +334,8 @@ object Main: TMain
           Lines.Strings = (
             'RichEdit2')
           ParentFont = False
+          ScrollBars = ssBoth
           TabOrder = 1
-          ExplicitLeft = 519
-          ExplicitTop = 145
-          ExplicitWidth = 634
-          ExplicitHeight = 247
         end
       end
     end
@@ -459,16 +463,15 @@ object Main: TMain
                 Caption = '&New Program...'
               end
               item
-                Action = Programs_Edit
-                Caption = '&Edit Program...'
+                Action = Programs_Open
+                Caption = '&Open Program...'
               end
               item
-                Action = Programs_Delete
-                Caption = '&Delete Program...'
+                Action = Programs_Save
+                Caption = '&Save Program...'
               end
               item
-                Action = Programs_Clone
-                Caption = '&Clone Program...'
+                Action = Programs_SaveAs
               end>
             Caption = '&Programs'
             ImageIndex = 0
@@ -642,6 +645,10 @@ object Main: TMain
       Category = 'Programs'
       Caption = 'New Program...'
     end
+    object Programs_Open: TAction
+      Category = 'Programs'
+      Caption = 'Open Program...'
+    end
     object Tools_Pools: TAction
       Category = 'Tools'
       Caption = 'Pools...'
@@ -670,17 +677,28 @@ object Main: TMain
       Category = 'Terms'
       Caption = 'Strokes...'
     end
+    object Programs_Save: TAction
+      Category = 'Programs'
+      Caption = 'Save Program...'
+    end
+    object Programs_SaveAs: TAction
+      Category = 'Programs'
+      Caption = 'Save As Programs...'
+    end
     object Programs_Edit: TAction
       Category = 'Programs'
       Caption = 'Edit Program...'
+      Visible = False
     end
     object Programs_Delete: TAction
       Category = 'Programs'
       Caption = 'Delete Program...'
+      Visible = False
     end
     object Programs_Clone: TAction
       Category = 'Programs'
       Caption = 'Clone Program...'
+      Visible = False
     end
     object Tools_StopWatches: TAction
       Category = 'Tools'
