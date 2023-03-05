@@ -114,6 +114,8 @@
             <Form>SquadNew</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="LINTER\Lexer.pas"/>
+        <DCCReference Include="LINTER\SimpleLexer.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

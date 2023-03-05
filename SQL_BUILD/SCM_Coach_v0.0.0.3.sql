@@ -2,7 +2,7 @@
  * ER/Studio Data Architect SQL Code Generation
  * Project :      SCM_Coach_v1.0.1.0.DM1
  *
- * Date Created : Saturday, March 04, 2023 11:09:27
+ * Date Created : Sunday, March 05, 2023 13:57:53
  * Target DBMS : Microsoft SQL Server 2017
  */
 
@@ -21,7 +21,7 @@ CREATE TABLE coach(
     MemberID    int              NOT NULL,
     teamID      int              NOT NULL,
     NickName    nvarchar(128)    NULL,
-    CONSTRAINT PK5 PRIMARY KEY NONCLUSTERED (coachID, MemberID, teamID)
+    CONSTRAINT PK_coach PRIMARY KEY NONCLUSTERED (coachID, MemberID, teamID)
 )
 go
 
@@ -81,8 +81,8 @@ CREATE TABLE course(
     courseID        int              IDENTITY(1,1),
     Caption         nvarchar(128)    NULL,
     ShortCaption    nvarchar(10)     NULL,
-    ABREV           nvarchar(4)      NULL,
-    CONSTRAINT PK25 PRIMARY KEY NONCLUSTERED (courseID)
+    ABREV           nvarchar(5)      NULL,
+    CONSTRAINT PK_course PRIMARY KEY NONCLUSTERED (courseID)
 )
 go
 
@@ -102,10 +102,11 @@ CREATE TABLE dictionary(
     dictionaryID      int              IDENTITY(1,1),
     Caption           nvarchar(128)    NULL,
     ShortCaption      nvarchar(10)     NULL,
-    ABREV             nvarchar(4)      NULL,
+    ABREV             nvarchar(5)      NULL,
     IsStandard        bit              DEFAULT 0 NOT NULL,
     dictionaryType    int              NOT NULL,
-    CONSTRAINT PK34 PRIMARY KEY NONCLUSTERED (dictionaryID)
+    SCMCoachID        int              NULL,
+    CONSTRAINT PK_dictionary PRIMARY KEY NONCLUSTERED (dictionaryID)
 )
 go
 
@@ -124,7 +125,7 @@ go
 CREATE TABLE dictionaryType(
     dictionaryType    int              IDENTITY(1,1),
     Caption           nvarchar(128)    NULL,
-    CONSTRAINT PK35 PRIMARY KEY NONCLUSTERED (dictionaryType)
+    CONSTRAINT PK_dictionaryType PRIMARY KEY NONCLUSTERED (dictionaryType)
 )
 go
 
@@ -144,10 +145,10 @@ CREATE TABLE Distance(
     DistanceID      int              IDENTITY(1,1),
     Caption         nvarchar(128)    NULL,
     ShortCaption    nvarchar(10)     NULL,
-    ABREV           nvarchar(4)      NULL,
+    ABREV           nvarchar(5)      NULL,
     IsStandard      bit              DEFAULT 0 NOT NULL,
-    Meters          int              NULL,
-    CONSTRAINT PK7 PRIMARY KEY NONCLUSTERED (DistanceID)
+    Meters          float            NULL,
+    CONSTRAINT PK_Distance PRIMARY KEY NONCLUSTERED (DistanceID)
 )
 go
 
@@ -167,9 +168,9 @@ CREATE TABLE drill(
     drillID         int              IDENTITY(1,1),
     Caption         nvarchar(128)    NULL,
     ShortCaption    nvarchar(10)     NULL,
-    ABREV           nvarchar(4)      NULL,
+    ABREV           nvarchar(5)      NULL,
     taskID          int              NOT NULL,
-    CONSTRAINT PK32 PRIMARY KEY NONCLUSTERED (drillID)
+    CONSTRAINT PK_drill PRIMARY KEY NONCLUSTERED (drillID)
 )
 go
 
@@ -189,9 +190,8 @@ CREATE TABLE drillEx(
     drillExID       int              IDENTITY(1,1),
     Caption         nvarchar(128)    NULL,
     ShortCaption    nvarchar(10)     NULL,
-    ABREV           nvarchar(4)      NULL,
-    taskID          int              NOT NULL,
-    CONSTRAINT PK33 PRIMARY KEY NONCLUSTERED (drillExID)
+    ABREV           nvarchar(5)      NULL,
+    CONSTRAINT PK_drillEx PRIMARY KEY NONCLUSTERED (drillExID)
 )
 go
 
@@ -204,6 +204,27 @@ ELSE
 go
 
 /* 
+ * TABLE: drillExLink 
+ */
+
+CREATE TABLE drillExLink(
+    drillExLinkID    char(10)         NOT NULL,
+    Caption          nvarchar(128)    NULL,
+    taskID           int              NULL,
+    drillExID        int              NULL,
+    CONSTRAINT PK_drillExLink PRIMARY KEY CLUSTERED (drillExLinkID)
+)
+go
+
+
+
+IF OBJECT_ID('drillExLink') IS NOT NULL
+    PRINT '<<< CREATED TABLE drillExLink >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE drillExLink >>>'
+go
+
+/* 
  * TABLE: equipment 
  */
 
@@ -211,8 +232,8 @@ CREATE TABLE equipment(
     equipmentID     int              IDENTITY(1,1),
     Caption         nvarchar(128)    NULL,
     ShortCaption    nvarchar(10)     NULL,
-    ABREV           nvarchar(4)      NULL,
-    CONSTRAINT PK26 PRIMARY KEY NONCLUSTERED (equipmentID)
+    ABREV           nvarchar(5)      NULL,
+    CONSTRAINT PK_equipment PRIMARY KEY NONCLUSTERED (equipmentID)
 )
 go
 
@@ -236,7 +257,7 @@ CREATE TABLE evTime(
     heartRACED    char(10)    NOT NULL,
     heartREST     char(10)    NOT NULL,
     taskID        int         NOT NULL,
-    CONSTRAINT PK38 PRIMARY KEY NONCLUSTERED (evTimeID)
+    CONSTRAINT PK_evTime PRIMARY KEY NONCLUSTERED (evTimeID)
 )
 go
 
@@ -255,7 +276,7 @@ go
 CREATE TABLE Gender(
     GenderID    int              IDENTITY(1,1),
     Caption     nvarchar(128)    NULL,
-    CONSTRAINT PK16 PRIMARY KEY NONCLUSTERED (GenderID)
+    CONSTRAINT PK_Gender PRIMARY KEY NONCLUSTERED (GenderID)
 )
 go
 
@@ -276,7 +297,7 @@ CREATE TABLE grade(
     Alpha       char(1)          NULL,
     Caption     nvarchar(128)    NULL,
     NickName    nvarchar(10)     NULL,
-    CONSTRAINT PK36 PRIMARY KEY NONCLUSTERED (gradeID)
+    CONSTRAINT PK_grade PRIMARY KEY NONCLUSTERED (gradeID)
 )
 go
 
@@ -297,7 +318,7 @@ CREATE TABLE heartRange(
     Caption         nvarchar(128)    NULL,
     BPMmin          int              NULL,
     BPMmax          int              NULL,
-    CONSTRAINT PK39 PRIMARY KEY NONCLUSTERED (heartRangeID)
+    CONSTRAINT PK_heartRange PRIMARY KEY NONCLUSTERED (heartRangeID)
 )
 go
 
@@ -317,9 +338,9 @@ CREATE TABLE intensity(
     intensityID     int              IDENTITY(1,1),
     Caption         nvarchar(128)    NULL,
     ShortCaption    nvarchar(10)     NULL,
-    ABREV           nvarchar(4)      NULL,
+    ABREV           nvarchar(5)      NULL,
     Level           int              NULL,
-    CONSTRAINT PK23 PRIMARY KEY NONCLUSTERED (intensityID)
+    CONSTRAINT PK_intensity PRIMARY KEY NONCLUSTERED (intensityID)
 )
 go
 
@@ -342,7 +363,7 @@ CREATE TABLE line(
     ModifiedOn    datetime         NULL,
     teamID        int              NOT NULL,
     sessionID     int              NOT NULL,
-    CONSTRAINT PK19 PRIMARY KEY NONCLUSTERED (lineID)
+    CONSTRAINT PK_line PRIMARY KEY NONCLUSTERED (lineID)
 )
 go
 
@@ -374,7 +395,7 @@ CREATE TABLE Member(
     Email            nvarchar(256)    NULL,
     GenderID         int              NOT NULL,
     gradeID          int              NOT NULL,
-    CONSTRAINT PK3 PRIMARY KEY NONCLUSTERED (MemberID)
+    CONSTRAINT PK_Member PRIMARY KEY NONCLUSTERED (MemberID)
 )
 go
 
@@ -394,8 +415,8 @@ CREATE TABLE miscTerm(
     miscTermID      int              IDENTITY(1,1),
     Caption         nvarchar(128)    NULL,
     ShortCaption    nvarchar(10)     NULL,
-    ABREV           nvarchar(4)      NULL,
-    CONSTRAINT PK33_1 PRIMARY KEY NONCLUSTERED (miscTermID)
+    ABREV           nvarchar(5)      NULL,
+    CONSTRAINT PK_miscTerm PRIMARY KEY NONCLUSTERED (miscTermID)
 )
 go
 
@@ -416,7 +437,7 @@ CREATE TABLE PB(
     DistanceID    int    NOT NULL,
     strokeID      int    NOT NULL,
     MemberID      int    NOT NULL,
-    CONSTRAINT PK6 PRIMARY KEY NONCLUSTERED (PBID)
+    CONSTRAINT PK_PB PRIMARY KEY NONCLUSTERED (PBID)
 )
 go
 
@@ -437,7 +458,7 @@ CREATE TABLE pool(
     Caption     nvarchar(128)    NULL,
     Lanes       char(10)         NULL,
     courseID    int              NOT NULL,
-    CONSTRAINT PK1 PRIMARY KEY NONCLUSTERED (poolID)
+    CONSTRAINT PK_pool PRIMARY KEY NONCLUSTERED (poolID)
 )
 go
 
@@ -447,6 +468,34 @@ IF OBJECT_ID('pool') IS NOT NULL
     PRINT '<<< CREATED TABLE pool >>>'
 ELSE
     PRINT '<<< FAILED CREATING TABLE pool >>>'
+go
+
+/* 
+ * TABLE: SCMCoach 
+ */
+
+CREATE TABLE SCMCoach(
+    SCMCoachID         int              IDENTITY(1,1),
+    NickName           nvarchar(128)    NULL,
+    Caption            nvarchar(128)    NULL,
+    Email              nvarchar(128)    NULL,
+    ContactNum         nvarchar(30)     NULL,
+    WebSite            nvarchar(256)    NULL,
+    CreatedOn          datetime         NULL,
+    LogoDir            varchar(max)     NULL,
+    LogoImg            image            NULL,
+    LogoType           nvarchar(5)      NULL,
+    DictionaryState    int              NULL,
+    CONSTRAINT PK_SCMCoach PRIMARY KEY CLUSTERED (SCMCoachID)
+)
+go
+
+
+
+IF OBJECT_ID('SCMCoach') IS NOT NULL
+    PRINT '<<< CREATED TABLE SCMCoach >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE SCMCoach >>>'
 go
 
 /* 
@@ -463,7 +512,8 @@ CREATE TABLE session(
     totTime        time(7)          NULL,
     totKM          char(10)         NULL,
     poolID         int              NOT NULL,
-    CONSTRAINT PK30 PRIMARY KEY NONCLUSTERED (sessionID)
+    SCMCoachID     int              NULL,
+    CONSTRAINT PK_session PRIMARY KEY NONCLUSTERED (sessionID)
 )
 go
 
@@ -483,9 +533,9 @@ CREATE TABLE stroke(
     strokeID        int              IDENTITY(1,1),
     Caption         nvarchar(128)    NULL,
     ShortCaption    nvarchar(10)     NULL,
-    ABREV           nvarchar(4)      NULL,
+    ABREV           nvarchar(5)      NULL,
     IsStandard      bit              NULL,
-    CONSTRAINT PK8 PRIMARY KEY NONCLUSTERED (strokeID)
+    CONSTRAINT PK_stroke PRIMARY KEY NONCLUSTERED (strokeID)
 )
 go
 
@@ -508,7 +558,7 @@ CREATE TABLE subline(
     ModifiedOn       datetime    NULL,
     sublineTypeID    int         NOT NULL,
     lineID           int         NOT NULL,
-    CONSTRAINT PK31 PRIMARY KEY NONCLUSTERED (sublineID)
+    CONSTRAINT PK_subline PRIMARY KEY NONCLUSTERED (sublineID)
 )
 go
 
@@ -528,7 +578,7 @@ CREATE TABLE sublinelink(
     sublinelinkID    int    IDENTITY(1,1),
     parentID         int    NULL,
     childID          int    NULL,
-    CONSTRAINT PK40 PRIMARY KEY NONCLUSTERED (sublinelinkID)
+    CONSTRAINT PK_sublinelink PRIMARY KEY NONCLUSTERED (sublinelinkID)
 )
 go
 
@@ -548,8 +598,8 @@ CREATE TABLE sublineType(
     sublineTypeID    int              IDENTITY(1,1),
     Caption          nvarchar(128)    NULL,
     ShortCaption     nvarchar(10)     NULL,
-    ABREV            nvarchar(4)      NULL,
-    CONSTRAINT PK18 PRIMARY KEY CLUSTERED (sublineTypeID)
+    ABREV            nvarchar(5)      NULL,
+    CONSTRAINT PK_sublineType PRIMARY KEY CLUSTERED (sublineTypeID)
 )
 go
 
@@ -576,15 +626,16 @@ CREATE TABLE task(
     repsdescby         int               NULL,
     repsasc            bit               DEFAULT 0 NULL,
     repsascby          int               NULL,
-    intensityID        int               NOT NULL,
     intensitydesc      bit               DEFAULT 0 NULL,
     intensitydescby    int               NULL,
+    intensityID        int               NOT NULL,
     equipmentID        int               NOT NULL,
     DistanceID         int               NOT NULL,
     strokeID           int               NOT NULL,
     sublineID          int               NOT NULL,
     miscTermID         int               NOT NULL,
-    CONSTRAINT PK29 PRIMARY KEY NONCLUSTERED (taskID)
+    gradeID            int               NULL,
+    CONSTRAINT PK_task PRIMARY KEY NONCLUSTERED (taskID)
 )
 go
 
@@ -603,7 +654,7 @@ go
 CREATE TABLE team(
     teamID     int              IDENTITY(1,1),
     Caption    nvarchar(128)    NULL,
-    CONSTRAINT PK2 PRIMARY KEY NONCLUSTERED (teamID)
+    CONSTRAINT PK_team PRIMARY KEY NONCLUSTERED (teamID)
 )
 go
 
@@ -623,7 +674,7 @@ CREATE TABLE teamMember(
     teamMemberID    int    IDENTITY(1,1),
     teamID          int    NOT NULL,
     MemberID        int    NOT NULL,
-    CONSTRAINT PK4 PRIMARY KEY NONCLUSTERED (teamMemberID, teamID, MemberID)
+    CONSTRAINT PK_teamMember PRIMARY KEY NONCLUSTERED (teamMemberID, teamID, MemberID)
 )
 go
 
@@ -639,12 +690,12 @@ go
  * TABLE: coach 
  */
 
-ALTER TABLE coach ADD CONSTRAINT RefMember30 
+ALTER TABLE coach ADD CONSTRAINT Member_coach 
     FOREIGN KEY (MemberID)
     REFERENCES Member(MemberID)
 go
 
-ALTER TABLE coach ADD CONSTRAINT Refteam31 
+ALTER TABLE coach ADD CONSTRAINT team_coach 
     FOREIGN KEY (teamID)
     REFERENCES team(teamID)
 go
@@ -654,14 +705,14 @@ go
  * TABLE: ContactNum 
  */
 
-ALTER TABLE ContactNum ADD CONSTRAINT RefMember29 
-    FOREIGN KEY (MemberID)
-    REFERENCES Member(MemberID)
-go
-
-ALTER TABLE ContactNum ADD CONSTRAINT FK_ContactNumType_ContactNum 
+ALTER TABLE ContactNum ADD CONSTRAINT ContactNumType_ContactNum 
     FOREIGN KEY (ContactNumTypeID)
     REFERENCES ContactNumType(ContactNumTypeID) ON DELETE SET NULL
+go
+
+ALTER TABLE ContactNum ADD CONSTRAINT Member_ContactNum 
+    FOREIGN KEY (MemberID)
+    REFERENCES Member(MemberID)
 go
 
 
@@ -669,9 +720,14 @@ go
  * TABLE: dictionary 
  */
 
-ALTER TABLE dictionary ADD CONSTRAINT RefdictionaryType48 
+ALTER TABLE dictionary ADD CONSTRAINT dictionaryType_dictionary 
     FOREIGN KEY (dictionaryType)
     REFERENCES dictionaryType(dictionaryType)
+go
+
+ALTER TABLE dictionary ADD CONSTRAINT SCMCoach_dictionary 
+    FOREIGN KEY (SCMCoachID)
+    REFERENCES SCMCoach(SCMCoachID)
 go
 
 
@@ -679,17 +735,22 @@ go
  * TABLE: drill 
  */
 
-ALTER TABLE drill ADD CONSTRAINT Reftask46 
+ALTER TABLE drill ADD CONSTRAINT task_drill 
     FOREIGN KEY (taskID)
     REFERENCES task(taskID)
 go
 
 
 /* 
- * TABLE: drillEx 
+ * TABLE: drillExLink 
  */
 
-ALTER TABLE drillEx ADD CONSTRAINT Reftask47 
+ALTER TABLE drillExLink ADD CONSTRAINT drillEx_drillExLink 
+    FOREIGN KEY (drillExID)
+    REFERENCES drillEx(drillExID)
+go
+
+ALTER TABLE drillExLink ADD CONSTRAINT task_drillExLink 
     FOREIGN KEY (taskID)
     REFERENCES task(taskID)
 go
@@ -699,17 +760,17 @@ go
  * TABLE: evTime 
  */
 
-ALTER TABLE evTime ADD CONSTRAINT RefheartRange56 
-    FOREIGN KEY (heartRACED)
-    REFERENCES heartRange(heartRangeID)
-go
-
-ALTER TABLE evTime ADD CONSTRAINT RefheartRange57 
+ALTER TABLE evTime ADD CONSTRAINT heartRange_evTi6 
     FOREIGN KEY (heartREST)
     REFERENCES heartRange(heartRangeID)
 go
 
-ALTER TABLE evTime ADD CONSTRAINT Reftask58 
+ALTER TABLE evTime ADD CONSTRAINT heartRange_evTime 
+    FOREIGN KEY (heartRACED)
+    REFERENCES heartRange(heartRangeID)
+go
+
+ALTER TABLE evTime ADD CONSTRAINT task_evTime 
     FOREIGN KEY (taskID)
     REFERENCES task(taskID)
 go
@@ -719,12 +780,12 @@ go
  * TABLE: line 
  */
 
-ALTER TABLE line ADD CONSTRAINT Refsession42 
+ALTER TABLE line ADD CONSTRAINT session_line 
     FOREIGN KEY (sessionID)
     REFERENCES session(sessionID)
 go
 
-ALTER TABLE line ADD CONSTRAINT Refteam22 
+ALTER TABLE line ADD CONSTRAINT team_line 
     FOREIGN KEY (teamID)
     REFERENCES team(teamID)
 go
@@ -734,14 +795,14 @@ go
  * TABLE: Member 
  */
 
-ALTER TABLE Member ADD CONSTRAINT Refgrade49 
-    FOREIGN KEY (gradeID)
-    REFERENCES grade(gradeID)
-go
-
-ALTER TABLE Member ADD CONSTRAINT RefGender17 
+ALTER TABLE Member ADD CONSTRAINT Gender_Member 
     FOREIGN KEY (GenderID)
     REFERENCES Gender(GenderID)
+go
+
+ALTER TABLE Member ADD CONSTRAINT grade_Member 
+    FOREIGN KEY (gradeID)
+    REFERENCES grade(gradeID)
 go
 
 
@@ -749,19 +810,19 @@ go
  * TABLE: PB 
  */
 
-ALTER TABLE PB ADD CONSTRAINT RefDistance7 
+ALTER TABLE PB ADD CONSTRAINT Distance_PB 
     FOREIGN KEY (DistanceID)
     REFERENCES Distance(DistanceID)
 go
 
-ALTER TABLE PB ADD CONSTRAINT Refstroke8 
-    FOREIGN KEY (strokeID)
-    REFERENCES stroke(strokeID)
-go
-
-ALTER TABLE PB ADD CONSTRAINT RefMember9 
+ALTER TABLE PB ADD CONSTRAINT Member_PB 
     FOREIGN KEY (MemberID)
     REFERENCES Member(MemberID)
+go
+
+ALTER TABLE PB ADD CONSTRAINT stroke_PB 
+    FOREIGN KEY (strokeID)
+    REFERENCES stroke(strokeID)
 go
 
 
@@ -769,7 +830,7 @@ go
  * TABLE: pool 
  */
 
-ALTER TABLE pool ADD CONSTRAINT Refcourse38 
+ALTER TABLE pool ADD CONSTRAINT course_pool 
     FOREIGN KEY (courseID)
     REFERENCES course(courseID)
 go
@@ -779,9 +840,14 @@ go
  * TABLE: session 
  */
 
-ALTER TABLE session ADD CONSTRAINT Refpool39 
+ALTER TABLE session ADD CONSTRAINT pool_session 
     FOREIGN KEY (poolID)
     REFERENCES pool(poolID)
+go
+
+ALTER TABLE session ADD CONSTRAINT SCMCoach_session 
+    FOREIGN KEY (SCMCoachID)
+    REFERENCES SCMCoach(SCMCoachID)
 go
 
 
@@ -789,12 +855,12 @@ go
  * TABLE: subline 
  */
 
-ALTER TABLE subline ADD CONSTRAINT Refline45 
+ALTER TABLE subline ADD CONSTRAINT line_subline 
     FOREIGN KEY (lineID)
     REFERENCES line(lineID)
 go
 
-ALTER TABLE subline ADD CONSTRAINT RefsublineType61 
+ALTER TABLE subline ADD CONSTRAINT sublineType_subline 
     FOREIGN KEY (sublineTypeID)
     REFERENCES sublineType(sublineTypeID)
 go
@@ -804,12 +870,12 @@ go
  * TABLE: sublinelink 
  */
 
-ALTER TABLE sublinelink ADD CONSTRAINT Refsubline59 
+ALTER TABLE sublinelink ADD CONSTRAINT subline_sublineli8 
     FOREIGN KEY (parentID)
     REFERENCES subline(sublineID)
 go
 
-ALTER TABLE sublinelink ADD CONSTRAINT Refsubline60 
+ALTER TABLE sublinelink ADD CONSTRAINT subline_sublinelink 
     FOREIGN KEY (childID)
     REFERENCES subline(sublineID)
 go
@@ -819,34 +885,39 @@ go
  * TABLE: task 
  */
 
-ALTER TABLE task ADD CONSTRAINT Refstroke41 
-    FOREIGN KEY (strokeID)
-    REFERENCES stroke(strokeID)
+ALTER TABLE task ADD CONSTRAINT Distance_task 
+    FOREIGN KEY (DistanceID)
+    REFERENCES Distance(DistanceID)
 go
 
-ALTER TABLE task ADD CONSTRAINT Refsubline44 
-    FOREIGN KEY (sublineID)
-    REFERENCES subline(sublineID)
-go
-
-ALTER TABLE task ADD CONSTRAINT RefmiscTerm50 
-    FOREIGN KEY (miscTermID)
-    REFERENCES miscTerm(miscTermID)
-go
-
-ALTER TABLE task ADD CONSTRAINT Refintensity34 
-    FOREIGN KEY (intensityID)
-    REFERENCES intensity(intensityID)
-go
-
-ALTER TABLE task ADD CONSTRAINT Refequipment36 
+ALTER TABLE task ADD CONSTRAINT equipment_task 
     FOREIGN KEY (equipmentID)
     REFERENCES equipment(equipmentID)
 go
 
-ALTER TABLE task ADD CONSTRAINT RefDistance40 
-    FOREIGN KEY (DistanceID)
-    REFERENCES Distance(DistanceID)
+ALTER TABLE task ADD CONSTRAINT grade_task 
+    FOREIGN KEY (gradeID)
+    REFERENCES grade(gradeID)
+go
+
+ALTER TABLE task ADD CONSTRAINT intensity_task 
+    FOREIGN KEY (intensityID)
+    REFERENCES intensity(intensityID)
+go
+
+ALTER TABLE task ADD CONSTRAINT miscTerm_task 
+    FOREIGN KEY (miscTermID)
+    REFERENCES miscTerm(miscTermID)
+go
+
+ALTER TABLE task ADD CONSTRAINT stroke_task 
+    FOREIGN KEY (strokeID)
+    REFERENCES stroke(strokeID)
+go
+
+ALTER TABLE task ADD CONSTRAINT subline_task 
+    FOREIGN KEY (sublineID)
+    REFERENCES subline(sublineID)
 go
 
 
@@ -854,14 +925,14 @@ go
  * TABLE: teamMember 
  */
 
-ALTER TABLE teamMember ADD CONSTRAINT Refteam4 
-    FOREIGN KEY (teamID)
-    REFERENCES team(teamID)
-go
-
-ALTER TABLE teamMember ADD CONSTRAINT RefMember5 
+ALTER TABLE teamMember ADD CONSTRAINT Member_teamMember 
     FOREIGN KEY (MemberID)
     REFERENCES Member(MemberID)
+go
+
+ALTER TABLE teamMember ADD CONSTRAINT team_teamMember 
+    FOREIGN KEY (teamID)
+    REFERENCES team(teamID)
 go
 
 

@@ -7,7 +7,9 @@ uses
   Vcl.Themes,
   Vcl.Styles,
   frmSessionNew in 'frmSessionNew.pas' {SessionNew},
-  dlgSquadNew in 'dlgSquadNew.pas' {SquadNew};
+  dlgSquadNew in 'dlgSquadNew.pas' {SquadNew},
+  Lexer in 'LINTER\Lexer.pas',
+  SimpleLexer in 'LINTER\SimpleLexer.pas';
 
 {$R *.res}
 
