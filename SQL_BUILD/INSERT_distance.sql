@@ -25,3 +25,4 @@ INSERT INTO [dbo].[Distance]
            ,(6,'1000M','1000M','1000',1,1000.0)
 GO
 
+SET IDENTITY_INSERT [dbo].[Distance] OFF;

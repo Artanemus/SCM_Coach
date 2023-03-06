@@ -21,4 +21,5 @@ INSERT INTO [dbo].[drillEx]
 
 GO
 
+SET IDENTITY_INSERT [dbo].[drillEx] OFF;
 

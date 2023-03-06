@@ -23,5 +23,7 @@ INSERT INTO [dbo].[equipment]
            ,(6,'FINS','Fins','FINS')
 GO
 
+SET IDENTITY_INSERT [dbo].[equipment] OFF;
+
 
 

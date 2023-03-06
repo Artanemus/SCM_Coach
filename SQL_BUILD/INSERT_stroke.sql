@@ -29,6 +29,10 @@ INSERT INTO [dbo].[stroke]
            ,(11,'Custom-Stroke','CustS','CUST',0)
 GO
 
+SET IDENTITY_INSERT [dbo].[stroke] OFF;
+
+
+
 /*
 STROKE
 (standard stroke)
