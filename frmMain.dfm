@@ -12,6 +12,8 @@ object Main: TMain
   Font.Style = []
   Position = poMainFormCenter
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
   TextHeight = 21
   object ActionMainMenuBar1: TActionMainMenuBar
     Left = 0
@@ -155,8 +157,6 @@ object Main: TMain
         ActivePage = TabSheet3
         Align = alBottom
         TabOrder = 0
-        ExplicitTop = 724
-        ExplicitWidth = 1343
         object TabSheet3: TTabSheet
           Caption = 'Output'
         end
@@ -174,8 +174,6 @@ object Main: TMain
         BevelOuter = bvNone
         Caption = 'Panel1'
         TabOrder = 1
-        ExplicitWidth = 1343
-        ExplicitHeight = 704
         object relpnlPrgBuilderToolBar: TRelativePanel
           Left = 0
           Top = 0
@@ -239,7 +237,6 @@ object Main: TMain
           Align = alLeft
           BevelOuter = bvNone
           TabOrder = 0
-          ExplicitHeight = 704
           DesignSize = (
             97
             705)
@@ -357,6 +354,8 @@ object Main: TMain
               item
                 Action = File_Swimmers
                 Caption = '&Swimmers...'
+                ImageIndex = 3
+                ImageName = 'Members'
               end>
             Caption = '&Squad'
           end>
@@ -404,6 +403,8 @@ object Main: TMain
               item
                 Action = File_Swimmers
                 Caption = '&Swimmers...'
+                ImageIndex = 3
+                ImageName = 'Members'
               end
               item
                 Caption = '-'
@@ -472,6 +473,7 @@ object Main: TMain
               end
               item
                 Action = Programs_SaveAs
+                Caption = 'S&ave As Programs...'
               end>
             Caption = '&Programs'
             ImageIndex = 0
@@ -576,6 +578,9 @@ object Main: TMain
     object File_Swimmers: TAction
       Category = 'Edit'
       Caption = 'Swimmers...'
+      ImageIndex = 3
+      ImageName = 'Members'
+      OnUpdate = File_SwimmersUpdate
     end
     object Session_New: TAction
       Category = 'Session'
@@ -937,6 +942,40 @@ object Main: TMain
               AB588A4D983EDE1757EEA009E06EF1CA02994026203A905B4834501E9E09C816
               8A130C9FC00373F64B31E3B12BA20000000049454E44AE426082}
           end>
+      end
+      item
+        Name = 'Members'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
+              87000000017352474200AECE1CE900000314494441546843ED988FD18C410CC6
+              9FAF0254800A50012A4005A8800E50012A40051F15A00254800A5001F33B9B9B
+              4CECBEB7D975EEBBF166E6E6FEBCBBD93CC9936C72273A72393972FBB5023874
+              04D708AC1198F4C04AA149074E6F9F89C00D4977255D92C467E49DA48F925E95
+              776FE06B49B7CA0F5FCA73D63F9F413102E0BCA447921EEE38F8B1A4276E0D20
+              DF56F600F87E057017AE11001F245DEDD2FEDBBB1EE8CB12B5B8FDBBA46B9288
+              4C4AB200F02ADE377923E959A10EBFDD96C49A2B6ECDCDF0FCB4612174626D4A
+              3200A0CE6749BC23D003636B12F97ED92DFAB9602154224ADD9201E039FCB524
+              6FEB20407E730FFD3978FA7A63E39253AA5B3200E0F2D3A22572BBA6DC1BEA69
+              B404E0BDAB685D51C800F0FCEFF194A7D11D497C475A89CCB34F8902B1519601
+              70F411F03940B9A3EC51FE6AC2E546C29B9C891C203131FC9CA30255230AEB28
+              95763B475A2C55214FB5BF9E0328F434E23B09496E509530FC62B91788800991
+              E2B645B8275AF700770ACF5392C90153BC5445E2E131D95B09FCA394E516259B
+              A04600A02CDEC8F1000CBAE72A0FCF5BBD109E676DDA78948E02602FFD1021C7
+              30288301D665D25E448328A39617508A17D1B4F29AA24EAD3A0C2938F4A69908
+              1CDAF6CDF9FF1D00784F2306E7F94CE98CB301BCB6124B4ED0DFB4FA7CF45099
+              B81B2C7FC80DF674494F046C74B464ED521C1659C2D204D6C050855E843D2437
+              AF250734298467987751EC2FA511E3E31EC050A5289FBE52D540D85EA2C49C6D
+              D1DDEAAC458089AB35A870E3E2150B37EFD1A300368A59A9B5F6C383C1785A11
+              5F4677DD2F71CEFE230284114F78C1683CC02B3DB3164500A10DE1DE8860FC14
+              16FBAD5AC4B163DB83F908C410C23D423D75D1040B30D0E666FA2613464E730E
+              673ED8C1D56DD3E701D0FE1ADF7B26AED97C20176CF887DF16F9A586CFCEDCFE
+              01E001F836F7C2686F9240E50DF5A364AB678AAA37B6B700F494D784ADD5A57E
+              F027A1711A12FF10689D73700018E6A3DE72E6108059EF8EEC5F012CCDAA231E
+              CDEE998E40F6C033B1FE5F549BBD025D01ECD5BD1DCAD708743869AF4BD608EC
+              D5BD1DCA7F01FCEEA831B2921B460000000049454E44AE426082}
+          end>
       end>
     Left = 664
     Top = 448
@@ -957,6 +996,11 @@ object Main: TMain
         CollectionIndex = 2
         CollectionName = 'Export'
         Name = 'Export'
+      end
+      item
+        CollectionIndex = 9
+        CollectionName = 'Members'
+        Name = 'Members'
       end>
     ImageCollection = ImageCollectionCoach
     Width = 32
