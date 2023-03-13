@@ -1,5 +1,4 @@
 object MemberDetail: TMemberDetail
-  OldCreateOrder = False
   Height = 533
   Width = 570
   object frxReport1: TfrxReport

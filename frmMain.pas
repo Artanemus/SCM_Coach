@@ -16,12 +16,12 @@ type
   TMain = class(TForm)
     ActionManager1: TActionManager;
     File_Exit: TAction;
-    File_Swimmers: TAction;
+    Edit_Swimmers: TAction;
     Session_New: TAction;
     ActionMainMenuBar1: TActionMainMenuBar;
     Session_Delete: TAction;
     Session_Edit: TAction;
-    File_Coaches: TAction;
+    Edit_Coaches: TAction;
     Squad_New: TAction;
     Session_Clone: TAction;
     Squad_Edit: TAction;
@@ -79,11 +79,13 @@ type
     Programs_Open: TAction;
     Programs_Save: TAction;
     Programs_SaveAs: TAction;
+    Edit_Guardians: TAction;
     procedure FormCreate(Sender: TObject);
     procedure btnNewSessionClick(Sender: TObject);
-    procedure File_SwimmersUpdate(Sender: TObject);
+    procedure Edit_SwimmersUpdate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure Edit_SwimmersExecute(Sender: TObject);
 
   private
     { Private declarations }
@@ -112,7 +114,7 @@ implementation
 
 {$R *.dfm}
 
-uses frmSessionNew, dlgBasicLogin, SCMUtility, IniFiles;
+uses frmSessionNew, dlgBasicLogin, SCMUtility, IniFiles, frmManageSwimmers;
 
 
 function TMain.AssertConnection: boolean;
@@ -136,7 +138,16 @@ begin
   Dlg.Free;
 end;
 
-procedure TMain.File_SwimmersUpdate(Sender: TObject);
+procedure TMain.Edit_SwimmersExecute(Sender: TObject);
+var
+dlg: TManageSwimmers;
+begin
+  dlg := TManageSwimmers.Create(Self);
+  dlg.ShowModal;
+  dlg.Free;
+end;
+
+procedure TMain.Edit_SwimmersUpdate(Sender: TObject);
 var
   DoEnable: boolean;
 begin

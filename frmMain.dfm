@@ -352,7 +352,7 @@ object Main: TMain
           item
             Items = <
               item
-                Action = File_Swimmers
+                Action = Edit_Swimmers
                 Caption = '&Swimmers...'
                 ImageIndex = 3
                 ImageName = 'Members'
@@ -397,12 +397,19 @@ object Main: TMain
           item
             Items = <
               item
-                Action = File_Coaches
+                Action = Edit_Coaches
                 Caption = '&Coaches...'
+                ImageIndex = 3
+                ImageName = 'Members'
               end
               item
-                Action = File_Swimmers
+                Action = Edit_Swimmers
                 Caption = '&Swimmers...'
+                ImageIndex = 3
+                ImageName = 'Members'
+              end
+              item
+                Action = Edit_Guardians
                 ImageIndex = 3
                 ImageName = 'Members'
               end
@@ -571,16 +578,19 @@ object Main: TMain
     Left = 664
     Top = 368
     StyleName = 'Platform Default'
-    object File_Coaches: TAction
+    object Edit_Coaches: TAction
       Category = 'Edit'
       Caption = 'Coaches...'
+      ImageIndex = 3
+      ImageName = 'Members'
     end
-    object File_Swimmers: TAction
+    object Edit_Swimmers: TAction
       Category = 'Edit'
       Caption = 'Swimmers...'
       ImageIndex = 3
       ImageName = 'Members'
-      OnUpdate = File_SwimmersUpdate
+      OnExecute = Edit_SwimmersExecute
+      OnUpdate = Edit_SwimmersUpdate
     end
     object Session_New: TAction
       Category = 'Session'
@@ -629,6 +639,12 @@ object Main: TMain
     object Squad_Delete: TAction
       Category = 'Squads'
       Caption = 'Delete Squad...'
+    end
+    object Edit_Guardians: TAction
+      Category = 'Edit'
+      Caption = 'Guardians...'
+      ImageIndex = 3
+      ImageName = 'Members'
     end
     object Edit_Preferences: TAction
       Category = 'Edit'

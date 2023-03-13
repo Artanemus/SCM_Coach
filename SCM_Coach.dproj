@@ -68,6 +68,8 @@
         <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <DCC_UnitSearchPath>$(FASTREPORTS)\Source\$(Platform)\Release;$(FASTREPORTS)\Source\ExportPack\$(Platform)\Release;$(FASTREPORTS)\FastScript\$(Platform)\Release;$(FASTREPORTS)\Source\;$(FASTREPORTS)\Source\ExportPack;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
         <DCC_UsePackage>vclwinx;DataSnapServer;frxIBX28;fmx;emshosting;vclie;DbxCommonDriver;bindengine;IndyIPCommon;VCLRESTComponents;DBXMSSQLDriver;FireDACCommonODBC;emsclient;FireDACCommonDriver;fsIBX28;appanalytics;IndyProtocols;vclx;frxe28;IndyIPClient;dbxcds;vcledge;bindcompvclwinx;FmxTeeUI;frxFD28;emsedge;bindcompfmx;DBXFirebirdDriver;fsDB28;inetdb;ibmonitor;FireDACSqliteDriver;DbxClientDriver;FireDACASADriver;Tee;soapmidas;vclactnband;TeeUI;fmxFireDAC;dbexpress;FireDACInfxDriver;frxDBX28;DBXMySQLDriver;VclSmp;inet;DataSnapCommon;vcltouch;fmxase;frx28;DBXOdbcDriver;fsFD28;dbrtl;FireDACDBXDriver;FireDACOracleDriver;fmxdae;TeeDB;FireDACMSAccDriver;CustomIPTransport;FireDACMSSQLDriver;DataSnapIndy10ServerTransport;DataSnapConnectors;vcldsnap;DBXInterBaseDriver;FireDACMongoDBDriver;IndySystem;FireDACTDataDriver;vcldb;ibxbindings;vclFireDAC;bindcomp;FireDACCommon;DataSnapServerMidas;FireDACODBCDriver;emsserverresource;IndyCore;RESTBackendComponents;fsTee28;bindcompdbx;rtl;FireDACMySQLDriver;FireDACADSDriver;RESTComponents;DBXSqliteDriver;vcl;IndyIPServer;dsnapxml;dsnapcon;DataSnapClient;DataSnapProviderClient;adortl;DBXSybaseASEDriver;DBXDb2Driver;frxcs28;vclimg;DataSnapFireDAC;emsclientfiredac;FireDACPgDriver;FireDAC;FireDACDSDriver;inetdbxpress;xmlrtl;tethering;ibxpress;bindcompvcl;dsnap;fsADO28;CloudService;DBXSybaseASADriver;DBXOracleDriver;FireDACDb2Driver;DBXInformixDriver;vclib;fmxobj;bindcompvclsmp;DataSnapNativeClient;FMXTee;DatasnapConnectorsFreePascal;soaprtl;soapserver;FireDACIBDriver;$(DCC_UsePackage)</DCC_UsePackage>
@@ -137,8 +139,8 @@
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="MEMBERS\frmManageMember.pas">
-            <Form>ManageMember</Form>
+        <DCCReference Include="MEMBERS\frmManageSwimmers.pas">
+            <Form>ManageSwimmers</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="MEMBERS\rptMemberDetail.pas">
@@ -186,6 +188,10 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="exeinfo.pas"/>
+        <DCCReference Include="dlgDOBPicker.pas">
+            <Form>DOBPicker</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

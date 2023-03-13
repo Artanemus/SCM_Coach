@@ -17,35 +17,10 @@ type
     tblContactNumTypeCaption: TWideStringField;
     tblStroke: TFDTable;
     tblDistance: TFDTable;
-    dsMember: TDataSource;
-    qryMember: TFDQuery;
-    qryMemberMemberID: TFDAutoIncField;
-    qryMemberMembershipDue: TSQLTimeStampField;
-    qryMemberMembershipNum: TIntegerField;
-    qryMemberFirstName: TWideStringField;
-    qryMemberLastName: TWideStringField;
-    qryMemberFName: TWideStringField;
-    qryMemberDOB: TSQLTimeStampField;
-    qryMemberSwimmerAge: TIntegerField;
-    qryMemberIsActive: TBooleanField;
-    qryMemberIsSwimmer: TBooleanField;
-    qryMemberIsArchived: TBooleanField;
-    qryMemberEmail: TWideStringField;
-    qryMemberSwimClubID: TIntegerField;
-    qryMemberCreatedOn: TSQLTimeStampField;
-    qryMemberArchivedOn: TSQLTimeStampField;
-    qryMemberGenderID: TIntegerField;
-    qryMemberluGender: TStringField;
-    qryMemberluMembershipType: TStringField;
-    qryMemberMembershipTypeID: TIntegerField;
-    qryMemberluHouse: TStringField;
-    qryMemberHouseID: TIntegerField;
-    tblMembershipType: TFDTable;
-    dsMembershipType: TDataSource;
+    tblMemberType: TFDTable;
+    dsMemberType: TDataSource;
     tblGender: TFDTable;
     dsGender: TDataSource;
-    dsHouse: TDataSource;
-    tblHouse: TFDTable;
     dsContactNum: TDataSource;
     qryContactNum: TFDQuery;
     qryContactNumContactNumID: TFDAutoIncField;
@@ -53,9 +28,6 @@ type
     qryContactNumContactNumTypeID: TIntegerField;
     qryContactNumMemberID: TIntegerField;
     qryContactNumlu: TStringField;
-    qrySwimClub: TFDQuery;
-    dsSwimClub: TDataSource;
-    qryMemberMembershipStr: TWideStringField;
     qryFindMember: TFDQuery;
     qryFindMemberMemberID: TFDAutoIncField;
     qryFindMemberMembershipNum: TIntegerField;
@@ -81,6 +53,26 @@ type
     qryMemberPBMemberID: TFDAutoIncField;
     qryMemberPBDistanceID: TFDAutoIncField;
     qryMemberPBStrokeID: TFDAutoIncField;
+    FDTempDesignConnection: TFDConnection;
+    dsMember: TDataSource;
+    qryMember: TFDQuery;
+    qryMemberMemberID: TFDAutoIncField;
+    qryMemberRegisterNum: TIntegerField;
+    qryMemberRegisterStr: TWideStringField;
+    qryMemberFirstName: TStringField;
+    qryMemberLastName: TStringField;
+    qryMemberDOB: TSQLTimeStampField;
+    qryMemberSwimmerAge: TIntegerField;
+    qryMemberIsActive: TBooleanField;
+    qryMemberIsArchived: TBooleanField;
+    qryMemberEmail: TWideStringField;
+    qryMemberGenderID: TIntegerField;
+    qryMemberMemberTypeID: TIntegerField;
+    qryMemberFName: TStringField;
+    qryMembergradeID: TIntegerField;
+    qryMemberCreatedOn: TSQLTimeStampField;
+    qryMemberArchivedOn: TSQLTimeStampField;
+    qryMemberlugender: TStringField;
     procedure DataModuleCreate(Sender: TObject);
     procedure qryMemberAfterScroll(DataSet: TDataSet);
     procedure qryMemberAfterInsert(DataSet: TDataSet);
@@ -131,26 +123,20 @@ begin
   fManageMemberDataActive := false;
   if Assigned(FConnection) and FConnection.Connected then
   begin
-    qrySwimClub.Connection := FConnection;
     qryMember.Connection := FConnection;
     qryContactNum.Connection := FConnection;
     qryMemberPB.Connection :=FConnection;
     // prepare lookup tables.
     tblStroke.Connection := FConnection;
     tblDistance.Connection := FConnection;
-    tblMembershipType.Connection := FConnection;
+    tblMemberType.Connection := FConnection;
     tblGender.Connection := FConnection;
-    tblHouse.Connection := FConnection;
     tblContactNumType.Connection := FConnection;
-    qrySwimClub.Open;
-    if qrySwimClub.Active then
-    begin
       // Lookup tables used by member
       tblStroke.Open;
       tblDistance.Open;
-      tblMembershipType.Open;
+      tblMemberType.Open;
       tblGender.Open;
-      tblHouse.Open;
       qryMember.Open;
       if qryMember.Active then
       begin
@@ -162,7 +148,6 @@ begin
           fManageMemberDataActive := True;
         end;
       end;
-    end;
   end;
 end;
 
@@ -230,19 +215,6 @@ begin
   begin
     fld.AsBoolean := True;
   end;
-
-  // DB : v1,1,5,0 v1,1,5,1 - required.
-  fld := DataSet.FieldByName('SwimClubID');
-  if (fld.IsNull) then
-  begin
-    fld.AsInteger := dsSwimClub.DataSet.FieldByName('SwimClubID').AsInteger;
-  end;
-
-  // DB : v1,1,6,0 - CREATE LINK
-  // build many-to-many relationship with SwimClub and member.
-(*
-  SQL := 'INSERT lnkSwimClubMember Value ....
-*)
 
 end;
 

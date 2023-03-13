@@ -1,4 +1,4 @@
-unit frmManageMember;
+unit frmManageSwimmers;
 
 interface
 
@@ -15,15 +15,14 @@ uses
   Vcl.ExtCtrls, Vcl.Menus, Vcl.WinXCalendars, dmManageMemberData, SCMDefines,
   Vcl.VirtualImageList, Vcl.BaseImageCollection, Vcl.ImageCollection,
   System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
-  Vcl.ToolWin, Vcl.ActnCtrls, Vcl.ActnMenus;
+  Vcl.ToolWin, Vcl.ActnCtrls, Vcl.ActnMenus, Vcl.VirtualImage;
 
 type
-  TManageMember = class(TForm)
+  TManageSwimmers = class(TForm)
     Panel1: TPanel;
     lblMemberCount: TLabel;
     chkbHideInActive: TCheckBox;
     chkbHideArchived: TCheckBox;
-    chkbHideNonSwimmers: TCheckBox;
     Panel3: TPanel;
     DBNavigator1: TDBNavigator;
     PageControl1: TPageControl;
@@ -35,25 +34,18 @@ type
     Label1: TLabel;
     Label10: TLabel;
     DBText3: TDBText;
-    Label6: TLabel;
     Label7: TLabel;
     Label12: TLabel;
     dblblMemberID: TDBText;
-    Label21: TLabel;
     Label22: TLabel;
     Label24: TLabel;
     DBlucboGender: TDBLookupComboBox;
     DBedtFirstName: TDBEdit;
     DBedtLastName: TDBEdit;
-    DBlucboMembershipType: TDBLookupComboBox;
     DBedtMembershipNum: TDBEdit;
     DBchkIsActive: TDBCheckBox;
     DBEdtEmail: TDBEdit;
-    DBlucboHouse: TDBLookupComboBox;
-    DBchkIsSwimmer: TDBCheckBox;
     DBchkIsArchived: TDBCheckBox;
-    btnClearHouse: TButton;
-    btnClearMembershipType: TButton;
     btnClearGender: TButton;
     TabSheet2: TTabSheet;
     DBGrid3: TDBGrid;
@@ -93,6 +85,7 @@ type
     MemSearch_FindMember: TAction;
     ImageCollectMember: TImageCollection;
     VirtlImageListMember: TVirtualImageList;
+    VirtualImage1: TVirtualImage;
     procedure FormCreate(Sender: TObject);
     procedure About2Click(Sender: TObject);
     procedure DBGrid3CellClick(Column: TColumn);
@@ -163,7 +156,7 @@ const
   INIFILE_SECTION = 'SCM_Member';
 
 var
-  ManageMember: TManageMember;
+  ManageSwimmers: TManageSwimmers;
 
 implementation
 
@@ -174,7 +167,7 @@ uses SCMUtility, dlgBasicLogin, System.IniFiles, System.UITypes, dlgAbout,
   System.IOUtils, Winapi.ShellAPI, dlgDeleteMember, vcl.Themes, rptMemberDetail,
   rptMemberHistory, rptMembersList, rptMembersDetail, rptMembersSummary;
 
-procedure TManageMember.About2Click(Sender: TObject);
+procedure TManageSwimmers.About2Click(Sender: TObject);
 var
   dlg: TAbout;
 begin
@@ -183,7 +176,7 @@ begin
   FreeAndNil(dlg);
 end;
 
-function TManageMember.AssertConnection: Boolean;
+function TManageSwimmers.AssertConnection: Boolean;
 begin
   result := false;
   // test datamodule construction
@@ -195,7 +188,7 @@ begin
   end;
 end;
 
-procedure TManageMember.btnClearClick(Sender: TObject);
+procedure TManageSwimmers.btnClearClick(Sender: TObject);
 begin
   if Assigned(ManageMemberData) and (ManageMemberData.qryMember.Active) then
   begin
@@ -213,7 +206,7 @@ begin
   end;
 end;
 
-procedure TManageMember.btnClubMembersDetailedClick(Sender: TObject);
+procedure TManageSwimmers.btnClubMembersDetailedClick(Sender: TObject);
 var
 rpt: TMembersDetail;
 begin
@@ -223,7 +216,7 @@ begin
     rpt.Free;
 end;
 
-procedure TManageMember.btnClubMembersListClick(Sender: TObject);
+procedure TManageSwimmers.btnClubMembersListClick(Sender: TObject);
 var
 rpt: TMembersList;
 begin
@@ -233,7 +226,7 @@ begin
     rpt.Free;
 end;
 
-procedure TManageMember.btnClubMembersSummaryClick(Sender: TObject);
+procedure TManageSwimmers.btnClubMembersSummaryClick(Sender: TObject);
 var
 rpt: TMembersSummary;
 begin
@@ -243,7 +236,7 @@ begin
     rpt.Free;
 end;
 
-procedure TManageMember.btnFindMemberClick(Sender: TObject);
+procedure TManageSwimmers.btnFindMemberClick(Sender: TObject);
 var
   dlg: TFindMember;
 begin
@@ -257,7 +250,7 @@ begin
   dlg.Free;
 end;
 
-procedure TManageMember.btnGotoMemberIDClick(Sender: TObject);
+procedure TManageSwimmers.btnGotoMemberIDClick(Sender: TObject);
 var
   dlg: TGotoMember;
   rtn: TModalResult;
@@ -276,7 +269,7 @@ begin
   end;
 end;
 
-procedure TManageMember.btnGotoMembershipClick(Sender: TObject);
+procedure TManageSwimmers.btnGotoMembershipClick(Sender: TObject);
 var
   dlg: TGotoMembership;
   rtn: TModalResult;
@@ -296,7 +289,7 @@ begin
   end;
 end;
 
-procedure TManageMember.btnMemberDetailClick(Sender: TObject);
+procedure TManageSwimmers.btnMemberDetailClick(Sender: TObject);
 var
   rpt: TMemberDetail;
   MemberID: Integer;
@@ -310,7 +303,7 @@ begin
   rpt.Free;
 end;
 
-procedure TManageMember.btnMemberHistoryClick(Sender: TObject);
+procedure TManageSwimmers.btnMemberHistoryClick(Sender: TObject);
 var
   rpt: TMemberHistory;
   MemberID: Integer;
@@ -324,40 +317,39 @@ begin
   rpt.Free;
 end;
 
-procedure TManageMember.chkbHideArchivedClick(Sender: TObject);
+procedure TManageSwimmers.chkbHideArchivedClick(Sender: TObject);
 begin
   if Assigned(ManageMemberData) then
     ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-      chkbHideInActive.Checked, chkbHideNonSwimmers.Checked);
+      chkbHideInActive.Checked, true);
 end;
 
-procedure TManageMember.chkbHideInActiveClick(Sender: TObject);
+procedure TManageSwimmers.chkbHideInActiveClick(Sender: TObject);
 begin
   if Assigned(ManageMemberData) then
     ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-      chkbHideInActive.Checked, chkbHideNonSwimmers.Checked);
+      chkbHideInActive.Checked, true);
 end;
 
-procedure TManageMember.chkbHideNonSwimmersClick(Sender: TObject);
+procedure TManageSwimmers.chkbHideNonSwimmersClick(Sender: TObject);
 begin
   if Assigned(ManageMemberData) then
     ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-      chkbHideInActive.Checked, chkbHideNonSwimmers.Checked);
+      chkbHideInActive.Checked, true);
 end;
 
-procedure TManageMember.ClearAllFilters;
+procedure TManageSwimmers.ClearAllFilters;
 begin
   if Assigned(ManageMemberData) then
   begin
     chkbHideArchived.Checked := false;
     chkbHideInActive.Checked := false;
-    chkbHideNonSwimmers.Checked := false;
     ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-      chkbHideInActive.Checked, chkbHideNonSwimmers.Checked);
+      chkbHideInActive.Checked, true);
   end;
 end;
 
-procedure TManageMember.DBGrid3CellClick(Column: TColumn);
+procedure TManageSwimmers.DBGrid3CellClick(Column: TColumn);
 begin
   if Assigned(Column.Field) and (Column.Field.DataType = ftBoolean) then
   begin
@@ -372,7 +364,7 @@ begin
   end;
 end;
 
-procedure TManageMember.DBGrid3ColEnter(Sender: TObject);
+procedure TManageSwimmers.DBGrid3ColEnter(Sender: TObject);
 begin
   // By default, two clicks on the same cell enacts the cell editing mode.
   // The grid draws a TEditBox over the cell, killing the checkbox draw UI.
@@ -385,14 +377,14 @@ begin
   end;
 end;
 
-procedure TManageMember.DBGrid3ColExit(Sender: TObject);
+procedure TManageSwimmers.DBGrid3ColExit(Sender: TObject);
 begin
   with Sender as TDBGrid do
   if Assigned(SelectedField) and   (SelectedField.DataType = ftBoolean) then
     Options := Options + [dgEditing];
 end;
 
-procedure TManageMember.DBGrid3DrawColumnCell(Sender: TObject;
+procedure TManageSwimmers.DBGrid3DrawColumnCell(Sender: TObject;
   const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
 var
   clFont, clBg: TColor;
@@ -420,7 +412,7 @@ begin
   end;
 end;
 
-procedure TManageMember.DBGrid3EditButtonClick(Sender: TObject);
+procedure TManageSwimmers.DBGrid3EditButtonClick(Sender: TObject);
 var
   fld: TField;
   cal: TDOBPicker;
@@ -453,7 +445,7 @@ begin
   end;
 end;
 
-procedure TManageMember.DBGrid3KeyDown(Sender: TObject; var Key: Word;
+procedure TManageSwimmers.DBGrid3KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
   fld: TField;
@@ -537,7 +529,7 @@ begin
 
 end;
 
-procedure TManageMember.DBNavigator1BeforeAction(Sender: TObject;
+procedure TManageSwimmers.DBNavigator1BeforeAction(Sender: TObject;
   Button: TNavigateBtn);
 var
   dlg: TDeleteMember;
@@ -567,7 +559,7 @@ begin
   end;
 end;
 
-procedure TManageMember.DBNavigator1Click(Sender: TObject;
+procedure TManageSwimmers.DBNavigator1Click(Sender: TObject;
   Button: TNavigateBtn);
 begin
   if Button = nbDelete then
@@ -580,7 +572,7 @@ end;
 // ---------------------------------------------------------------------------
 // Draw a very basic checkbox (ticked) - not a nice as TCheckListBox
 // ---------------------------------------------------------------------------
-procedure TManageMember.DrawCheckBoxes(oGrid: TObject; Rect: TRect; Column: TColumn;
+procedure TManageSwimmers.DrawCheckBoxes(oGrid: TObject; Rect: TRect; Column: TColumn;
   fontColor, bgColor: TColor);
 var
   MyRect: TRect;
@@ -669,7 +661,7 @@ begin
   end;
 end;
 
-procedure TManageMember.dtpickDOBChange(Sender: TObject);
+procedure TManageSwimmers.dtpickDOBChange(Sender: TObject);
 begin
   if Assigned(ManageMemberData) and (ManageMemberData.qryMember.Active) then
   begin
@@ -681,7 +673,7 @@ begin
   end;
 end;
 
-function TManageMember.FindMember(MemberID: Integer): Boolean;
+function TManageSwimmers.FindMember(MemberID: Integer): Boolean;
 var
   b: Boolean;
   s: string;
@@ -706,7 +698,7 @@ begin
   end;
 end;
 
-procedure TManageMember.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+procedure TManageSwimmers.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
   // Test database state
   if Assigned(ManageMemberData) and (ManageMemberData.qryMember.Active) then
@@ -717,7 +709,7 @@ begin
   end;
 end;
 
-procedure TManageMember.FormCreate(Sender: TObject);
+procedure TManageSwimmers.FormCreate(Sender: TObject);
 var
   css: TCustomStyleServices;
 
@@ -756,12 +748,12 @@ begin
 
 end;
 
-procedure TManageMember.FormDestroy(Sender: TObject);
+procedure TManageSwimmers.FormDestroy(Sender: TObject);
 begin
   WritePreferences;
 end;
 
-procedure TManageMember.FormShow(Sender: TObject);
+procedure TManageSwimmers.FormShow(Sender: TObject);
 begin
   // ----------------------------------------------------
   // R E A D   P R E F E R E N C E S .
@@ -775,11 +767,10 @@ begin
   // ----------------------------------------------------
   if not AssertConnection then
     exit;
-  Self.Caption := 'Manage SwimClubMeet Members - ' +
-    ManageMemberData.qrySwimClub.FieldByName('DetailStr').AsString;
+
 end;
 
-procedure TManageMember.ManageMemberAfterScroll(var Msg: TMessage);
+procedure TManageSwimmers.ManageMemberAfterScroll(var Msg: TMessage);
 begin
   if not AssertConnection then
     exit;
@@ -788,7 +779,7 @@ begin
 
 end;
 
-procedure TManageMember.ManageMemberUpdate(var Msg: TMessage);
+procedure TManageSwimmers.ManageMemberUpdate(var Msg: TMessage);
 begin
   if not AssertConnection then
     exit;
@@ -796,17 +787,17 @@ begin
   lblCount.Caption := IntToStr(ManageMemberData.RecordCount);
 end;
 
-procedure TManageMember.MemFile_ExitExecute(Sender: TObject);
+procedure TManageSwimmers.MemFile_ExitExecute(Sender: TObject);
 begin
   Close();
 end;
 
-procedure TManageMember.MemSearch_FindMemberExecute(Sender: TObject);
+procedure TManageSwimmers.MemSearch_FindMemberExecute(Sender: TObject);
 begin
   btnFindMemberClick(Self);
 end;
 
-procedure TManageMember.Onlinehelp1Click(Sender: TObject);
+procedure TManageSwimmers.Onlinehelp1Click(Sender: TObject);
 var
   base_URL: string;
 begin
@@ -815,7 +806,7 @@ begin
 
 end;
 
-procedure TManageMember.Prepare(AConnection: TFDConnection;
+procedure TManageSwimmers.Prepare(AConnection: TFDConnection;
   ASwimClubID, AMemberID: Integer);
 begin
   FConnection := AConnection;
@@ -853,7 +844,7 @@ begin
   // Prepares all core queries  (Master+Child)
   // ----------------------------------------------------
   ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-    chkbHideInActive.Checked, chkbHideNonSwimmers.Checked);
+    chkbHideInActive.Checked, true);
 
   // Cue-to-member
   if AMemberID > 0 then
@@ -861,7 +852,7 @@ begin
 
 end;
 
-procedure TManageMember.ReadPreferences;
+procedure TManageSwimmers.ReadPreferences;
 var
   ini: TIniFile;
 begin
@@ -872,14 +863,12 @@ begin
       'HideArchived', true);
     chkbHideInActive.Checked := ini.ReadBool(INIFILE_SECTION,
       'HideInActive', false);
-    chkbHideNonSwimmers.Checked := ini.ReadBool(INIFILE_SECTION,
-      'HideNonSwimmer', false);
   finally
     ini.Free;
   end;
 end;
 
-procedure TManageMember.SCMwebsite1Click(Sender: TObject);
+procedure TManageSwimmers.SCMwebsite1Click(Sender: TObject);
 var
   base_URL: string;
 begin
@@ -891,7 +880,7 @@ begin
 
 end;
 
-procedure TManageMember.WritePreferences;
+procedure TManageSwimmers.WritePreferences;
 var
   ini: TIniFile;
 begin
@@ -900,8 +889,6 @@ begin
   try
     ini.WriteBool(INIFILE_SECTION, 'HideArchived', chkbHideArchived.Checked);
     ini.WriteBool(INIFILE_SECTION, 'HideInActive', chkbHideInActive.Checked);
-    ini.WriteBool(INIFILE_SECTION, 'HideNonSwimmer',
-      chkbHideNonSwimmers.Checked);
   finally
     ini.Free;
   end;

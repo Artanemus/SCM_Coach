@@ -29,8 +29,8 @@ type
     qryPBMemberID: TFDAutoIncField;
     qryPBDistanceID: TFDAutoIncField;
     qryPBStrokeID: TFDAutoIncField;
-    frxDBPB: TfrxDBDataset;
     qryPBIsQualified: TBooleanField;
+    frxDBPB: TfrxDBDataset;
     qryHistory: TFDQuery;
     frxDBHistory: TfrxDBDataset;
   private

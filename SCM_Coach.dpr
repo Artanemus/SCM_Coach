@@ -15,7 +15,7 @@ uses
   dlgGotoMember in 'MEMBERS\dlgGotoMember.pas' {GotoMember},
   dlgGotoMembership in 'MEMBERS\dlgGotoMembership.pas' {GotoMembership},
   dmManageMemberData in 'MEMBERS\dmManageMemberData.pas' {ManageMemberData: TDataModule},
-  frmManageMember in 'MEMBERS\frmManageMember.pas' {ManageMember},
+  frmManageSwimmers in 'MEMBERS\frmManageSwimmers.pas' {ManageSwimmers},
   rptMemberDetail in 'MEMBERS\rptMemberDetail.pas' {MemberDetail: TDataModule},
   rptMemberHistory in 'MEMBERS\rptMemberHistory.pas' {MemberHistory: TDataModule},
   rptMembersDetail in 'MEMBERS\rptMembersDetail.pas' {MembersDetail: TDataModule},
@@ -27,7 +27,8 @@ uses
   SCMUtility in 'SCMUtility.pas',
   SCMDefines in 'SCMDefines.pas',
   dlgAbout in 'dlgAbout.pas' {About},
-  exeinfo in 'exeinfo.pas';
+  exeinfo in 'exeinfo.pas',
+  dlgDOBPicker in 'dlgDOBPicker.pas' {DOBPicker};
 
 {$R *.res}
 
