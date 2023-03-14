@@ -11,6 +11,7 @@ uses
 type
   TSCM = class(TDataModule)
     scmConnection: TFDConnection;
+    procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
     fSCMActive: boolean;
@@ -55,6 +56,11 @@ uses
 procedure TSCM.ActivateTable;
 begin
 fSCMActive := true;
+end;
+
+procedure TSCM.DataModuleCreate(Sender: TObject);
+begin
+  // TODO: INIT SCM datamodule
 end;
 
 procedure TSCM.DeActivateTable;

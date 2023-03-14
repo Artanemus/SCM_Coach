@@ -14,7 +14,7 @@ SELECT FirstName
      , LastName
      , DOB
      , GenderID
-     , [SwimClubMeet].[dbo].[SwimmerAge](GETDATE(), [SwimClubMeet].[dbo].[DOB] ) AS AGE
+     , [SwimClubMeet].[dbo].[SwimmerAge](GETDATE(), DOB ) AS AGE
 INTO #scmSwimmers
 FROM [SwimClubMeet].[dbo].[Member]
 WHERE isSwimmer = 1;
@@ -40,6 +40,6 @@ SELECT #scmSwimmers.FirstName
      ,GETDATE()
      ,3
 FROM #scmSwimmers
-WHERE (#scmSwimmers.AGE >= 8) 
+WHERE (#scmSwimmers.AGE >= 10) 
 GO
 

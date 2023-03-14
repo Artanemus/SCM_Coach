@@ -409,7 +409,7 @@ object Main: TMain
                 ImageName = 'Members'
               end
               item
-                Action = Edit_Guardians
+                Action = Edit_Contacts
                 ImageIndex = 3
                 ImageName = 'Members'
               end
@@ -640,9 +640,9 @@ object Main: TMain
       Category = 'Squads'
       Caption = 'Delete Squad...'
     end
-    object Edit_Guardians: TAction
+    object Edit_Contacts: TAction
       Category = 'Edit'
-      Caption = 'Guardians...'
+      Caption = 'Contacts...'
       ImageIndex = 3
       ImageName = 'Members'
     end

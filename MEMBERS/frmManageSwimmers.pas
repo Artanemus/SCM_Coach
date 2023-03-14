@@ -21,8 +21,6 @@ type
   TManageSwimmers = class(TForm)
     Panel1: TPanel;
     lblMemberCount: TLabel;
-    chkbHideInActive: TCheckBox;
-    chkbHideArchived: TCheckBox;
     Panel3: TPanel;
     DBNavigator1: TDBNavigator;
     PageControl1: TPageControl;
@@ -50,14 +48,11 @@ type
     TabSheet2: TTabSheet;
     DBGrid3: TDBGrid;
     ImageList1: TImageList;
-    btnFindMember: TButton;
-    btnGotoMemberID: TButton;
     Label18: TLabel;
     RegistrationNum: TDBEdit;
     Label8: TLabel;
     dtpickDOB: TCalendarPicker;
     lblCount: TLabel;
-    btnGotoMembership: TButton;
     DBgridHistoryPB: TDBGrid;
     Label23: TLabel;
     Label13: TLabel;
@@ -76,16 +71,17 @@ type
     btnMemberHistory: TButton;
     btnClubMembersDetailed: TButton;
     btnClubMembersList: TButton;
-    ActnMemberMenuBar: TActionMainMenuBar;
     ActnManagerMember: TActionManager;
     MemFile_AutoEdit: TAction;
     MemFile_Exit: TAction;
-    MemSearch_GotoMembershipNum: TAction;
-    MemSearch_GotoMemberID: TAction;
-    MemSearch_FindMember: TAction;
+    Search_GotoHRNUM: TAction;
+    Search_GotoSwimmerID: TAction;
+    Search_FindSwimmer: TAction;
     ImageCollectMember: TImageCollection;
     VirtlImageListMember: TVirtualImageList;
-    VirtualImage1: TVirtualImage;
+    ActionToolBar1: TActionToolBar;
+    Hide_Archived: TAction;
+    Hide_InActive: TAction;
     procedure FormCreate(Sender: TObject);
     procedure About2Click(Sender: TObject);
     procedure DBGrid3CellClick(Column: TColumn);
@@ -119,7 +115,7 @@ type
     procedure btnClubMembersDetailedClick(Sender: TObject);
     procedure btnClubMembersListClick(Sender: TObject);
     procedure MemFile_ExitExecute(Sender: TObject);
-    procedure MemSearch_FindMemberExecute(Sender: TObject);
+    procedure Search_FindSwimmerExecute(Sender: TObject);
 
   private
     { Private declarations }
@@ -320,32 +316,32 @@ end;
 procedure TManageSwimmers.chkbHideArchivedClick(Sender: TObject);
 begin
   if Assigned(ManageMemberData) then
-    ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-      chkbHideInActive.Checked, true);
+//    ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
+//      chkbHideInActive.Checked, true);
 end;
 
 procedure TManageSwimmers.chkbHideInActiveClick(Sender: TObject);
 begin
   if Assigned(ManageMemberData) then
-    ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-      chkbHideInActive.Checked, true);
+//    ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
+//      chkbHideInActive.Checked, true);
 end;
 
 procedure TManageSwimmers.chkbHideNonSwimmersClick(Sender: TObject);
 begin
   if Assigned(ManageMemberData) then
-    ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-      chkbHideInActive.Checked, true);
+//    ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
+//      chkbHideInActive.Checked, true);
 end;
 
 procedure TManageSwimmers.ClearAllFilters;
 begin
   if Assigned(ManageMemberData) then
   begin
-    chkbHideArchived.Checked := false;
-    chkbHideInActive.Checked := false;
-    ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-      chkbHideInActive.Checked, true);
+    Hide_Archived.Checked := false;
+    Hide_InActive.Checked := false;
+//    ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
+//      chkbHideInActive.Checked, true);
   end;
 end;
 
@@ -792,7 +788,7 @@ begin
   Close();
 end;
 
-procedure TManageSwimmers.MemSearch_FindMemberExecute(Sender: TObject);
+procedure TManageSwimmers.Search_FindSwimmerExecute(Sender: TObject);
 begin
   btnFindMemberClick(Self);
 end;
@@ -843,8 +839,8 @@ begin
   // ----------------------------------------------------
   // Prepares all core queries  (Master+Child)
   // ----------------------------------------------------
-  ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-    chkbHideInActive.Checked, true);
+  ManageMemberData.UpdateMember(fSwimClubID, Hide_Archived.Checked,
+    Hide_InActive.Checked, true);
 
   // Cue-to-member
   if AMemberID > 0 then
@@ -859,9 +855,9 @@ begin
   // C:\Users\<#USERNAME#>\AppData\Roaming\Artanemus\ManageMemberData\ + SCMMEMBERPREF
   ini := TIniFile.Create(GetSCMAppDataDir + INIFILE_SCM_MEMBERPREF);
   try
-    chkbHideArchived.Checked := ini.ReadBool(INIFILE_SECTION,
+    Hide_Archived.Checked := ini.ReadBool(INIFILE_SECTION,
       'HideArchived', true);
-    chkbHideInActive.Checked := ini.ReadBool(INIFILE_SECTION,
+    Hide_InActive.Checked := ini.ReadBool(INIFILE_SECTION,
       'HideInActive', false);
   finally
     ini.Free;
@@ -887,8 +883,8 @@ begin
   // C:\Users\<#USERNAME#>\AppData\Roaming\Artanemus\ManageMember\ + SCMMEMBERPREF
   ini := TIniFile.Create(GetSCMAppDataDir + INIFILE_SCM_MEMBERPREF);
   try
-    ini.WriteBool(INIFILE_SECTION, 'HideArchived', chkbHideArchived.Checked);
-    ini.WriteBool(INIFILE_SECTION, 'HideInActive', chkbHideInActive.Checked);
+    ini.WriteBool(INIFILE_SECTION, 'HideArchived', Hide_Archived.Checked);
+    ini.WriteBool(INIFILE_SECTION, 'HideInActive', Hide_InActive.Checked);
   finally
     ini.Free;
   end;

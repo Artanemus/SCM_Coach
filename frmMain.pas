@@ -79,7 +79,7 @@ type
     Programs_Open: TAction;
     Programs_Save: TAction;
     Programs_SaveAs: TAction;
-    Edit_Guardians: TAction;
+    Edit_Contacts: TAction;
     procedure FormCreate(Sender: TObject);
     procedure btnNewSessionClick(Sender: TObject);
     procedure Edit_SwimmersUpdate(Sender: TObject);
@@ -114,7 +114,8 @@ implementation
 
 {$R *.dfm}
 
-uses frmSessionNew, dlgBasicLogin, SCMUtility, IniFiles, frmManageSwimmers;
+uses frmSessionNew, dlgBasicLogin, SCMUtility, IniFiles, frmManageSwimmers
+, System.UITypes;
 
 
 function TMain.AssertConnection: boolean;
@@ -211,7 +212,7 @@ begin
   Application.ProcessMessages;
 
   // scmConnectionAfterConnect calls ActivateTables
-  // SCM.ActivateTable;
+   SCM.ActivateTable;
 
   // then test 'IsActive
   if not SCM.SCMActive then

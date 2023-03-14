@@ -1,7 +1,7 @@
 object ManageSwimmers: TManageSwimmers
   Left = 0
   Top = 0
-  Caption = 'Human Resources - Swimmers.'
+  Caption = 'Human Resources - Squad Swimmers.'
   ClientHeight = 844
   ClientWidth = 1350
   Color = clBtnFace
@@ -18,17 +18,16 @@ object ManageSwimmers: TManageSwimmers
   TextHeight = 19
   object Panel1: TPanel
     Left = 0
-    Top = 27
+    Top = 42
     Width = 1350
-    Height = 49
+    Height = 37
     Align = alTop
     BevelEdges = []
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 1346
     object lblMemberCount: TLabel
-      Left = 669
-      Top = 11
+      Left = 1159
+      Top = 6
       Width = 164
       Height = 23
       Caption = 'Swimmers Found : '
@@ -40,8 +39,8 @@ object ManageSwimmers: TManageSwimmers
       ParentFont = False
     end
     object lblCount: TLabel
-      Left = 830
-      Top = 12
+      Left = 1320
+      Top = 7
       Width = 10
       Height = 23
       Caption = '0'
@@ -51,66 +50,6 @@ object ManageSwimmers: TManageSwimmers
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
-    end
-    object VirtualImage1: TVirtualImage
-      Left = 0
-      Top = 0
-      Width = 49
-      Height = 49
-      Align = alLeft
-      ImageCollection = ImageCollectMember
-      ImageWidth = 0
-      ImageHeight = 0
-      ImageIndex = 4
-      ImageName = 'pool_swimmer'
-      ExplicitLeft = 16
-    end
-    object chkbHideInActive: TCheckBox
-      Left = 194
-      Top = 11
-      Width = 206
-      Height = 28
-      Caption = 'Hide In-Active'
-      TabOrder = 1
-      WordWrap = True
-      OnClick = chkbHideInActiveClick
-    end
-    object chkbHideArchived: TCheckBox
-      Left = 55
-      Top = 11
-      Width = 133
-      Height = 28
-      Caption = 'Hide Archived'
-      TabOrder = 0
-      WordWrap = True
-      OnClick = chkbHideArchivedClick
-    end
-    object btnFindMember: TButton
-      Left = 890
-      Top = 9
-      Width = 123
-      Height = 34
-      Caption = 'Find...'
-      TabOrder = 2
-      OnClick = btnFindMemberClick
-    end
-    object btnGotoMemberID: TButton
-      Left = 1027
-      Top = 9
-      Width = 133
-      Height = 34
-      Caption = 'Goto Swimmer ID'
-      TabOrder = 3
-      OnClick = btnGotoMemberIDClick
-    end
-    object btnGotoMembership: TButton
-      Left = 1172
-      Top = 9
-      Width = 157
-      Height = 34
-      Caption = 'Goto HR number'
-      TabOrder = 4
-      OnClick = btnGotoMembershipClick
     end
   end
   object Panel3: TPanel
@@ -140,15 +79,16 @@ object ManageSwimmers: TManageSwimmers
   end
   object PageControl1: TPageControl
     Left = 0
-    Top = 76
+    Top = 79
     Width = 1350
-    Height = 702
-    ActivePage = TabSheet1
+    Height = 699
+    ActivePage = TabSheet2
     Align = alClient
     MultiLine = True
     TabHeight = 40
     TabOrder = 2
     TabWidth = 160
+    ExplicitTop = 76
     ExplicitWidth = 1346
     ExplicitHeight = 701
     object TabSheet1: TTabSheet
@@ -157,7 +97,7 @@ object ManageSwimmers: TManageSwimmers
         Left = 0
         Top = 0
         Width = 1342
-        Height = 652
+        Height = 649
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
@@ -259,12 +199,12 @@ object ManageSwimmers: TManageSwimmers
           ParentFont = False
         end
         object Label22: TLabel
-          Left = 192
+          Left = 182
           Top = 172
-          Width = 191
+          Width = 201
           Height = 19
           Alignment = taRightJustify
-          Caption = 'Member'#39's age as of today :'
+          Caption = 'Swimmer'#39's age as of today :'
         end
         object Label24: TLabel
           Left = 192
@@ -368,7 +308,7 @@ object ManageSwimmers: TManageSwimmers
           Top = 302
           Width = 292
           Height = 17
-          Caption = 'Is Active - Indicates full membership. '
+          Caption = 'Is Active. '
           DataField = 'IsActive'
           TabOrder = 6
         end
@@ -385,7 +325,7 @@ object ManageSwimmers: TManageSwimmers
           Top = 275
           Width = 255
           Height = 17
-          Caption = 'Is Archived - Retired from club.'
+          Caption = 'Is Archived - Retired from squad.'
           DataField = 'IsArchived'
           TabOrder = 5
         end
@@ -405,7 +345,7 @@ object ManageSwimmers: TManageSwimmers
         object RegistrationNum: TDBEdit
           Left = 192
           Top = 516
-          Width = 184
+          Width = 283
           Height = 27
           DataField = 'RegisterStr'
           DataSource = ManageMemberData.dsMember
@@ -526,7 +466,7 @@ object ManageSwimmers: TManageSwimmers
         Left = 0
         Top = 0
         Width = 1342
-        Height = 652
+        Height = 649
         Align = alClient
         BorderStyle = bsNone
         DefaultDrawing = False
@@ -557,49 +497,54 @@ object ManageSwimmers: TManageSwimmers
           item
             Expanded = False
             FieldName = 'MemberNUM'
-            Width = 90
+            Title.Caption = 'HR#'
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'FirstName'
-            Width = 80
+            Width = 100
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'LastName'
-            Width = 100
+            Width = 120
             Visible = True
           end
           item
             ButtonStyle = cbsEllipsis
             Expanded = False
             FieldName = 'DOB'
+            Width = 100
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'luGender'
+            Title.Caption = 'Gender'
+            Width = 90
             Visible = True
           end
           item
             Alignment = taCenter
             Expanded = False
             FieldName = 'IsArchived'
-            Title.Caption = 'Archive'
+            Title.Caption = 'Is-Archive'
+            Width = 90
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'IsActive'
-            Width = 40
+            Title.Caption = 'Is-Active'
+            Width = 90
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'Email'
-            Width = 350
+            Width = 400
             Visible = True
           end>
       end
@@ -608,53 +553,53 @@ object ManageSwimmers: TManageSwimmers
       Caption = 'REPORTS'
       ImageIndex = 2
       object Label5: TLabel
-        Left = 241
+        Left = 242
         Top = 51
-        Width = 443
-        Height = 19
-        Caption = 'Produce a detailed report of the current selected club member.'
+        Width = 447
+        Height = 38
+        Caption = 'Produce a detailed report of the current selected swimmer.'
         WordWrap = True
       end
       object Label14: TLabel
         Left = 241
         Top = 97
-        Width = 499
-        Height = 19
+        Width = 568
+        Height = 38
         Caption = 
-          'List the swimming events that the current selected member has sw' +
-          'um.'
+          'List the swimming events that the current selected squad member ' +
+          'has swum.'
         WordWrap = True
       end
       object Label16: TLabel
-        Left = 241
+        Left = 242
         Top = 236
-        Width = 472
-        Height = 19
-        Caption = 'Prepare a summary of all the club members (3 columns per page).'
+        Width = 503
+        Height = 38
+        Caption = 'Prepare a summary of all the squad members (3 columns per page).'
         WordWrap = True
       end
       object Label17: TLabel
         Left = 241
-        Top = 282
-        Width = 352
-        Height = 19
-        Caption = 'Prepare a detailed report of all the club members.'
+        Top = 280
+        Width = 384
+        Height = 38
+        Caption = 'Prepare a detailed report of all the squad members.'
         WordWrap = True
       end
       object Label9: TLabel
         Left = 242
         Top = 339
-        Width = 290
-        Height = 19
-        Caption = 'Prepare a compact list of club members. '
+        Width = 327
+        Height = 38
+        Caption = 'Prepare a compact list of squad members. '
         WordWrap = True
       end
       object Label19: TLabel
         Left = 242
         Top = 20
-        Width = 248
+        Width = 310
         Height = 25
-        Caption = 'Current Selected Member ...'
+        Caption = 'Current Selected Squad Member ...'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -19
@@ -665,9 +610,9 @@ object ManageSwimmers: TManageSwimmers
       object Label20: TLabel
         Left = 241
         Top = 205
-        Width = 131
+        Width = 193
         Height = 25
-        Caption = 'All Members ...'
+        Caption = 'All Squad Members ...'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -19
@@ -680,7 +625,7 @@ object ManageSwimmers: TManageSwimmers
         Top = 43
         Width = 218
         Height = 38
-        Caption = 'Member Details'
+        Caption = 'Swimmer'#39's Details'
         TabOrder = 0
         OnClick = btnMemberDetailClick
       end
@@ -689,7 +634,7 @@ object ManageSwimmers: TManageSwimmers
         Top = 228
         Width = 218
         Height = 38
-        Caption = 'Club Members Summary'
+        Caption = 'Squad in Summary'
         TabOrder = 1
         OnClick = btnClubMembersSummaryClick
       end
@@ -698,7 +643,7 @@ object ManageSwimmers: TManageSwimmers
         Top = 89
         Width = 218
         Height = 38
-        Caption = 'Member History'
+        Caption = 'Swimmer'#39's History'
         TabOrder = 2
         OnClick = btnMemberHistoryClick
       end
@@ -707,7 +652,7 @@ object ManageSwimmers: TManageSwimmers
         Top = 274
         Width = 218
         Height = 38
-        Caption = 'Club Members Detailed'
+        Caption = 'Squad in Detailed'
         TabOrder = 3
         OnClick = btnClubMembersDetailedClick
       end
@@ -716,20 +661,19 @@ object ManageSwimmers: TManageSwimmers
         Top = 320
         Width = 218
         Height = 38
-        Caption = 'Club Members List'
+        Caption = 'List of Squad Swimmers'
         TabOrder = 4
         OnClick = btnClubMembersListClick
       end
     end
   end
-  object ActnMemberMenuBar: TActionMainMenuBar
+  object ActionToolBar1: TActionToolBar
     Left = 0
     Top = 0
     Width = 1350
-    Height = 27
-    UseSystemFont = False
+    Height = 42
     ActionManager = ActnManagerMember
-    Caption = 'Member Menu Bar'
+    Caption = 'ActionToolBar1'
     Color = clMenuBar
     ColorMap.DisabledFontColor = 7171437
     ColorMap.HighlightColor = clWhite
@@ -737,12 +681,12 @@ object ManageSwimmers: TManageSwimmers
     ColorMap.UnusedColor = clWhite
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
-    Font.Height = -13
+    Font.Height = -12
     Font.Name = 'Segoe UI'
     Font.Style = []
-    HorzMargin = 10
-    Spacing = 10
-    ExplicitWidth = 1346
+    ParentFont = False
+    Spacing = 0
+    ExplicitTop = 5
   end
   object ImageList1: TImageList
     Height = 24
@@ -1071,7 +1015,7 @@ object ManageSwimmers: TManageSwimmers
               end
               item
                 Action = MemFile_Exit
-                Caption = '&Exit Member'
+                Caption = '&Close '
                 ImageIndex = 0
                 ImageName = 'Exit'
               end>
@@ -1080,27 +1024,72 @@ object ManageSwimmers: TManageSwimmers
           item
             Items = <
               item
-                Action = MemSearch_FindMember
-                Caption = '&Find Member...'
+                Action = Search_FindSwimmer
+                Caption = '&Find Swimmer...'
                 ImageIndex = 2
                 ImageName = 'Search'
                 ShortCut = 16454
               end
               item
-                Action = MemSearch_GotoMembershipNum
-                Caption = '&Goto Membership Number...'
+                Action = Search_GotoHRNUM
+                Caption = '&Goto HR Number...'
                 ImageIndex = 3
                 ImageName = 'Goto'
               end
               item
-                Action = MemSearch_GotoMemberID
-                Caption = 'G&oto Member ID...'
+                Action = Search_GotoSwimmerID
+                Caption = 'G&oto Swimmer ID...'
                 ImageIndex = 3
                 ImageName = 'Goto'
               end>
             Caption = '&Search'
           end>
-        ActionBar = ActnMemberMenuBar
+      end
+      item
+        Items = <
+          item
+            Action = Search_FindSwimmer
+            Caption = '&Find Swimmer...'
+            ImageIndex = 2
+            ImageName = 'Search'
+            ShortCut = 16454
+          end
+          item
+            Action = Search_GotoSwimmerID
+            Caption = '&Goto Swimmer ID...'
+            ImageIndex = 3
+            ImageName = 'Goto'
+          end
+          item
+            Action = Search_GotoHRNUM
+            Caption = 'G&oto HR Number...'
+            ImageIndex = 3
+            ImageName = 'Goto'
+          end
+          item
+            Caption = '-'
+          end
+          item
+            Action = Hide_Archived
+            Caption = '&Hide Archived'
+            ImageIndex = 4
+            ImageName = 'VisibilityOn'
+          end
+          item
+            Action = Hide_InActive
+            ImageIndex = 4
+            ImageName = 'VisibilityOn'
+          end
+          item
+            Caption = '-'
+          end
+          item
+            Action = MemFile_Exit
+            Caption = '&Close '
+            ImageIndex = 0
+            ImageName = 'Exit'
+          end>
+        ActionBar = ActionToolBar1
       end>
     Images = VirtlImageListMember
     Left = 1072
@@ -1115,32 +1104,46 @@ object ManageSwimmers: TManageSwimmers
     end
     object MemFile_Exit: TAction
       Category = 'File'
-      Caption = 'Exit Member'
+      Caption = 'Close '
       ImageIndex = 0
       ImageName = 'Exit'
       OnExecute = MemFile_ExitExecute
     end
-    object MemSearch_FindMember: TAction
+    object Search_FindSwimmer: TAction
       Category = 'Search'
-      Caption = 'Find Member...'
+      Caption = 'Find Swimmer...'
       ImageIndex = 2
       ImageName = 'Search'
       ShortCut = 16454
-      OnExecute = MemSearch_FindMemberExecute
+      OnExecute = Search_FindSwimmerExecute
     end
-    object MemSearch_GotoMembershipNum: TAction
+    object Search_GotoSwimmerID: TAction
       Category = 'Search'
-      Caption = 'Goto Membership Number...'
+      Caption = 'Goto Swimmer ID...'
+      ImageIndex = 3
+      ImageName = 'Goto'
+      OnExecute = btnGotoMemberIDClick
+    end
+    object Search_GotoHRNUM: TAction
+      Category = 'Search'
+      Caption = 'Goto HR Number...'
       ImageIndex = 3
       ImageName = 'Goto'
       OnExecute = btnGotoMembershipClick
     end
-    object MemSearch_GotoMemberID: TAction
-      Category = 'Search'
-      Caption = 'Goto Member ID...'
-      ImageIndex = 3
-      ImageName = 'Goto'
-      OnExecute = btnGotoMemberIDClick
+    object Hide_Archived: TAction
+      Category = 'Hide'
+      AutoCheck = True
+      Caption = 'Hide Archived'
+      ImageIndex = 4
+      ImageName = 'VisibilityOn'
+    end
+    object Hide_InActive: TAction
+      Category = 'Hide'
+      AutoCheck = True
+      Caption = 'Hide In-Active'
+      ImageIndex = 4
+      ImageName = 'VisibilityOn'
     end
   end
   object ImageCollectMember: TImageCollection
@@ -1292,6 +1295,85 @@ object ManageSwimmers: TManageSwimmers
               1D09605F7CEDCC5A9B0EDCF501D92AB0556065060EBE856E00D628AA31EAFC4B
               A10000000049454E44AE426082}
           end>
+      end
+      item
+        Name = 'VisibilityOn'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
+              87000000017352474200AECE1CE90000039B494441546843ED9981910D411086
+              FB2220034480081001224004880011200264702240048800191001F555F5FFAA
+              5FBF99E9D9B77775AE6AA74ADDDA9BEEE9BFFF7F7A7AE74EEC928F934B1EBF6D
+              002E9AC18D818D819519D824E409BC6A6677CCEC9699DDF5773CF39EF1DBCCBE
+              F9F3677FFEE2EF5771B096814766F63804BD3418C0BC37B30F4B0D35FF58002F
+              CCEC59C8F0B1EBCB0E86DE98D9ABA58E9602401EEFCCEC7A63212421794832FC
+              642025494A32437279FC34B327EE670ACB1200048E5CE2F8E59943060A766A61
+              4FC20367F25A32C21F40CA310380EC7DF20CCA2181BF74FD968B4C4C2031F88B
+              40D8F4F7AAC45400A09BE0554D88850D87FEAB8CAB2A614330486C3458837D40
+              61D0600D40A8821DD88F00A0F3AF29786885DEDEC006A9A994E679EC117CA0F5
+              DE2039AF13881BBD84F50064D9FC71FD9F0E167EEA32886CB5A69355E4F276E0
+              0B49C1C6159FD395530F00B25116099EE72E8D2EA998356C54918841954701F1
+              EEB907D9C3810D3E64C33372DA1B2D00914202C1D188F22CB58FCE56DE233083
+              FCEE7B04FCFE76E19BB591B1C601E80CA03468A42BB245F094C6D1408602D1CC
+              6A32466E1C9C1A80DEA9210388C150357A9B31AEF1D7FF035BB0515527988051
+              49A3AA84B827E09BBECE1EE8684CB00060CC488779D16626FB021E5940D70435
+              1A59193B9B082066BFDA605A2CEE17FA18E89E195116B36B459B1D0B11002FD5
+              9FCC3ABD28003B79F724345321FE3B0911506461A64260A34D0CE8EE891974C5
+              26FE114EF8994D4C29651F30F68ACB5994D1089ACDF9B0D8044B2BDDA232CADA
+              51D73352A27452E654160141BFD33AC8E893744ECC54BAF25CEAD117B35A7684
+              8D56029B562B11FBA4AA31CC9D70F35C1A357304A0C383805870D4CCC11C74C7
+              7EA7A52632CFDC51574B33476F25C0DFFDCC393824AB763A4A43F21A7591C889
+              C05A9F8BDA800437EAADE86AE9443586277C55017247885302E49CA85A064E69
+              550E12519DB6649BACC7CFD6B213AE0010308EA39C78470691CBD1D721495B7C
+              85E12F5E167465136D6700683E998F9F7B0202DDF4412359B4F602C1D295B21F
+              F22D0789C91708CDEABC04804E5E80E45B041D82F15A850CC66B150A82AE5790
+              57ABD3E5B280C02BB9EDC02C052043E8267355C59969EC9883D66172B6195C0D
+              400EC816FF7A55A702406D87D151491DFA389681EC1469A8EAC4CB5D314486F3
+              E52E32A92A599580ED6F646586CE7BC25949E8BCE3ECFADF005C58EA7DE18D81
+              8D819519D824B43281ABCDFF018921E03192487AFD0000000049454E44AE4260
+              82}
+          end>
+      end
+      item
+        Name = 'VisibilityOff'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
+              87000000017352474200AECE1CE9000003BC494441546843ED9881B14D410C86
+              F32AA00354800A50012A4005A80015A00254800A50012A400754C07C6673262F
+              7693ECB967E69E3B6367EEBC7BDFDD93CD9FFCF993BD6772E2EBECC4FD97FF00
+              8E9DC15E062E8AC8CF633B563DDF03C0F90F22F245441E548D1C739F05A0CE5F
+              6B0EBD3E05103E03387DCF4474F7207A35B00604D9BB2122648F179F6F3A6A7D
+              6C9FA127EFBF8AC8F743E93792D10A089CBC2D22F73BCE56FD02CC0B1179BF56
+              38A23E908120D244F242D5DB601FAAC779CF6681648D6C06C4A7A65E80C221A2
+              AB727C594478597AF1DE8367FF531179590D4A06003B19081C63CDF2190A42BF
+              472272C9390CF85B956C540010A9CFEE80ADD5092044DE02211B8000CC706500
+              709EC646B4FC8A4090155489BF4A2728962D80BC729B68A89CD55D11006410E7
+              75217B4423EB13EF9A3AF50EA43E7028A29B1787301323003EF2C81CD151B588
+              4064EA5429546C1008A5D410C4689823F23A52907ADF94B2C2E6598A93487338
+              9FEF38D579DC7AC0881DD0968C5D352271DD17760F008DE5617B08DAE07C6F3A
+              CD4078C7A8076CD3FC58D8C4A1884E80E07B955BE495C02CCB03B0BCFFD59C8F
+              5460160407DB6788304A132D32F7D66C60BF8E25FFDCC8904BA54E96626C12D5
+              6FEEF48AC41255E577A68498C761544DDF2FA0EDC316E98FE65C129CBF85ED65
+              4FA31CDD272C4DCF457470208182094AA5E5190B80C2D5620DB5D71C42F37932
+              3834CA043C7EDE9EAB649AADF6AC857A16804D53D5A875A4876304C23EC70087
+              73D9B2D95E94D102B0055C51080EF4CDAE0AC236BBBB4DF33300D49ACE5D5D0A
+              F962E1108C67EB77B6A1298FAD09DBECAE1406419BB1737D299251FCAA44C752
+              2FC2E2E90408A8837844CB0F93A18C62C82A04542242D1CF2C5E21664064C9F3
+              3F34A48D4C0D2259DAC22BB3F9484EAB35D1DBE79DEF4E05D13067AF8B95D91C
+              9E4289CA15336B76384F7F517A0DA782A80BF6C65AE475389B3795E07BED9A6B
+              E8E4231F8E34591BEF8DC644BA72674562F50ECCE84046C950769FB06306CE93
+              8565F6F111C900B0DFCFE6FC8F4390C5A1E120F4D900A841D33E73D09552FD20
+              ADF4054F0D8CE3D09BCA05DC80AA80D0BB44A854950C5803BDCBB77E4F3600C4
+              8BC31908EDAC4F10503664177A61CBAEACB0BB406601600447A8035E15C5C9B4
+              FE20106B00585A516044B2A23A3D209A25FBFC54260E01601DD21F7329401DC9
+              FD2F6FEAAC2A92D20D3B594D0CB3B81580199A8CF6AE02B12700AB32B13700D3
+              20F608600AC45E01F44074AF9E7B0660410C7F60DB3B004070C142A1BA33D129
+              00D87416DA42EF37B571F219F8031D3DFD310C1B9D900000000049454E44AE42
+              6082}
+          end>
       end>
     Left = 1072
     Top = 472
@@ -1317,6 +1399,16 @@ object ManageSwimmers: TManageSwimmers
         CollectionIndex = 3
         CollectionName = 'Goto'
         Name = 'Goto'
+      end
+      item
+        CollectionIndex = 5
+        CollectionName = 'VisibilityOn'
+        Name = 'VisibilityOn'
+      end
+      item
+        CollectionIndex = 6
+        CollectionName = 'VisibilityOff'
+        Name = 'VisibilityOff'
       end>
     ImageCollection = ImageCollectMember
     Width = 32
