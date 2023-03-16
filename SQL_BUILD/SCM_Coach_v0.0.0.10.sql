@@ -2,7 +2,7 @@
  * ER/Studio Data Architect SQL Code Generation
  * Project :      SCM_Coach_v1.0.1.0.DM1
  *
- * Date Created : Sunday, March 12, 2023 11:08:03
+ * Date Created : Thursday, March 16, 2023 11:09:18
  * Target DBMS : Microsoft SQL Server 2017
  */
 
@@ -18,10 +18,10 @@ go
 
 CREATE TABLE coachLink(
     coachLinkID    int              IDENTITY(1,1),
-    MemberID       int              NOT NULL,
+    HRID           int              NOT NULL,
     teamID         int              NOT NULL,
     NickName       nvarchar(128)    NULL,
-    CONSTRAINT PK_coachLink PRIMARY KEY CLUSTERED (coachLinkID, MemberID, teamID)
+    CONSTRAINT PK_coachLink PRIMARY KEY CLUSTERED (coachLinkID, HRID, teamID)
 )
 go
 
@@ -41,7 +41,7 @@ CREATE TABLE ContactNum(
     ContactNumID        int             IDENTITY(1,1),
     Number              nvarchar(30)    NULL,
     ContactNumTypeID    int             NULL,
-    MemberID            int             NOT NULL,
+    HRID                int             NOT NULL,
     CONSTRAINT PK_ContactNum PRIMARY KEY NONCLUSTERED (ContactNumID)
 )
 go
@@ -256,6 +256,72 @@ ELSE
 go
 
 /* 
+ * TABLE: EventTime 
+ */
+
+CREATE TABLE EventTime(
+    EventTimeID        int               IDENTITY(1,1),
+    Caption            nvarchar(128)     NULL,
+    LongCaption        nvarchar(1024)    NULL,
+    RaceTime           time(7)           NULL,
+    CreatedOn          datetime          NULL,
+    DistanceID         int               NOT NULL,
+    strokeID           int               NOT NULL,
+    HRID               int               NOT NULL,
+    EventTimeTypeID    int               NULL,
+    CONSTRAINT PK_PB PRIMARY KEY CLUSTERED (EventTimeID)
+)
+go
+
+
+
+IF OBJECT_ID('EventTime') IS NOT NULL
+    PRINT '<<< CREATED TABLE EventTime >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE EventTime >>>'
+go
+
+/* 
+ * TABLE: EventTimeSplit 
+ */
+
+CREATE TABLE EventTimeSplit(
+    EventTimeSplitID    int         IDENTITY(1,1),
+    Lap                 smallint    NULL,
+    RaceTime            time(7)     NULL,
+    EventTimeID         int         NULL,
+    CONSTRAINT PK_PBSplit PRIMARY KEY CLUSTERED (EventTimeSplitID)
+)
+go
+
+
+
+IF OBJECT_ID('EventTimeSplit') IS NOT NULL
+    PRINT '<<< CREATED TABLE EventTimeSplit >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE EventTimeSplit >>>'
+go
+
+/* 
+ * TABLE: EventTimeType 
+ */
+
+CREATE TABLE EventTimeType(
+    EventTimeTypeID    int              IDENTITY(1,1),
+    Caption            nvarchar(128)    NULL,
+    CONSTRAINT PK62 PRIMARY KEY CLUSTERED (EventTimeTypeID)
+)
+go
+
+
+
+IF OBJECT_ID('EventTimeType') IS NOT NULL
+    PRINT '<<< CREATED TABLE EventTimeType >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE EventTimeType >>>'
+go
+
+/* 
  * TABLE: evTime 
  */
 
@@ -347,6 +413,57 @@ ELSE
 go
 
 /* 
+ * TABLE: HR 
+ */
+
+CREATE TABLE HR(
+    HRID           int              IDENTITY(1,1),
+    FirstName      char(64)         NULL,
+    LastName       char(64)         NULL,
+    DOB            datetime         NULL,
+    RegisterNum    int              NULL,
+    RegisterStr    nvarchar(24)     NULL,
+    IsActive       bit              DEFAULT 1 NULL,
+    IsArchived     bit              DEFAULT 0 NULL,
+    CreatedOn      datetime         NULL,
+    ArchivedOn     datetime         NULL,
+    Email          nvarchar(256)    NULL,
+    SCMMemberID    int              NULL,
+    GenderID       int              NOT NULL,
+    gradeID        int              NULL,
+    HRTypeID       int              NOT NULL,
+    CONSTRAINT PK_HR PRIMARY KEY CLUSTERED (HRID)
+)
+go
+
+
+
+IF OBJECT_ID('HR') IS NOT NULL
+    PRINT '<<< CREATED TABLE HR >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE HR >>>'
+go
+
+/* 
+ * TABLE: HRType 
+ */
+
+CREATE TABLE HRType(
+    HRTypeID    int              IDENTITY(1,1),
+    Caption     nvarchar(128)    NULL,
+    CONSTRAINT PK_HRType PRIMARY KEY CLUSTERED (HRTypeID)
+)
+go
+
+
+
+IF OBJECT_ID('HRType') IS NOT NULL
+    PRINT '<<< CREATED TABLE HRType >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE HRType >>>'
+go
+
+/* 
  * TABLE: intensity 
  */
 
@@ -415,45 +532,14 @@ ELSE
 go
 
 /* 
- * TABLE: Member 
- */
-
-CREATE TABLE Member(
-    MemberID        int              IDENTITY(1,1),
-    FirstName       char(64)         NULL,
-    LastName        char(64)         NULL,
-    DOB             datetime         NULL,
-    RegisterNum     int              NULL,
-    RegisterStr     nvarchar(24)     NULL,
-    IsActive        bit              DEFAULT 1 NULL,
-    IsArchived      bit              DEFAULT 0 NULL,
-    CreatedOn       datetime         NULL,
-    ArchivedOn      datetime         NULL,
-    Email           nvarchar(256)    NULL,
-    GenderID        int              NOT NULL,
-    gradeID         int              NOT NULL,
-    MemberTypeID    int              NULL,
-    CONSTRAINT PK_Member PRIMARY KEY NONCLUSTERED (MemberID)
-)
-go
-
-
-
-IF OBJECT_ID('Member') IS NOT NULL
-    PRINT '<<< CREATED TABLE Member >>>'
-ELSE
-    PRINT '<<< FAILED CREATING TABLE Member >>>'
-go
-
-/* 
  * TABLE: memberLink 
  */
 
 CREATE TABLE memberLink(
     memberLinkID    int    IDENTITY(1,1),
     teamID          int    NOT NULL,
-    MemberID        int    NOT NULL,
-    CONSTRAINT PK_memberLink PRIMARY KEY CLUSTERED (memberLinkID, teamID, MemberID)
+    HRID            int    NOT NULL,
+    CONSTRAINT PK_memberLink PRIMARY KEY CLUSTERED (memberLinkID, teamID, HRID)
 )
 go
 
@@ -463,25 +549,6 @@ IF OBJECT_ID('memberLink') IS NOT NULL
     PRINT '<<< CREATED TABLE memberLink >>>'
 ELSE
     PRINT '<<< FAILED CREATING TABLE memberLink >>>'
-go
-
-/* 
- * TABLE: MemberType 
- */
-
-CREATE TABLE MemberType(
-    MemberTypeID    int              IDENTITY(1,1),
-    Caption         nvarchar(128)    NULL,
-    CONSTRAINT PK_MemberType PRIMARY KEY CLUSTERED (MemberTypeID)
-)
-go
-
-
-
-IF OBJECT_ID('MemberType') IS NOT NULL
-    PRINT '<<< CREATED TABLE MemberType >>>'
-ELSE
-    PRINT '<<< FAILED CREATING TABLE MemberType >>>'
 go
 
 /* 
@@ -506,27 +573,6 @@ IF OBJECT_ID('miscTerm') IS NOT NULL
     PRINT '<<< CREATED TABLE miscTerm >>>'
 ELSE
     PRINT '<<< FAILED CREATING TABLE miscTerm >>>'
-go
-
-/* 
- * TABLE: PB 
- */
-
-CREATE TABLE PB(
-    PBID          int    IDENTITY(1,1),
-    DistanceID    int    NOT NULL,
-    strokeID      int    NOT NULL,
-    MemberID      int    NOT NULL,
-    CONSTRAINT PK_PB PRIMARY KEY NONCLUSTERED (PBID)
-)
-go
-
-
-
-IF OBJECT_ID('PB') IS NOT NULL
-    PRINT '<<< CREATED TABLE PB >>>'
-ELSE
-    PRINT '<<< FAILED CREATING TABLE PB >>>'
 go
 
 /* 
@@ -755,12 +801,12 @@ go
  * TABLE: coachLink 
  */
 
-ALTER TABLE coachLink ADD CONSTRAINT MembercoachLink 
-    FOREIGN KEY (MemberID)
-    REFERENCES Member(MemberID)
+ALTER TABLE coachLink ADD CONSTRAINT HR_coachLink 
+    FOREIGN KEY (HRID)
+    REFERENCES HR(HRID)
 go
 
-ALTER TABLE coachLink ADD CONSTRAINT teamcoachLink 
+ALTER TABLE coachLink ADD CONSTRAINT team_coachLink 
     FOREIGN KEY (teamID)
     REFERENCES team(teamID)
 go
@@ -770,14 +816,14 @@ go
  * TABLE: ContactNum 
  */
 
-ALTER TABLE ContactNum ADD CONSTRAINT ContactNumTypeContactNum 
+ALTER TABLE ContactNum ADD CONSTRAINT ContactNumType_ContactNum 
     FOREIGN KEY (ContactNumTypeID)
     REFERENCES ContactNumType(ContactNumTypeID) ON DELETE SET NULL
 go
 
-ALTER TABLE ContactNum ADD CONSTRAINT MemberContactNum 
-    FOREIGN KEY (MemberID)
-    REFERENCES Member(MemberID)
+ALTER TABLE ContactNum ADD CONSTRAINT HR_ContactNum 
+    FOREIGN KEY (HRID)
+    REFERENCES HR(HRID)
 go
 
 
@@ -785,12 +831,12 @@ go
  * TABLE: dictionary 
  */
 
-ALTER TABLE dictionary ADD CONSTRAINT dictionaryTypedictionary 
+ALTER TABLE dictionary ADD CONSTRAINT dictionaryType_dictionary 
     FOREIGN KEY (dictionaryType)
     REFERENCES dictionaryType(dictionaryType)
 go
 
-ALTER TABLE dictionary ADD CONSTRAINT SCMCoachdictionary 
+ALTER TABLE dictionary ADD CONSTRAINT SCMCoach_dictionary 
     FOREIGN KEY (SCMCoachID)
     REFERENCES SCMCoach(SCMCoachID)
 go
@@ -800,14 +846,49 @@ go
  * TABLE: drillLink 
  */
 
-ALTER TABLE drillLink ADD CONSTRAINT drilldrillLink 
+ALTER TABLE drillLink ADD CONSTRAINT drill_drillLink 
     FOREIGN KEY (drillID)
     REFERENCES drill(drillID)
 go
 
-ALTER TABLE drillLink ADD CONSTRAINT drillExdrillLink 
+ALTER TABLE drillLink ADD CONSTRAINT drillEx_drillLink 
     FOREIGN KEY (drillExID)
     REFERENCES drillEx(drillExID)
+go
+
+
+/* 
+ * TABLE: EventTime 
+ */
+
+ALTER TABLE EventTime ADD CONSTRAINT RefEventTimeType113 
+    FOREIGN KEY (EventTimeTypeID)
+    REFERENCES EventTimeType(EventTimeTypeID)
+go
+
+ALTER TABLE EventTime ADD CONSTRAINT Distance_PB 
+    FOREIGN KEY (DistanceID)
+    REFERENCES Distance(DistanceID)
+go
+
+ALTER TABLE EventTime ADD CONSTRAINT HR_PB 
+    FOREIGN KEY (HRID)
+    REFERENCES HR(HRID)
+go
+
+ALTER TABLE EventTime ADD CONSTRAINT stroke_PB 
+    FOREIGN KEY (strokeID)
+    REFERENCES stroke(strokeID)
+go
+
+
+/* 
+ * TABLE: EventTimeSplit 
+ */
+
+ALTER TABLE EventTimeSplit ADD CONSTRAINT PB_PBSplit 
+    FOREIGN KEY (EventTimeID)
+    REFERENCES EventTime(EventTimeID)
 go
 
 
@@ -815,19 +896,39 @@ go
  * TABLE: evTime 
  */
 
-ALTER TABLE evTime ADD CONSTRAINT heartRangeevT11 
+ALTER TABLE evTime ADD CONSTRAINT heartRange_evT32 
     FOREIGN KEY (heartREST)
     REFERENCES heartRange(heartRangeID)
 go
 
-ALTER TABLE evTime ADD CONSTRAINT heartRangeevTime 
+ALTER TABLE evTime ADD CONSTRAINT heartRange_evTime 
     FOREIGN KEY (heartRACED)
     REFERENCES heartRange(heartRangeID)
 go
 
-ALTER TABLE evTime ADD CONSTRAINT taskevTime 
+ALTER TABLE evTime ADD CONSTRAINT task_evTime 
     FOREIGN KEY (taskID)
     REFERENCES task(taskID)
+go
+
+
+/* 
+ * TABLE: HR 
+ */
+
+ALTER TABLE HR ADD CONSTRAINT Gender_HR 
+    FOREIGN KEY (GenderID)
+    REFERENCES Gender(GenderID)
+go
+
+ALTER TABLE HR ADD CONSTRAINT grade_HR 
+    FOREIGN KEY (gradeID)
+    REFERENCES grade(gradeID)
+go
+
+ALTER TABLE HR ADD CONSTRAINT HRType_HR 
+    FOREIGN KEY (HRTypeID)
+    REFERENCES HRType(HRTypeID)
 go
 
 
@@ -835,29 +936,9 @@ go
  * TABLE: line 
  */
 
-ALTER TABLE line ADD CONSTRAINT lineTypeline 
+ALTER TABLE line ADD CONSTRAINT lineType_line 
     FOREIGN KEY (lineTypeID)
     REFERENCES lineType(lineTypeID)
-go
-
-
-/* 
- * TABLE: Member 
- */
-
-ALTER TABLE Member ADD CONSTRAINT GenderMember 
-    FOREIGN KEY (GenderID)
-    REFERENCES Gender(GenderID)
-go
-
-ALTER TABLE Member ADD CONSTRAINT gradeMember 
-    FOREIGN KEY (gradeID)
-    REFERENCES grade(gradeID)
-go
-
-ALTER TABLE Member ADD CONSTRAINT MemberTypeMember 
-    FOREIGN KEY (MemberTypeID)
-    REFERENCES MemberType(MemberTypeID)
 go
 
 
@@ -865,34 +946,14 @@ go
  * TABLE: memberLink 
  */
 
-ALTER TABLE memberLink ADD CONSTRAINT MembermemberLink 
-    FOREIGN KEY (MemberID)
-    REFERENCES Member(MemberID)
+ALTER TABLE memberLink ADD CONSTRAINT HR_memberLink 
+    FOREIGN KEY (HRID)
+    REFERENCES HR(HRID)
 go
 
-ALTER TABLE memberLink ADD CONSTRAINT teammemberLink 
+ALTER TABLE memberLink ADD CONSTRAINT team_memberLink 
     FOREIGN KEY (teamID)
     REFERENCES team(teamID)
-go
-
-
-/* 
- * TABLE: PB 
- */
-
-ALTER TABLE PB ADD CONSTRAINT DistancePB 
-    FOREIGN KEY (DistanceID)
-    REFERENCES Distance(DistanceID)
-go
-
-ALTER TABLE PB ADD CONSTRAINT MemberPB 
-    FOREIGN KEY (MemberID)
-    REFERENCES Member(MemberID)
-go
-
-ALTER TABLE PB ADD CONSTRAINT strokePB 
-    FOREIGN KEY (strokeID)
-    REFERENCES stroke(strokeID)
 go
 
 
@@ -900,7 +961,7 @@ go
  * TABLE: pool 
  */
 
-ALTER TABLE pool ADD CONSTRAINT coursepool 
+ALTER TABLE pool ADD CONSTRAINT course_pool 
     FOREIGN KEY (courseID)
     REFERENCES course(courseID)
 go
@@ -910,12 +971,12 @@ go
  * TABLE: session 
  */
 
-ALTER TABLE session ADD CONSTRAINT poolsession 
+ALTER TABLE session ADD CONSTRAINT pool_session 
     FOREIGN KEY (poolID)
     REFERENCES pool(poolID)
 go
 
-ALTER TABLE session ADD CONSTRAINT SCMCoachsession 
+ALTER TABLE session ADD CONSTRAINT SCMCoach_session 
     FOREIGN KEY (SCMCoachID)
     REFERENCES SCMCoach(SCMCoachID)
 go
@@ -925,42 +986,42 @@ go
  * TABLE: task 
  */
 
-ALTER TABLE task ADD CONSTRAINT Distancetask 
+ALTER TABLE task ADD CONSTRAINT Distance_task 
     FOREIGN KEY (DistanceID)
     REFERENCES Distance(DistanceID)
 go
 
-ALTER TABLE task ADD CONSTRAINT drilltask 
+ALTER TABLE task ADD CONSTRAINT drill_task 
     FOREIGN KEY (drillID)
     REFERENCES drill(drillID)
 go
 
-ALTER TABLE task ADD CONSTRAINT equipmenttask 
+ALTER TABLE task ADD CONSTRAINT equipment_task 
     FOREIGN KEY (equipmentID)
     REFERENCES equipment(equipmentID)
 go
 
-ALTER TABLE task ADD CONSTRAINT gradetask 
+ALTER TABLE task ADD CONSTRAINT grade_task 
     FOREIGN KEY (gradeID)
     REFERENCES grade(gradeID)
 go
 
-ALTER TABLE task ADD CONSTRAINT intensitytask 
+ALTER TABLE task ADD CONSTRAINT intensity_task 
     FOREIGN KEY (intensityID)
     REFERENCES intensity(intensityID)
 go
 
-ALTER TABLE task ADD CONSTRAINT linetask 
+ALTER TABLE task ADD CONSTRAINT line_task 
     FOREIGN KEY (lineID)
     REFERENCES line(lineID)
 go
 
-ALTER TABLE task ADD CONSTRAINT miscTermtask 
+ALTER TABLE task ADD CONSTRAINT miscTerm_task 
     FOREIGN KEY (miscTermID)
     REFERENCES miscTerm(miscTermID)
 go
 
-ALTER TABLE task ADD CONSTRAINT stroketask 
+ALTER TABLE task ADD CONSTRAINT stroke_task 
     FOREIGN KEY (strokeID)
     REFERENCES stroke(strokeID)
 go
@@ -970,12 +1031,12 @@ go
  * TABLE: WorkOut 
  */
 
-ALTER TABLE WorkOut ADD CONSTRAINT sessionWorkOut 
+ALTER TABLE WorkOut ADD CONSTRAINT session_WorkOut 
     FOREIGN KEY (sessionID)
     REFERENCES session(sessionID)
 go
 
-ALTER TABLE WorkOut ADD CONSTRAINT teamWorkOut 
+ALTER TABLE WorkOut ADD CONSTRAINT team_WorkOut 
     FOREIGN KEY (teamID)
     REFERENCES team(teamID)
 go
@@ -985,17 +1046,17 @@ go
  * TABLE: WorkOutLink 
  */
 
-ALTER TABLE WorkOutLink ADD CONSTRAINT lineWorkOutL29 
+ALTER TABLE WorkOutLink ADD CONSTRAINT line_WorkOutLi9 
     FOREIGN KEY (ChildLine)
     REFERENCES line(lineID)
 go
 
-ALTER TABLE WorkOutLink ADD CONSTRAINT lineWorkOutLink 
+ALTER TABLE WorkOutLink ADD CONSTRAINT line_WorkOutLink 
     FOREIGN KEY (lineID)
     REFERENCES line(lineID)
 go
 
-ALTER TABLE WorkOutLink ADD CONSTRAINT WorkOutWorkOutLink 
+ALTER TABLE WorkOutLink ADD CONSTRAINT WorkOut_WorkOutLink 
     FOREIGN KEY (WorkOutID)
     REFERENCES WorkOut(WorkOutID)
 go

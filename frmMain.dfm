@@ -410,6 +410,7 @@ object Main: TMain
               end
               item
                 Action = Edit_Contacts
+                Caption = 'C&ontacts...'
                 ImageIndex = 3
                 ImageName = 'Members'
               end
@@ -557,6 +558,10 @@ object Main: TMain
               item
                 Action = Tools_Timed
                 Caption = '&Timed Events...'
+              end
+              item
+                Action = Tools_Inventory
+                Caption = '&Equipment Inventory...'
               end>
             Caption = '&Tools'
             ImageIndex = 0
@@ -567,6 +572,9 @@ object Main: TMain
               item
                 Action = Help_About
                 Caption = '&About...'
+              end
+              item
+                Action = Help_WebHelp
               end>
             Caption = '&Help'
             ImageIndex = 0
@@ -736,6 +744,14 @@ object Main: TMain
     object Help_About: TAction
       Category = 'Help'
       Caption = 'About...'
+    end
+    object Tools_Inventory: TAction
+      Category = 'Tools'
+      Caption = 'Equipment Inventory...'
+    end
+    object Help_WebHelp: TAction
+      Category = 'Help'
+      Caption = 'Web Coach Wiki...'
     end
   end
   object ImageCollectionCoach: TImageCollection

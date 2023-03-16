@@ -173,8 +173,8 @@
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="dlgBasicLogin.pas">
-            <Form>BasicLogin</Form>
+        <DCCReference Include="dlgBasicLoginSCM.pas">
+            <Form>BasicLoginSCM</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="dlgBootProgress.pas">
@@ -190,6 +190,14 @@
         <DCCReference Include="exeinfo.pas"/>
         <DCCReference Include="dlgDOBPicker.pas">
             <Form>DOBPicker</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="dlgImportSCMSwimmer.pas">
+            <Form>ImportSCMSwimmer</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="dlgBasicLogin.pas">
+            <Form>BasicLogin</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">

@@ -80,6 +80,8 @@ type
     Programs_Save: TAction;
     Programs_SaveAs: TAction;
     Edit_Contacts: TAction;
+    Tools_Inventory: TAction;
+    Help_WebHelp: TAction;
     procedure FormCreate(Sender: TObject);
     procedure btnNewSessionClick(Sender: TObject);
     procedure Edit_SwimmersUpdate(Sender: TObject);

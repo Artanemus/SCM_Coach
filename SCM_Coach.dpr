@@ -22,13 +22,15 @@ uses
   rptMembersList in 'MEMBERS\rptMembersList.pas' {MembersList: TDataModule},
   rptMembersSummary in 'MEMBERS\rptMembersSummary.pas' {MembersSummary: TDataModule},
   dmSCM in 'dmSCM.pas' {SCM: TDataModule},
-  dlgBasicLogin in 'dlgBasicLogin.pas' {BasicLogin},
+  dlgBasicLoginSCM in 'dlgBasicLoginSCM.pas' {BasicLoginSCM},
   dlgBootProgress in 'dlgBootProgress.pas' {BootProgress},
   SCMUtility in 'SCMUtility.pas',
   SCMDefines in 'SCMDefines.pas',
   dlgAbout in 'dlgAbout.pas' {About},
   exeinfo in 'exeinfo.pas',
-  dlgDOBPicker in 'dlgDOBPicker.pas' {DOBPicker};
+  dlgDOBPicker in 'dlgDOBPicker.pas' {DOBPicker},
+  dlgImportSCMSwimmer in 'dlgImportSCMSwimmer.pas' {ImportSCMSwimmer},
+  dlgBasicLogin in 'dlgBasicLogin.pas' {BasicLogin};
 
 {$R *.res}
 

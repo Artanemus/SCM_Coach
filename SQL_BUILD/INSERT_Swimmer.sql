@@ -1,7 +1,7 @@
 USE SCM_Coach
 GO
 
-DELETE FROM [SCM_Coach].[dbo].[Member]
+DELETE FROM [SCM_Coach].[dbo].[HR]
 GO
 
 -- Drop a temporary table called '#scmSwimmers'
@@ -15,12 +15,13 @@ SELECT FirstName
      , DOB
      , GenderID
      , [SwimClubMeet].[dbo].[SwimmerAge](GETDATE(), DOB ) AS AGE
+     , MemberID
 INTO #scmSwimmers
 FROM [SwimClubMeet].[dbo].[Member]
 WHERE isSwimmer = 1;
 
 -- Insert rows into table 'Member' in schema '[dbo]'
-INSERT INTO [dbo].[Member]
+INSERT INTO [dbo].[HR]
 ( -- Columns to insert data into
     [FirstName]
   , [LastName]
@@ -29,7 +30,8 @@ INSERT INTO [dbo].[Member]
   ,[IsActive]
   ,[IsArchived]
   ,[CreatedOn]
-  ,[MemberTypeID]
+  ,[HRTypeID]
+  ,[SCMMemberID]
 )
 SELECT #scmSwimmers.FirstName
      , #scmSwimmers.LastName
@@ -39,6 +41,7 @@ SELECT #scmSwimmers.FirstName
      ,0
      ,GETDATE()
      ,3
+     ,#scmSwimmers.MemberID
 FROM #scmSwimmers
 WHERE (#scmSwimmers.AGE >= 10) 
 GO

@@ -41,12 +41,6 @@ const
   SCMSubFolder = 'Artanemus\SCM\';
   SCMSectionName = 'SCM';
 
-  // D E P R E C A T E D .
-  // Static connection definitions are no longer in used.
-  // --------------------------------------------------
-  SCMConnectionDefsFileName = 'SCMConnectionDefs.ini';
-  SCMConnectionDefsName = 'MSSQL_SwimClubMeet';
-  // --------------------------------------------------
 
 implementation
 

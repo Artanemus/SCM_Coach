@@ -47,17 +47,21 @@ object ManageMemberData: TManageMemberData
     Left = 64
     Top = 472
   end
-  object tblMemberType: TFDTable
+  object tblHRType: TFDTable
     ActiveStoredUsage = [auDesignTime]
-    Active = True
-    IndexFieldNames = 'MemberTypeID'
+    IndexFieldNames = 'HRTypeID'
     Connection = FDTempDesignConnection
-    TableName = 'SCM_Coach..MemberType'
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
+    UpdateOptions.EnableDelete = False
+    UpdateOptions.EnableInsert = False
+    UpdateOptions.EnableUpdate = False
+    UpdateOptions.KeyFields = 'HRTypeID'
+    TableName = 'dbo.HRType'
     Left = 64
     Top = 256
   end
   object dsMemberType: TDataSource
-    DataSet = tblMemberType
+    DataSet = tblHRType
     Left = 168
     Top = 256
   end
@@ -83,7 +87,6 @@ object ManageMemberData: TManageMemberData
   end
   object qryContactNum: TFDQuery
     ActiveStoredUsage = [auDesignTime]
-    Active = True
     Indexes = <
       item
         Active = True
@@ -104,7 +107,7 @@ object ManageMemberData: TManageMemberData
       'SELECT ContactNum.ContactNumID'
       #9',ContactNum.Number'
       #9',ContactNum.ContactNumTypeID'
-      #9',ContactNum.MemberID'
+      #9',ContactNum.HRID'
       'FROM ContactNum;')
     Left = 64
     Top = 184
@@ -179,8 +182,8 @@ object ManageMemberData: TManageMemberData
         '                         Gender ON Member.GenderID = Gender.Gend' +
         'erID'
       #9#9#9#9#9'ORDER BY Member.LastName')
-    Left = 696
-    Top = 96
+    Left = 616
+    Top = 56
     object qryFindMemberMemberID: TFDAutoIncField
       Alignment = taCenter
       DisplayLabel = '  ID'
@@ -273,8 +276,8 @@ object ManageMemberData: TManageMemberData
   end
   object dsFindMember: TDataSource
     DataSet = qryFindMember
-    Left = 782
-    Top = 96
+    Left = 718
+    Top = 56
   end
   object qAssertMemberID: TFDQuery
     ActiveStoredUsage = [auDesignTime]
@@ -349,6 +352,7 @@ object ManageMemberData: TManageMemberData
   object qryMemberPB: TFDQuery
     ActiveStoredUsage = [auDesignTime]
     IndexFieldNames = 'MemberID'
+    Connection = FDTempDesignConnection
     FormatOptions.AssignedValues = [fvFmtDisplayTime]
     FormatOptions.FmtDisplayTime = 'nn:ss.zzz'
     UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
@@ -358,36 +362,31 @@ object ManageMemberData: TManageMemberData
     UpdateOptions.UpdateTableName = 'SwimClubMeet..Member'
     UpdateOptions.KeyFields = 'MemberID'
     SQL.Strings = (
-      'USE SwimClubMeet'
+      'USE SCM_Coach'
       ';'
       ''
-      'DECLARE @memberid as int'
+      'DECLARE @memberid AS INT'
       'SET @memberid = :MEMBERID'
       ''
-      'SELECT DISTINCT Member.MemberID'
-      #9',Distance.DistanceID'
-      #9',Stroke.StrokeID'
+      'SELECT '
+      '       PB.PBID'
+      '     , PB.DistanceID'
+      '     , PB.StrokeID'
+      '     , RaceTime'
       
-        #9',dbo.PersonalBest(MemberID, DistanceID, StrokeID, GETDATE()) AS' +
-        ' PB'
-      #9',('
-      #9#9'CONCAT ('
-      #9#9#9'distance.caption'
-      #9#9#9','#39' '#39
-      #9#9#9',stroke.caption'
-      #9#9#9')'
-      #9#9') AS EventStr'
-      'FROM Distance'
-      'CROSS JOIN Stroke'
-      'CROSS JOIN Member'
-      
-        'WHERE Member.MemberID = @memberid AND dbo.PersonalBest(MemberID,' +
-        ' DistanceID, StrokeID, GETDATE()) IS NOT NULL'
-      'ORDER BY MemberID'
-      #9',DistanceID'
-      #9',StrokeID'
-      #9',PB ASC'
-      ';')
+        '     , (CONCAT(distance.caption, '#39' '#39', stroke.caption)) AS EventS' +
+        'tr'
+      'FROM PB'
+      '    INNER JOIN stroke'
+      '        ON pb.strokeID = stroke.strokeID'
+      '    INNER JOIN distance'
+      '        ON pb.distanceID = distance.distanceID'
+      'WHERE PB.PBID = @memberid'
+      '      AND RaceTime IS NOT NULL'
+      'ORDER BY HRID'
+      '       , DistanceID'
+      '       , StrokeID'
+      '       , RaceTime ASC;')
     Left = 649
     Top = 448
     ParamData = <
@@ -446,7 +445,6 @@ object ManageMemberData: TManageMemberData
   end
   object qryMember: TFDQuery
     ActiveStoredUsage = [auDesignTime]
-    Active = True
     AfterInsert = qryMemberAfterInsert
     BeforeDelete = qryMemberBeforeDelete
     AfterDelete = qryMemberAfterDelete
@@ -466,50 +464,53 @@ object ManageMemberData: TManageMemberData
       'SET @HideInActive = :HIDE_INACTIVE;'
       'SET @HideArchived = :HIDE_ARCHIVED;'
       ''
-      'SELECT [MemberID],'
-      '       [RegisterNum],'
-      '       [RegisterStr],'
-      '       [FirstName],'
-      '       [LastName],'
-      '       [DOB],'
-      '       dbo.SwimmerAge(GETDATE(), [DOB]) AS SwimmerAge,'
-      '       [IsActive],'
-      '       IsArchived,'
-      '       [Email],'
-      '       [GenderID],'
-      '       [MemberTypeID],'
-      
-        '       CONCAT(Member.FirstName, '#39' '#39', UPPER(Member.LastName)) AS ' +
-        'FName,'
-      '       gradeID,'
-      '       CreatedOn,'
-      '       ArchivedOn'
-      'FROM [dbo].[Member]'
-      'WHERE (IsActive >= CASE'
-      '                       WHEN @HideInActive = 1 THEN'
-      '                           1'
-      '                       ELSE'
-      '                           0'
-      '                   END'
-      '      )'
-      '      AND (IsArchived <= CASE'
-      '                             WHEN @HideArchived = 1 THEN'
-      '                                 0'
-      '                             ELSE'
-      '                                 1'
-      '                         END'
+      'SELECT [HRID]'
+      '     , [RegisterNum]'
+      '     , [RegisterStr]'
+      '     , [FirstName]'
+      '     , [LastName]'
+      '     , [DOB]'
+      '     , dbo.SwimmerAge(GETDATE(), [DOB]) AS SwimmerAge'
+      '     , [IsActive]'
+      '     , IsArchived'
+      '     , [Email]'
+      '     , [GenderID]'
+      '     , [HRTypeID]'
+      '     , CONCAT(HR.FirstName, '#39' '#39', UPPER(HR.LastName)) AS FName'
+      '     , gradeID'
+      '     , CreatedOn'
+      '     , ArchivedOn'
+      '     , SCMMemberID'
+      'FROM [dbo].[HR]'
+      'WHERE HRTypeID = 3'
+      '      AND'
+      '      ('
+      '          (IsActive >= CASE'
+      '                           WHEN @HideInActive = 1 THEN'
+      '                               1'
+      '                           ELSE'
+      '                               0'
+      '                       END'
       '          )'
-      '       '
-      '-- mitigates NULL booleans'
-      '      OR'
-      '      ('
-      '          IsArchived IS NULL'
-      '          AND @HideArchived = 0'
-      '      )'
-      '      OR'
-      '      ('
-      '          IsActive IS NULL'
-      '          AND @HideInActive = 0'
+      '          AND (IsArchived <= CASE'
+      '                                 WHEN @HideArchived = 1 THEN'
+      '                                     0'
+      '                                 ELSE'
+      '                                     1'
+      '                             END'
+      '              )'
+      ''
+      '          -- mitigates NULL booleans'
+      '          OR'
+      '          ('
+      '              IsArchived IS NULL'
+      '              AND @HideArchived = 0'
+      '          )'
+      '          OR'
+      '          ('
+      '              IsActive IS NULL'
+      '              AND @HideInActive = 0'
+      '          )'
       '      );'
       ''
       ''
@@ -530,10 +531,9 @@ object ManageMemberData: TManageMemberData
         ParamType = ptInput
         Value = False
       end>
-    object qryMemberMemberID: TFDAutoIncField
-      FieldName = 'MemberID'
-      Origin = 'MemberID'
-      ProviderFlags = [pfInWhere, pfInKey]
+    object qryMemberHRID: TFDAutoIncField
+      FieldName = 'HRID'
+      Origin = 'HRID'
       ReadOnly = True
     end
     object qryMemberRegisterNum: TIntegerField
@@ -584,9 +584,10 @@ object ManageMemberData: TManageMemberData
       Origin = 'GenderID'
       Required = True
     end
-    object qryMemberMemberTypeID: TIntegerField
-      FieldName = 'MemberTypeID'
-      Origin = 'MemberTypeID'
+    object qryMemberHRTypeID: TIntegerField
+      FieldName = 'HRTypeID'
+      Origin = 'HRTypeID'
+      Required = True
     end
     object qryMemberFName: TStringField
       FieldName = 'FName'
@@ -598,7 +599,6 @@ object ManageMemberData: TManageMemberData
     object qryMembergradeID: TIntegerField
       FieldName = 'gradeID'
       Origin = 'gradeID'
-      Required = True
     end
     object qryMemberCreatedOn: TSQLTimeStampField
       FieldName = 'CreatedOn'
@@ -608,14 +608,17 @@ object ManageMemberData: TManageMemberData
       FieldName = 'ArchivedOn'
       Origin = 'ArchivedOn'
     end
-    object qryMemberlugender: TStringField
+    object qryMemberSCMMemberID: TIntegerField
+      FieldName = 'SCMMemberID'
+      Origin = 'SCMMemberID'
+    end
+    object qryMemberluGender: TStringField
       FieldKind = fkLookup
-      FieldName = 'lugender'
+      FieldName = 'luGender'
       LookupDataSet = tblGender
       LookupKeyFields = 'GenderID'
       LookupResultField = 'Caption'
       KeyFields = 'GenderID'
-      Size = 0
       Lookup = True
     end
   end

@@ -17,7 +17,7 @@ type
     tblContactNumTypeCaption: TWideStringField;
     tblStroke: TFDTable;
     tblDistance: TFDTable;
-    tblMemberType: TFDTable;
+    tblHRType: TFDTable;
     dsMemberType: TDataSource;
     tblGender: TFDTable;
     dsGender: TDataSource;
@@ -56,7 +56,7 @@ type
     FDTempDesignConnection: TFDConnection;
     dsMember: TDataSource;
     qryMember: TFDQuery;
-    qryMemberMemberID: TFDAutoIncField;
+    qryMemberHRID: TFDAutoIncField;
     qryMemberRegisterNum: TIntegerField;
     qryMemberRegisterStr: TWideStringField;
     qryMemberFirstName: TStringField;
@@ -67,12 +67,13 @@ type
     qryMemberIsArchived: TBooleanField;
     qryMemberEmail: TWideStringField;
     qryMemberGenderID: TIntegerField;
-    qryMemberMemberTypeID: TIntegerField;
+    qryMemberHRTypeID: TIntegerField;
     qryMemberFName: TStringField;
     qryMembergradeID: TIntegerField;
     qryMemberCreatedOn: TSQLTimeStampField;
     qryMemberArchivedOn: TSQLTimeStampField;
-    qryMemberlugender: TStringField;
+    qryMemberSCMMemberID: TIntegerField;
+    qryMemberluGender: TStringField;
     procedure DataModuleCreate(Sender: TObject);
     procedure qryMemberAfterScroll(DataSet: TDataSet);
     procedure qryMemberAfterInsert(DataSet: TDataSet);
@@ -210,10 +211,15 @@ begin
   begin
     fld.AsBoolean := True;
   end;
-  fld := DataSet.FieldByName('IsSwimmer');
+  fld := DataSet.FieldByName('MemberTypeID');
   if (fld.IsNull) then
   begin
-    fld.AsBoolean := True;
+    fld.AsInteger := 3;
+  end;
+  fld := DataSet.FieldByName('CreatedOn');
+  if (fld.IsNull) then
+  begin
+    fld.AsDateTime := Date;
   end;
 
 end;

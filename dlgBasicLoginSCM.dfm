@@ -1,7 +1,7 @@
-object BasicLogin: TBasicLogin
+object BasicLoginSCM: TBasicLoginSCM
   Left = 0
   Top = 0
-  Caption = 'Login to the SCM Coach Server ...'
+  Caption = 'Login to the SwimClubMeet Server ...'
   ClientHeight = 285
   ClientWidth = 527
   Color = clBtnFace
@@ -62,32 +62,32 @@ object BasicLogin: TBasicLogin
   object edtPassword: TEdit
     Left = 99
     Top = 96
-    Width = 295
+    Width = 287
     Height = 27
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 1
     Text = 'edtPassword'
-    ExplicitWidth = 291
+    ExplicitWidth = 283
   end
   object edtServer: TEdit
     Left = 99
     Top = 16
-    Width = 419
+    Width = 411
     Height = 27
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 2
     Text = 'edtServer'
-    ExplicitWidth = 415
+    ExplicitWidth = 407
   end
   object edtUser: TEdit
     Left = 99
     Top = 56
-    Width = 367
+    Width = 359
     Height = 27
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 3
     Text = 'edtUser'
-    ExplicitWidth = 363
+    ExplicitWidth = 355
   end
   object Panel1: TPanel
     Left = 0
@@ -114,7 +114,7 @@ object BasicLogin: TBasicLogin
       Visible = False
     end
     object btnAbort: TButton
-      Left = 351
+      Left = 343
       Top = 19
       Width = 81
       Height = 32
@@ -123,10 +123,10 @@ object BasicLogin: TBasicLogin
       ModalResult = 3
       TabOrder = 1
       OnClick = btnAbortClick
-      ExplicitLeft = 347
+      ExplicitLeft = 339
     end
     object btnConnect: TButton
-      Left = 438
+      Left = 430
       Top = 19
       Width = 81
       Height = 32
@@ -135,7 +135,7 @@ object BasicLogin: TBasicLogin
       Default = True
       TabOrder = 0
       OnClick = btnConnectClick
-      ExplicitLeft = 434
+      ExplicitLeft = 426
     end
   end
 end

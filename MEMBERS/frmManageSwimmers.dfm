@@ -25,6 +25,7 @@ object ManageSwimmers: TManageSwimmers
     BevelEdges = []
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 1346
     object lblMemberCount: TLabel
       Left = 1159
       Top = 6
@@ -82,15 +83,14 @@ object ManageSwimmers: TManageSwimmers
     Top = 79
     Width = 1350
     Height = 699
-    ActivePage = TabSheet2
+    ActivePage = TabSheet1
     Align = alClient
     MultiLine = True
     TabHeight = 40
     TabOrder = 2
     TabWidth = 160
-    ExplicitTop = 76
     ExplicitWidth = 1346
-    ExplicitHeight = 701
+    ExplicitHeight = 698
     object TabSheet1: TTabSheet
       Caption = 'Swimmer'#39's Details'
       object Panel7: TPanel
@@ -101,8 +101,6 @@ object ManageSwimmers: TManageSwimmers
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 1338
-        ExplicitHeight = 651
         object Label3: TLabel
           Left = 153
           Top = 139
@@ -555,51 +553,46 @@ object ManageSwimmers: TManageSwimmers
       object Label5: TLabel
         Left = 242
         Top = 51
-        Width = 447
-        Height = 38
+        Width = 415
+        Height = 19
         Caption = 'Produce a detailed report of the current selected swimmer.'
-        WordWrap = True
       end
       object Label14: TLabel
         Left = 241
         Top = 97
-        Width = 568
-        Height = 38
+        Width = 548
+        Height = 19
         Caption = 
-          'List the swimming events that the current selected squad member ' +
-          'has swum.'
-        WordWrap = True
+          'List the coaching sessions that the current selected squad membe' +
+          'r has swum.'
       end
       object Label16: TLabel
         Left = 242
         Top = 236
-        Width = 503
-        Height = 38
+        Width = 485
+        Height = 19
         Caption = 'Prepare a summary of all the squad members (3 columns per page).'
-        WordWrap = True
       end
       object Label17: TLabel
         Left = 241
-        Top = 280
-        Width = 384
-        Height = 38
+        Top = 282
+        Width = 365
+        Height = 19
         Caption = 'Prepare a detailed report of all the squad members.'
-        WordWrap = True
       end
       object Label9: TLabel
-        Left = 242
-        Top = 339
-        Width = 327
-        Height = 38
+        Left = 241
+        Top = 328
+        Width = 303
+        Height = 19
         Caption = 'Prepare a compact list of squad members. '
-        WordWrap = True
       end
       object Label19: TLabel
         Left = 242
         Top = 20
-        Width = 310
+        Width = 256
         Height = 25
-        Caption = 'Current Selected Squad Member ...'
+        Caption = 'Current Selected Swimmer ...'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -19
@@ -686,7 +679,7 @@ object ManageSwimmers: TManageSwimmers
     Font.Style = []
     ParentFont = False
     Spacing = 0
-    ExplicitTop = 5
+    ExplicitWidth = 1346
   end
   object ImageList1: TImageList
     Height = 24
@@ -1077,6 +1070,7 @@ object ManageSwimmers: TManageSwimmers
           end
           item
             Action = Hide_InActive
+            Caption = 'H&ide In-Active'
             ImageIndex = 4
             ImageName = 'VisibilityOn'
           end
