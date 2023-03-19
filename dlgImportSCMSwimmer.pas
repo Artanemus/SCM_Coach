@@ -11,24 +11,71 @@ uses
   Data.DB, FireDAC.Comp.Client, FireDAC.Phys.MSSQL, FireDAC.Phys.MSSQLDef,
   Vcl.StdCtrls, Vcl.VirtualImage, Vcl.BaseImageCollection, Vcl.ImageCollection,
   Vcl.ComCtrls, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
-  FireDAC.DApt, FireDAC.Comp.DataSet, dmSCM;
+  FireDAC.DApt, FireDAC.Comp.DataSet, dmSCM, System.ImageList, Vcl.ImgList,
+  Vcl.VirtualImageList, Vcl.WinXCtrls, Vcl.ExtCtrls;
 
 type
   TImportSCMSwimmer = class(TForm)
-    myConnection: TFDConnection;
-    ListViewA: TListView;
-    ListViewB: TListView;
-    ImageCollection1: TImageCollection;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    TabSheet3: TTabSheet;
+    TabSheet4: TTabSheet;
+    TabSheet5: TTabSheet;
     VirtualImage1: TVirtualImage;
     VirtualImage2: TVirtualImage;
     VirtualImage3: TVirtualImage;
     VirtualImage4: TVirtualImage;
+    VirtualImage5: TVirtualImage;
+    ListViewA: TListView;
+    ListViewB: TListView;
+    edtSearch: TEdit;
+    myConnection: TFDConnection;
+    ImageCollection1: TImageCollection;
+    qrySCMSwimmer: TFDQuery;
+    qrySCMSwimmerFNAME: TWideStringField;
+    qrySCMSwimmerMemberID: TFDAutoIncField;
+    qrySCMSwimmerFirstName: TWideStringField;
+    qrySCMSwimmerLastName: TWideStringField;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    lblLoginErrMsg: TLabel;
+    chkOsAuthent: TCheckBox;
+    edtPassword: TEdit;
+    edtServer: TEdit;
+    edtUser: TEdit;
+    RelativePanel1: TRelativePanel;
+    btnPrev: TButton;
+    VirtualImageList1: TVirtualImageList;
+    btnNext: TButton;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    CheckBox3: TCheckBox;
+    Button3: TButton;
+    Label4: TLabel;
+    btnCancel: TButton;
+    Label5: TLabel;
+    btnFirst: TButton;
+    btnLast: TButton;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Shape1: TShape;
+    Shape2: TShape;
+    Shape3: TShape;
+    lblMsg: TLabel;
     Button1: TButton;
     Button2: TButton;
-    qrySCMSwimmer: TFDQuery;
-    FDCommand1: TFDCommand;
-    edtSearch: TEdit;
-    VirtualImage5: TVirtualImage;
+    btnAbort: TButton;
+    btnConnect: TButton;
+    TabSheet6: TTabSheet;
+    TabSheet7: TTabSheet;
+    RadioGroup1: TRadioGroup;
+    Label9: TLabel;
+    Shape4: TShape;
+    Label10: TLabel;
+    Label11: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ListViewADragOver(Sender, Source: TObject; X, Y: Integer;
@@ -85,9 +132,9 @@ begin
   Begin
     while not qrySCMSwimmer.eof do
     begin
-      // exclude duplicates in SCM_Coach
+      // exclude from list swimmers who are already in the SCM_Coach
       count := SCM.scmConnection.ExecSQLScalar
-        ('COUNT([SCMMemberID]) FROM HR WHERE HR.SCMMemberID := :ID',
+        ('SELECT COUNT(SCMMemberID) FROM HR WHERE HR.SCMMemberID = :ID',
         [qrySCMSwimmer.FieldByName('MemberID').AsInteger]);
       if (count = 0) then
       begin

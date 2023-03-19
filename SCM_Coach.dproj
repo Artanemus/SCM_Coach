@@ -200,6 +200,10 @@
             <Form>BasicLogin</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="dlgImportSelect.pas">
+            <Form>ImportSelect</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

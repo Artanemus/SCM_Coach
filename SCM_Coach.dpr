@@ -30,7 +30,8 @@ uses
   exeinfo in 'exeinfo.pas',
   dlgDOBPicker in 'dlgDOBPicker.pas' {DOBPicker},
   dlgImportSCMSwimmer in 'dlgImportSCMSwimmer.pas' {ImportSCMSwimmer},
-  dlgBasicLogin in 'dlgBasicLogin.pas' {BasicLogin};
+  dlgBasicLogin in 'dlgBasicLogin.pas' {BasicLogin},
+  dlgImportSelect in 'dlgImportSelect.pas' {ImportSelect};
 
 {$R *.res}
 

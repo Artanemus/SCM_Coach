@@ -88,6 +88,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Edit_SwimmersExecute(Sender: TObject);
+    procedure File_ImportUpdate(Sender: TObject);
+    procedure File_ImportExecute(Sender: TObject);
 
   private
     { Private declarations }
@@ -117,7 +119,7 @@ implementation
 {$R *.dfm}
 
 uses frmSessionNew, dlgBasicLogin, SCMUtility, IniFiles, frmManageSwimmers
-, System.UITypes;
+, System.UITypes, dlgImportSelect, dlgImportSCMSwimmer;
 
 
 function TMain.AssertConnection: boolean;
@@ -151,6 +153,37 @@ begin
 end;
 
 procedure TMain.Edit_SwimmersUpdate(Sender: TObject);
+var
+  DoEnable: boolean;
+begin
+  DoEnable := false;
+  // MSSQL scmCoach connected?
+  if AssertConnection then
+      DoEnable := true;
+  TAction(Sender).Enabled := DoEnable;
+end;
+
+procedure TMain.File_ImportExecute(Sender: TObject);
+var
+  dlgA: TImportSelect;
+  dlgB: TImportSCMSwimmer;
+begin
+  dlgA := TImportSelect.Create(Self);
+  if IsPositiveResult(dlgA.ShowModal) then
+  begin
+    case dlgA.RtnValue of
+      0:
+        begin
+          dlgB := TImportSCMSwimmer.Create(Self);
+          dlgB.ShowModal;
+          dlgB.Free;
+        end;
+    end;
+  end;
+  dlgA.Free;
+end;
+
+procedure TMain.File_ImportUpdate(Sender: TObject);
 var
   DoEnable: boolean;
 begin

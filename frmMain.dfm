@@ -575,6 +575,7 @@ object Main: TMain
               end
               item
                 Action = Help_WebHelp
+                Caption = '&Web Coach Wiki...'
               end>
             Caption = '&Help'
             ImageIndex = 0
@@ -621,6 +622,8 @@ object Main: TMain
       Caption = 'Import...'
       ImageIndex = 1
       ImageName = 'Import'
+      OnExecute = File_ImportExecute
+      OnUpdate = File_ImportUpdate
     end
     object File_Export: TAction
       Category = 'File'

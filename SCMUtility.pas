@@ -167,8 +167,10 @@ function ExistsSCMConnectionDefs(): boolean;
 var
   str: string;
   szPath: array [0 .. Max_Path] of Char;
+  SCMConnectionDefsFileName: String;
 begin
   result := false;
+  SCMConnectionDefsFileName := 'SCMConnectionDef.ini';
   if (SUCCEEDED(SHGetFolderPath(null, CSIDL_COMMON_APPDATA, 0, 0, szPath))) then
   begin
     str := String(szPath);

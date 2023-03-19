@@ -130,13 +130,13 @@ begin
     // prepare lookup tables.
     tblStroke.Connection := FConnection;
     tblDistance.Connection := FConnection;
-    tblMemberType.Connection := FConnection;
+//    tblMemberType.Connection := FConnection;
     tblGender.Connection := FConnection;
     tblContactNumType.Connection := FConnection;
       // Lookup tables used by member
       tblStroke.Open;
       tblDistance.Open;
-      tblMemberType.Open;
+//      tblMemberType.Open;
       tblGender.Open;
       qryMember.Open;
       if qryMember.Active then
