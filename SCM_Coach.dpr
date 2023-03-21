@@ -22,7 +22,6 @@ uses
   rptMembersList in 'MEMBERS\rptMembersList.pas' {MembersList: TDataModule},
   rptMembersSummary in 'MEMBERS\rptMembersSummary.pas' {MembersSummary: TDataModule},
   dmSCM in 'dmSCM.pas' {SCM: TDataModule},
-  dlgBasicLoginSCM in 'dlgBasicLoginSCM.pas' {BasicLoginSCM},
   dlgBootProgress in 'dlgBootProgress.pas' {BootProgress},
   SCMUtility in 'SCMUtility.pas',
   SCMDefines in 'SCMDefines.pas',

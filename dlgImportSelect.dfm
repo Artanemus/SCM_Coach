@@ -3,7 +3,7 @@ object ImportSelect: TImportSelect
   Top = 0
   BorderStyle = bsDialog
   Caption = 'SCM Coach Import Data'
-  ClientHeight = 358
+  ClientHeight = 206
   ClientWidth = 535
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -19,23 +19,18 @@ object ImportSelect: TImportSelect
     Left = 16
     Top = 8
     Width = 497
-    Height = 302
+    Height = 129
     Caption = 'Select item to import ...'
     ItemIndex = 0
     Items.Strings = (
-      'SwimClubMeet Member(s) profile data. (TCP/IP)'
-      'SwimClubMeet Member(s) profile data and racetimes. (TCP/IP)'
-      'SwimClubMeet Session Race-times. (TCP/IP)'
-      'SwimClubMeet Session export file. (.scm)'
-      'SwimClubMeet export to Carnival file. (.scmd)'
-      'SCM Canival export to SwimClubMeet file. (.scmd)'
-      'SCM Coach Swimmer(s) export file. (.scmc).'
+      'SwimClubMeet. (TCP/IP)'
+      'SwimClubMeet export file. (.scm)'
       'HyTek swim meet results file. (.hy3).')
     TabOrder = 0
   end
   object btnCancel: TButton
-    Left = 319
-    Top = 316
+    Left = 335
+    Top = 156
     Width = 86
     Height = 34
     Caption = 'Cancel'
@@ -43,8 +38,8 @@ object ImportSelect: TImportSelect
     OnClick = btnCancelClick
   end
   object btnOk: TButton
-    Left = 411
-    Top = 316
+    Left = 427
+    Top = 156
     Width = 86
     Height = 34
     Caption = 'Import'

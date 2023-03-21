@@ -173,10 +173,6 @@
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="dlgBasicLoginSCM.pas">
-            <Form>BasicLoginSCM</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="dlgBootProgress.pas">
             <Form>BootProgress</Form>
             <FormType>dfm</FormType>

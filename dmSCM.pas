@@ -25,10 +25,10 @@ type
     procedure DeActivateTable();
 
     // CONNECTION
-    procedure SimpleLoadSettingString(Section, Name: string; var Value: string);
+    procedure SimpleLoadSettingString(ASection, AName: string; var AValue: string);
     procedure SimpleMakeTemporyFDConnection(Server, User, Password: string;
       OsAuthent: boolean);
-    procedure SimpleSaveSettingString(Section, Name, Value: string);
+    procedure SimpleSaveSettingString(ASection, AName, AValue: string);
 
     // FLAG - true if all FireDAC tables, queries are active.
     property SCMActive: boolean read FSCMActive write FSCMActive;
@@ -68,8 +68,8 @@ begin
 fSCMActive := false;
 end;
 
-procedure TSCM.SimpleLoadSettingString(Section, Name: string;
-  var Value: string);
+procedure TSCM.SimpleLoadSettingString(ASection, AName: string;
+  var AValue: string);
 var
   ini: TIniFile;
 begin
@@ -78,7 +78,7 @@ begin
   else
     ini := TIniFile.Create(TPath.GetDocumentsPath + PathDelim + CUSTOMINIFILE);
   try
-    Value := ini.ReadString(Section, name, '');
+    AValue := ini.ReadString(ASection, AName, '');
   finally
     ini.free;
   end;
@@ -88,7 +88,7 @@ end;
 procedure TSCM.SimpleMakeTemporyFDConnection(Server, User, Password: string;
   OsAuthent: boolean);
 var
-  Value, Section: string;
+  AValue, ASection, AName: string;
 begin
   if (scmConnection.Connected) then
   begin
@@ -101,9 +101,9 @@ begin
   scmConnection.Params.Add('User_name=' + User);
   scmConnection.Params.Add('Password=' + Password);
   if (OsAuthent) then
-    Value := 'Yes'
+    AValue := 'Yes'
   else
-    Value := 'No';
+    AValue := 'No';
   scmConnection.Params.Add('OSAuthent=' + Value);
   scmConnection.Params.Add('Mars=yes');
   scmConnection.Params.Add('MetaDefSchema=dbo');
@@ -114,20 +114,20 @@ begin
   // ON SUCCESS - Save connection details.
   if (scmConnection.Connected) then
   begin
-    Section := 'MSSQL_SCM_Coach';
-    Name := 'Server';
-    SimpleSaveSettingString(Section, Name, Server);
-    Name := 'User';
-    SimpleSaveSettingString(Section, Name, User);
-    Name := 'Password';
-    SimpleSaveSettingString(Section, Name, Password);
-    Name := 'OSAuthent';
-    SimpleSaveSettingString(Section, Name, Value);
+    ASection := 'MSSQL_SCM_Coach';
+    AName := 'Server';
+    SimpleSaveSettingString(ASection, AName, Server);
+    AName := 'User';
+    SimpleSaveSettingString(ASection, AName, User);
+    AName := 'Password';
+    SimpleSaveSettingString(ASection, AName, Password);
+    AName := 'OSAuthent';
+    SimpleSaveSettingString(ASection, AName, Value);
   end
 
 end;
 
-procedure TSCM.SimpleSaveSettingString(Section, Name, Value: string);
+procedure TSCM.SimpleSaveSettingString(ASection, AName, AValue: string);
 var
   ini: TIniFile;
 begin
@@ -137,7 +137,7 @@ begin
   else
     ini := TIniFile.Create(SCMUtility.GetSCMAppDataDir + CUSTOMINIFILE);
   try
-    ini.WriteString(Section, Name, Value);
+    ini.WriteString(ASection, AName, AValue);
   finally
     ini.free;
   end;

@@ -139,19 +139,23 @@ end;
 
 procedure TSimpleLexer.IdentProc;
 begin
-  while pSource[Run] in ['_', 'A'..'Z', 'a'..'z', '0'..'9'] do
+  // Warning: WideChar reduced to byte char in set expressions
+  //  while pSource[Run] in ['_', 'A'..'Z', 'a'..'z', '0'..'9'] do
+  while CharInSet(pSource[Run],['_', 'A'..'Z', 'a'..'z', '0'..'9'] ) do
     Inc(run);
 end;
 
 procedure TSimpleLexer.NumberProc;
 begin
-  while pSource[run] in ['0'..'9'] do
+  // while pSource[run] in ['0'..'9'] do
+  while CharInSet(pSource[run],['0'..'9']) do
     inc(run);
 end;
 
 procedure TSimpleLexer.SpaceProc;
 begin
-  while pSource[run] in [#1..#9, #11, #12, #14..#32] do
+  // while pSource[run] in [#1..#9, #11, #12, #14..#32] do
+  while CharInSet(pSource[run],[#1..#9, #11, #12, #14..#32]) do
     inc(run);
   if fIgnoreSpaces then Next;
 end;

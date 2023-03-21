@@ -346,7 +346,7 @@ begin
 
     The font of the MenuItemTextNormal element (or any other) in the style
     designer has no effect, this is because the Vcl Style Engine simply
-    ignores the font size and name, and just uses the font color defined in
+    ignores the font-size and font-name, and just uses the font color defined in
     the vcl style file.
 
     S O L U T I O N :

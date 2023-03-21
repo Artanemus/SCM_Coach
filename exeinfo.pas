@@ -82,7 +82,7 @@ type
     function GetVersionNr: Integer; virtual;
     procedure GetVersionInfo; virtual;
     function GetComputerName : String; virtual;
-    //procedure SetComputerName(Name : String); virtual;
+    //procedure SetComputerName(AName : String); virtual;
     function GetWinDir : String;
     function GetSysDir : String;
     function GetTempDir : String;
@@ -330,7 +330,7 @@ begin
 end;
 
 (*
-procedure TExeInfo.SetComputerName(Name : String);
+procedure TExeInfo.SetComputerName(AName : String);
 var
   pcComputer : PChar;
   dwCSize    : DWORD;
@@ -342,7 +342,7 @@ begin
   {$IFNDEF DELPHI_UNICODE}
   GetMem( pcComputer, dwCSize ); // allocate memory for the string
   {$ENDIF}
-  pcComputer := StrpCopy(pcComputer,Name);
+  pcComputer := StrpCopy(pcComputer,AName);
   try
     Windows.SetComputerName(pcComputer)
   finally
