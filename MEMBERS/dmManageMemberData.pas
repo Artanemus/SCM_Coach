@@ -231,7 +231,7 @@ begin
   // Post directly to parent form : TForm(Self.GetOwner).Handle;
   // Uses : Vcl.Forms
   if Owner is TForm then
-    PostMessage(TForm(Owner).Handle, MANAGEMEMBER_AFTERSCROLL, 0, 0);
+    PostMessage(TForm(Owner).Handle, SCM_AFTERSCROLL, 0, 0);
 end;
 
 procedure TManageMemberData.qryMemberBeforeDelete(DataSet: TDataSet);
@@ -344,7 +344,7 @@ begin
   // Post directly to parent form : TForm(Self.GetOwner).Handle;
   // Uses : Vcl.Forms
   if Owner is TForm then
-    PostMessage(TForm(Owner).Handle, MANAGEMEMBER_UPDATE, 0, 0);
+    PostMessage(TForm(Owner).Handle, SCM_UPDATE, 0, 0);
 
 end;
 

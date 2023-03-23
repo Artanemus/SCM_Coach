@@ -13,6 +13,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
   Font.Style = []
   Position = poOwnerFormCenter
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   TextHeight = 21
   object RelativePanel1: TRelativePanel
     Left = 0
@@ -71,6 +72,8 @@ object ImportSCMSwimmer: TImportSCMSwimmer
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 674
+    ExplicitWidth = 677
     DesignSize = (
       681
       96)
@@ -241,7 +244,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       end>
     Align = alTop
     TabOrder = 1
-    ExplicitLeft = 8
+    ExplicitWidth = 677
     DesignSize = (
       681
       81)
@@ -361,7 +364,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
     Top = 81
     Width = 681
     Height = 594
-    ActivePage = TabSheet1
+    ActivePage = TabSheet2
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -373,6 +376,8 @@ object ImportSCMSwimmer: TImportSCMSwimmer
     TabHeight = 40
     TabOrder = 2
     TabWidth = 90
+    ExplicitWidth = 677
+    ExplicitHeight = 593
     object TabSheet1: TTabSheet
       Caption = 'Start'
       object Label6: TLabel
@@ -485,7 +490,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       end
       object Button1: TButton
         AlignWithMargins = True
-        Left = 425
+        Left = 416
         Top = 302
         Width = 85
         Height = 83
@@ -500,7 +505,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       end
       object Button2: TButton
         AlignWithMargins = True
-        Left = 530
+        Left = 521
         Top = 302
         Width = 85
         Height = 83
@@ -553,18 +558,20 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         Font.Style = []
         ParentFont = False
       end
-      object RadioGroup1: TRadioGroup
+      object rgrpMethod: TRadioGroup
         Left = 24
         Top = 136
         Width = 609
         Height = 113
         Caption = 'Select method ...'
+        ItemIndex = 1
         Items.Strings = (
           
             'Update the details and racing history of squad swimmers who swim' +
             ' with SCM.'
           'Introduce new SCM club members into your squad.')
         TabOrder = 0
+        OnClick = rgrpMethodClick
       end
     end
     object TabSheet3: TTabSheet
@@ -590,7 +597,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       end
       object VirtualImage2: TVirtualImage
         Left = 313
-        Top = 153
+        Top = 207
         Width = 48
         Height = 48
         ImageCollection = ImageCollection1
@@ -601,7 +608,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       end
       object VirtualImage3: TVirtualImage
         Left = 313
-        Top = 207
+        Top = 153
         Width = 48
         Height = 48
         ImageCollection = ImageCollection1
@@ -658,37 +665,29 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         ShowHint = True
         TabOrder = 0
         Text = 'edtSearch'
+        OnChange = edtSearchChange
       end
-      object ListViewA: TListView
-        Left = 80
+      object lbSrc: TListBox
+        Left = 42
         Top = 99
-        Width = 227
-        Height = 438
-        Columns = <
-          item
-            Caption = 'SwimClubMeet Member'
-            MaxWidth = 200
-            MinWidth = 100
-            Width = 200
-          end>
-        GridLines = True
-        MultiSelect = True
-        ReadOnly = True
-        RowSelect = True
+        Width = 265
+        Height = 430
+        DragMode = dmAutomatic
+        ItemHeight = 21
         TabOrder = 1
-        ViewStyle = vsReport
-        OnDragDrop = ListViewADragDrop
-        OnDragOver = ListViewADragOver
+        OnDragDrop = ListBoxSrcDragDrop
+        OnDragOver = ListBoxSrcDragOver
       end
-      object ListViewB: TListView
+      object lbDest: TListBox
         Left = 367
         Top = 99
-        Width = 227
-        Height = 438
-        Columns = <>
-        ReadOnly = True
-        RowSelect = True
+        Width = 265
+        Height = 430
+        DragMode = dmAutomatic
+        ItemHeight = 21
         TabOrder = 2
+        OnDragDrop = ListBoxDestDragDrop
+        OnDragOver = ListBoxDestDragOver
       end
     end
     object TabSheet4: TTabSheet
@@ -732,8 +731,8 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       object Label11: TLabel
         Left = 72
         Top = 219
-        Width = 544
-        Height = 42
+        Width = 414
+        Height = 21
         Caption = 'When updating, enable this option to have profiles restored.'
         WordWrap = True
       end
@@ -779,7 +778,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       end
       object Button3: TButton
         AlignWithMargins = True
-        Left = 272
+        Left = 266
         Top = 172
         Width = 85
         Height = 68
@@ -802,8 +801,8 @@ object ImportSCMSwimmer: TImportSCMSwimmer
   object myConnection: TFDConnection
     ConnectedStoredUsage = [auDesignTime]
     LoginPrompt = False
-    Left = 272
-    Top = 16
+    Left = 144
+    Top = 440
   end
   object ImageCollection1: TImageCollection
     Images = <
@@ -1322,8 +1321,8 @@ object ImportSCMSwimmer: TImportSCMSwimmer
               916C0000000049454E44AE426082}
           end>
       end>
-    Left = 368
-    Top = 16
+    Left = 248
+    Top = 440
   end
   object qrySCMSwimmer: TFDQuery
     Connection = myConnection
@@ -1338,8 +1337,8 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       ',CONCAT([FirstName],'#39' '#39',UPPER(LastName)) AS FNAME'
       ''
       'FROM Member WHERE IsSwimmer = 1;')
-    Left = 576
-    Top = 16
+    Left = 472
+    Top = 440
     object qrySCMSwimmerFNAME: TWideStringField
       FieldName = 'FNAME'
       Origin = 'FNAME'
@@ -1398,13 +1397,13 @@ object ImportSCMSwimmer: TImportSCMSwimmer
     ImageCollection = ImageCollection1
     Width = 48
     Height = 48
-    Left = 476
-    Top = 18
+    Left = 360
+    Top = 440
   end
   object ActionManager1: TActionManager
     Images = VirtualImageList1
-    Left = 192
-    Top = 16
+    Left = 40
+    Top = 440
     StyleName = 'Platform Default'
     object actnLogin: TAction
       Caption = 'Login'
@@ -1412,6 +1411,22 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       ImageName = 'login'
       OnExecute = actnLoginExecute
       OnUpdate = actnLoginUpdate
+    end
+    object actnSrcToDestAll: TAction
+      Category = 'TranferBtn'
+      OnExecute = actnSrcToDestAllExecute
+    end
+    object actnSrcToDestSelected: TAction
+      Category = 'TranferBtn'
+      OnExecute = actnSrcToDestSelectedExecute
+    end
+    object actnDestToSrcAll: TAction
+      Category = 'TranferBtn'
+      OnExecute = actnDestToSrcAllExecute
+    end
+    object actnDestToSrcSelected: TAction
+      Category = 'TranferBtn'
+      OnExecute = actnDestToSrcSelectedExecute
     end
   end
 end

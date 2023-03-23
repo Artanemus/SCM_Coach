@@ -224,6 +224,8 @@ begin
   // to the FireDAC connection definition file
   // -----------------------------------------------------------
   aBasicLogin := TBasicLogin.Create(self);
+  aBasicLogin.ADataBaseName := 'SCM_Coach';
+  aBasicLogin.AConnection := SCM.scmConnection;
   result := aBasicLogin.ShowModal;
   aBasicLogin.Free;
 

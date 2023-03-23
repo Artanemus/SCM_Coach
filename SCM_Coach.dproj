@@ -107,7 +107,6 @@
             <Form>Main</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Vcl.PlatformVclStylesActnCtrls.pas"/>
         <DCCReference Include="frmSessionNew.pas">
             <Form>SessionNew</Form>
             <FormType>dfm</FormType>
@@ -177,13 +176,6 @@
             <Form>BootProgress</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="SCMUtility.pas"/>
-        <DCCReference Include="SCMDefines.pas"/>
-        <DCCReference Include="dlgAbout.pas">
-            <Form>About</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="exeinfo.pas"/>
         <DCCReference Include="dlgDOBPicker.pas">
             <Form>DOBPicker</Form>
             <FormType>dfm</FormType>
@@ -192,12 +184,21 @@
             <Form>ImportSCMSwimmer</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="dlgBasicLogin.pas">
+        <DCCReference Include="dlgImportSelect.pas">
+            <Form>ImportSelect</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\SCM_SHARED\exeinfo.pas"/>
+        <DCCReference Include="..\SCM_SHARED\SCMSimpleConnect.pas"/>
+        <DCCReference Include="..\SCM_SHARED\dlgBasicLogin.pas">
             <Form>BasicLogin</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="dlgImportSelect.pas">
-            <Form>ImportSelect</Form>
+        <DCCReference Include="..\SCM_SHARED\SCMDefines.pas"/>
+        <DCCReference Include="..\SCM_SHARED\SCMUtility.pas"/>
+        <DCCReference Include="..\SCM_SHARED\Vcl.PlatformVclStylesActnCtrls.pas"/>
+        <DCCReference Include="..\SCM_SHARED\dlgAbout.pas">
+            <Form>About</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">
@@ -221,6 +222,11 @@
                     <Source Name="MainSource">SCM_Coach.dpr</Source>
                 </Source>
                 <Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\TMSVCLUIPackPkgALEX.bpl">TMS VCL UI Pack</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\TMSVCLUIPackPkgExALEX.bpl">TMS VCL UI Pack Extra</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\TMSVCLUIPackPkgEdALEX.bpl">TMS VCL UI Pack design time support</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\TMSVCLUIPackPkgWizALEX.bpl">TMS VCL UI Pack Wizards</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\TMSVCLUIPackPkgXlsALEX.bpl">TMS TAdvStringGrid Excel support</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\bcboffice2k280.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\bcbofficexp280.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k280.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>

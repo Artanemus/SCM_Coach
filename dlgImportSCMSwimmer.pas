@@ -13,9 +13,27 @@ uses
   Vcl.ComCtrls, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
   FireDAC.DApt, FireDAC.Comp.DataSet, dmSCM, System.ImageList, Vcl.ImgList,
   Vcl.VirtualImageList, Vcl.WinXCtrls, Vcl.ExtCtrls, System.Actions,
-  Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan;
+  Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
+  System.Contnrs;
 
 type
+  TscmMember = class(TObject)
+  private
+    { private declarations }
+    MemberID: integer;
+    FName: string;
+  protected
+    { protected declarations }
+  public
+    { public declarations }
+
+    // published
+    { published declarations }
+    constructor Create();
+    destructor Destroy(); override;
+    property ID: integer read MemberID;
+  end;
+
   TImportSCMSwimmer = class(TForm)
     myConnection: TFDConnection;
     ImageCollection1: TImageCollection;
@@ -64,7 +82,7 @@ type
     TabSheet7: TTabSheet;
     Shape4: TShape;
     Label9: TLabel;
-    RadioGroup1: TRadioGroup;
+    rgrpMethod: TRadioGroup;
     TabSheet3: TTabSheet;
     Shape1: TShape;
     VirtualImage1: TVirtualImage;
@@ -74,8 +92,6 @@ type
     VirtualImage5: TVirtualImage;
     Label7: TLabel;
     edtSearch: TEdit;
-    ListViewA: TListView;
-    ListViewB: TListView;
     TabSheet4: TTabSheet;
     Shape2: TShape;
     Label8: TLabel;
@@ -88,21 +104,42 @@ type
     Label4: TLabel;
     Button3: TButton;
     TabSheet6: TTabSheet;
+    actnSrcToDestAll: TAction;
+    actnDestToSrcAll: TAction;
+    actnSrcToDestSelected: TAction;
+    actnDestToSrcSelected: TAction;
+    lbSrc: TListBox;
+    lbDest: TListBox;
     procedure FormCreate(Sender: TObject);
-    procedure ListViewADragOver(Sender, Source: TObject; X, Y: Integer;
+    procedure ListBoxSrcDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
-    procedure ListViewADragDrop(Sender, Source: TObject; X, Y: Integer);
+    procedure ListBoxSrcDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure actnLoginExecute(Sender: TObject);
     procedure actnLoginUpdate(Sender: TObject);
+    procedure actnSrcToDestAllExecute(Sender: TObject);
+    procedure actnSrcToDestSelectedExecute(Sender: TObject);
+    procedure actnDestToSrcAllExecute(Sender: TObject);
+    procedure actnDestToSrcSelectedExecute(Sender: TObject);
+    procedure ListBoxDestDragDrop(Sender, Source: TObject; X, Y: Integer);
+    procedure ListBoxDestDragOver(Sender, Source: TObject; X, Y: Integer;
+      State: TDragState; var Accept: Boolean);
+    procedure FormDestroy(Sender: TObject);
+    procedure edtSearchChange(Sender: TObject);
+    procedure rgrpMethodClick(Sender: TObject);
   private
     { Private declarations }
-    procedure SimpleLoadSettingString(ASection, AName: string;
-  var AValue: string);
-    procedure SimpleMakeTemporyFDConnection(AConnection: TFDConnection; Server, User, Password: string;
-  AOsAuthent: Boolean);
-    procedure SimpleSaveSettingString(ASection, AName,
-  AValue: string);
-    procedure UpdateMemberListView();
+//    procedure SimpleLoadSettingString(ASection, AName: string;
+//  var AValue: string);
+//    procedure SimpleMakeTemporyFDConnection(AConnection: TFDConnection; Server, User, Password: string;
+//  AOsAuthent: Boolean);
+//    procedure SimpleSaveSettingString(ASection, AName,
+//  AValue: string);
+    scmMemberList: TObjectList;
+
+    function MemberIsAssigned(obj: TObject; lbox: TListBox): Boolean;
+    procedure BuildListBoxSource();
+    procedure TransferItems(SrcListBox, DestListBox: TObject);
+
 
   public
     { Public declarations }
@@ -117,10 +154,23 @@ implementation
 
 uses (*
     dlgBasicLoginSCM,
-  *) System.Math, IniFiles, SCMUtility;
+  *) System.Math, IniFiles, SCMUtility, SCMSimpleConnect, System.StrUtils;
 
 // DON'T CALL HERE IF SCM NOT ISACTIVE
+procedure TImportSCMSwimmer.actnDestToSrcAllExecute(Sender: TObject);
+begin
+  lbDest.SelectAll;
+  TransferItems(lbDest, lbSrc);
+end;
+
+procedure TImportSCMSwimmer.actnDestToSrcSelectedExecute(Sender: TObject);
+begin
+  TransferItems(lbDest, lbSrc);
+end;
+
 procedure TImportSCMSwimmer.actnLoginExecute(Sender: TObject);
+var
+  sc: TSimpleConnect;
 begin
   // Hide the Login and abort buttons while attempting connection
   lblLoginErrMsg.Visible := false;
@@ -130,28 +180,27 @@ begin
   lblMsg.Update();
   Application.ProcessMessages();
 
-  // if tempory connection is successful ... connection params are
-  // written out to document path . SCMConfig.ini
-  // try connection
-  try
-    SimpleMakeTemporyFDConnection(myConnection, edtServer.Text, edtUser.Text,
-      edtPassword.Text, chkOsAuthent.Checked);
-  finally
-    begin
-      lblMsg.Visible := false;
-      if (myConnection.Connected) then
-      begin
-        UpdateMemberListView;
-      end
-      else
-      begin
-        // show error message - let user try again or abort
-        lblLoginErrMsg.Visible := true;
-        btnAbort.Visible := true;
-        btnConnect.Visible := true;
-      end
-    end
+  sc := TSimpleConnect.CreateWithConnection(Self, myConnection);
+  // default : SwimClubMeet : change to connect to other databases.
+  // sc.DatabaseName := 'SwimClubMeet';
+  sc.SimpleMakeTemporyConnection(edtServer.Text, edtUser.Text, edtPassword.Text,
+    chkOsAuthent.Checked);
+
+  lblMsg.Visible := false;
+  if (myConnection.Connected) then
+  begin
+    BuildListBoxSource;
+  end
+  else
+  begin
+    // show error message - let user try again or abort
+    lblLoginErrMsg.Visible := true;
+    btnAbort.Visible := true;
+    btnConnect.Visible := true;
   end;
+
+  sc.Free;
+
 end;
 
 procedure TImportSCMSwimmer.actnLoginUpdate(Sender: TObject);
@@ -180,6 +229,95 @@ begin
   end;
 end;
 
+procedure TImportSCMSwimmer.actnSrcToDestAllExecute(Sender: TObject);
+begin
+  lbSrc.SelectAll;
+  TransferItems(lbSrc, lbDest);
+end;
+
+procedure TImportSCMSwimmer.actnSrcToDestSelectedExecute(Sender: TObject);
+begin
+  TransferItems(lbSrc, lbDest);
+end;
+
+procedure TImportSCMSwimmer.BuildListBoxSource;
+var
+  count: integer;
+  s: string;
+  obj: TscmMember;
+  j: integer;
+
+begin
+  // reset SOURCE AND DESTINATION ListBoxes AND ObjectList state.
+  lbSrc.Clear;
+  lbDest.Clear;
+  scmMemberList.Clear;
+
+  // Gather ALL swimmers in SwimClubMeet
+  if myConnection.Connected then
+  begin
+    qrySCMSwimmer.Connection := myConnection;
+    qrySCMSwimmer.Open;
+    if qrySCMSwimmer.Active then
+    Begin
+      while not qrySCMSwimmer.eof do
+      begin
+        count := SCM.scmConnection.ExecSQLScalar
+          ('SELECT COUNT(SCMMemberID) FROM HR WHERE HR.SCMMemberID = :ID',
+          [qrySCMSwimmer.FieldByName('MemberID').AsInteger]);
+
+        // if Method is : INTRODUCE
+        // EXCLUDE from list SCM Members who are already in SCM_Coach.
+        // if Method is : UPDATE.
+        // INCLUDE only SCM Members who are in the squad.
+
+        if ((count = 0) and (rgrpMethod.ItemIndex = 1) ) OR
+        ((count > 0) and (rgrpMethod.ItemIndex = 0) )
+        then
+        begin
+          // add to list
+        obj := TscmMember.Create;
+        obj.MemberID := qrySCMSwimmer.FieldByName('MemberID').AsInteger;
+        obj.FName := qrySCMSwimmer.FieldByName('FName').AsString;
+        j := scmMemberList.Add(obj);
+        s := qrySCMSwimmer.FieldByName('FName').AsString;
+        lbSrc.Items.AddObject(s, scmMemberList.Items[j]);
+        end;
+        qrySCMSwimmer.next;
+      end;
+    End;
+    qrySCMSwimmer.Close;
+  end;
+end;
+
+
+procedure TImportSCMSwimmer.edtSearchChange(Sender: TObject);
+var
+  I: integer;
+  obj: TscmMember;
+  s: string;
+begin
+  // Rebuild SOURCE LISTBOX using the objectlist.
+  lbSrc.clear;
+  for I := 0 to scmMemberList.Count - 1 do
+  begin
+    obj := (scmMemberList.Items[I] as TscmMember);
+    // Already assigned to right-listbox.
+    if MemberIsAssigned(obj, lbDest) then
+      continue;
+    s := obj.FName;
+    // DO ALL
+    if (length(edtSearch.Text) = 0) then
+      lbSrc.Items.AddObject(s, obj)
+    else
+    begin
+      // FILTER - test for sub-string
+      if ContainsText(s, edtSearch.Text) then
+        lbSrc.Items.AddObject(s, obj);
+    end;
+  end;
+end;
+
 procedure TImportSCMSwimmer.FormCreate(Sender: TObject);
 var
   m: Integer;
@@ -190,19 +328,19 @@ begin
   lblLoginErrMsg.Visible := false;
   lblMsg.Visible := false;
 
+  // list of members from SwimClubMeet
+  scmMemberList := TObjectList.Create(true);
+
   // Populate login with last state else default values
   ASection := 'MSSQL_SwimClubMeet';
   AName := 'Server';
-  SimpleLoadSettingString(ASection, AName, AValue);
-  edtServer.Text := AValue;
+  edtServer.Text :=LoadSharedIniFileSetting(ASection, AName);
   AName := 'User';
-  SimpleLoadSettingString(ASection, AName, AValue);
-  edtUser.Text := AValue;
+  edtUser.Text := LoadSharedIniFileSetting(ASection, AName);
   AName := 'Password';
-  SimpleLoadSettingString(ASection, AName, AValue);
-  edtPassword.Text := AValue;
+  edtPassword.Text := LoadSharedIniFileSetting(ASection, AName);
   AName := 'OsAuthent';
-  SimpleLoadSettingString(ASection, AName, AValue);
+  AValue := LoadSharedIniFileSetting(ASection, AName);
 
   if ((UpperCase(AValue) = 'YES') or (UpperCase(AValue) = 'TRUE')) then
     chkOsAuthent.Checked := true
@@ -222,126 +360,93 @@ begin
 
 end;
 
-procedure TImportSCMSwimmer.ListViewADragDrop(Sender, Source: TObject;
-  X, Y: Integer);
-var
-  i: TListItem;
+procedure TImportSCMSwimmer.FormDestroy(Sender: TObject);
 begin
-  if (Sender is TListView) and (Source is TListItems) then
-  begin
-    for i in TListItems(Source) do
-      ListViewA.Items.AddItem(i);
-  end;
+  scmMemberList.clear;
 end;
 
-procedure TImportSCMSwimmer.ListViewADragOver(Sender, Source: TObject;
+procedure TImportSCMSwimmer.ListBoxDestDragDrop(Sender, Source: TObject; X,
+  Y: Integer);
+begin
+  // Source - the object being dropped.
+  TransferItems(Source, Sender);
+end;
+
+procedure TImportSCMSwimmer.ListBoxDestDragOver(Sender, Source: TObject; X,
+  Y: Integer; State: TDragState; var Accept: Boolean);
+begin
+  Accept := Source is TListBox;
+end;
+
+procedure TImportSCMSwimmer.ListBoxSrcDragDrop(Sender, Source: TObject;
+  X, Y: Integer);
+begin
+  TransferItems(Source, Sender);
+end;
+
+procedure TImportSCMSwimmer.ListBoxSrcDragOver(Sender, Source: TObject;
   X, Y: Integer; State: TDragState; var Accept: Boolean);
 begin
-  Accept := Source is TListView;
+  Accept := Source is TListBox;
 end;
 
-procedure TImportSCMSwimmer.SimpleLoadSettingString(ASection, AName: string;
-  var AValue: string);
+function TImportSCMSwimmer.MemberIsAssigned(obj: TObject;
+  lbox: TListBox): Boolean;
 var
-  ini: TIniFile;
+  I: integer;
 begin
-  ini := TIniFile.Create(SCMUtility.GetSCM_SharedIniFile);
-  try
-    AValue := ini.ReadString(ASection, Aname, '');
-  finally
-    ini.free;
+  // check if obj is used by to lboxView
+  result := false;
+  for I := 0 to lbox.Count - 1 do
+  begin
+    if (obj = lbox.Items.Objects[I]) then
+    begin
+      result := true;
+      break;
+    end;
   end;
 end;
 
-procedure TImportSCMSwimmer.SimpleMakeTemporyFDConnection
-  (AConnection: TFDConnection; Server, User, Password: string;
-  AOsAuthent: Boolean);
-var
-  AValue, ASection, AName: string;
+procedure TImportSCMSwimmer.rgrpMethodClick(Sender: TObject);
 begin
-  if (AConnection.Connected) then
-  begin
-    AConnection.Close();
-  end;
-
-  AConnection.Params.Add('Server=' + Server);
-  AConnection.Params.Add('DriverID=MSSQL');
-  AConnection.Params.Add('Database=SwimClubMeet');
-  AConnection.Params.Add('User_name=' + User);
-  AConnection.Params.Add('Password=' + Password);
-  if (AOsAuthent) then
-    AValue := 'Yes'
-  else
-    AValue := 'No';
-  AConnection.Params.Add('OSAuthent=' + AValue);
-  AConnection.Params.Add('Mars=yes');
-  AConnection.Params.Add('MetaDefSchema=dbo');
-  AConnection.Params.Add('ExtendedMetadata=False');
-  AConnection.Params.Add('ApplicationName=SCM_Coach');
-  AConnection.Connected := true;
-
-  // ON SUCCESS - Save connection details.
-  if (AConnection.Connected) then
-  begin
-    ASection := 'MSSQL_SwimClubMeet';
-    AName := 'Server';
-    SimpleSaveSettingString(ASection, AName, Server);
-    AName := 'User';
-    SimpleSaveSettingString(ASection, AName, User);
-    AName := 'Password';
-    SimpleSaveSettingString(ASection, AName, Password);
-    AName := 'OSAuthent';
-    SimpleSaveSettingString(ASection, AName, AValue);
-  end
-
+  // changes to the RadioGroup determine the contents of the ObjectList
+  BuildListBoxSource;
 end;
 
-procedure TImportSCMSwimmer.SimpleSaveSettingString(ASection, AName,
-  AValue: string);
+procedure TImportSCMSwimmer.TransferItems(SrcListBox, DestListBox: TObject);
 var
-  ini: TIniFile;
+  I: integer;
 begin
-  // C:\Users\<#USERNAME#>\AppData\Roaming\Artanemus\SCM\
-  ini := TIniFile.Create(SCMUtility.GetSCM_SharedIniFile);
-  try
-    ini.WriteString(ASection, AName, AValue);
-  finally
-    ini.free;
-  end;
-end;
-
-procedure TImportSCMSwimmer.UpdateMemberListView;
-var
-  li: TListItem;
-  count: integer;
-begin
-  // Gather ALL swimmers in SwimClubMeet
-  if myConnection.Connected then
+  with (SrcListBox AS TListBox) do
   begin
-    qrySCMSwimmer.Connection := myConnection;
-    qrySCMSwimmer.Open;
-    if qrySCMSwimmer.Active then
-    Begin
-      while not qrySCMSwimmer.eof do
+    try
+      for I := 0 to Items.Count - 1 do
       begin
-        // exclude from list swimmers who are already in the SCM_Coach
-        count := SCM.scmConnection.ExecSQLScalar
-          ('SELECT COUNT(SCMMemberID) FROM HR WHERE HR.SCMMemberID = :ID',
-          [qrySCMSwimmer.FieldByName('MemberID').AsInteger]);
-        if (count = 0) then
-        begin
-          // add to list
-          li := ListViewA.Items.Add;
-          li.Caption := qrySCMSwimmer.FieldByName('FName').AsString;
-        end;
-        qrySCMSwimmer.next;
+        if Selected[I] then
+          // NOTE: destination MemberList is assigned source object.
+          (DestListBox AS TListBox).Items.AddObject(Items[I], Items.Objects[I]);
       end;
-    End;
-    qrySCMSwimmer.Close;
-
-    // Alpha Sort
-    ListViewA.SortType := stText;
+    finally
+      // NOTE: Source's assigned objects are not freed (in use).
+      DeleteSelected;
+    end;
   end;
+end;
+
+
+
+{ TscmMember }
+
+constructor TscmMember.Create;
+begin
+  MemberID := 0;
+  FName := '';
+end;
+
+destructor TscmMember.Destroy;
+begin
+
+  inherited;
 end;
 
 end.

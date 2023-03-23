@@ -2,8 +2,8 @@ object ManageSwimmers: TManageSwimmers
   Left = 0
   Top = 0
   Caption = 'Human Resources - Squad Swimmers.'
-  ClientHeight = 843
-  ClientWidth = 1346
+  ClientHeight = 842
+  ClientWidth = 1342
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,12 +19,13 @@ object ManageSwimmers: TManageSwimmers
   object Panel1: TPanel
     Left = 0
     Top = 42
-    Width = 1346
+    Width = 1342
     Height = 37
     Align = alTop
     BevelEdges = []
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 1346
     object lblMemberCount: TLabel
       Left = 1159
       Top = 6
@@ -54,13 +55,15 @@ object ManageSwimmers: TManageSwimmers
   end
   object Panel3: TPanel
     Left = 0
-    Top = 777
-    Width = 1346
+    Top = 776
+    Width = 1342
     Height = 66
     Align = alBottom
     BevelEdges = []
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitTop = 777
+    ExplicitWidth = 1346
     object DBNavigator1: TDBNavigator
       Left = 385
       Top = 6
@@ -78,24 +81,28 @@ object ManageSwimmers: TManageSwimmers
   object PageControl1: TPageControl
     Left = 0
     Top = 79
-    Width = 1346
-    Height = 698
+    Width = 1342
+    Height = 697
     ActivePage = TabSheet1
     Align = alClient
     MultiLine = True
     TabHeight = 40
     TabOrder = 2
     TabWidth = 160
+    ExplicitWidth = 1346
+    ExplicitHeight = 698
     object TabSheet1: TTabSheet
       Caption = 'Swimmer'#39's Details'
       object Panel7: TPanel
         Left = 0
         Top = 0
-        Width = 1342
-        Height = 649
+        Width = 1338
+        Height = 648
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitWidth = 1342
+        ExplicitHeight = 649
         object Label3: TLabel
           Left = 153
           Top = 139
@@ -658,7 +665,7 @@ object ManageSwimmers: TManageSwimmers
   object ActionToolBar1: TActionToolBar
     Left = 0
     Top = 0
-    Width = 1346
+    Width = 1342
     Height = 42
     ActionManager = ActnManagerMember
     Caption = 'ActionToolBar1'

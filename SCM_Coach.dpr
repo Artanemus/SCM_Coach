@@ -3,7 +3,6 @@ program SCM_Coach;
 uses
   Vcl.Forms,
   frmMain in 'frmMain.pas' {Main},
-  Vcl.PlatformVclStylesActnCtrls in 'Vcl.PlatformVclStylesActnCtrls.pas',
   Vcl.Themes,
   Vcl.Styles,
   frmSessionNew in 'frmSessionNew.pas' {SessionNew},
@@ -23,14 +22,16 @@ uses
   rptMembersSummary in 'MEMBERS\rptMembersSummary.pas' {MembersSummary: TDataModule},
   dmSCM in 'dmSCM.pas' {SCM: TDataModule},
   dlgBootProgress in 'dlgBootProgress.pas' {BootProgress},
-  SCMUtility in 'SCMUtility.pas',
-  SCMDefines in 'SCMDefines.pas',
-  dlgAbout in 'dlgAbout.pas' {About},
-  exeinfo in 'exeinfo.pas',
   dlgDOBPicker in 'dlgDOBPicker.pas' {DOBPicker},
   dlgImportSCMSwimmer in 'dlgImportSCMSwimmer.pas' {ImportSCMSwimmer},
-  dlgBasicLogin in 'dlgBasicLogin.pas' {BasicLogin},
-  dlgImportSelect in 'dlgImportSelect.pas' {ImportSelect};
+  dlgImportSelect in 'dlgImportSelect.pas' {ImportSelect},
+  exeinfo in '..\SCM_SHARED\exeinfo.pas',
+  SCMSimpleConnect in '..\SCM_SHARED\SCMSimpleConnect.pas',
+  dlgBasicLogin in '..\SCM_SHARED\dlgBasicLogin.pas' {BasicLogin},
+  SCMDefines in '..\SCM_SHARED\SCMDefines.pas',
+  SCMUtility in '..\SCM_SHARED\SCMUtility.pas',
+  Vcl.PlatformVclStylesActnCtrls in '..\SCM_SHARED\Vcl.PlatformVclStylesActnCtrls.pas',
+  dlgAbout in '..\SCM_SHARED\dlgAbout.pas' {About};
 
 {$R *.res}
 

@@ -24,11 +24,6 @@ type
     procedure ActivateTable();
     procedure DeActivateTable();
 
-    // CONNECTION
-    procedure SimpleLoadSettingString(ASection, AName: string; var AValue: string);
-    procedure SimpleMakeTemporyFDConnection(Server, User, Password: string;
-      OsAuthent: boolean);
-    procedure SimpleSaveSettingString(ASection, AName, AValue: string);
 
     // FLAG - true if all FireDAC tables, queries are active.
     property SCMActive: boolean read FSCMActive write FSCMActive;
@@ -68,80 +63,5 @@ begin
 fSCMActive := false;
 end;
 
-procedure TSCM.SimpleLoadSettingString(ASection, AName: string;
-  var AValue: string);
-var
-  ini: TIniFile;
-begin
-  if USEDEFAULTINIFILE then
-    ini := TIniFile.Create(SCMUtility.GetSCM_SharedIniFile)
-  else
-    ini := TIniFile.Create(TPath.GetDocumentsPath + PathDelim + CUSTOMINIFILE);
-  try
-    AValue := ini.ReadString(ASection, AName, '');
-  finally
-    ini.free;
-  end;
-
-end;
-
-procedure TSCM.SimpleMakeTemporyFDConnection(Server, User, Password: string;
-  OsAuthent: boolean);
-var
-  AValue, ASection, AName: string;
-begin
-  if (scmConnection.Connected) then
-  begin
-    scmConnection.Close();
-  end;
-
-  scmConnection.Params.Add('Server=' + Server);
-  scmConnection.Params.Add('DriverID=MSSQL');
-  scmConnection.Params.Add('Database=SCM_Coach');
-  scmConnection.Params.Add('User_name=' + User);
-  scmConnection.Params.Add('Password=' + Password);
-  if (OsAuthent) then
-    AValue := 'Yes'
-  else
-    AValue := 'No';
-  scmConnection.Params.Add('OSAuthent=' + Value);
-  scmConnection.Params.Add('Mars=yes');
-  scmConnection.Params.Add('MetaDefSchema=dbo');
-  scmConnection.Params.Add('ExtendedMetadata=False');
-  scmConnection.Params.Add('ApplicationName=SCM_Coach');
-  scmConnection.Connected := true;
-
-  // ON SUCCESS - Save connection details.
-  if (scmConnection.Connected) then
-  begin
-    ASection := 'MSSQL_SCM_Coach';
-    AName := 'Server';
-    SimpleSaveSettingString(ASection, AName, Server);
-    AName := 'User';
-    SimpleSaveSettingString(ASection, AName, User);
-    AName := 'Password';
-    SimpleSaveSettingString(ASection, AName, Password);
-    AName := 'OSAuthent';
-    SimpleSaveSettingString(ASection, AName, Value);
-  end
-
-end;
-
-procedure TSCM.SimpleSaveSettingString(ASection, AName, AValue: string);
-var
-  ini: TIniFile;
-begin
-  // C:\Users\<#USERNAME#>\AppData\Roaming\Artanemus\SCM\
-  if USEDEFAULTINIFILE then
-    ini := TIniFile.Create(SCMUtility.GetSCM_SharedIniFile)
-  else
-    ini := TIniFile.Create(SCMUtility.GetSCMAppDataDir + CUSTOMINIFILE);
-  try
-    ini.WriteString(ASection, AName, AValue);
-  finally
-    ini.free;
-  end;
-
-end;
 
 end.
