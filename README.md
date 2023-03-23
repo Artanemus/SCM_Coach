@@ -1,7 +1,9 @@
 # SCM_Coach
 Swimming coaching application. Part of the SwimClubMeet eco system.
 
-Development of this application has just started. Currently there is no releases and is a work inprogress.
+Development of this application has just started. Currently there is no releases and it's a work inprogress.
+
+Coach uses shared resources located in the Artanemus/SCM_SHARED repository. (Public)
 
 ![Hero Coach ICON](ASSETS/SCM_Icons_Coach.png)
 
