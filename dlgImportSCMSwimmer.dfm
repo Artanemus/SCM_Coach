@@ -92,6 +92,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       ImageMargins.Bottom = -10
       Images = VirtualImageList1
       TabOrder = 0
+      Visible = False
     end
     object btnNext: TButton
       AlignWithMargins = True
@@ -108,6 +109,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       ImageMargins.Bottom = -10
       Images = VirtualImageList1
       TabOrder = 1
+      Visible = False
     end
     object btnCancel: TButton
       AlignWithMargins = True
@@ -117,11 +119,9 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       Height = 68
       Margins.Left = 20
       Margins.Right = 20
+      Action = actnExit
       Anchors = []
-      Caption = 'Exit'
       ImageAlignment = iaTop
-      ImageIndex = 3
-      ImageName = 'cancel'
       ImageMargins.Bottom = -10
       Images = VirtualImageList1
       TabOrder = 2
@@ -136,11 +136,12 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       Anchors = []
       Caption = 'First'
       ImageAlignment = iaTop
-      ImageIndex = 0
-      ImageName = 'arrow_left'
+      ImageIndex = 6
+      ImageName = 'arrow_left_double'
       ImageMargins.Bottom = -10
       Images = VirtualImageList1
       TabOrder = 3
+      Visible = False
     end
     object btnLast: TButton
       AlignWithMargins = True
@@ -152,11 +153,12 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       Anchors = []
       Caption = 'Last'
       ImageAlignment = iaTop
-      ImageIndex = 1
-      ImageName = 'arrow_right'
+      ImageIndex = 7
+      ImageName = 'arrow_right_double'
       ImageMargins.Bottom = -10
       Images = VirtualImageList1
       TabOrder = 4
+      Visible = False
     end
   end
   object RelativePanel2: TRelativePanel
@@ -166,16 +168,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
     Height = 81
     ControlCollection = <
       item
-        Control = shapeLine
-        AlignBottomWithPanel = False
-        AlignHorizontalCenterWithPanel = False
-        AlignLeftWithPanel = True
-        AlignRightWithPanel = True
-        AlignTopWithPanel = False
-        AlignVerticalCenterWithPanel = True
-      end
-      item
-        Control = vimgLineStart
+        Control = vimgTracker
         AlignBottomWithPanel = False
         AlignHorizontalCenterWithPanel = False
         AlignLeftWithPanel = True
@@ -184,63 +177,76 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         AlignVerticalCenterWithPanel = True
       end
       item
-        Control = vimgLineEnd
-        AlignBottomWithPanel = False
-        AlignHorizontalCenterWithPanel = False
-        AlignLeftWithPanel = False
-        AlignRightWithPanel = True
-        AlignTopWithPanel = False
-        AlignVerticalCenterWithPanel = True
-      end
-      item
-        Control = vimgLogin
+        Control = vimgTackDisplay
         AlignBottomWithPanel = False
         AlignHorizontalCenterWithPanel = False
         AlignLeftWithPanel = False
         AlignRightWithPanel = False
         AlignTopWithPanel = False
         AlignVerticalCenterWithPanel = True
-        RightOf = vimgLineStart
       end
       item
-        Control = vimgMethod
+        Control = vimgTrack2
         AlignBottomWithPanel = False
         AlignHorizontalCenterWithPanel = False
         AlignLeftWithPanel = False
         AlignRightWithPanel = False
         AlignTopWithPanel = False
         AlignVerticalCenterWithPanel = True
-        RightOf = vimgLogin
       end
       item
-        Control = vimgSelect
+        Control = vimgTrack3
         AlignBottomWithPanel = False
         AlignHorizontalCenterWithPanel = False
         AlignLeftWithPanel = False
         AlignRightWithPanel = False
         AlignTopWithPanel = False
-        AlignVerticalCenterWithPanel = True
-        RightOf = vimgMethod
+        AlignVerticalCenterWithPanel = False
       end
       item
-        Control = vimgOptions
+        Control = vimgTrack4
         AlignBottomWithPanel = False
         AlignHorizontalCenterWithPanel = False
         AlignLeftWithPanel = False
         AlignRightWithPanel = False
         AlignTopWithPanel = False
-        AlignVerticalCenterWithPanel = True
-        RightOf = vimgSelect
+        AlignVerticalCenterWithPanel = False
       end
       item
-        Control = vimgLastStep
+        Control = vimgTrack5
         AlignBottomWithPanel = False
         AlignHorizontalCenterWithPanel = False
         AlignLeftWithPanel = False
         AlignRightWithPanel = False
         AlignTopWithPanel = False
-        AlignVerticalCenterWithPanel = True
-        RightOf = vimgOptions
+        AlignVerticalCenterWithPanel = False
+      end
+      item
+        Control = vimgTrack0
+        AlignBottomWithPanel = False
+        AlignHorizontalCenterWithPanel = False
+        AlignLeftWithPanel = False
+        AlignRightWithPanel = False
+        AlignTopWithPanel = False
+        AlignVerticalCenterWithPanel = False
+      end
+      item
+        Control = vimgTrack1
+        AlignBottomWithPanel = False
+        AlignHorizontalCenterWithPanel = False
+        AlignLeftWithPanel = False
+        AlignRightWithPanel = False
+        AlignTopWithPanel = False
+        AlignVerticalCenterWithPanel = False
+      end
+      item
+        Control = vimgTrack6
+        AlignBottomWithPanel = False
+        AlignHorizontalCenterWithPanel = False
+        AlignLeftWithPanel = False
+        AlignRightWithPanel = False
+        AlignTopWithPanel = False
+        AlignVerticalCenterWithPanel = False
       end>
     Align = alTop
     TabOrder = 1
@@ -248,51 +254,25 @@ object ImportSCMSwimmer: TImportSCMSwimmer
     DesignSize = (
       681
       81)
-    object shapeLine: TShape
+    object vimgTracker: TVirtualImage
       AlignWithMargins = True
-      Left = 61
-      Top = 37
-      Width = 559
-      Height = 4
-      Margins.Left = 60
-      Margins.Right = 60
-      Anchors = []
-      Brush.Color = clBackground
-      Pen.Width = 0
-    end
-    object vimgLineStart: TVirtualImage
-      AlignWithMargins = True
-      Left = 17
+      Left = 1
       Top = 15
       Width = 48
       Height = 48
-      Margins.Left = 16
+      Margins.Left = 0
       Anchors = []
       ImageCollection = ImageCollection1
       ImageWidth = 0
       ImageHeight = 0
-      ImageIndex = 12
-      ImageName = 'line_start'
+      ImageIndex = 9
+      ImageName = 'wizBig'
     end
-    object vimgLineEnd: TVirtualImage
+    object vimgTackDisplay: TVirtualImage
       AlignWithMargins = True
-      Left = 616
+      Left = 12
       Top = 15
-      Width = 48
-      Height = 48
-      Margins.Right = 16
-      Anchors = []
-      ImageCollection = ImageCollection1
-      ImageWidth = 0
-      ImageHeight = 0
-      ImageIndex = 11
-      ImageName = 'line_end'
-    end
-    object vimgLogin: TVirtualImage
-      AlignWithMargins = True
-      Left = 112
-      Top = 15
-      Width = 48
+      Width = 654
       Height = 48
       Margins.Left = 44
       Anchors = []
@@ -300,63 +280,98 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       ImageWidth = 0
       ImageHeight = 0
       ImageIndex = 16
-      ImageName = 'wizCircleTickedFilled'
+      ImageName = 'WizardNodeBgrd5Grey'
     end
-    object vimgMethod: TVirtualImage
-      AlignWithMargins = True
-      Left = 207
+    object vimgTrack2: TVirtualImage
+      Left = 213
       Top = 15
       Width = 48
       Height = 48
-      Margins.Left = 44
+      Margins.Left = 0
       Anchors = []
       ImageCollection = ImageCollection1
       ImageWidth = 0
       ImageHeight = 0
-      ImageIndex = 15
-      ImageName = 'wizDotFilled'
+      ImageIndex = 14
+      ImageName = 'wizDotSmallFilled'
     end
-    object vimgSelect: TVirtualImage
-      AlignWithMargins = True
-      Left = 302
+    object vimgTrack3: TVirtualImage
+      Left = 315
       Top = 15
       Width = 48
       Height = 48
-      Margins.Left = 44
+      Margins.Left = 0
       Anchors = []
       ImageCollection = ImageCollection1
       ImageWidth = 0
       ImageHeight = 0
-      ImageIndex = 15
-      ImageName = 'wizDotFilled'
+      ImageIndex = 14
+      ImageName = 'wizDotSmallFilled'
     end
-    object vimgOptions: TVirtualImage
-      AlignWithMargins = True
-      Left = 397
+    object vimgTrack4: TVirtualImage
+      Left = 416
       Top = 15
       Width = 48
       Height = 48
-      Margins.Left = 44
+      Margins.Left = 0
       Anchors = []
       ImageCollection = ImageCollection1
       ImageWidth = 0
       ImageHeight = 0
-      ImageIndex = 15
-      ImageName = 'wizDotFilled'
+      ImageIndex = 14
+      ImageName = 'wizDotSmallFilled'
     end
-    object vimgLastStep: TVirtualImage
-      AlignWithMargins = True
-      Left = 492
+    object vimgTrack5: TVirtualImage
+      Left = 518
       Top = 15
       Width = 48
       Height = 48
-      Margins.Left = 44
+      Margins.Left = 0
       Anchors = []
       ImageCollection = ImageCollection1
       ImageWidth = 0
       ImageHeight = 0
-      ImageIndex = 15
-      ImageName = 'wizDotFilled'
+      ImageIndex = 14
+      ImageName = 'wizDotSmallFilled'
+    end
+    object vimgTrack0: TVirtualImage
+      Left = 0
+      Top = 15
+      Width = 48
+      Height = 48
+      Margins.Left = 0
+      Anchors = []
+      ImageCollection = ImageCollection1
+      ImageWidth = 0
+      ImageHeight = 0
+      ImageIndex = 14
+      ImageName = 'wizDotSmallFilled'
+    end
+    object vimgTrack1: TVirtualImage
+      Left = 112
+      Top = 15
+      Width = 48
+      Height = 48
+      Margins.Left = 0
+      Anchors = []
+      ImageCollection = ImageCollection1
+      ImageWidth = 0
+      ImageHeight = 0
+      ImageIndex = 18
+      ImageName = 'check_circle_filled'
+    end
+    object vimgTrack6: TVirtualImage
+      Left = 629
+      Top = 15
+      Width = 48
+      Height = 48
+      Margins.Left = 0
+      Anchors = []
+      ImageCollection = ImageCollection1
+      ImageWidth = 0
+      ImageHeight = 0
+      ImageIndex = 14
+      ImageName = 'wizDotSmallFilled'
     end
   end
   object PageControl1: TPageControl
@@ -364,7 +379,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
     Top = 81
     Width = 681
     Height = 594
-    ActivePage = TabSheet2
+    ActivePage = tabOptions
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -376,19 +391,60 @@ object ImportSCMSwimmer: TImportSCMSwimmer
     TabHeight = 40
     TabOrder = 2
     TabWidth = 90
+    OnChange = PageControl1Change
+    OnChanging = PageControl1Changing
     ExplicitWidth = 677
     ExplicitHeight = 593
-    object TabSheet1: TTabSheet
+    object tabStart: TTabSheet
       Caption = 'Start'
       object Label6: TLabel
         Left = 27
-        Top = 32
-        Width = 74
+        Top = 24
+        Width = 254
         Height = 21
-        Caption = 'WELCOME'
+        Caption = 'WELCOME TO THE IMPORT WIZARD.'
+      end
+      object Memo1: TMemo
+        Left = 24
+        Top = 144
+        Width = 625
+        Height = 353
+        BevelInner = bvNone
+        BevelOuter = bvNone
+        BorderStyle = bsNone
+        EditMargins.Auto = True
+        Lines.Strings = (
+          ''
+          'The SwimClubMeet import wizard can perform one of these task...'
+          
+            '        1) Introduce new SwimClubMeet members into your coaching' +
+            ' squad.'
+          
+            '        2) Update your squad member'#39's profile and race history u' +
+            'sing information found in'
+          'the Swimming Club.'
+          ''
+          
+            'When method 1 is used, the swimmers profile, personal bests and ' +
+            'full race history can be '
+          'imported.'
+          
+            'Naturally, for method 2 to work, your squad member must be a mem' +
+            'ber of the  '
+          'Swimming Club.'
+          ''
+          
+            'To get started SCM_Coach must be connected to the Club'#39's databas' +
+            'e server.'
+          
+            'This database could possibly be located locally, within a Domain' +
+            ', in the Cloud, etc. '
+          'Talk to the swimming club to get the connection details.')
+        ReadOnly = True
+        TabOrder = 0
       end
     end
-    object TabSheet2: TTabSheet
+    object tabLogin: TTabSheet
       Caption = 'Login'
       ImageIndex = 1
       DesignSize = (
@@ -490,7 +546,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       end
       object Button1: TButton
         AlignWithMargins = True
-        Left = 416
+        Left = 412
         Top = 302
         Width = 85
         Height = 83
@@ -502,10 +558,12 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         ImageName = 'cancel'
         Images = VirtualImageList1
         TabOrder = 4
+        ExplicitLeft = 409
+        ExplicitTop = 301
       end
       object Button2: TButton
         AlignWithMargins = True
-        Left = 521
+        Left = 513
         Top = 302
         Width = 85
         Height = 83
@@ -515,6 +573,8 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         ImageAlignment = iaTop
         Images = VirtualImageList1
         TabOrder = 5
+        ExplicitLeft = 510
+        ExplicitTop = 301
       end
       object btnAbort: TButton
         Left = 76
@@ -535,7 +595,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         TabOrder = 7
       end
     end
-    object TabSheet7: TTabSheet
+    object tabMethod: TTabSheet
       Caption = 'Method'
       ImageIndex = -1
       object Shape4: TShape
@@ -546,11 +606,15 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         Brush.Color = clOlive
       end
       object Label9: TLabel
-        Left = 35
-        Top = 56
-        Width = 512
+        Left = 16
+        Top = 60
+        Width = 633
         Height = 25
-        Caption = 'Update existing swimmers or introduce new squad members.'
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 
+          'Select either update profiles and stats or introduce new swimmer' +
+          's.'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -19
@@ -564,7 +628,6 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         Width = 609
         Height = 113
         Caption = 'Select method ...'
-        ItemIndex = 1
         Items.Strings = (
           
             'Update the details and racing history of squad swimmers who swim' +
@@ -574,7 +637,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         OnClick = rgrpMethodClick
       end
     end
-    object TabSheet3: TTabSheet
+    object tabSelect: TTabSheet
       Caption = 'Select'
       ImageIndex = 2
       object Shape1: TShape
@@ -614,7 +677,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         ImageCollection = ImageCollection1
         ImageWidth = 0
         ImageHeight = 0
-        ImageIndex = 4
+        ImageIndex = -1
         ImageName = 'arrow_double_right'
       end
       object VirtualImage4: TVirtualImage
@@ -625,7 +688,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         ImageCollection = ImageCollection1
         ImageWidth = 0
         ImageHeight = 0
-        ImageIndex = 3
+        ImageIndex = -1
         ImageName = 'arrow_double_left'
       end
       object VirtualImage5: TVirtualImage
@@ -641,7 +704,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       end
       object Label7: TLabel
         Left = 24
-        Top = 19
+        Top = 25
         Width = 617
         Height = 25
         Alignment = taCenter
@@ -674,6 +737,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         Height = 430
         DragMode = dmAutomatic
         ItemHeight = 21
+        MultiSelect = True
         TabOrder = 1
         OnDragDrop = ListBoxSrcDragDrop
         OnDragOver = ListBoxSrcDragOver
@@ -685,12 +749,13 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         Height = 430
         DragMode = dmAutomatic
         ItemHeight = 21
+        MultiSelect = True
         TabOrder = 2
         OnDragDrop = ListBoxDestDragDrop
         OnDragOver = ListBoxDestDragOver
       end
     end
-    object TabSheet4: TTabSheet
+    object tabOptions: TTabSheet
       Caption = 'Options'
       ImageIndex = 3
       object Shape2: TShape
@@ -731,15 +796,15 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       object Label11: TLabel
         Left = 72
         Top = 219
-        Width = 414
+        Width = 413
         Height = 21
-        Caption = 'When updating, enable this option to have profiles restored.'
+        Caption = 'When updating, enable this option to have profiles updated.'
         WordWrap = True
       end
       object CheckBox1: TCheckBox
         Left = 48
         Top = 304
-        Width = 257
+        Width = 298
         Height = 21
         Caption = 'Import Personal Best (PB) race times.'
         TabOrder = 0
@@ -763,7 +828,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         TabOrder = 2
       end
     end
-    object TabSheet5: TTabSheet
+    object tabFinalStep: TTabSheet
       Caption = 'Final Step'
       ImageIndex = 4
       DesignSize = (
@@ -778,7 +843,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       end
       object Button3: TButton
         AlignWithMargins = True
-        Left = 266
+        Left = 262
         Top = 172
         Width = 85
         Height = 68
@@ -793,7 +858,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         TabOrder = 0
       end
     end
-    object TabSheet6: TTabSheet
+    object tabSuccess: TTabSheet
       Caption = 'Success'
       ImageIndex = 5
     end
@@ -801,8 +866,8 @@ object ImportSCMSwimmer: TImportSCMSwimmer
   object myConnection: TFDConnection
     ConnectedStoredUsage = [auDesignTime]
     LoginPrompt = False
-    Left = 144
-    Top = 440
+    Left = 184
+    Top = 576
   end
   object ImageCollection1: TImageCollection
     Images = <
@@ -880,7 +945,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
           end>
       end
       item
-        Name = 'arrow_double_left'
+        Name = 'arrow_left_double'
         SourceImages = <
           item
             Image.Data = {
@@ -903,7 +968,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
           end>
       end
       item
-        Name = 'arrow_double_right'
+        Name = 'arrow_right_double'
         SourceImages = <
           item
             Image.Data = {
@@ -1046,45 +1111,64 @@ object ImportSCMSwimmer: TImportSCMSwimmer
           end>
       end
       item
-        Name = 'wizDisabled'
+        Name = 'login'
         SourceImages = <
           item
             Image.Data = {
               89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
-              87000000017352474200AECE1CE900000385494441546843ED99FDB10D4110C5
-              CF8B00112002448008100122400488001120024480081001224004D4AF6A5AF5
-              9DBBB3D33DBBF7EE7B55AFABF68FBB7776B64FF7E9AFD9139D713939E3FAEB1C
-              C0D61E5CD3035724DD91744BD2C5725D2F00BF4AFA5DAE4F923E48FAB106F8A5
-              0050F4BEA407924CD9A85E8002CCF3022CFADCCEBA510028FE48D2E362E9A197
-              9787F0CC4B49AF46808C00B82BE9852428E3E58FA4F7C5AAD0C32ED6B0960BE0
-              3CCF75A17A1E200FCB1E618364013C95F4ACDAFD73B9071D3242ACB0D7CDEA21
-              EE41AB9044016039AC0ED74D7E96DF59C56BC5000285AEB93FF024DEC02BB312
-              05F0BA52FE6DE17FF7053D05CAFF1808102404933705C46200B814EA98E0DE9A
-              46413DBBCBD2EFEA7980607B7724E5ED3535887B73813D0700B77E776912DAF8
-              18E89A73C102E8637482A6575BF13007C05BE25BA9B06B71BE870DE3911C2CB0
-              9BB46D01A8AD7FBB6CD87BF19AFF939D3E960D9B5E68012023506911F23C9B6D
-              2178C1EA04959ACABF232D0070DF2AED16D63725BD17E89D6E4400A0380010DA
-              03E8B4A5401F6B3B08E69D2E76CA03B889AA8B8C661E2C47EDF0ED34813852B5
-              7D467A520ADE7F834E01F0BC9BCDC10DB7D479DC2F1B2982BE163147F03B0C20
-              CB7FCFD916ED96ECB99750A63CF0C5B97E8F739D60F0DE6B2DCD66351F937B81
-              3C05E06FC74373187E05829EA0BC94CC0A4D9DD606E033464BC791CC9602809B
-              AC849F060A91C9A035424BB3337BF7B2D09280DB2C889986381E41988AC8C319
-              593B8DD201335021A134BA562103882F64FC3E4A21F3696B246364BC1559EB33
-              5BA89560531FC8D9388828155DE30BE35E00B349AB1BF534C2ED80D8429807AC
-              95DFEB83E600D081D2F55917B885177C0F44ED80DA7B136174A4040CBDF83147
-              4A72BFCD24E99112EFE00562E172E10EE995EEF418C24988759D1CA091CD268D
-              973D56991CEB5646E4C759B61E3E5631BD7C40738F171050871006293FF74E06
-              AE7F71CF03B6D64F45DC0B9F5D06514257AAAD1F5642D36014C0D4D925818D85
-              00B344489328EF8FEBC367AF51002D3A719F3A01ADE853326273737D64931A3B
-              B300501037A3B06527539A2CE13F7090BBC96208D665BDFFC0519F76B09EC62D
-              E5D1110028C4CB0936AEFA4B4BC60BAC45710CC295AE33A3004C498060352EFF
-              81220282DE06FAD1A5A615B7172C05E0158526D0CB7F66355028EB3FB3429353
-              F1993562E983AE59D3030755B4B5F939804DCCEE5EFA0F4C1DCE317C288A9B00
-              00000049454E44AE426082}
+              87000000017352474200AECE1CE90000016A494441546843ED99E151C3300C46
+              5F376084B20123B0496102D800D8800DDA4D98A11BC0066C00A71EBEF305A789
+              6C55C687FC37B6A2F77D8A1C271B061F9BC1F327007A3B180EFC07079E81A74A
+              D04FE01578995BEF51422D00296F019038BFC62800EFC0752F80CAEA392DFBCA
+              1617C5F67020007E1408075A4AA1766D3C035AE5AE8087731B8F32A0AB0392FC
+              1B70031C807B65B2A5E9AE00D31DD702C215401494A4779994AD10EE00D6105D
+              002C21BA0158413401D4BEC3E7DDE41190EE9486F6996802C8171B74C42A883F
+              0970046E01396D2D8D2680E20968E98E93EBB22BE725A449BEFB79600FDC6540
+              DAE4BB025824DF0DC02AF92E0096C9BB0348BD0B401A35353FED114D5D48D970
+              4ED3D3CB9C45F2EE0E246069BFF2356D4D9F5F12C9DD81A584B4D70340AB98F5
+              FC70C05A516DBC7040AB5869BEC5FF810F605B0AEEF175DA0260D81F1CA2BCEC
+              EEB367130F072CCA703646005C54DE15C1C38115225D74CAF00E7C036EF65731
+              5B48308D0000000049454E44AE426082}
           end>
       end
       item
-        Name = 'wizDone'
+        Name = 'wizBig'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
+              87000000017352474200AECE1CE900000350494441546843ED99FF910D4110C7
+              BF17811301223822400488C0890011200244C045800810C11101224004D4A76A
+              5AF59B9DD9EDD9DDB7734F5D57CD1F6FDFEC4C7FFB77F71EE9C0E9E8C0F9D725
+              80DE1A5C5303D725DD937447D2715A3713C02F927EA5F549D20749DFD700BF14
+              008C3E94742AC9988DF20528C0BC48C0A2EFEDEC9B0B00C61F4B7A92243DEBF2
+              F4129A7925E9F51C207300DC97F4521226E3E9B7A4F749AA98872DF6B0970570
+              DE675DC9DE07C8A374465820AD009E497A9E9DFE393DC31C5A085FE1ACDBD94B
+              3CC3AC42140580E4903AB66EF423FD6E653C670C2098D089FB034DA20DB4324A
+              51006F32E6CF92FD4F5E30C540FA1F0101828060F43681580C0095623A46A837
+              37A3209F93DB9AEF9AD200CEF66E23E6ED9A1CC48331C71E03805ABFB93089D9
+              781F9814E7820D988F9913667AA3E60F6300BC24BEA60CBB96CD4F6143780407
+              73ECAAD9D600E4D2BF9B0E9CBA78CDFF894E1FD381552DD4001011C8B410719E
+              C37A105AB03C41A626F3EF500D00B66F99B687F48D49AF056AA75B1100300E00
+              88F20073EA49988F951D38F34E155BD2006A22EB425B469E9A907C447A9A12DE
+              BFBD2500A471EA7A6834066FA4169F8BE823F83D0AC03B4E4FFB2FF9C120A094
+              3470EE9A9381CD6D24757F0D8D123C4103472E01F833A1A10E1854E5E9BF0480
+              9A2C855F3413A2A4D9E9BD4B1A387827F66194AE8838DC93A88069A8A050183D
+              F844E64B09D2F8D59EE297F4D39533A152C2E2AD3972CF64E68BB98103C368AD
+              1AF566845303A207D10F58293FA883C600508152F55915D8430B5EFA54C598F6
+              A0238CB69480A116DFB2A5A47CB09EA4B9A5443B6881A4762DD90EE195EA740B
+              6212625527033492575178AD6395625BB73222DFCE72F4ECB18AF1E51D9A675C
+              8043ED8368A47CDF5B745C7FF194066CAFEF8A78169E5D065162AE645BDFAC84
+              BAC12880D2EC12C74642805942441B98F7E3FAF0EC350AA0664E3CB7AF2CAD53
+              6A1867E69A8F6C9A66AFAD00601835E307169D0C1C51C27FE0207613C520A208
+              390529C33067E4D30EF653B83569740E000BB1381B2BFFD2D26A4E308E4058CD
+              79662E00631229223596FF401101416D83D931836D66DC2E580AC0338A79601A
+              FE33AB818259FF991533B9109F592392DEEB9E3535B057466B875F02E8227677
+              E95F7CD7B831303DE8C60000000049454E44AE426082}
+          end>
+      end
+      item
+        Name = 'wizBig_DotSmall'
         SourceImages = <
           item
             Image.Data = {
@@ -1124,172 +1208,45 @@ object ImportSCMSwimmer: TImportSCMSwimmer
           end>
       end
       item
-        Name = 'wizReady'
+        Name = 'wizBig_DotTiny'
         SourceImages = <
           item
             Image.Data = {
               89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
-              87000000017352474200AECE1CE900000350494441546843ED99FF910D4110C7
-              BF17811301223822400488C0890011200244C045800810C11101224004D4A76A
-              5AF59B9DD9EDD9DDB7734F5D57CD1F6FDFEC4C7FFB77F71EE9C0E9E8C0F9D725
-              80DE1A5C5303D725DD937447D2715A3713C02F927EA5F549D20749DFD700BF14
-              008C3E94742AC9988DF20528C0BC48C0A2EFEDEC9B0B00C61F4B7A92243DEBF2
-              F4129A7925E9F51C207300DC97F4521226E3E9B7A4F749AA98872DF6B0970570
-              DE675DC9DE07C8A374465820AD009E497A9E9DFE393DC31C5A085FE1ACDBD94B
-              3CC3AC42140580E4903AB66EF423FD6E653C670C2098D089FB034DA20DB4324A
-              51006F32E6CF92FD4F5E30C540FA1F0101828060F43681580C0095623A46A837
-              37A3209F93DB9AEF9AD200CEF66E23E6ED9A1CC48331C71E03805ABFB93089D9
-              781F9814E7820D988F9913667AA3E60F6300BC24BEA60CBB96CD4F6143780407
-              73ECAAD9D600E4D2BF9B0E9CBA78CDFF894E1FD381552DD4001011C8B410719E
-              C37A105AB03C41A626F3EF500D00B66F99B687F48D49AF056AA75B1100300E00
-              88F20073EA49988F951D38F34E155BD2006A22EB425B469E9A907C447A9A12DE
-              BFBD2500A471EA7A6834066FA4169F8BE823F83D0AC03B4E4FFB2FF9C120A094
-              3470EE9A9381CD6D24757F0D8D123C4103472E01F833A1A10E1854E5E9BF0480
-              9A2C855F3413A2A4D9E9BD4B1A387827F66194AE8838DC93A88069A8A050183D
-              F844E64B09D2F8D59EE297F4D39533A152C2E2AD3972CF64E68BB98103C368AD
-              1AF566845303A207D10F58293FA883C600508152F55915D8430B5EFA54C598F6
-              A0238CB69480A116DFB2A5A47CB09EA4B9A5443B6881A4762DD90EE195EA740B
-              6212625527033492575178AD6395625BB73222DFCE72F4ECB18AF1E51D9A675C
-              8043ED8368A47CDF5B745C7FF194066CAFEF8A78169E5D065162AE645BDFAC84
-              BAC12880D2EC12C74642805942441B98F7E3FAF0EC350AA0664E3CB7AF2CAD53
-              6A1867E69A8F6C9A66AFAD00601835E307169D0C1C51C27FE0207613C520A208
-              390529C33067E4D30EF653B83569740E000BB1381B2BFFD2D26A4E308E4058CD
-              79662E00631229223596FF401101416D83D931836D66DC2E580AC0338A79601A
-              FE33AB818259FF991533B9109F592392DEEB9E3535B057466B875F02E8227677
-              E95F7CD7B831303DE8C60000000049454E44AE426082}
+              87000000017352474200AECE1CE900000385494441546843ED99FDB10D4110C5
+              CF8B00112002448008100122400488001120024480081001224004D4AF6A5AF5
+              9DBBB3D33DBBF7EE7B55AFABF68FBB7776B64FF7E9AFD9139D713939E3FAEB1C
+              C0D61E5CD3035724DD91744BD2C5725D2F00BF4AFA5DAE4F923E48FAB106F8A5
+              0050F4BEA407924CD9A85E8002CCF3022CFADCCEBA510028FE48D2E362E9A197
+              9787F0CC4B49AF46808C00B82BE9852428E3E58FA4F7C5AAD0C32ED6B0960BE0
+              3CCF75A17A1E200FCB1E618364013C95F4ACDAFD73B9071D3242ACB0D7CDEA21
+              EE41AB9044016039AC0ED74D7E96DF59C56BC5000285AEB93FF024DEC02BB312
+              05F0BA52FE6DE17FF7053D05CAFF1808102404933705C46200B814EA98E0DE9A
+              46413DBBCBD2EFEA7980607B7724E5ED3535887B73813D0700B77E776912DAF8
+              18E89A73C102E8637482A6575BF13007C05BE25BA9B06B71BE870DE3911C2CB0
+              9BB46D01A8AD7FBB6CD87BF19AFF939D3E960D9B5E68012023506911F23C9B6D
+              2178C1EA04959ACABF232D0070DF2AED16D63725BD17E89D6E4400A0380010DA
+              03E8B4A5401F6B3B08E69D2E76CA03B889AA8B8C661E2C47EDF0ED34813852B5
+              7D467A520ADE7F834E01F0BC9BCDC10DB7D479DC2F1B2982BE163147F03B0C20
+              CB7FCFD916ED96ECB99750A63CF0C5B97E8F739D60F0DE6B2DCD66351F937B81
+              3C05E06FC74373187E05829EA0BC94CC0A4D9DD606E033464BC791CC9602809B
+              AC849F060A91C9A035424BB3337BF7B2D09280DB2C889986381E41988AC8C319
+              593B8DD201335021A134BA562103882F64FC3E4A21F3696B246364BC1559EB33
+              5BA89560531FC8D9388828155DE30BE35E00B349AB1BF534C2ED80D8429807AC
+              95DFEB83E600D081D2F55917B885177C0F44ED80DA7B136174A4040CBDF83147
+              4A72BFCD24E99112EFE00562E172E10EE995EEF418C24988759D1CA091CD268D
+              973D56991CEB5646E4C759B61E3E5631BD7C40738F171050871006293FF74E06
+              AE7F71CF03B6D64F45DC0B9F5D06514257AAAD1F5642D36014C0D4D925818D85
+              00B344489328EF8FEBC367AF51002D3A719F3A01ADE853326273737D64931A3B
+              B300501037A3B06527539A2CE13F7090BBC96208D665BDFFC0519F76B09EC62D
+              E5D1110028C4CB0936AEFA4B4BC60BAC45710CC295AE33A3004C498060352EFF
+              81220282DE06FAD1A5A615B7172C05E0158526D0CB7F66355028EB3FB3429353
+              F1993562E983AE59D3030755B4B5F939804DCCEE5EFA0F4C1DCE317C288A9B00
+              00000049454E44AE426082}
           end>
       end
       item
-        Name = 'line_end'
-        SourceImages = <
-          item
-            Image.Data = {
-              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
-              87000000017352474200AECE1CE900000239494441546843ED98813104411045
-              FF4580081001224004880019100132900122400488001120024440BD32ADFAF6
-              76EFC68ED9B56ABA6AEAB66A7766FAF7FFDDD373230DDC4603F75F0540DF0C16
-              060A03891128124A0C60F2F4C24072081317280CFC30804B92D625ADBA312FE9
-              398C2B49D7E1396AE92E193892741CE595742EE9240648170036249D4922FA3F
-              B1374987FA02D368B901EC05E7BD0377926EC378082F9014401948CCDBFE3410
-              3901E0D48D24348EBD4B02103A9F66DBC1E139F75123885C0070FADEC986A8E3
-              18B28831E6C3D24AF898796B7539910B0051DE729147FFB1CE1B40AB4EC6C445
-              60702C00B900BC3AE9EC44C8A6891558BB742F97AB2CE400E037453A24668A21
-              254B6CAAD2A95F2C0700CADE6ED8845A1E5BFB9B40329F33049B08481D00FBB8
-              6DD4A83456F3374332B65D8B79304835C328BB24F3B7D501F848D9AD3277A145
-              F256B72799C929B3319FFF258054CD22A1C510AEDF96D0636802A74A285541BD
-              27712A005F462981B0906224B095E24ECA28CE72EADA093AB8830C005E4680E1
-              046DD34A3CB913BDD35682D247CDB664464A30110B82F948878E16A393E5999B
-              DB98E538896D0336C4719312CED316C7B4D35C80AC0D67BDCEDB69035177A1B1
-              CB0CBF94458CB6D92E34D5DEA9B70B8D81C02172C2E4145B9190CD41DF574AEF
-              AC6FCA66812061F97E42F35DE6409D93347930E2FF5621475EDCDF2AE4C84CC7
-              6B1BA35961F98BEF7356A14EF016009D8479CA268581C24062048A841203983C
-              BD30901CC2C40506CFC02721E46831E75D5F560000000049454E44AE426082}
-          end>
-      end
-      item
-        Name = 'line_start'
-        SourceImages = <
-          item
-            Image.Data = {
-              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
-              87000000017352474200AECE1CE90000024E494441546843ED98812D84411085
-              9F0A50012A4005E8800AD0810E50011DA0023A4005A80015A002F2C94EB2F7E7
-              BFFB676F96CBB1935C2E17B3BB33EFBD999DB5A039B785398F5F2D815933D818
-              680C041168120A02185EDE18084318DCE0DF31B021694BD2AEA42549FC7E97F4
-              987DEE25BD0481752FF732B02AE958D28173E71349A74EDF909B2701823E4B88
-              971C060B8792EE4A1695FA0E2540F0179D4D910841F1413A1852DA4E1F24961B
-              495C9606E6F59F944037F88F24A19B81CDA90F025E4C7ED4C84E96AC373697DF
-              B804D0FC43261B50273082F118050E43EBC919396D16ACF79CF1ED332E0110DC
-              4FBB803C097983B7C34982C08D89AB8226104A003D83BED99EA421D98C3B10D6
-              AE33292DBB23733AF6317094BA0E5B201D8A336248C90A3B02466F0C7D09E407
-              D2CBE9E911633D7708565D467D093C27CD7320DD23DAC761F0362BE6684B1DB9
-              20FB12F8CCE046B3A5C5DB658B627E8B50D8593B12F39F4C80D6B792B2AE2DA1
-              D70AB7F2484DFEC922CEDB28050C0B11A380AD15FF4A1BFDA98B8C1B9D82AE6A
-              9E51822EB436453722585AB2055DFD0E008949C31CA3B2CD314809FABD2D95A0
-              910E6C624F4946DEF56E964AC6690E67B61F9A8B987F784318F248871AB0B783
-              3B388FE3340F1A7BCCF00DB21863B33D68BAB3D3CC1E3406000F9BF34C4E1E60
-              F0A1E7B3363A8A4C3C6F88015BCC7B800BC4DE084349D4180287CEF8FEBB3701
-              DBCCDEBEF66F15A483C6D13748738BDBB72B80A8536902D1F3AAAF6F095487B4
-              70C3C6402160D5DD1B03D5212DDCB03150085875F7C64075480B379C7B06BE00
-              A1D36C31CEB67E0C0000000049454E44AE426082}
-          end>
-      end
-      item
-        Name = 'login'
-        SourceImages = <
-          item
-            Image.Data = {
-              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
-              87000000017352474200AECE1CE90000016A494441546843ED99E151C3300C46
-              5F376084B20123B0496102D800D8800DDA4D98A11BC0066C00A71EBEF305A789
-              6C55C687FC37B6A2F77D8A1C271B061F9BC1F327007A3B180EFC07079E81A74A
-              D04FE01578995BEF51422D00296F019038BFC62800EFC0752F80CAEA392DFBCA
-              1617C5F67020007E1408075A4AA1766D3C035AE5AE8087731B8F32A0AB0392FC
-              1B70031C807B65B2A5E9AE00D31DD702C215401494A4779994AD10EE00D6105D
-              002C21BA0158413401D4BEC3E7DDE41190EE9486F6996802C8171B74C42A883F
-              0970046E01396D2D8D2680E20968E98E93EBB22BE725A449BEFB79600FDC6540
-              DAE4BB025824DF0DC02AF92E0096C9BB0348BD0B401A35353FED114D5D48D970
-              4ED3D3CB9C45F2EE0E246069BFF2356D4D9F5F12C9DD81A584B4D70340AB98F5
-              FC70C05A516DBC7040AB5869BEC5FF810F605B0AEEF175DA0260D81F1CA2BCEC
-              EEB367130F072CCA703646005C54DE15C1C38115225D74CAF00E7C036EF65731
-              5B48308D0000000049454E44AE426082}
-          end>
-      end
-      item
-        Name = 'wizDot'
-        SourceImages = <
-          item
-            Image.Data = {
-              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
-              87000000017352474200AECE1CE900000286494441546843ED98812D84411085
-              DF554007A80015A00274400574800EA80015D0012A4007744005E493DD986CCE
-              EDCECE2197EC267F22313B3BEFCDDBD9999B68C1D764C1E3D700F0DF191C1918
-              1908323024142430BC7D64A0A0705BD2AEA40D49ABE9C3E4257D4F926E253D84
-              A94F0EE6958103492726E05A7C003A95745D33ACFD3F0A00A66F1C8197F10064
-              5F1299E95A11007B922E252D9B935F9344EE535004C8424E804562EC5B317BDE
-              241DA67D6E10BD000802E6F37A97749E3E029AB5007C9CBE25634826B81FAED5
-              030026EF0CF3B00E20AF0CF043C0391B00DFF1FAE901802CF2A1044F2035D67F
-              62956C003CFBE3EF4D4F0ABC00A836E89E856CD0B497F9323E08E0CE6439711F
-              AE5A41780158F6CF52296C3D6B961D259532CCE28CB556A71E00B08DF65951E9
-              94F19552E22E9095EAF200A0CA1C258F17A98A540F701874F9F7008091AD1450
-              57C9AB80B1A59956838C57970780D53F1ACD8F54F59046032EF363B26DAE461E
-              001F2610CFBEC6F8BFCCDC677802713BF7449E6CDD677800FCA5849ED30359E5
-              C00360E12F715799AB52F86DD0E5DF9301FB9021277A96DE1E68DA434605A2ED
-              66FDCA4386E3BF682578E533906A023D19C0996DE6BADADF291195EDF9AF3673
-              6516A252A207B2D269AE3E99086F06D857B6BFBD736D394F77B5E73D0000518E
-              94C8892A429357BBD8B04E53C85869E7E9E68B6B65D80B208360F0B0732DD960
-              4CE4CDE032E66107B699BAF2506F2F29CC434853FB5CDEA108802C273BD756AB
-              466180E6290CDD535D14408E872098AAECCF25B3C0901DEC9B47C79F9CCD0B40
-              F69F258264D0F77AFA074C7337F24F8B5D72990662DE00BC120ADB0F00610A83
-              0E4606820486B78F0C84290C3A1819081218DEBEF019F804E5668031F038996D
-              0000000049454E44AE426082}
-          end>
-      end
-      item
-        Name = 'wizDotFilled'
-        SourceImages = <
-          item
-            Image.Data = {
-              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
-              87000000017352474200AECE1CE9000001A6494441546843ED98ED3104411086
-              9F8B800C1001322003421081CB001910011990012110013210C2D5AB6EABB6EE
-              EC6EF5C716537AAAEED76EF7BD1FDD3D33BBA0F1B5681C3F45E0B71D2C07CA81
-              A00255424101C3E1E54058C26082726040C07D600FD85D3FFF023E818FA0E05B
-              E1990E08EC2570061C0D007D059E803B40A4C22B8B8040DFF7149F0226F0176B
-              3253EF8E3ECF20700D5C395128F6C619FB1D16251001DFE11601E571AD080195
-              CDA3EB5FB783CEBDE5E425A0867D37D4FC144F4DA7634F637B096494CE262957
-              297909681C1E4EC96A7CAE9C72C1B43C04B449A97CE65807D6CDCE43E004789E
-              033D700ABC58727B08644E9F4DACE669F42F09345F42CD37B1EA768E31FA3672
-              8A1DEC6B4F0F2859F31B998E12DAFE772C236FE45D5D76748730DF11BC0E084B
-              E638358FCF4E8C0881AC52729D81B208444984C0EBCFA30E7442A89C1E0C3DA1
-              9A5F7AEF00FD5ECA22A09C6A6C811299A193AA46A52EF5B79E86FD69086412E8
-              E7D766A75FFFB38AA6D69FFEAC9234516D69E672C08622F07611088897125A0E
-              A4C81848520E04C44B092D0752640C24290702E2A584AE0080853A311071BB30
-              0000000049454E44AE426082}
-          end>
-      end
-      item
-        Name = 'wizCircleTickedFilled'
+        Name = 'wizBigFilledTicked'
         SourceImages = <
           item
             Image.Data = {
@@ -1320,9 +1277,481 @@ object ImportSCMSwimmer: TImportSCMSwimmer
               31E281DAC67828BCDAA3E92E0BD7365993406D6F97DF4F9EC01FC8BA94311ECF
               916C0000000049454E44AE426082}
           end>
+      end
+      item
+        Name = 'wizDotSmall'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
+              87000000017352474200AECE1CE900000286494441546843ED98812D84411085
+              DF554007A80015A00274400574800EA80015D0012A4007744005E493DD986CCE
+              EDCECE2197EC267F22313B3BEFCDDBD9999B68C1D764C1E3D700F0DF191C1918
+              1908323024142430BC7D64A0A0705BD2AEA40D49ABE9C3E4257D4F926E253D84
+              A94F0EE6958103492726E05A7C003A95745D33ACFD3F0A00A66F1C8197F10064
+              5F1299E95A11007B922E252D9B935F9344EE535004C8424E804562EC5B317BDE
+              241DA67D6E10BD000802E6F37A97749E3E029AB5007C9CBE25634826B81FAED5
+              030026EF0CF3B00E20AF0CF043C0391B00DFF1FAE901802CF2A1044F2035D67F
+              62956C003CFBE3EF4D4F0ABC00A836E89E856CD0B497F9323E08E0CE6439711F
+              AE5A41780158F6CF52296C3D6B961D259532CCE28CB556A71E00B08DF65951E9
+              94F19552E22E9095EAF200A0CA1C258F17A98A540F701874F9F7008091AD1450
+              57C9AB80B1A59956838C57970780D53F1ACD8F54F59046032EF363B26DAE461E
+              001F2610CFBEC6F8BFCCDC677802713BF7449E6CDD677800FCA5849ED30359E5
+              C00360E12F715799AB52F86DD0E5DF9301FB9021277A96DE1E68DA434605A2ED
+              66FDCA4386E3BF682578E533906A023D19C0996DE6BADADF291195EDF9AF3673
+              6516A252A207B2D269AE3E99086F06D857B6BFBD736D394F77B5E73D0000518E
+              94C8892A429357BBD8B04E53C85869E7E9E68B6B65D80B208360F0B0732DD960
+              4CE4CDE032E66107B699BAF2506F2F29CC434853FB5CDEA108802C273BD756AB
+              466180E6290CDD535D14408E872098AAECCF25B3C0901DEC9B47C79F9CCD0B40
+              F69F258264D0F77AFA074C7337F24F8B5D72990662DE00BC120ADB0F00610A83
+              0E4606820486B78F0C84290C3A1819081218DEBEF019F804E5668031F038996D
+              0000000049454E44AE426082}
+          end>
+      end
+      item
+        Name = 'wizDotSmallFilled'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
+              87000000017352474200AECE1CE9000001A6494441546843ED98ED3104411086
+              9F8B800C1001322003421081CB001910011990012110013210C2D5AB6EABB6EE
+              EC6EF5C716537AAAEED76EF7BD1FDD3D33BBA0F1B5681C3F45E0B71D2C07CA81
+              A00255424101C3E1E54058C26082726040C07D600FD85D3FFF023E818FA0E05B
+              E1990E08EC2570061C0D007D059E803B40A4C22B8B8040DFF7149F0226F0176B
+              3253EF8E3ECF20700D5C395128F6C619FB1D16251001DFE11601E571AD080195
+              CDA3EB5FB783CEBDE5E425A0867D37D4FC144F4DA7634F637B096494CE262957
+              297909681C1E4EC96A7CAE9C72C1B43C04B449A97CE65807D6CDCE43E004789E
+              033D700ABC58727B08644E9F4DACE669F42F09345F42CD37B1EA768E31FA3672
+              8A1DEC6B4F0F2859F31B998E12DAFE772C236FE45D5D76748730DF11BC0E084B
+              E638358FCF4E8C0881AC52729D81B208444984C0EBCFA30E7442A89C1E0C3DA1
+              9A5F7AEF00FD5ECA22A09C6A6C811299A193AA46A52EF5B79E86FD69086412E8
+              E7D766A75FFFB38AA6D69FFEAC9234516D69E672C08622F07611088897125A0E
+              A4C81848520E04C44B092D0752640C24290702E2A584AE0080853A311071BB30
+              0000000049454E44AE426082}
+          end>
+      end
+      item
+        Name = 'WizardNodeBgrd'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D4948445200000262000000180806000000597091
+              68000000097048597300000EC300000EC301C76FA8640000001974455874536F
+              667477617265007777772E696E6B73636170652E6F72679BEE3C1A00000B6749
+              444154789CED9D7FB0555515C73FEBC90F1F283F3250A41FC87B92FD321D1290
+              BF2A342C1571067F2409D690944856489A41658AE5683663395393983A438A63
+              2AE08FFCC1D81F2668635353EA202A248680963F227C2AEFAEFE58E7F2F63DF7
+              BD77CF39F7BCD99C73F77766CDDC7BEE5EFBACFD3DF79CB3F6DA7BAF2DAA4A5F
+              1091A380D380CF0313804301015E053601EB81BB5575739F9504040404040404
+              049410227224703A3003F8083006506027B005780858A3AA9BFAACA337474C44
+              3A8115C01998E3D51FBA81D5C072557D317D3302020202020202028A03119908
+              5C019C051CD0A0B8627ED232557DA1AEAEB823262273805B806129ED7A0B58A8
+              AAB7A7D40BC800111982FD014E018E03C6026DC02EE029E0016095AABEEDCDC8
+              92424446015F014E048E06DE0FBC0B6C0736027701F7AA6AC59B912585888C00
+              E601338163814380BDC00E6003B0168BD2777B33B2A41091E1C0B9C01730EEC7
+              601DF11DC013C03AE04E55DDEBCDC8924244DA81B9C01781C918F715EC79FF24
+              701FB05A55DFF566640B414466033701A353AA76010B547555CD5155DD27C052
+              ECE26A2415ECC1360FE8008647D209CCC76E3CB7BC028BDC3A83E42FC06C605B
+              8CF7DE642770AE6F7BCB2298A3BB14EB7434E2FE1960BA6F9BCB2258647E31F0
+              7A02EE37039FF56D739904381FF87702EEB70027F9B6B74C8239BF3B1370BF0D
+              98EDDBDEB20BB028C67B25F285E647BE51D54FEA887CA7B5BDF8554B6BEA742A
+              3F3356F869604A02A3A601CF3A7ADDC0D9BEC92AA3442FA39F25B821E3B21238
+              C0B7FD4596E8C6FA434ADEF7028B7DDB5E74010E04EE49C97D3770896FDB8B2E
+              C060E0B694DC57801FFBB6BDE8820D77ADCCF0BCBF9668B42B48EED7E44B313F
+              E959606A02BD29914FE5DE2367ECFB3D2AD409EC710AAD0746A6306E14F0A8A3
+              FF0630DE37696513E0BAD80DB713B80C1B1E1B8E0D271F057C1B782956F626DF
+              F61755A297D1A3313E9F011602132347E1E0E866BB8AFA88D9377CB7A1A88245
+              21EF8BF1F91C70017064C4FD41D870CDE5D447CC2EF6DD86A20AD6F1BB33C6E7
+              16E09BD8A4E4F688FB6380E5C06BB1B23FF4DD86220B3645C8E5F3256009F0D1
+              E8593F1CF824F03DEA2366D7F8B6BF6C028C8F7C9B2AC78F02A352E88F8C7CAB
+              AAFEFF800ED51E47EC76E7C7A7D33861CE4946511B19FB9D6FE2CA24D8EA55F7
+              46BB0718D14FF9F65E6EE4F37CB7A388025CE97058C116B2F4196104C661F395
+              AA3A5DC0B1BEDB5144012E8DFD87AF0306F7537E0CF047A7FC7B8421E2ACDC2F
+              8E71FF2B60483FE547531B35EE0666F86E4711059B83EA727F0BD0DE4FF911D4
+              468D2BC0A9BEDB5126A13632FC6C1A27CCA96324D689AFF193C0222815E7E235
+              1C8EECE724D39CBADE050EF74D5E190418043CEF5CBC35405B42DD9B1DBD1DFD
+              DDCC417AE5EF83C03B0E87CB13EA0DC3164D54F51EF6DD96A249E454ED7638FC
+              6942BDA1C0638EDE06DF6D299A442F0C37BAF8CB847A8380871DBDBF1186C9D2
+              723F8CDA08D7CD09F5DAB0F94855BDCD842929795D93F151A7AEEA274D6BA2AE
+              A9319F6B521B308B9E1415EB54F5493242553702F7475F0763E3A901CD631636
+              F10F2CFC3F4F93AFC8FB3A16D206CB03774ECEB6951D8B8021D1E7C7B0E85843
+              A8EA1EE06CECE6053841448ECEDFBC52632136FC02F0176C18BE2154F51DECD9
+              535D313C4D448ECFDFBC52E3ABD8280758EFFF5B4994D4564CCE05FE1B1D3A1A
+              CBAF14901C73B155F0005BB1FBA021A277C23C6C5105D894A353F236AE453117
+              EB6400DC1FF93A99A0AA4F00F7465F0598D5862D03AFE2CEAC95F751C7F41CEA
+              0B80939DCFBF50D537932AAA6A1736C1BF8A5373B3AA35E072BF42A32E4D12A8
+              253ABEC33914B84F07F725F293149D0F54751B706B1F75053486FBBFBF5A53A4
+              A450D55DC06F9C43E17F9F0EEE7FF5DAA8639108AAFA0670837328709F0FA639
+              9FF3F6936602BC404F28B3238710DE24A7BE24CB9D5B597667D0F974866BD299
+              D1BEAEFD80A3FD45DE068666E0FE9C0CE7DAB41FB477A0E45F1974BA81833270
+              3F2BC3B9FEB91F703450F29F8C7A6332703F23C37976ED071C0D94647D961E91
+              71E82BED79B2BC8B5A495C5F66520E7E92FB4E7EBE0D1BAEAA6207CDE315E7F3
+              FB72A82FA0165B33EA84E4A2CD617B9A9EA9832DB95BD27A784D557767D00BDC
+              378F3DAAFA6A06BDC07DF3A860B9C1D222709F3F5C5F667B0EF5B97ED2616D39
+              541847A32D91029A43E0D70F02EFFE10B8F787C0BD3F04EEF74FE4715DDC3A2A
+              6DD8EA8C2A0ECBE1046E1D6FE4505F402D8EC8A0F3616C454D40768C1391A119
+              F426E46D480BE290686BA3B49890B7212D88761139B471B13A4CC8DB90168460
+              CFEEB49890B31D01B5BECCB81CEA73FDA45D83B061AB89D181E9D89CB166E04E
+              D05FAFAA739AACAFE521222BB1554C609368D3AE6C7527DEAE51D5D9B918D602
+              1091BF039FC012879E8025174D0397FB65AABA222FDBCA0E11D9804D926DC3F6
+              375C9DB20A97FBAB54F5FB79D9567688C823F4AC763C19DB572F0D5CEEAF57D5
+              8B7231AC0520226BB0F98D603C5E9FB20A97FB95AABA2017C35A18227217707A
+              F4753A9654BA19B87ED29636E041E7401E4E935BC7E339D417D0B3D4156051B4
+              E97422449BC52E710EADCDCDAAD680CBFD652292382C2D2293B0ADC3AA08DCA7
+              83CBFDA5229238AA2B221FC296F257B12E37AB5A032EF7DF1591C1491545642C
+              F035E750E03E1D5CBE9688C88149154564349672A7B7BA02B26383F3396F3FE9
+              41B0AD2A062AA1EBB86657170451B0FC259BE95965B196E4095DDDECFAAF1012
+              BAA6E5FE03D4AE78FA4142BD7842D7877CB7A568427D42D7AB13EA0D05FEE4E8
+              3DEEBB2D4513EA13BADE90506F10F088A3F7574242D7B4DCB7630BE7AA1CDE92
+              50AF0D73BCAA7ACF1112BAE6754D0E676012BA760347567F7053F7E7B5C5D12A
+              DFE49549B07C30EE66A38DB6381A86E5517297E0CEF3DD8E220A7085C36105DB
+              4F72503FE5C7031B1D9D2EE018DFED28A20097C4FEC33FA7FF2D8EC652BFC5D1
+              F1BEDB5144012E8C71FF6BFA49E182AD2C8B6F71F439DFED28A200E7C5B8BF95
+              FEB7381A89EDB8E23EA74EF1DD8E320903B3C5D12A55A5FA6307B60165F5C766
+              37FD7E9DB0BDD140FC11AE8DDD9CBBB06CE39FA267D3EF8F034B819763656FF4
+              6D7F5105EBE5AF8FF159DDF4BB039B3F360A8B085F8D6515771F880B7DB7A1A8
+              427D2FBFDAD35F44CFA6DF23B00DD757006FC6CA7EC7771B8A2AD864F13B627C
+              6E012EC2B6C66BC736BB9F0CFC88FABC9189B6030BD227FFBF8DF1B90D9B66F2
+              B1E8597F10702CB08CFA1C6C89A2C741525D8FBC37FDDE0D4C548D1CB1A8D019
+              D4465C9E26C13065F4F2712361DDC099BE492BA3440FC6B83396446E2484A89B
+              E57E18B5BDFD24B217B8D0B7ED45176CA8F1EE94DC770397F8B6BDE8826D5577
+              5B4AEE2BC0E5BE6D2FBA0007002B333CEFAF210C070FD435392B7AB6B891B1A9
+              09F4A6443E957B8FCCD9F77BACF0D2983356C1E623CDC37AFEC323E904E6633D
+              55B7BC0217F826ABEC029C86ED1FD9E886DC01CCF56D6F59048BCE5C4C7DD4A5
+              37F90761482C4FEE051B2A4B921D7E13F019DF3697498005D83EB78DB87F1198
+              E9DBDE3209F0656AE78CF5252F01A7F9B6B7EC8245E3E31D8F75914FD4E9F849
+              1D91EFB4B617BFEA62B74E892ADE071199834DF01E463ABC059CAFAA69979807
+              6480880CC156E49D0C1C87E525112C44FD14F00036FEDCE5CDC892225AB53A1F
+              38111B161E832D4E79199B1B7637709FA6D81B31201944E460ECE136133806E3
+              7E2F96ED7A23364FE69EC07DFE1091E198537012362436168B0EECC0B8BF17F8
+              BDA6D897322019A2959373B1342E9331EEAB9DED3F63697556ABEA7BDE8C6C21
+              88C86C2CA5CBE894AA5DC002555D55535FDC118B4ED2015C8985E11A2DD7EFC6
+              42D7CB55756B4AA302020202020202020A051139025BC87536368CDC1F2AC0ED
+              989FF4625D5DBD3962CE892661C36033B10CBFD58CB23BB1740A8F60BDCFE753
+              B62120202020202020A0D010914E2CD9EB0C601216AD044B17B515CB13B64655
+              37F755C7FF012CE5A119449E98630000000049454E44AE426082}
+          end>
+      end
+      item
+        Name = 'WizardNodeBgrd5Grey'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D4948445200000262000000180806000000597091
+              68000000097048597300000EC300000EC301C76FA8640000001974455874536F
+              667477617265007777772E696E6B73636170652E6F72679BEE3C1A0000101D49
+              444154789CED9D6B9454D59580BF7DAA1AE86E148D62E3385150830C33CBE830
+              3E78D4AD5A8A7110159D253E235197F1113466C4D732C1CC8A1A434212A37126
+              3A4B41B208101045213D304D4FD5AD8606677A664DB2E20B152638DA6066C628
+              9DD06DD7D9F3E3DEEAAAC67ED4ADEE86D875BE5F754F9D7D7AD7A9EA7BF7D967
+              9FBD4555E90D119904CC01BE008C07EA0001DE075E073603CFABEA8E5E077138
+              1C0E87C3E11886F8BEFF3955BD5444CE15915354752CA0C01E60A7AA6E8AC7E3
+              EBA64F9FFE7A6F63484F8698889C0C3C0CCC2530BCFA2207AC0216AAEADBE57E
+              1887C3E170381C8E4F034D4D4D275A6B1F04AE0062FD7457555D95CBE5BE71CE
+              39E7BC75E09B9F30C444E432E059A026A25E1F0237ABEACA88728E3210911104
+              3F800B813380630003EC055A807A60B9AAFEE19029394C49A7D347C462B1EB55
+              F53CE054E068A04355DF15916DC05ACFF3D603F6902A3A0CD9BE7DFBE11D1D1D
+              F3ACB5E78BC8E9C0514027D02A22CDC08BADADADCFCF9D3B377768351D7E6CDA
+              B4A9B6BABAFA5A559D059C0E8C057222D2AAAADB45E4A55C2EB726954A751E62
+              55871DCDCDCDD59D9D9DD7A8EA05C01482B9B704F7FB975575C3D8B163574D9E
+              3CB9E3902A5A2164B3D94B54F519E0C888A2FB811B3DCF5B5EDCD8CD101391BB
+              814514BC600AAC07D6005B80D6B0FD58603A7019309BEE5EB3DB54F58988CA39
+              22202297008F037FDA4FD7BDC05DAAFAD3A1D7AA2230D96C7681AA2E040EEBA7
+              EFAB04FF705B0F825E9580643299DB44E45BC011FDF47D53556F4A2693FF7230
+              14AB047CDFBF097804F84C3F5D77596B6F4DA552FF7410D4AA083299CCB522B2
+              9860B1DD17EF88C8ED8944E28583A157A5E2FBFE7CE0C7454DAAAA1B44648DB5
+              764B4747C77B00F1787C5C3C1ECFDB491752645789C8BD8944E27BF901BA0C31
+              11B91C5859D4F915E07A557DB92FA544E46C600930296CB2C035CE3336F88888
+              008B813B238A3E03DCA4AACE4B50269B366DAA1D356AD473C0F911C472AAFAB7
+              C964F2F1A1D2AB1248A7D3A38C312B09E2554BC502F77B9EB76888D4AA085A5A
+              5AAAF6EDDBB74C44AE8C20A6AAFA5032997C60C814AB0056AF5E1DABABAB7B0A
+              B821A2E8F73DCFBB9BC091E218443299CC5522B29C829DF49A31E6BA1933666C
+              EF4B2E9BCD9EA9AA4B80C96193AAEA15C9647235045B59F998B0A545833702D3
+              FA33C2C2D1B601538174D864809F88C871A57E3847C97C9FEE46D85EE0EBC0E7
+              81D1402DF067619FDD45FD6E00FEF120E938EC686969A9AAAEAE5E4F7723EC55
+              E01663CC49D6DAEA582C76B8889CA5AA8F001F857D6222F2582693B9F5A02B3D
+              7C30C698E7E86E84ED50D5F9C0446B6DB5B5F63063CC5F85DEB20FF272C0777C
+              DFBFEB602B3C8C90B6B6B615071861BB54F58E582C36A9AAAAAAC65A7B98B5F6
+              74117900F89FBC9C882CF47DFF9B8740E761435D5DDD337437C276037701936B
+              6B6B6BF7EFDF3F1A385544EE277816E459E0FBFE770FA2AA15416363E37122F2
+              0F84769288A4ADB553FB33C2001289C4CB1D1D1DD3086CAB505C963636369E04
+              A1474C445612C41B41E0099BA6AABF8BA2A4881C013453F08CAD50D5ABA38CE1
+              E81D11990314BB9CD701F354F5C35EFA57033F01E615355FAFAA4B874CC9618A
+              EFFB0F1118BC10B8951F696D6D7DA0B738A46C367BACAAAE05CE0E9BDA81A99E
+              E7FDC741507758E1FBFE7D045B6200A8EA0F478F1E7DEF9429533EEEA97F369B
+              1DABAAAB8164D8D40924DD1671743299CCED22F25851D393471F7DF4577B8B43
+              6A6A6A3AD25ABB82C282C58AC8171289C4E62157769891C964AE1791678A9A96
+              555555DD3275EAD41E637EB76FDF7E787B7BFB320A0B1655D539C964F2A52157
+              B642C86432C58B92D7ACB55353A9D4077D0A1D404343C3981123463413384C10
+              91158944E26A21309C5E21B0F21438BB144F584F84DB945BC3B13E06C6ABEABB
+              E58CE528202271E035E0A4B0E945E05255ED37185C4496025F0A2FF700135C00
+              7FE9F8BEFF59E04D600480883C9048241EEC4FAEA5A5A5A6ADAD2D0BFC6528D7
+              904824CE1B52658719A151B593C0D30BB0C8F3BCFBFA93ABAFAF1F595B5BBB99
+              208E15609BE77953874ACFE148F8C0D845211EEF09CFF36EEB4F2E9D4EC763B1
+              58BDAACE0C9B7EE979DE69B86DB29209EF1D3B29C4843DEB79DE7525881ADFF7
+              5F002E0AAFDFDCB367CF24777065E03436361E178FC777017140ADB5D352A9D4
+              B672C66A6A6A3ACB5ADB4C687319632619E0620A5B922F956B8441D736E52FC2
+              CB2AE0AA72C77274E3620A46D86F093C61A59EC8BB05F84DF8BA0E705ECA68CC
+              A7608435251289874A119A3265CAEF812B091624A8EACC6C367BEA9069390C51
+              D59B291861FFEE79DEFDA5C8CD9A35AB9DE0DE935F709C9DC9649C2116819123
+              47DE40C1087BD55AFBB552E452A954672C16BB86C2F6FCA9E974FADCA1D071B8
+              B26FDFBE6B281861BBDADADA6E2E51D45A6BE751D8223E79DCB871170EBA8215
+              48F89B8E8797BF28D7080308B732D7879762ADBDD8D03DEE654DB983F732C6B4
+              4118CF119C4CCDF378946D6355DD4F105B96E7A2DEFA3A7AA46BEE73B9DCC344
+              58D97B9EB703F879FE5A55DDDC47A3EB2122228F10211D88E779BB8165F96B63
+              8C7B204540558BEF398BA2A4A498366DDA5E11E98A4935C6B8DF7D0444A4F8B7
+              BA385C5894442A95FA4044BAB216B87BCEE010EEF6E55F0FAA9D2422E70BF016
+              7062D876B2AA7E22D9581444642241D67D80FFA5FFE3CE954C1B85157FA99CA1
+              AAFF1645203C8C514EF58376606419727FD44C983081A54B974615DBDFD6D676
+              44949B2280EFFB5703CBFBEDD89D37808911653E1584B9D6FE24A298B5D68E49
+              A552FBA208F9BE7F31412C65147E031C1F51E6D3C2FF113DEF1122724C229178
+              3F8A4C369B3D57551B22FEA9F709F2630D47CABD979EE879DECE2802E1D65724
+              8F8DAAB68948D4675125D165CB18634E993163C61B03192C9D4E9F6C8CD90120
+              226F1982EDAA3CAD3D8B45E2BDA2D7CE081B7C769529E3928B0E8C77A31A6100
+              618C936360FC36AA1116E2E67EE0FC3EAA110620226EEE078EB5D6EEEEBF5B77
+              8C316EEE079F2E5BA6B3B373C071EFF95C6300AA3ACE0C74C01EE8AF24926360
+              B8F93D34B8793F74B8B93F74B8B93F74B8B9FF23A4AAAA6AC0DFCB8811238AC7
+              B086E0245D9E7103FD03078C11E968A7A324269421730261CE3847D91C5B5F5F
+              5FCED6C2F8C156A402396AFBF6ED87471552D5F143A04BA551BD79F3E6BAFEBB
+              75C75A3B7E0874A934C45A7B4254A15C2E377E0874A974BA6C19553D7610C6EB
+              B29344646F9C60DB2A1F23368D20666C201407E86F56D5CB06385EC523224F53
+              48EC371B887AB2B538F0769DAA5E32288A5500BEEFFF0AF80B60D4E8D1A36702
+              1BA2C88B48F1DC7FC3F3BC870753BFE18CEFFBCD04B9D84C7B7BFB2C605514F9
+              E2B917916F271289AFF7D5DF51C0F7FD06E05C80AAAAAAD904D5394A46446617
+              95CF7BCCF3BC3B0657C3E18BEFFBEB084ECA138BC566038FF52DF1098AEF394F
+              7B9E77E360E956A9F8BEBF16B8144055A711C4F1968D31A6D84EDA69808D450D
+              836134158FE192280E0EEB8B5ECF0F93E7964498D8754151D38B83A65565D035
+              F7AA7A3F11B60B9A9A9A2602971735B9B98F46F1EFFE3E227875B76CD9723C45
+              C98C73B99C4B6C19011129FEDDDFD3D2D25255AAECD6AD5B8F51D52FE7AFADB5
+              6EEE2320222F15BD5E904EA747952ADBD4D474645875E2136339CA47449AF3AF
+              07C9B9D43586AA6E3404A78AF24B978B44E4CC72470E8F785E105E7E0CAC2877
+              2C47375E22482A0A7014B04C444A7D283D49E114582BEE3B8984B5F60982134F
+              00D33299CCC252E45A5A5A6AC22CE3F907D83F7B9EF7ABA1D071B822224F119C
+              2C06382D9BCD3ED257FF3CF5F5F52373B9DC0AA03A6C6A1E48DE9F4AA4BDBD7D
+              09E1768C889CD2D6D6F6682972E9743ADED9D9F933E0300055FDCF542AE532EB
+              47201E8F2FA7103274BC31E6C912454D2E975B46F08C00D8D1DADABABE2F0147
+              691863961354E900B8209D4E9FDD57FFBE686A6A3A8B426A1E0BAC33AAFA3A05
+              97BF004B44644CD4C1432FCD120A1E83D5AAFA5E1F228E1251D54E82FA915D06
+              33B056447A8D9B11911A11F929706D51F3BD2EAB7E3452A9D43BC0F7F2D722F2
+              77994CE6DBE9743ADE9B4C6363E3716D6D6D8D8459F581766BED3D43ACEAB023
+              3CADD755C54055EFF17DFF877D7967B66EDD7A4C6D6DED460A21129DAABAA0B7
+              FE8E9E993973E6EF44A478D1F115DFF79FEC2B4EB2B9B9F933C698F5845B9A04
+              258E8AEF5B8E12983A75EA1F44A4B882C4BC6C36BBACB9B9B9BA379986868631
+              BEEF3F5F94834C8D3177BAACFA83C3F4E9D3DF55D57CEE2F31C62C49A7D325EF
+              4CE56968681863AD2DB693567A9EB7235F6BF224E097404DF86623F037A5260E
+              0D8DB0E78154D8F401F0E7AEBCD1E022228BE9BECDF83EF02841DCD29B0437BC
+              09045EC93B80E2C2EB4FABAA8B152883743A1D37C66C04CE296A7E15F8516767
+              678331E6BF8151C0A4582C76A9AA7E85A0083B04DFC9AD9EE795BAAA7574C764
+              3299750724B9DC01FC08D864ADDD5D5D5D3DA2A3A363123047556F03BA1628AA
+              BA20994CFEE020EB3C5C906C36BB4A55E716B5ED021EB5D66E1C3972E47F596B
+              E3AA3AD15A7B11703B45C7FC4B2D07E6E8994C26B34444AE2B6A7A07785444EA
+              6B6A6A767DF4D147C618F3398298B0AF5294834D44BE9B4824EE3DB81A0F6FC2
+              3247BF06C64050F43B97CB5D5A6ABDC9B06CD85A0ACF913663CCA93366CC785B
+              F20195223297C03396B7D45E212812DD676078B81DB98442B16F0B5CA5AA3FEF
+              5DCA510E222204DE99A82BFCA7819B55D5AD8ECA24ACFFB696EE9528FA232722
+              5F4B24123F1E2ABD2A81FAFAFA913535352B4524CA21130BDCEF79DEA2A1D2AB
+              12686969A9DAB76FDFB2A262C7A5A022F2602291F8E690295601AC5EBD3A5657
+              57F71485835AA5B2D8F3BC7B709EC841C7F7FD2B809F5188577DCD18735D58B6
+              A857B2D9EC99AABA04981C36A9885C9E4824D60048D1C91644E46E601105634C
+              090266D7005B28247C3D96A0A0EE6504D6787100F37C55FDFBB23EA5A3244464
+              0EF038F0D97EBAEE0116A86AD4CCEE8E9E31BEEFDF092CA4C8EBD213AAFA6BE0
+              CBC964B2B9AF7E8E92916C363B5F55BF45FFD9E1DFB0D6DE9C4AA5D20741AF8A
+              209BCDDEA8AADFA1107FD41B3B45E4D64422B1B19F7E8E12C966B35F54D5C574
+              4FBEDE13BB45E4F6442211B59A842302BEEFCF078A17D7AAAA1B44648DB5764B
+              3E596B3C1E1F178FC7F376D28574B7ABEEF13C6F717E806E861880885C063C4B
+              619BB2543E046E52D54847CC1DE5212223084EE4CD06CE20C84B22C05EA005A8
+              079687B5261D83483A9D3EC218F325E03CE0F3045B021DC03B22B2CD5AFB7C32
+              99DC80AB6630E86CD9B2E5B05C2E378FC033791AC1DC7702EF02DB80759EE7BD
+              809BFB4167D3A64DB5A3468DFAA2AAFEB531E674553D06C801ADAABA4D44D65B
+              6B9F8B5297D2511AE9747A9431E61A60163085A028B88A48ABB5F65F8D311B6A
+              6A6A564D9932E5E343AB696590CD662F51D567885E326C3F70A3E779DD9C239F
+              30C4807CCCD843C015F47F5C3F4770126FA1AAEE8AA894C3E170381C0EC7A70A
+              DFF727101C26BA1288F5D3DD022B8D310B67CC98F1F6816FF6688875BD1914F0
+              9E43B0FA3C81604B12822DAF1D4003F082AABED9F3080E87C3E170381CC39374
+              3A7D727848EB5C602281B712E03D11D9A5AA1B093CF53B7A1BE3FF011628EB65
+              8D6A706B0000000049454E44AE426082}
+          end>
+      end
+      item
+        Name = 'WizardNodeBgrd4Grey'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D4948445200000262000000180806000000597091
+              68000000097048597300000EC300000EC301C76FA8640000001974455874536F
+              667477617265007777772E696E6B73636170652E6F72679BEE3C1A00000FBD49
+              444154789CED9D6B745CD57580BF7D47B22C215EA6205337601E01D7ED225097
+              87A57B07AD00A1E6ED2E1B024E1C60111E318414F35A24265D09C471701A02A1
+              05BAC0E02EC7766C1E063BAE5D990E7347964DAB763559E165C06E4C4198B425
+              80652466EEEE8F734773059266EE68649799F3FDD23D73F6D6D619AD997DF6D9
+              676F5155864344A60017025F0226032D8000EF02AF009B80A75475DBB04A2C16
+              8BC562B158AA90743AFD791199099C011C0F1C0A28F00EB01DD8E838CE9AB6B6
+              B65786D32143396222722C7037301BE3788D440E58092C50D537CAF9432C168B
+              C562B1583E2B643299A381EFABEA2540A2C8740556261289EFB4B6B6BEFEC917
+              3FE58889C82CE071A029A65DEF03D7A8EA8A98729632109171C025C079C0C9C0
+              618003EC02BA81F5C03255DDB3CF8CAC5244E420E00AE02CE004E00F807EE02D
+              600BF024B05655837D666495B275EBD603FAFBFBE70267ABEA4922720890057A
+              802EE0999E9E9EA766CF9E9DDBA78656211B376EDCAFB1B1F1ABC00CE024CCCE
+              3F07F488C856557D3697CBAD6E6F6FCFEE5343AB90AEAEAEC66C363B4755CF11
+              916998B50F309FF72F88C8BA091326AC9C3A756AFFBEB5B436F07DFF22E051E0
+              E098A21FA9EA55C9647259747090232622B7008B2844C114580BAC063A311F76
+              0087036DC02CE05C0647CDAE57D507621A678981885C04DC0FFC5191A9BB809B
+              55F51FC6DEAAEA47441C603EB000D8BFC8F49780AB5475F3981B561B88EFFBD7
+              03DF030E2A32F7B52008AE3EFDF4D3FF792FD85513643299AB55752130A1C8D4
+              1D22729DEBBAFFB837ECAA053299CC5755753166B33D126F0237789EF7F45E30
+              AB6649A7D3F344E467912105D6A9EAEA20083AFBFBFBDF06686E6E9E1804415B
+              1004B344E43C06FB55B7799E774F5EC18023262217032B22935F04AE50D51746
+              324A444E03960053C2A1009863236395474404580CDC1453F451E06A55B55182
+              321191FD802780B36388E580BF52D5FBC7C6AADA20954A8D4F24122B30F9AAA5
+              1288C81DAEEB2E1A2BBB6A81EEEEEEFADEDEDEA5C0976388297097E779778E91
+              5935C1AA55AB122D2D2D0F8BC89571E444E4C7AEEBDE82791F2C152493C95CAA
+              AACB08FD24117919B8DC75DDAD23C9F9BE7F0AC64F9A1A0EA9885CE2BAEE2A30
+              4759F99CB0C7283861CF01ADC59C300055DD024C0752E190033C2822934AFEEB
+              2CA5F263063B61BB806F035F009A81FD803F0EE7EC8CCCBB12F8FBBD6463D521
+              22F598C870D4097B09B816380668040E004E0516021F847312C07D2272DDDEB3
+              B6EA701289C4130C76C2B689C83C553D2E97CB35E672B9FD45E4CF31D1B2F7F2
+              72AAFAC3743A7DF35EB7B87A90DEDEDEE50C76C27688C88D8EE34CA9ABAB6BCA
+              E572FB27128993803B81FFCECB010B3299CC77F7B6C1D5444B4BCBA39F70C276
+              AAEACDAA3AB5A9A969BF3D7BF634ABEA09C01D98EF02005475BEEFFB3FDAEB06
+              57395D5D5D9354F5EF28F849A96C363BBD981306E079DE0B7D7D7DAD18DF0A4C
+              10ECB1CD9B371F937F40445660F28DC044C25A55F5F7718C0CF366BA2844C696
+              ABEA657174588647442E04A221E735C05C557D7F98F98DC083C0DCC8F015AAFA
+              D8981959A588C85D188717CC2E732170E770114611391C9327765A38D4074C57
+              D57F1F6B5BAB8D743A7DBB882C8C0CFDA4A9A9E9B669D3A67D3CD47CDFF70F05
+              5601A7874359553D3D994CDA23E298F8BE7F03705FFE59441E9A3061C23787CB
+              43CA643207ABEA720A1B9600F892E7799BC6DEDAEA2293C95CA1AA8FE69F5575
+              697D7DFDB5D3A74F1F32E737CC9D5C4A61C3A22272A1EBBACFEE0D7B6B01DFF7
+              07362522F272369B9DDEDEDEFE5E11B1417474741CD8D0D0D0850998002CF73C
+              EF32C1384E2F62BC3C054E2B25123614E131E5E650D7C7C064557DAB1C5D9602
+              225207BC8C89BE003C03CC2C25195C441E03BE163EBE031C6513F84B47443E07
+              BC068C0B87EE54D5EF9720D704F8C09F85431DAA7AD6D858599D844ED5764CA4
+              17555D944C266F2F26B77EFDFA86E6E6E64D983C5654754B32999C3EA6C65619
+              E117C60EC27C3C1179C075DDEB8BC9A552A9BA4422B11E38331CFA95E7792762
+              8FC94AA6BBBBBBA9B7B7773B859CB0C73DCFBBBC0451279D4E3F2D22E787CFAF
+              F5F4F44CB11757464F5757D7A46C36BB03A803D4719CD6B6B6B62DE5E8CA6432
+              A7AA6A17A1CF2522531CE0020AA1B667CB75C260E098F297E1633D7069B9BA2C
+              83B8808213F63B4C24ACD41B79D702BF0D7F6E016C94321EF328386119E0AE52
+              8454B517B37BCA476ECE1491132A6F5EF5A2AAD7103A61C0BF2593C93B4A919B
+              3163469FAA5E0AEC01B3417CFEF9E7AD2316838686862B295C8A78299BCD7EAB
+              14B9F6F6F66C22919843E178FE844C2673C658D858ADF4F6F6CEA1E084EDF8F0
+              C30FAF2951340882602E8523E263274E9C785EC50DAC41B2D9EC1C8C1306F0CB
+              729D3000D775B7AAEADAF0518220B8C06170DECBEA72950FA3A3B502FA2CE666
+              6A9EFBE31C1BABEA4798DCB23CE70F37D73224D1B5BF5B47AA80FC09C242C7BF
+              880CD9B58F4178D328CF42CC5157492493C99D22B234FFEC388EFD428AC7C0FF
+              BDAA2E8A5392A2B5B57517919CD42008ECFF7D3C06FE575575F18C1933FA4A15
+              0C8FCA06AA1644A2639651A0AAA7451E47ED27398E33A04344CE16E075E0E870
+              EC5855FD54B1B13888C87198AAFB00FF43F1EBCEB5CC6E0A3BFE52395955FF35
+              8E407819A39CEE077D40431972D5C847C041AA5AF2872280885C062C2B3A7130
+              AF02C7C594F94C3069D2A4B7962F5FFE8731C5825C2E77607B7BFB877184D2E9
+              F40522B226E6EFFA2D70444C99CF0AFF4BFCBA470087799EF76E1C01DFF7CF00
+              3AE2C8A8EABB2272682CCB3E3B94F559AAAA472793C9ED7164C2A3AF58111B55
+              DD1DDE0CB70CCD802F2322C7BBAEFBEA6894A552A963138944FE3BF97507735C
+              95A7670899B8BC1DF9D93A619567479932B6B8E8E8782BAE131612EB43D43224
+              BF8BEB8485D8B51F3DBD719D300011B16B3F7A82200876169F3618C771ECDA57
+              9E015F269BCD8E3AEF3D5F6B2C64A2335A854350AC25926574D8F5DD37D875DF
+              77D8B5DF77D8B5DF77D8B5FF7F487D7DFDA8DF9771E3C64575040EE6265D9E89
+              A3FD059FD011EB6AA7A5248E2A43E648C29A7196B2395C44CA39A69D5C69436A
+              9043B66EDD7A405C21C771268F812DB546E3A64D9B5A8A4F1B4C100493C7C096
+              5A43C68D1B77645CA15C2E37790C6CA975067C19553DBC02FAA27ED2AE3ACCB1
+              553E47AC159333361AA209FA9B5475D628F5D53C22F208A6282B9824DAB8375B
+              A309E76B54F5A28A18560388C8AF813F05C663AEE4AF8BA922BAF6DF51D5BB2B
+              655BB5934EA7BBC292384E5F5FDF0C60654C15D1B5FF81E779DF1E76A66510BE
+              EF770067003434349C8BE9CE513222124DF6BF2F994CDE58590BAB17DFF7D760
+              6ECA1304C1B9446AB995C8C0DA8BC823AEEB5E5541F36A92743AFDA488CC0450
+              D5564C1E6FD9D4D5D5B546EE7D6D77800D91D72BE1344575D8228A95616DE4E7
+              7961F1DC92080BBBCE8F0C3D5331AB6A83E8DADF11B6992A89F0E2CAC59121BB
+              F631701C27BAF6B71323AADBD9D97984AA0E1433761CC716B68CC7C0DAABEAAD
+              DDDDDDF5A50A6EDEBCF930E0EBF967BBF6B119582F559D9F4AA5C6972A98C964
+              0EC694DCC9CBDBB5AF0022D215791CB59F1404C1800E55DDE0602AB4E75DB3F3
+              45E494729587BBD773C2C78F81E5E5EAB20CE2594C5151804380A56103EA5278
+              90C22DB01EEC7B12970730379EC0447B1794221416745D8EA9A707F04FAAFAEB
+              CA9B57BDA8EAC3989BC588C889BEEF2F2C22029882AE41102CC7B49E02E81A4D
+              DD9F5AA4AFAF6F0985E398E377EFDE7D6F2972A954AA2E97CBFD1CD83F1CFA0F
+              D7756D65FD18D4D5D52D53D57CCAD0118EE33C54A2A8A3AA4B31DF1100DB7A7A
+              7AD68E2460290DC7719601F9122EE77476769E36D2FC91C86432A7464AF304C0
+              1A47555FA110F2176089881C18577918A5594221C17095AABE3D8288A5445435
+              8BE91F39E030034F8AC8B0793322D214D6518AB638BACD56D58F87AABE09DC13
+              19FA6B11F941D8ED6048C23EABCF51A8AADF07DC3A765656279EE7BD2B22D12E
+              06B7FABEFF9391A2339B376F3EACB9B979038514896C1004F3879B6F199A33CF
+              3CF3F744361D22F28D743AFDD0FAF5EB87CD93ECEAEA9A904824D6121E690281
+              AA463FB72C25307DFAF43D2232D0414244E6FABEBFB4ABABAB7138998E8E8E03
+              7DDF7F8A420D3215919B6C55FDCAD0D6D6F61685FA61A2AA4B52A954C9275379
+              3A3A3A0E54D5013F4944562493C96DF95E93C700BF029AC2F9CF017F596AE1D0
+              D0097B0A680F87DE03FEC4B637AA2C22B298C1C78CEF02F762F2965EC37CE01D
+              85894ADE08441BAF3FA2AA3657A00C42A76B03F0C5C8F04BC04F31B592FE0B93
+              43360598097C03D3841DCC7B729DAA96BAABB50CC6097366A20559B7A9EA4F81
+              8D4110EC6C6C6C1CD7DFDF3F05D367EF7A4C0376004464BEEBBA7FB3774DAE1A
+              C4F7FD95C0ECC8D80E55BD3708820D0D0D0DFF1904419DAA1E1704C1F9227203
+              834B16DDE9795ED1766096A1F17D7F09707964E84D55BD5744D6373535EDF8E0
+              830F1CC7713E0F9C2B22DF04A235D87EE479DE6D7BD3DE6A276C73F41B201FA8
+              4AE572B999A5F69B0CDB863D49E17B64B7889CE0BAEE1B924F181391D998C858
+              3EA2F522A649F48889E1E171E4120ACDBE03E05255FDC5F052967208F393EE61
+              B033560A8F00D70CD7A4DA529CF0A8F1490677A228460EF896AAFE6C6CACAA0D
+              C2DE912B8038974C0211B9C375DD456365572DD0DDDD5DDFDBDBBB94B0D97189
+              28F07DCFF3BE3B4666D504AB56AD4AB4B4B43C2C2257169F3D88C59EE7DD8A8D
+              44569C743A7D8988FC9C305F55445E062E775D77EB4872BEEF9F82F193A68643
+              0A5CEC79DE6A3021B681C922720BB0888233A698A4CDD540278582AF87631AEA
+              CEC2DCD0882630CF53D5BF2DEFCFB49482885C08DC0F7CAEC8D47780F9AA1AB7
+              B2BB6508C2BCBC9B304736C5CA29FC06F87AD8DCD5327AC4F7FD79C0F7285E1D
+              FE5511B9C675DDD4D89B551BF8BE7F15F0430AF947C3B11DB8CEF3BC0D45E659
+              4AC4F7FDAFA8EA621129564664277083E77971BB495862904EA7E789487473AD
+              C03A555D1D044167BE586B7373F3C42008DA82209815E6840DF855AA7A6B3299
+              5C9C5730C81103109159C0E3148E294BE57DE06A558D7BC5DC520622320E7323
+              EF5CE0644C5D12017601DDC07A6059D86BD25241C2A3F8AF0167015FC01C09F4
+              036F025B30C7F4EB623466B794486767E7FEB95C6E2E70B6889C8859FB2CA6F3
+              C116604D32997C1ADB49A2E26CDCB871BFF1E3C77F4544FE023809D3983A87D9
+              A06F51D5B541103C11A72FA5A53452A9D478C771E688C80C601A66ED15B3F6FF
+              02AC6B6A6A5A396DDAB48FF7A59DB582EFFB17614ABAC46D19F691AA5E954C26
+              0705473EE58801F99CB1BB804B285EDD3787B91DB6405577C434CA62B1582C16
+              8BE533453A9D3E2ABC4CF4652051647A20222B8005AEEBBEF1C9178774C4065E
+              3475902EC4E4C51C8939920473E4B50D93A8FCB4AABE36B4068BC562B1582C96
+              EA246CE03D13735BF8384CB4124CDFED1DAABA0113A9DF369C8EFF03EF749A49
+              CE3EE9F40000000049454E44AE426082}
+          end>
+      end
+      item
+        Name = 'check_circle_filled'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
+              87000000097048597300000EC300000EC301C76FA8640000001974455874536F
+              667477617265007777772E696E6B73636170652E6F72679BEE3C1A0000039749
+              4441546881D59ACD6B134118879FD96C3E5A6B0C8D95227A50110F95160F52A1
+              8A16D1FA27E8A982E0498B7A50442DE2C7A1BD88085E14510F2AFE037E1CA4DE
+              EC491415455A410F6A7BB18D1FA949331E7637DD6C36C9643F92F8C20BD9CDCC
+              BBCF6FE69D999D49849492FFD9B46603F8353DE880428828B01EE80212E6ED2C
+              300B4C4B2973813ECF6F0A0921746008D8070C029BA8DC3079E00330013C051E
+              F91624A5F4E4182D7C19F80A488F3E038C03DD9E393C80B70117819F3EC09DFE
+              1B18033A4215006C07A6030477FA17607728028093402E4478CB178151CCF1E9
+              5B00C6547BAD01E04EBF0944821070A509F096DFADD513B5E04F3511DEF2514F
+              02801D3426E76BF922B0A72E01403BE1CE36F5FA672A4CB195045C6A0168A78F
+              290900D240A605809DFE0758EDE4757B1B1D013A5CEE876311E59209E058D95D
+              9739FF330D6A55AD2726A367D352A423AA75668068B51E1804D62AB7890FD37A
+              E3E8875288AE08FA9114A253A92BBA30DE7C97E2380A0CD100D37A62E8C3C962
+              FA88CE08FA480A915612B1B72496E3CB9D81105631ABE5D145C97D918C20BA95
+              040C96D433731F218400E60971006B7D71F4E115E5037711F2B7E728BC5E5009
+              9307DAA5B911B2F7C06AEA8417CBD5B7D45A6F20F060ECF6D615E3DABE58A94C
+              0368DB1244CFA5D136C66A97ED8BA31F0C04DEB222AB5DC032D5DA5A7F027D7F
+              12E202FDF08AAA22024A1BA71533C52E40B8142C07DA62C25BA563954584045F
+              FA0CDBE79F9EA3B8880819BEC86A1730AB52B3F0324BFEDEBCB12EDACD142136
+              441BD1F24556CFD3A8D69F403F902C4FBCBF1222224CF81CC6349A075B0F4843
+              C91BD52885C92CF9FBEE3DE10A7F27989C07DE59F050BE123FAF2752451176B3
+              5AFE5520F000CFEC174E018FEB8D5698CC927F907117116CCB5BF6C47E517236
+              6A8E83296C2B9DAA69DB1CD36B8053A5CDBE036B2AA690390E6E79895C789125
+              FFD0EC89705A1EE0861D1E70DD52A68039BC6E5206DAA4D6170F63039401D2AA
+              9BFA332100F875D7F3A14A02E218E7F8CD86B6FC2390A8F7606B2BB0D002F039
+              60C0EBD1E2D1161070DCF3D9A82962BC89F0D76BF22908104D127115D07C0B70
+              A45323C6440E38A1CCA55AD036B0DF87083F459501EB5B802922069C067E0408
+              9E01CE036D75F3D45BC1262485B1E07DF201FE05B880CB0AABEA41FCD02D307E
+              BDDC07EC023603C90AC533C05B8CD7F6A7C08494B2E0EBF97E05B80615A21B58
+              C5D249C72F60464AF92DF0678521A091F6DFFF5BE51FBD91DE683E6A37400000
+              000049454E44AE426082}
+          end>
       end>
-    Left = 248
-    Top = 440
+    Left = 288
+    Top = 576
   end
   object qrySCMSwimmer: TFDQuery
     Connection = myConnection
@@ -1337,8 +1766,8 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       ',CONCAT([FirstName],'#39' '#39',UPPER(LastName)) AS FNAME'
       ''
       'FROM Member WHERE IsSwimmer = 1;')
-    Left = 472
-    Top = 440
+    Left = 512
+    Top = 576
     object qrySCMSwimmerFNAME: TWideStringField
       FieldName = 'FNAME'
       Origin = 'FNAME'
@@ -1390,20 +1819,30 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         Name = 'check_circle'
       end
       item
-        CollectionIndex = 13
+        CollectionIndex = 8
         CollectionName = 'login'
         Name = 'login'
+      end
+      item
+        CollectionIndex = 3
+        CollectionName = 'arrow_left_double'
+        Name = 'arrow_left_double'
+      end
+      item
+        CollectionIndex = 4
+        CollectionName = 'arrow_right_double'
+        Name = 'arrow_right_double'
       end>
     ImageCollection = ImageCollection1
     Width = 48
     Height = 48
-    Left = 360
-    Top = 440
+    Left = 400
+    Top = 576
   end
   object ActionManager1: TActionManager
     Images = VirtualImageList1
-    Left = 40
-    Top = 440
+    Left = 80
+    Top = 576
     StyleName = 'Platform Default'
     object actnLogin: TAction
       Caption = 'Login'
@@ -1427,6 +1866,37 @@ object ImportSCMSwimmer: TImportSCMSwimmer
     object actnDestToSrcSelected: TAction
       Category = 'TranferBtn'
       OnExecute = actnDestToSrcSelectedExecute
+    end
+    object actnExit: TAction
+      Category = 'Transport'
+      Caption = 'Exit'
+      ImageIndex = 3
+      ImageName = 'cancel'
+      OnExecute = actnExitExecute
+    end
+    object actnFirst: TAction
+      Category = 'Transport'
+      Caption = 'First'
+      ImageIndex = 6
+      ImageName = 'arrow_left_double'
+    end
+    object actnLast: TAction
+      Category = 'Transport'
+      Caption = 'Last'
+      ImageIndex = 7
+      ImageName = 'arrow_right_double'
+    end
+    object actnPrev: TAction
+      Category = 'Transport'
+      Caption = 'Previous'
+      ImageIndex = 0
+      ImageName = 'arrow_left'
+    end
+    object actnNext: TAction
+      Category = 'Transport'
+      Caption = 'Next'
+      ImageIndex = 1
+      ImageName = 'arrow_right'
     end
   end
 end

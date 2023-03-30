@@ -50,20 +50,14 @@ type
     btnFirst: TButton;
     btnLast: TButton;
     RelativePanel2: TRelativePanel;
-    shapeLine: TShape;
-    vimgLineStart: TVirtualImage;
-    vimgLineEnd: TVirtualImage;
-    vimgLogin: TVirtualImage;
-    vimgMethod: TVirtualImage;
-    vimgSelect: TVirtualImage;
-    vimgOptions: TVirtualImage;
-    vimgLastStep: TVirtualImage;
+    vimgTracker: TVirtualImage;
+    vimgTackDisplay: TVirtualImage;
     ActionManager1: TActionManager;
     actnLogin: TAction;
     PageControl1: TPageControl;
-    TabSheet1: TTabSheet;
+    tabStart: TTabSheet;
     Label6: TLabel;
-    TabSheet2: TTabSheet;
+    tabLogin: TTabSheet;
     Shape3: TShape;
     Label1: TLabel;
     Label2: TLabel;
@@ -79,11 +73,11 @@ type
     Button2: TButton;
     btnAbort: TButton;
     btnConnect: TButton;
-    TabSheet7: TTabSheet;
+    tabMethod: TTabSheet;
     Shape4: TShape;
     Label9: TLabel;
     rgrpMethod: TRadioGroup;
-    TabSheet3: TTabSheet;
+    tabSelect: TTabSheet;
     Shape1: TShape;
     VirtualImage1: TVirtualImage;
     VirtualImage2: TVirtualImage;
@@ -92,7 +86,7 @@ type
     VirtualImage5: TVirtualImage;
     Label7: TLabel;
     edtSearch: TEdit;
-    TabSheet4: TTabSheet;
+    tabOptions: TTabSheet;
     Shape2: TShape;
     Label8: TLabel;
     Label10: TLabel;
@@ -100,16 +94,29 @@ type
     CheckBox1: TCheckBox;
     CheckBox2: TCheckBox;
     CheckBox3: TCheckBox;
-    TabSheet5: TTabSheet;
+    tabFinalStep: TTabSheet;
     Label4: TLabel;
     Button3: TButton;
-    TabSheet6: TTabSheet;
+    tabSuccess: TTabSheet;
     actnSrcToDestAll: TAction;
     actnDestToSrcAll: TAction;
     actnSrcToDestSelected: TAction;
     actnDestToSrcSelected: TAction;
     lbSrc: TListBox;
     lbDest: TListBox;
+    Memo1: TMemo;
+    actnExit: TAction;
+    actnFirst: TAction;
+    actnLast: TAction;
+    actnPrev: TAction;
+    actnNext: TAction;
+    vimgTrack2: TVirtualImage;
+    vimgTrack3: TVirtualImage;
+    vimgTrack4: TVirtualImage;
+    vimgTrack5: TVirtualImage;
+    vimgTrack0: TVirtualImage;
+    vimgTrack1: TVirtualImage;
+    vimgTrack6: TVirtualImage;
     procedure FormCreate(Sender: TObject);
     procedure ListBoxSrcDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
@@ -126,6 +133,9 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure edtSearchChange(Sender: TObject);
     procedure rgrpMethodClick(Sender: TObject);
+    procedure actnExitExecute(Sender: TObject);
+    procedure PageControl1Change(Sender: TObject);
+    procedure PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
   private
     { Private declarations }
 //    procedure SimpleLoadSettingString(ASection, AName: string;
@@ -135,10 +145,16 @@ type
 //    procedure SimpleSaveSettingString(ASection, AName,
 //  AValue: string);
     scmMemberList: TObjectList;
+    fTrackState: integer;
+    fLastMethodState: Integer;
 
     function MemberIsAssigned(obj: TObject; lbox: TListBox): Boolean;
     procedure BuildListBoxSource();
     procedure TransferItems(SrcListBox, DestListBox: TObject);
+    procedure TrackStateUpdate;
+    procedure TrackStateDots;
+    procedure TrackStateTracker(idx: integer);
+    procedure TrackStateConnected;
 
 
   public
@@ -168,6 +184,11 @@ begin
   TransferItems(lbDest, lbSrc);
 end;
 
+procedure TImportSCMSwimmer.actnExitExecute(Sender: TObject);
+begin
+  ModalResult := mrCancel;
+end;
+
 procedure TImportSCMSwimmer.actnLoginExecute(Sender: TObject);
 var
   sc: TSimpleConnect;
@@ -190,6 +211,14 @@ begin
   if (myConnection.Connected) then
   begin
     BuildListBoxSource;
+    fTrackState := 2;
+    // Dots and base graphic
+    TrackStateDots;
+    // connection circle_checked_fill
+    TrackStateConnected;
+    // move tracker to next tabsheet
+    PageControl1.SelectNextPage(true, true);
+    TrackStateTracker(PageControl1.TabIndex);
   end
   else
   begin
@@ -197,6 +226,8 @@ begin
     lblLoginErrMsg.Visible := true;
     btnAbort.Visible := true;
     btnConnect.Visible := true;
+    fTrackState := 1;
+    TrackStateUpdate;
   end;
 
   sc.Free;
@@ -205,27 +236,20 @@ end;
 
 procedure TImportSCMSwimmer.actnLoginUpdate(Sender: TObject);
 begin
-  if (myConnection.Connected) then
+  // only update display if the TrackState is not syncronized.
+  if (myConnection.Connected) and (fTrackState = 1) then
   begin
-    vimgMethod.enabled := true;
-    vimgSelect.enabled := true;
-    vimgOptions.enabled := true;
-    vimgLastStep.enabled := true;
-    vimgMethod.ImageIndex := 14;
-    vimgSelect.ImageIndex := 14;
-    vimgOptions.ImageIndex := 14;
-    vimgLastStep.ImageIndex := 14;
-  end
-  else
+    fTrackState := 2;
+    TrackStateUpdate;
+  end;
+  // only revert state if the TrackState is not syncronized.
+  if (not myConnection.Connected) AND (fTrackState > 1) then
   begin
-    vimgMethod.enabled := false;
-    vimgSelect.enabled := false;
-    vimgOptions.enabled := false;
-    vimgLastStep.enabled := false;
-    vimgMethod.ImageIndex := 15;
-    vimgSelect.ImageIndex := 15;
-    vimgOptions.ImageIndex := 15;
-    vimgLastStep.ImageIndex := 15;
+    // page index out-of-range for the current TrackState
+    if (PageControl1.TabIndex > 1) then
+      PageControl1.TabIndex := 1;
+    fTrackState := 1;
+    TrackStateUpdate;
   end;
 end;
 
@@ -256,6 +280,11 @@ begin
   // Gather ALL swimmers in SwimClubMeet
   if myConnection.Connected then
   begin
+    // -------------------------------------------------------------------
+    // Induct SwimClubMeet Members into your squad.
+    // -------------------------------------------------------------------
+    if (fLastMethodState = 1) then
+    begin
     qrySCMSwimmer.Connection := myConnection;
     qrySCMSwimmer.Open;
     if qrySCMSwimmer.Active then
@@ -287,6 +316,14 @@ begin
       end;
     End;
     qrySCMSwimmer.Close;
+    end
+    // -------------------------------------------------------------------
+    // Update the profiles and stats of your swimmers in your squad.
+    // -------------------------------------------------------------------
+  else
+  begin
+      {TODO -oBSA -cGeneral : build queries for update profiles}
+  end;
   end;
 end;
 
@@ -328,10 +365,10 @@ begin
   lblLoginErrMsg.Visible := false;
   lblMsg.Visible := false;
 
-  // list of members from SwimClubMeet
+  // CREATE list of members from SwimClubMeet
   scmMemberList := TObjectList.Create(true);
 
-  // Populate login with last state else default values
+  // Populate login with 'SCM core' last state else default values
   ASection := 'MSSQL_SwimClubMeet';
   AName := 'Server';
   edtServer.Text :=LoadSharedIniFileSetting(ASection, AName);
@@ -347,16 +384,15 @@ begin
   else
     chkOsAuthent.Checked := false;
 
-  // programmatically calculate vimgWizButton margins
-  // better results on round down - rather than depend on div.
-  // TODO: move to update action
-  m := floor((vimgLineEnd.Left - (vimgLineStart.Left +
-    vimgLineStart.width)) / 10);
-  vimgLogin.Margins.Left := m;
-  vimgMethod.Margins.Left := m;
-  vimgSelect.Margins.Left := m;
-  vimgOptions.Margins.Left := m;
-  vimgLastStep.Margins.Left := m;
+  // Select first tab-sheet
+  PageControl1.TabIndex := 0;
+  // Method UNKNOWN
+  rgrpMethod.ItemIndex := -1;
+  fLastMethodState := -1;
+  // TrackState WELCOME
+  fTrackState := 1;
+  // INIT wizard tracker display
+  TrackStateUpdate;
 
 end;
 
@@ -407,10 +443,64 @@ begin
   end;
 end;
 
+procedure TImportSCMSwimmer.PageControl1Change(Sender: TObject);
+begin
+  TrackStateUpdate;
+  if (TPageControl(Sender).TabIndex = 3) then
+  begin
+    // Is the member's list in sync with the 'Processing Method'?
+    if (fLastMethodState <> rgrpMethod.ItemIndex) then
+    begin
+      // changes to the RadioGroup determine the contents of the ObjectList
+      BuildListBoxSource;
+      fLastMethodState := rgrpMethod.ItemIndex;
+    end;
+  end;
+  if (TPageControl(Sender).TabIndex = 4) then
+  begin
+    if (fLastMethodState = 0) then
+    // Update profiles
+    Label7.Caption := 'Select the swimmers to have their profiles updated.'
+    else
+    // introduce club memeber
+    Label7.Caption := 'Select the club members to induct into your squad.';
+  end;
+
+
+end;
+
+procedure TImportSCMSwimmer.PageControl1Changing(Sender: TObject;
+  var AllowChange: Boolean);
+begin
+
+  if (TPageControl(Sender).TabIndex = 3) then
+  begin
+    // Is the member's list in sync with the 'Processing Method'?
+    if (lbDest.Items.count > 0) then
+      vimgTrack3.ImageName := 'check_circle_filled'
+    else
+      vimgTrack3.ImageName := 'wizDotSmallFilled';
+  end;
+
+  AllowChange := true;
+end;
+
 procedure TImportSCMSwimmer.rgrpMethodClick(Sender: TObject);
 begin
-  // changes to the RadioGroup determine the contents of the ObjectList
-  BuildListBoxSource;
+  // Move to next tab-sheet
+  if (fTrackState <> 3) then
+  begin
+    fTrackState := 3;
+    TrackStateUpdate;
+    // move to the 'Select' tab-sheet.
+    PageControl1.SelectNextPage(true, true);
+  end;
+
+  if (rgrpMethod.ItemIndex <> -1) then
+    vimgTrack2.ImageName := 'check_circle_filled'
+  else
+    vimgTrack2.ImageName := 'wizDotSmallFilled';
+
 end;
 
 procedure TImportSCMSwimmer.TransferItems(SrcListBox, DestListBox: TObject);
@@ -433,7 +523,96 @@ begin
   end;
 end;
 
+procedure TImportSCMSwimmer.TrackStateConnected;
+begin
+  if myConnection.Connected then
+  begin
+    vimgTrack1.ImageName := 'check_circle_filled';
+  end
+  else
+  begin
+    vimgTrack1.ImageName := 'wizDotSmallFilled';
+  end;
+end;
 
+procedure TImportSCMSwimmer.TrackStateDots;
+begin
+  case fTrackState of
+    1:
+      begin
+        vimgTackDisplay.ImageName := 'WizardNodeBgrd5Grey';
+        tabMethod.TabVisible := false;
+        tabSelect.TabVisible := false;
+        tabOptions.TabVisible := false;
+        tabFinalStep.TabVisible := false;
+        tabSuccess.TabVisible := false;
+        vimgTrack2.Visible := false;
+        vimgTrack3.Visible := false;
+        vimgTrack4.Visible := false;
+        vimgTrack5.Visible := false;
+        vimgTrack6.Visible := false;
+      end;
+    2:
+      begin
+        vimgTackDisplay.ImageName := 'WizardNodeBgrd4Grey';
+        tabMethod.TabVisible := true;
+        tabSelect.TabVisible := false;
+        tabOptions.TabVisible := false;
+        tabFinalStep.TabVisible := false;
+        tabSuccess.TabVisible := false;
+        vimgTrack2.Visible := true;
+        vimgTrack3.Visible := false;
+        vimgTrack4.Visible := false;
+        vimgTrack5.Visible := false;
+        vimgTrack6.Visible := false;
+      end;
+    3:
+      begin
+        vimgTackDisplay.ImageName := 'WizardNodeBgrd';
+        tabMethod.TabVisible := true;
+        tabSelect.TabVisible := true;
+        tabOptions.TabVisible := true;
+        tabFinalStep.TabVisible := true;
+        tabSuccess.TabVisible := false;
+        vimgTrack2.Visible := true;
+        vimgTrack3.Visible := true;
+        vimgTrack4.Visible := true;
+        vimgTrack5.Visible := true;
+        vimgTrack6.Visible := false;
+      end;
+  end;
+end;
+
+procedure TImportSCMSwimmer.TrackStateTracker(idx: integer);
+begin
+  case idx of
+  0:
+    // Move TrackCircle
+    vimgTracker.Margins.Left := 0;
+  1:
+    vimgTracker.Margins.Left := 111;
+  2:
+    vimgTracker.Margins.Left := 212;
+  3:
+    vimgTracker.Margins.Left := 314;
+  4:
+    vimgTracker.Margins.Left := 416;
+  5:
+    vimgTracker.Margins.Left := 518;
+  6:
+    vimgTracker.Margins.Left := 628;
+  end;
+end;
+
+procedure TImportSCMSwimmer.TrackStateUpdate;
+begin
+  // Dots and base graphic
+  TrackStateDots;
+  // connection circle_checked_fill
+  TrackStateConnected;
+  // Tracker
+  TrackStateTracker(PageControl1.TabIndex);
+end;
 
 { TscmMember }
 
