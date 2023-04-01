@@ -31,7 +31,8 @@ uses
   SCMDefines in '..\SCM_SHARED\SCMDefines.pas',
   SCMUtility in '..\SCM_SHARED\SCMUtility.pas',
   Vcl.PlatformVclStylesActnCtrls in '..\SCM_SHARED\Vcl.PlatformVclStylesActnCtrls.pas',
-  dlgAbout in '..\SCM_SHARED\dlgAbout.pas' {About};
+  dlgAbout in '..\SCM_SHARED\dlgAbout.pas' {About},
+  SCMImportMember in 'SCMImportMember.pas';
 
 {$R *.res}
 

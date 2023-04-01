@@ -379,7 +379,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
     Top = 81
     Width = 681
     Height = 594
-    ActivePage = tabOptions
+    ActivePage = tabSelect
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -546,24 +546,21 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       end
       object Button1: TButton
         AlignWithMargins = True
-        Left = 412
+        Left = 406
         Top = 302
         Width = 85
         Height = 83
         Margins.Left = 20
+        Action = actnAbort
         Anchors = []
-        Caption = 'Abort'
         ImageAlignment = iaTop
-        ImageIndex = 3
-        ImageName = 'cancel'
         Images = VirtualImageList1
         TabOrder = 4
-        ExplicitLeft = 409
-        ExplicitTop = 301
+        Visible = False
       end
       object Button2: TButton
         AlignWithMargins = True
-        Left = 513
+        Left = 507
         Top = 302
         Width = 85
         Height = 83
@@ -573,8 +570,6 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         ImageAlignment = iaTop
         Images = VirtualImageList1
         TabOrder = 5
-        ExplicitLeft = 510
-        ExplicitTop = 301
       end
       object btnAbort: TButton
         Left = 76
@@ -657,6 +652,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         ImageHeight = 0
         ImageIndex = 2
         ImageName = 'arrow_right'
+        OnClick = actnSrcToDestSelectedExecute
       end
       object VirtualImage2: TVirtualImage
         Left = 313
@@ -668,6 +664,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         ImageHeight = 0
         ImageIndex = 1
         ImageName = 'arrow_left'
+        OnClick = actnDestToSrcSelectedExecute
       end
       object VirtualImage3: TVirtualImage
         Left = 313
@@ -677,8 +674,9 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         ImageCollection = ImageCollection1
         ImageWidth = 0
         ImageHeight = 0
-        ImageIndex = -1
-        ImageName = 'arrow_double_right'
+        ImageIndex = 4
+        ImageName = 'arrow_right_double'
+        OnClick = actnSrcToDestAllExecute
       end
       object VirtualImage4: TVirtualImage
         Left = 313
@@ -688,8 +686,9 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         ImageCollection = ImageCollection1
         ImageWidth = 0
         ImageHeight = 0
-        ImageIndex = -1
-        ImageName = 'arrow_double_left'
+        ImageIndex = 3
+        ImageName = 'arrow_left_double'
+        OnClick = actnDestToSrcAllExecute
       end
       object VirtualImage5: TVirtualImage
         Left = 42
@@ -702,7 +701,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         ImageIndex = 0
         ImageName = 'Search'
       end
-      object Label7: TLabel
+      object lblSelect: TLabel
         Left = 24
         Top = 25
         Width = 617
@@ -801,15 +800,15 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         Caption = 'When updating, enable this option to have profiles updated.'
         WordWrap = True
       end
-      object CheckBox1: TCheckBox
+      object chkbDoPB: TCheckBox
         Left = 48
         Top = 304
         Width = 298
         Height = 21
-        Caption = 'Import Personal Best (PB) race times.'
+        Caption = 'Import Personal Best (PB) race-data.'
         TabOrder = 0
       end
-      object CheckBox2: TCheckBox
+      object chkbDoHistory: TCheckBox
         Left = 48
         Top = 376
         Width = 249
@@ -817,12 +816,12 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         Caption = 'Import ALL swimming history. '
         TabOrder = 1
       end
-      object CheckBox3: TCheckBox
+      object chkbDoProfile: TCheckBox
         Left = 48
         Top = 128
         Width = 611
         Height = 21
-        Caption = 'Import member'#39's profile.'
+        Caption = 'Import club member'#39's profile.'
         Checked = True
         State = cbChecked
         TabOrder = 2
@@ -831,31 +830,64 @@ object ImportSCMSwimmer: TImportSCMSwimmer
     object tabFinalStep: TTabSheet
       Caption = 'Final Step'
       ImageIndex = 4
-      DesignSize = (
-        673
-        544)
-      object Label4: TLabel
-        Left = 264
-        Top = 272
-        Width = 105
-        Height = 21
-        Caption = 'Click to import.'
-      end
-      object Button3: TButton
-        AlignWithMargins = True
-        Left = 262
-        Top = 172
-        Width = 85
-        Height = 68
-        Margins.Left = 20
-        Anchors = []
-        Caption = 'Go'
-        ImageAlignment = iaTop
-        ImageIndex = 4
-        ImageName = 'check_circle'
-        ImageMargins.Bottom = -2
-        Images = VirtualImageList1
+      object RelativePanel3: TRelativePanel
+        Left = 0
+        Top = 0
+        Width = 673
+        Height = 544
+        ControlCollection = <
+          item
+            Control = btnGo
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = True
+          end
+          item
+            Control = lblGo
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+            Below = btnGo
+          end>
+        Align = alClient
+        BevelOuter = bvNone
         TabOrder = 0
+        ExplicitWidth = 669
+        ExplicitHeight = 543
+        DesignSize = (
+          673
+          544)
+        object btnGo: TButton
+          AlignWithMargins = True
+          Left = 294
+          Top = 238
+          Width = 85
+          Height = 68
+          Margins.Left = 20
+          Action = actnGo
+          Anchors = []
+          ImageAlignment = iaTop
+          ImageMargins.Bottom = -2
+          Images = VirtualImageList1
+          TabOrder = 0
+        end
+        object lblGo: TLabel
+          AlignWithMargins = True
+          Left = 284
+          Top = 319
+          Width = 105
+          Height = 21
+          Margins.Top = 10
+          Alignment = taCenter
+          Anchors = []
+          Caption = 'Click to import.'
+        end
       end
     end
     object tabSuccess: TTabSheet
@@ -1832,6 +1864,11 @@ object ImportSCMSwimmer: TImportSCMSwimmer
         CollectionIndex = 4
         CollectionName = 'arrow_right_double'
         Name = 'arrow_right_double'
+      end
+      item
+        CollectionIndex = 10
+        CollectionName = 'wizBig_DotSmall'
+        Name = 'wizBig_DotSmall'
       end>
     ImageCollection = ImageCollection1
     Width = 48
@@ -1845,6 +1882,7 @@ object ImportSCMSwimmer: TImportSCMSwimmer
     Top = 576
     StyleName = 'Platform Default'
     object actnLogin: TAction
+      Category = 'Login'
       Caption = 'Login'
       ImageIndex = 5
       ImageName = 'login'
@@ -1897,6 +1935,53 @@ object ImportSCMSwimmer: TImportSCMSwimmer
       Caption = 'Next'
       ImageIndex = 1
       ImageName = 'arrow_right'
+    end
+    object actnAbort: TAction
+      Category = 'Login'
+      Caption = 'Abort Login'
+      ImageIndex = 3
+      ImageName = 'cancel'
+    end
+    object actnTrackStart: TAction
+      Category = 'Track'
+      Caption = 'Start'
+      OnExecute = actnTrackStartExecute
+    end
+    object actnTrackLogin: TAction
+      Category = 'Track'
+      Caption = 'Login'
+      OnExecute = actnTrackLoginExecute
+    end
+    object actnTrackMethod: TAction
+      Category = 'Track'
+      Caption = 'Method'
+      OnExecute = actnTrackMethodExecute
+    end
+    object actnTrackSelect: TAction
+      Category = 'Track'
+      Caption = 'Select'
+      OnExecute = actnTrackSelectExecute
+    end
+    object actnTrackOptions: TAction
+      Category = 'Track'
+      Caption = 'Options'
+      OnExecute = actnTrackOptionsExecute
+    end
+    object actnTrackFinalStep: TAction
+      Category = 'Track'
+      Caption = 'Final Step'
+      OnExecute = actnTrackFinalStepExecute
+    end
+    object actnTrackSuccess: TAction
+      Category = 'Track'
+      Caption = 'Success'
+    end
+    object actnGo: TAction
+      Caption = 'Go'
+      ImageIndex = 8
+      ImageName = 'wizBig_DotSmall'
+      OnExecute = actnGoExecute
+      OnUpdate = actnGoUpdate
     end
   end
 end

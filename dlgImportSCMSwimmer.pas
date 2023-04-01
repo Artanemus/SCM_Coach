@@ -84,19 +84,17 @@ type
     VirtualImage3: TVirtualImage;
     VirtualImage4: TVirtualImage;
     VirtualImage5: TVirtualImage;
-    Label7: TLabel;
+    lblSelect: TLabel;
     edtSearch: TEdit;
     tabOptions: TTabSheet;
     Shape2: TShape;
     Label8: TLabel;
     Label10: TLabel;
     Label11: TLabel;
-    CheckBox1: TCheckBox;
-    CheckBox2: TCheckBox;
-    CheckBox3: TCheckBox;
+    chkbDoPB: TCheckBox;
+    chkbDoHistory: TCheckBox;
+    chkbDoProfile: TCheckBox;
     tabFinalStep: TTabSheet;
-    Label4: TLabel;
-    Button3: TButton;
     tabSuccess: TTabSheet;
     actnSrcToDestAll: TAction;
     actnDestToSrcAll: TAction;
@@ -117,18 +115,30 @@ type
     vimgTrack0: TVirtualImage;
     vimgTrack1: TVirtualImage;
     vimgTrack6: TVirtualImage;
+    actnAbort: TAction;
+    RelativePanel3: TRelativePanel;
+    btnGo: TButton;
+    lblGo: TLabel;
+    actnTrackSelect: TAction;
+    actnTrackStart: TAction;
+    actnTrackLogin: TAction;
+    actnTrackMethod: TAction;
+    actnTrackOptions: TAction;
+    actnTrackFinalStep: TAction;
+    actnTrackSuccess: TAction;
+    actnGo: TAction;
     procedure FormCreate(Sender: TObject);
-    procedure ListBoxSrcDragOver(Sender, Source: TObject; X, Y: Integer;
+    procedure ListBoxSrcDragOver(Sender, Source: TObject; X, Y: integer;
       State: TDragState; var Accept: Boolean);
-    procedure ListBoxSrcDragDrop(Sender, Source: TObject; X, Y: Integer);
+    procedure ListBoxSrcDragDrop(Sender, Source: TObject; X, Y: integer);
     procedure actnLoginExecute(Sender: TObject);
     procedure actnLoginUpdate(Sender: TObject);
     procedure actnSrcToDestAllExecute(Sender: TObject);
     procedure actnSrcToDestSelectedExecute(Sender: TObject);
     procedure actnDestToSrcAllExecute(Sender: TObject);
     procedure actnDestToSrcSelectedExecute(Sender: TObject);
-    procedure ListBoxDestDragDrop(Sender, Source: TObject; X, Y: Integer);
-    procedure ListBoxDestDragOver(Sender, Source: TObject; X, Y: Integer;
+    procedure ListBoxDestDragDrop(Sender, Source: TObject; X, Y: integer);
+    procedure ListBoxDestDragOver(Sender, Source: TObject; X, Y: integer;
       State: TDragState; var Accept: Boolean);
     procedure FormDestroy(Sender: TObject);
     procedure edtSearchChange(Sender: TObject);
@@ -136,17 +146,25 @@ type
     procedure actnExitExecute(Sender: TObject);
     procedure PageControl1Change(Sender: TObject);
     procedure PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
+    procedure actnTrackMethodExecute(Sender: TObject);
+    procedure actnTrackSelectExecute(Sender: TObject);
+    procedure actnTrackOptionsExecute(Sender: TObject);
+    procedure actnTrackFinalStepExecute(Sender: TObject);
+    procedure actnTrackStartExecute(Sender: TObject);
+    procedure actnTrackLoginExecute(Sender: TObject);
+    procedure actnGoUpdate(Sender: TObject);
+    procedure actnGoExecute(Sender: TObject);
   private
     { Private declarations }
-//    procedure SimpleLoadSettingString(ASection, AName: string;
-//  var AValue: string);
-//    procedure SimpleMakeTemporyFDConnection(AConnection: TFDConnection; Server, User, Password: string;
-//  AOsAuthent: Boolean);
-//    procedure SimpleSaveSettingString(ASection, AName,
-//  AValue: string);
+    // procedure SimpleLoadSettingString(ASection, AName: string;
+    // var AValue: string);
+    // procedure SimpleMakeTemporyFDConnection(AConnection: TFDConnection; Server, User, Password: string;
+    // AOsAuthent: Boolean);
+    // procedure SimpleSaveSettingString(ASection, AName,
+    // AValue: string);
     scmMemberList: TObjectList;
     fTrackState: integer;
-    fLastMethodState: Integer;
+    fLastMethodState: integer;
 
     function MemberIsAssigned(obj: TObject; lbox: TListBox): Boolean;
     procedure BuildListBoxSource();
@@ -155,7 +173,6 @@ type
     procedure TrackStateDots;
     procedure TrackStateTracker(idx: integer);
     procedure TrackStateConnected;
-
 
   public
     { Public declarations }
@@ -187,6 +204,48 @@ end;
 procedure TImportSCMSwimmer.actnExitExecute(Sender: TObject);
 begin
   ModalResult := mrCancel;
+end;
+
+procedure TImportSCMSwimmer.actnGoExecute(Sender: TObject);
+var
+  i, MemberID: Integer;
+  obj: TObject;
+begin
+  // ---------------------------------------------------------------
+  // I M P O R T .
+  // ---------------------------------------------------------------
+  // I N T R O D U C E.
+  if (rgrpMethod.ItemIndex = 1) then
+  begin
+    // Loop across select member IDs
+    for i := 0 to lbDest.Items.Count-1	do
+    begin
+       obj := lbDest.Items.Objects[i];
+       MemberID := TscmMember(obj).ID;
+       // collect member profile data ...
+       //'SELECT * FROM SwimClubMeet.dbo.Member WHERE MemberID = ' + IntToStr(MemberID);
+
+
+
+       // INSERT THE MEMBER INTO SCM_Coach
+       // create new member record
+       //
+    end;
+  end;
+
+end;
+
+procedure TImportSCMSwimmer.actnGoUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := false;
+
+  if (fTrackState = 3) then
+  begin
+    if (rgrpMethod.ItemIndex <> -1) and (lbDest.Items.count > 0) and
+    (chkbDoProfile.Checked or chkbDoPB.Checked or chkbDoHistory.Checked)
+    then
+      TAction(Sender).Enabled := true;
+  end;
 end;
 
 procedure TImportSCMSwimmer.actnLoginExecute(Sender: TObject);
@@ -264,6 +323,36 @@ begin
   TransferItems(lbSrc, lbDest);
 end;
 
+procedure TImportSCMSwimmer.actnTrackFinalStepExecute(Sender: TObject);
+begin
+  PageControl1.ActivePageIndex := 5;
+end;
+
+procedure TImportSCMSwimmer.actnTrackLoginExecute(Sender: TObject);
+begin
+  PageControl1.ActivePageIndex := 1;
+end;
+
+procedure TImportSCMSwimmer.actnTrackMethodExecute(Sender: TObject);
+begin
+  PageControl1.ActivePageIndex := 2;
+end;
+
+procedure TImportSCMSwimmer.actnTrackOptionsExecute(Sender: TObject);
+begin
+  PageControl1.ActivePageIndex := 4;
+end;
+
+procedure TImportSCMSwimmer.actnTrackSelectExecute(Sender: TObject);
+begin
+  PageControl1.ActivePageIndex := 3;
+end;
+
+procedure TImportSCMSwimmer.actnTrackStartExecute(Sender: TObject);
+begin
+  PageControl1.ActivePageIndex := 0;
+end;
+
 procedure TImportSCMSwimmer.BuildListBoxSource;
 var
   count: integer;
@@ -281,52 +370,48 @@ begin
   if myConnection.Connected then
   begin
     // -------------------------------------------------------------------
+    // Method  : INTRODUCE
     // Induct SwimClubMeet Members into your squad.
+    // EXCLUDE from list SCM Members who are already in SCM_Coach.
     // -------------------------------------------------------------------
-    if (fLastMethodState = 1) then
+    if (rgrpMethod.ItemIndex = 1) then
     begin
-    qrySCMSwimmer.Connection := myConnection;
-    qrySCMSwimmer.Open;
-    if qrySCMSwimmer.Active then
-    Begin
-      while not qrySCMSwimmer.eof do
-      begin
-        count := SCM.scmConnection.ExecSQLScalar
-          ('SELECT COUNT(SCMMemberID) FROM HR WHERE HR.SCMMemberID = :ID',
-          [qrySCMSwimmer.FieldByName('MemberID').AsInteger]);
-
-        // if Method is : INTRODUCE
-        // EXCLUDE from list SCM Members who are already in SCM_Coach.
-        // if Method is : UPDATE.
-        // INCLUDE only SCM Members who are in the squad.
-
-        if ((count = 0) and (rgrpMethod.ItemIndex = 1) ) OR
-        ((count > 0) and (rgrpMethod.ItemIndex = 0) )
-        then
+      qrySCMSwimmer.Connection := myConnection;
+      qrySCMSwimmer.Open;
+      if qrySCMSwimmer.Active then
+      Begin
+        while not qrySCMSwimmer.eof do
         begin
-          // add to list
-        obj := TscmMember.Create;
-        obj.MemberID := qrySCMSwimmer.FieldByName('MemberID').AsInteger;
-        obj.FName := qrySCMSwimmer.FieldByName('FName').AsString;
-        j := scmMemberList.Add(obj);
-        s := qrySCMSwimmer.FieldByName('FName').AsString;
-        lbSrc.Items.AddObject(s, scmMemberList.Items[j]);
+          count := SCM.scmConnection.ExecSQLScalar
+            ('SELECT COUNT(SCMMemberID) FROM HR WHERE HR.SCMMemberID = :ID',
+            [qrySCMSwimmer.FieldByName('MemberID').AsInteger]);
+
+          if ((count = 0) and (rgrpMethod.ItemIndex = 1)) OR
+            ((count > 0) and (rgrpMethod.ItemIndex = 0)) then
+          begin
+            obj := TscmMember.Create;
+            obj.MemberID := qrySCMSwimmer.FieldByName('MemberID').AsInteger;
+            obj.FName := qrySCMSwimmer.FieldByName('FName').AsString;
+            j := scmMemberList.Add(obj);
+            s := qrySCMSwimmer.FieldByName('FName').AsString;
+            lbSrc.Items.AddObject(s, scmMemberList.Items[j]);
+          end;
+          qrySCMSwimmer.next;
         end;
-        qrySCMSwimmer.next;
-      end;
-    End;
-    qrySCMSwimmer.Close;
+      End;
+      qrySCMSwimmer.Close;
     end
     // -------------------------------------------------------------------
+    // Method : UPDATE.
     // Update the profiles and stats of your swimmers in your squad.
+    // INCLUDE only SCM Members who are in the squad.
     // -------------------------------------------------------------------
-  else
-  begin
-      {TODO -oBSA -cGeneral : build queries for update profiles}
-  end;
+    else
+    begin
+      { TODO -oBSA -cGeneral : build queries for update profiles }
+    end;
   end;
 end;
-
 
 procedure TImportSCMSwimmer.edtSearchChange(Sender: TObject);
 var
@@ -335,8 +420,8 @@ var
   s: string;
 begin
   // Rebuild SOURCE LISTBOX using the objectlist.
-  lbSrc.clear;
-  for I := 0 to scmMemberList.Count - 1 do
+  lbSrc.Clear;
+  for I := 0 to scmMemberList.count - 1 do
   begin
     obj := (scmMemberList.Items[I] as TscmMember);
     // Already assigned to right-listbox.
@@ -357,7 +442,7 @@ end;
 
 procedure TImportSCMSwimmer.FormCreate(Sender: TObject);
 var
-  m: Integer;
+  m: integer;
   AValue, ASection, AName: string;
 
 begin
@@ -371,7 +456,7 @@ begin
   // Populate login with 'SCM core' last state else default values
   ASection := 'MSSQL_SwimClubMeet';
   AName := 'Server';
-  edtServer.Text :=LoadSharedIniFileSetting(ASection, AName);
+  edtServer.Text := LoadSharedIniFileSetting(ASection, AName);
   AName := 'User';
   edtUser.Text := LoadSharedIniFileSetting(ASection, AName);
   AName := 'Password';
@@ -398,30 +483,30 @@ end;
 
 procedure TImportSCMSwimmer.FormDestroy(Sender: TObject);
 begin
-  scmMemberList.clear;
+  scmMemberList.Clear;
 end;
 
-procedure TImportSCMSwimmer.ListBoxDestDragDrop(Sender, Source: TObject; X,
-  Y: Integer);
+procedure TImportSCMSwimmer.ListBoxDestDragDrop(Sender, Source: TObject;
+  X, Y: integer);
 begin
   // Source - the object being dropped.
   TransferItems(Source, Sender);
 end;
 
-procedure TImportSCMSwimmer.ListBoxDestDragOver(Sender, Source: TObject; X,
-  Y: Integer; State: TDragState; var Accept: Boolean);
+procedure TImportSCMSwimmer.ListBoxDestDragOver(Sender, Source: TObject;
+  X, Y: integer; State: TDragState; var Accept: Boolean);
 begin
   Accept := Source is TListBox;
 end;
 
 procedure TImportSCMSwimmer.ListBoxSrcDragDrop(Sender, Source: TObject;
-  X, Y: Integer);
+  X, Y: integer);
 begin
   TransferItems(Source, Sender);
 end;
 
 procedure TImportSCMSwimmer.ListBoxSrcDragOver(Sender, Source: TObject;
-  X, Y: Integer; State: TDragState; var Accept: Boolean);
+  X, Y: integer; State: TDragState; var Accept: Boolean);
 begin
   Accept := Source is TListBox;
 end;
@@ -433,7 +518,7 @@ var
 begin
   // check if obj is used by to lboxView
   result := false;
-  for I := 0 to lbox.Count - 1 do
+  for I := 0 to lbox.count - 1 do
   begin
     if (obj = lbox.Items.Objects[I]) then
     begin
@@ -446,26 +531,55 @@ end;
 procedure TImportSCMSwimmer.PageControl1Change(Sender: TObject);
 begin
   TrackStateUpdate;
-  if (TPageControl(Sender).TabIndex = 3) then
-  begin
-    // Is the member's list in sync with the 'Processing Method'?
-    if (fLastMethodState <> rgrpMethod.ItemIndex) then
-    begin
-      // changes to the RadioGroup determine the contents of the ObjectList
-      BuildListBoxSource;
-      fLastMethodState := rgrpMethod.ItemIndex;
-    end;
-  end;
-  if (TPageControl(Sender).TabIndex = 4) then
-  begin
-    if (fLastMethodState = 0) then
-    // Update profiles
-    Label7.Caption := 'Select the swimmers to have their profiles updated.'
-    else
-    // introduce club memeber
-    Label7.Caption := 'Select the club members to induct into your squad.';
-  end;
+  case TPageControl(Sender).TabIndex of
+    3: // TABSHEET SELECT
+      begin
+        // Is the member's list in sync with the 'Processing Method'?
+        if (fLastMethodState <> rgrpMethod.ItemIndex) then
+        begin
+          // changes to the RadioGroup determine the contents of the ObjectList
+          BuildListBoxSource;
+          fLastMethodState := rgrpMethod.ItemIndex;
+        end;
 
+        if (rgrpMethod.ItemIndex = 0) then
+          // Update profiles
+          lblSelect.Caption :=
+            'Select the swimmers to have their profiles updated.'
+        else
+          // Introduce club memeber
+          lblSelect.Caption :=
+            'Select the club members to induct into your squad.';
+      end;
+    4: // TABSHEET OPTIONS
+      begin
+        if (rgrpMethod.ItemIndex = 0) then
+        begin
+          // UPDATE
+          chkbDoProfile.Caption := 'Update squad swimmer''s profiles.';
+          chkbDoProfile.Enabled := true;
+          chkbDoPB.Caption := 'Update Personal Best (PB) race-data,';
+          chkbDoHistory.Caption := 'Update swimming history.';
+        end
+        else
+        begin
+          // INTRODUCE
+          chkbDoProfile.Caption := 'Import club member''s profiles.';
+          chkbDoProfile.Enabled := false;
+          chkbDoProfile.Checked := true;
+          chkbDoPB.Caption := 'Import Personal Best (PB) race-data,';
+          chkbDoHistory.Caption := 'Import ALL swimming history.';
+        end;
+      end;
+    5: // TABSHEET GO
+      begin
+        if (rgrpMethod.ItemIndex = 0) then
+          lblGo.Caption := 'Click to update your squad swimmer''s data.'
+        else
+          lblGo.Caption :=
+            'Click to induct selected SCM members into your squad.';
+      end;
+  end;
 
 end;
 
@@ -473,13 +587,37 @@ procedure TImportSCMSwimmer.PageControl1Changing(Sender: TObject;
   var AllowChange: Boolean);
 begin
 
-  if (TPageControl(Sender).TabIndex = 3) then
+  if (TPageControl(Sender).TabIndex = 3) then // TABSHEET SELECT
   begin
     // Is the member's list in sync with the 'Processing Method'?
     if (lbDest.Items.count > 0) then
       vimgTrack3.ImageName := 'check_circle_filled'
     else
       vimgTrack3.ImageName := 'wizDotSmallFilled';
+  end;
+
+  if (TPageControl(Sender).TabIndex = 4) then // TABSHEET OPTION
+  begin
+    if chkbDoProfile.Checked or chkbDoPB.Checked or chkbDoHistory.Checked then
+      vimgTrack4.ImageName := 'check_circle_filled'
+    else
+      vimgTrack4.ImageName := 'wizDotSmallFilled';
+  end;
+
+  if (TPageControl(Sender).TabIndex = 5) then // TABSHEET GO
+  begin
+    if (rgrpMethod.ItemIndex <> -1) and (lbDest.Items.count > 0) and
+    (chkbDoProfile.Checked or chkbDoPB.Checked or chkbDoHistory.Checked)
+    then
+    begin
+      btnGo.Enabled := true;
+      lblGo.Enabled := true;
+    end
+    else
+    begin
+      btnGo.Enabled := false;
+      lblGo.Enabled := false;
+    end;
   end;
 
   AllowChange := true;
@@ -510,7 +648,7 @@ begin
   with (SrcListBox AS TListBox) do
   begin
     try
-      for I := 0 to Items.Count - 1 do
+      for I := 0 to Items.count - 1 do
       begin
         if Selected[I] then
           // NOTE: destination MemberList is assigned source object.
@@ -586,21 +724,21 @@ end;
 procedure TImportSCMSwimmer.TrackStateTracker(idx: integer);
 begin
   case idx of
-  0:
-    // Move TrackCircle
-    vimgTracker.Margins.Left := 0;
-  1:
-    vimgTracker.Margins.Left := 111;
-  2:
-    vimgTracker.Margins.Left := 212;
-  3:
-    vimgTracker.Margins.Left := 314;
-  4:
-    vimgTracker.Margins.Left := 416;
-  5:
-    vimgTracker.Margins.Left := 518;
-  6:
-    vimgTracker.Margins.Left := 628;
+    0:
+      // Move TrackCircle
+      vimgTracker.Margins.Left := 0;
+    1:
+      vimgTracker.Margins.Left := 111;
+    2:
+      vimgTracker.Margins.Left := 212;
+    3:
+      vimgTracker.Margins.Left := 314;
+    4:
+      vimgTracker.Margins.Left := 416;
+    5:
+      vimgTracker.Margins.Left := 518;
+    6:
+      vimgTracker.Margins.Left := 628;
   end;
 end;
 

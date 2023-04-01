@@ -201,6 +201,7 @@
             <Form>About</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="SCMImportMember.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
