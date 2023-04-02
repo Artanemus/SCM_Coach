@@ -202,6 +202,11 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="SCMImportMember.pas"/>
+        <DCCReference Include="dmImportData.pas">
+            <Form>ImportData</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

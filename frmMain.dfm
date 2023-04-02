@@ -30,7 +30,7 @@ object Main: TMain
     ColorMap.UnusedColor = clWhite
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
-    Font.Height = -13
+    Font.Height = -16
     Font.Name = 'Segoe UI'
     Font.Style = []
     Spacing = 10
@@ -141,7 +141,7 @@ object Main: TMain
       ImageIndex = 1
       object Splitter1: TSplitter
         Left = 0
-        Top = 716
+        Top = 705
         Width = 1347
         Height = 20
         Cursor = crVSplit
@@ -151,13 +151,12 @@ object Main: TMain
       end
       object PageControl2: TPageControl
         Left = 0
-        Top = 736
+        Top = 725
         Width = 1347
         Height = 193
         ActivePage = TabSheet3
         Align = alBottom
         TabOrder = 0
-        ExplicitTop = 725
         object TabSheet3: TTabSheet
           Caption = 'Output'
         end
@@ -170,17 +169,16 @@ object Main: TMain
         Left = 0
         Top = 0
         Width = 1347
-        Height = 716
+        Height = 705
         Align = alClient
         BevelOuter = bvNone
         Caption = 'Panel1'
         TabOrder = 1
-        ExplicitHeight = 705
         object relpnlPrgBuilderToolBar: TRelativePanel
           Left = 0
           Top = 0
           Width = 97
-          Height = 716
+          Height = 705
           ControlCollection = <
             item
               Control = VirtualImage1
@@ -239,7 +237,6 @@ object Main: TMain
           Align = alLeft
           BevelOuter = bvNone
           TabOrder = 0
-          ExplicitHeight = 705
           DesignSize = (
             97
             705)
