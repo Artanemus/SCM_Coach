@@ -180,8 +180,8 @@
             <Form>DOBPicker</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="dlgImportSCMSwimmer.pas">
-            <Form>ImportSCMSwimmer</Form>
+        <DCCReference Include="dlgImportSCMWizard.pas">
+            <Form>ImportSCMWizard</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="dlgImportSelect.pas">
@@ -201,7 +201,7 @@
             <Form>About</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="SCMImportMember.pas"/>
+        <DCCReference Include="clsImportSCM.pas"/>
         <DCCReference Include="dmImportData.pas">
             <Form>ImportData</Form>
             <FormType>dfm</FormType>

@@ -1,4 +1,4 @@
-unit SCMImportMember;
+unit clsImportSCM;
 
 // INSERT SCM MEMBER
 // Member must be UNIQUE;

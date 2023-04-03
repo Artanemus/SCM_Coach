@@ -23,7 +23,7 @@ uses
   dmSCM in 'dmSCM.pas' {SCM: TDataModule},
   dlgBootProgress in 'dlgBootProgress.pas' {BootProgress},
   dlgDOBPicker in 'dlgDOBPicker.pas' {DOBPicker},
-  dlgImportSCMSwimmer in 'dlgImportSCMSwimmer.pas' {ImportSCMSwimmer},
+  dlgImportSCMWizard in 'dlgImportSCMWizard.pas' {ImportSCMWizard},
   dlgImportSelect in 'dlgImportSelect.pas' {ImportSelect},
   exeinfo in '..\SCM_SHARED\exeinfo.pas',
   SCMSimpleConnect in '..\SCM_SHARED\SCMSimpleConnect.pas',
@@ -32,7 +32,7 @@ uses
   SCMUtility in '..\SCM_SHARED\SCMUtility.pas',
   Vcl.PlatformVclStylesActnCtrls in '..\SCM_SHARED\Vcl.PlatformVclStylesActnCtrls.pas',
   dlgAbout in '..\SCM_SHARED\dlgAbout.pas' {About},
-  SCMImportMember in 'SCMImportMember.pas',
+  clsImportSCM in 'clsImportSCM.pas',
   dmImportData in 'dmImportData.pas' {ImportData: TDataModule};
 
 {$R *.res}

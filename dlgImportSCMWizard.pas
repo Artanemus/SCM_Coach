@@ -1,4 +1,4 @@
-unit dlgImportSCMSwimmer;
+unit dlgImportSCMWizard;
 
 interface
 
@@ -14,7 +14,7 @@ uses
   FireDAC.DApt, FireDAC.Comp.DataSet, dmSCM, System.ImageList, Vcl.ImgList,
   Vcl.VirtualImageList, Vcl.WinXCtrls, Vcl.ExtCtrls, System.Actions,
   Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
-  System.Contnrs;
+  System.Contnrs, Vcl.Buttons;
 
 type
   TscmMember = class(TObject)
@@ -34,7 +34,7 @@ type
     property ID: integer read MemberID;
   end;
 
-  TImportSCMSwimmer = class(TForm)
+  TImportSCMWizard = class(TForm)
     myConnection: TFDConnection;
     ImageCollection1: TImageCollection;
     qrySCMSwimmer: TFDQuery;
@@ -89,10 +89,7 @@ type
     tabOptions: TTabSheet;
     Shape2: TShape;
     Label8: TLabel;
-    Label10: TLabel;
-    Label11: TLabel;
-    chkbDoPB: TCheckBox;
-    chkbDoHistory: TCheckBox;
+    lblOptionProfileInfo: TLabel;
     chkbDoProfile: TCheckBox;
     tabFinalStep: TTabSheet;
     tabSuccess: TTabSheet;
@@ -108,13 +105,6 @@ type
     actnLast: TAction;
     actnPrev: TAction;
     actnNext: TAction;
-    vimgTrack2: TVirtualImage;
-    vimgTrack3: TVirtualImage;
-    vimgTrack4: TVirtualImage;
-    vimgTrack5: TVirtualImage;
-    vimgTrack0: TVirtualImage;
-    vimgTrack1: TVirtualImage;
-    vimgTrack6: TVirtualImage;
     actnAbort: TAction;
     RelativePanel3: TRelativePanel;
     btnGo: TButton;
@@ -127,6 +117,15 @@ type
     actnTrackFinalStep: TAction;
     actnTrackSuccess: TAction;
     actnGo: TAction;
+    rgrpOptionsData: TRadioGroup;
+    VirtualImage6: TVirtualImage;
+    sbtnMethod: TSpeedButton;
+    sbtnLogin: TSpeedButton;
+    sbtnStart: TSpeedButton;
+    sbtnSelect: TSpeedButton;
+    sbtnOptions: TSpeedButton;
+    sbtnFinalStep: TSpeedButton;
+    sbtnSuccess: TSpeedButton;
     procedure FormCreate(Sender: TObject);
     procedure ListBoxSrcDragOver(Sender, Source: TObject; X, Y: integer;
       State: TDragState; var Accept: Boolean);
@@ -154,6 +153,9 @@ type
     procedure actnTrackLoginExecute(Sender: TObject);
     procedure actnGoUpdate(Sender: TObject);
     procedure actnGoExecute(Sender: TObject);
+    procedure actnTrackSelectUpdate(Sender: TObject);
+    procedure actnTrackMethodUpdate(Sender: TObject);
+    procedure actnTrackOptionsUpdate(Sender: TObject);
   private
     { Private declarations }
     // procedure SimpleLoadSettingString(ASection, AName: string;
@@ -179,7 +181,7 @@ type
   end;
 
 var
-  ImportSCMSwimmer: TImportSCMSwimmer;
+  ImportSCMWizard: TImportSCMWizard;
 
 implementation
 
@@ -190,25 +192,25 @@ uses (*
   *) System.Math, IniFiles, SCMUtility, SCMSimpleConnect, System.StrUtils;
 
 // DON'T CALL HERE IF SCM NOT ISACTIVE
-procedure TImportSCMSwimmer.actnDestToSrcAllExecute(Sender: TObject);
+procedure TImportSCMWizard.actnDestToSrcAllExecute(Sender: TObject);
 begin
   lbDest.SelectAll;
   TransferItems(lbDest, lbSrc);
 end;
 
-procedure TImportSCMSwimmer.actnDestToSrcSelectedExecute(Sender: TObject);
+procedure TImportSCMWizard.actnDestToSrcSelectedExecute(Sender: TObject);
 begin
   TransferItems(lbDest, lbSrc);
 end;
 
-procedure TImportSCMSwimmer.actnExitExecute(Sender: TObject);
+procedure TImportSCMWizard.actnExitExecute(Sender: TObject);
 begin
   ModalResult := mrCancel;
 end;
 
-procedure TImportSCMSwimmer.actnGoExecute(Sender: TObject);
+procedure TImportSCMWizard.actnGoExecute(Sender: TObject);
 var
-  i, MemberID: Integer;
+  i, MemberID: integer;
   obj: TObject;
 begin
   // ---------------------------------------------------------------
@@ -218,37 +220,46 @@ begin
   if (rgrpMethod.ItemIndex = 1) then
   begin
     // Loop across select member IDs
-    for i := 0 to lbDest.Items.Count-1	do
+    for i := 0 to lbDest.Items.Count - 1 do
     begin
-       obj := lbDest.Items.Objects[i];
-       MemberID := TscmMember(obj).ID;
-       // collect member profile data ...
-       //'SELECT * FROM SwimClubMeet.dbo.Member WHERE MemberID = ' + IntToStr(MemberID);
+      obj := lbDest.Items.Objects[i];
+      MemberID := TscmMember(obj).ID;
+      // collect member profile data ...
+      // 'SELECT * FROM SwimClubMeet.dbo.Member WHERE MemberID = ' + IntToStr(MemberID);
 
-
-
-       // INSERT THE MEMBER INTO SCM_Coach
-       // create new member record
-       //
+      // INSERT THE MEMBER INTO SCM_Coach
+      // create new member record
+      //
     end;
   end;
 
 end;
 
-procedure TImportSCMSwimmer.actnGoUpdate(Sender: TObject);
+procedure TImportSCMWizard.actnGoUpdate(Sender: TObject);
 begin
-  TAction(Sender).Enabled := false;
-
   if (fTrackState = 3) then
   begin
-    if (rgrpMethod.ItemIndex <> -1) and (lbDest.Items.count > 0) and
-    (chkbDoProfile.Checked or chkbDoPB.Checked or chkbDoHistory.Checked)
-    then
-      TAction(Sender).Enabled := true;
+    if (rgrpMethod.ItemIndex <> -1) and (lbDest.Items.Count > 0) and
+      (chkbDoProfile.Checked or (rgrpOptionsData.ItemIndex <> -1)) then
+    begin
+      if not TAction(Sender).Enabled then
+      begin
+        TAction(Sender).Enabled := true;
+        lblGo.Enabled := true;
+      end;
+    end
+    else
+    begin
+      if TAction(Sender).Enabled then
+      begin
+        TAction(Sender).Enabled := false;
+        lblGo.Enabled := false;
+      end;
+    end;
   end;
 end;
 
-procedure TImportSCMSwimmer.actnLoginExecute(Sender: TObject);
+procedure TImportSCMWizard.actnLoginExecute(Sender: TObject);
 var
   sc: TSimpleConnect;
 begin
@@ -293,7 +304,7 @@ begin
 
 end;
 
-procedure TImportSCMSwimmer.actnLoginUpdate(Sender: TObject);
+procedure TImportSCMWizard.actnLoginUpdate(Sender: TObject);
 begin
   // only update display if the TrackState is not syncronized.
   if (myConnection.Connected) and (fTrackState = 1) then
@@ -312,50 +323,106 @@ begin
   end;
 end;
 
-procedure TImportSCMSwimmer.actnSrcToDestAllExecute(Sender: TObject);
+procedure TImportSCMWizard.actnSrcToDestAllExecute(Sender: TObject);
 begin
   lbSrc.SelectAll;
   TransferItems(lbSrc, lbDest);
 end;
 
-procedure TImportSCMSwimmer.actnSrcToDestSelectedExecute(Sender: TObject);
+procedure TImportSCMWizard.actnSrcToDestSelectedExecute(Sender: TObject);
 begin
   TransferItems(lbSrc, lbDest);
 end;
 
-procedure TImportSCMSwimmer.actnTrackFinalStepExecute(Sender: TObject);
+procedure TImportSCMWizard.actnTrackFinalStepExecute(Sender: TObject);
 begin
   PageControl1.ActivePageIndex := 5;
 end;
 
-procedure TImportSCMSwimmer.actnTrackLoginExecute(Sender: TObject);
+procedure TImportSCMWizard.actnTrackLoginExecute(Sender: TObject);
 begin
   PageControl1.ActivePageIndex := 1;
 end;
 
-procedure TImportSCMSwimmer.actnTrackMethodExecute(Sender: TObject);
+procedure TImportSCMWizard.actnTrackMethodExecute(Sender: TObject);
 begin
   PageControl1.ActivePageIndex := 2;
 end;
 
-procedure TImportSCMSwimmer.actnTrackOptionsExecute(Sender: TObject);
+procedure TImportSCMWizard.actnTrackMethodUpdate(Sender: TObject);
+begin
+  if (fTrackState = 1) then
+  begin
+    if (TAction(Sender).Enabled) then
+      TAction(Sender).Enabled := false;
+  end;
+  if (fTrackState >= 2) then
+  begin
+    if not(TAction(Sender).Enabled) then
+      TAction(Sender).Enabled := true;
+  end;
+end;
+
+procedure TImportSCMWizard.actnTrackOptionsExecute(Sender: TObject);
 begin
   PageControl1.ActivePageIndex := 4;
 end;
 
-procedure TImportSCMSwimmer.actnTrackSelectExecute(Sender: TObject);
+procedure TImportSCMWizard.actnTrackOptionsUpdate(Sender: TObject);
+begin
+
+  if (fTrackState <= 3) then
+  begin
+    if (TAction(Sender).Enabled) then
+      TAction(Sender).Enabled := false;
+  end;
+  if (fTrackState >= 4) then
+  begin
+    if not(TAction(Sender).Enabled) then
+      TAction(Sender).Enabled := true;
+  end;
+end;
+
+procedure TImportSCMWizard.actnTrackSelectExecute(Sender: TObject);
 begin
   PageControl1.ActivePageIndex := 3;
 end;
 
-procedure TImportSCMSwimmer.actnTrackStartExecute(Sender: TObject);
+procedure TImportSCMWizard.actnTrackSelectUpdate(Sender: TObject);
+begin
+
+  if (fTrackState <= 2) then
+  begin
+    if (TAction(Sender).Enabled) then
+      TAction(Sender).Enabled := false;
+  end;
+  if (fTrackState >= 3) then
+  begin
+    if not(TAction(Sender).Enabled) then
+      TAction(Sender).Enabled := true;
+  end;
+
+  if (lbDest.Items.Count > 0) then
+  begin
+    if (TAction(Sender).ImageIndex <> 18) then
+      TAction(Sender).ImageName := 'check_circle_filled';
+  end
+  else
+  begin
+    if (TAction(Sender).ImageIndex <> 10) then
+      TAction(Sender).ImageName := 'wizDotSmallFilled';
+  end;
+
+end;
+
+procedure TImportSCMWizard.actnTrackStartExecute(Sender: TObject);
 begin
   PageControl1.ActivePageIndex := 0;
 end;
 
-procedure TImportSCMSwimmer.BuildListBoxSource;
+procedure TImportSCMWizard.BuildListBoxSource;
 var
-  count: integer;
+  Count: integer;
   s: string;
   obj: TscmMember;
   j: integer;
@@ -382,12 +449,12 @@ begin
       Begin
         while not qrySCMSwimmer.eof do
         begin
-          count := SCM.scmConnection.ExecSQLScalar
+          Count := SCM.scmConnection.ExecSQLScalar
             ('SELECT COUNT(SCMMemberID) FROM HR WHERE HR.SCMMemberID = :ID',
             [qrySCMSwimmer.FieldByName('MemberID').AsInteger]);
 
-          if ((count = 0) and (rgrpMethod.ItemIndex = 1)) OR
-            ((count > 0) and (rgrpMethod.ItemIndex = 0)) then
+          if ((Count = 0) and (rgrpMethod.ItemIndex = 1)) OR
+            ((Count > 0) and (rgrpMethod.ItemIndex = 0)) then
           begin
             obj := TscmMember.Create;
             obj.MemberID := qrySCMSwimmer.FieldByName('MemberID').AsInteger;
@@ -413,17 +480,17 @@ begin
   end;
 end;
 
-procedure TImportSCMSwimmer.edtSearchChange(Sender: TObject);
+procedure TImportSCMWizard.edtSearchChange(Sender: TObject);
 var
-  I: integer;
+  i: integer;
   obj: TscmMember;
   s: string;
 begin
   // Rebuild SOURCE LISTBOX using the objectlist.
   lbSrc.Clear;
-  for I := 0 to scmMemberList.count - 1 do
+  for i := 0 to scmMemberList.Count - 1 do
   begin
-    obj := (scmMemberList.Items[I] as TscmMember);
+    obj := (scmMemberList.Items[i] as TscmMember);
     // Already assigned to right-listbox.
     if MemberIsAssigned(obj, lbDest) then
       continue;
@@ -440,9 +507,8 @@ begin
   end;
 end;
 
-procedure TImportSCMSwimmer.FormCreate(Sender: TObject);
+procedure TImportSCMWizard.FormCreate(Sender: TObject);
 var
-  m: integer;
   AValue, ASection, AName: string;
 
 begin
@@ -473,6 +539,7 @@ begin
   PageControl1.TabIndex := 0;
   // Method UNKNOWN
   rgrpMethod.ItemIndex := -1;
+  rgrpOptionsData.ItemIndex := -1;
   fLastMethodState := -1;
   // TrackState WELCOME
   fTrackState := 1;
@@ -481,46 +548,46 @@ begin
 
 end;
 
-procedure TImportSCMSwimmer.FormDestroy(Sender: TObject);
+procedure TImportSCMWizard.FormDestroy(Sender: TObject);
 begin
   scmMemberList.Clear;
 end;
 
-procedure TImportSCMSwimmer.ListBoxDestDragDrop(Sender, Source: TObject;
+procedure TImportSCMWizard.ListBoxDestDragDrop(Sender, Source: TObject;
   X, Y: integer);
 begin
   // Source - the object being dropped.
   TransferItems(Source, Sender);
 end;
 
-procedure TImportSCMSwimmer.ListBoxDestDragOver(Sender, Source: TObject;
+procedure TImportSCMWizard.ListBoxDestDragOver(Sender, Source: TObject;
   X, Y: integer; State: TDragState; var Accept: Boolean);
 begin
   Accept := Source is TListBox;
 end;
 
-procedure TImportSCMSwimmer.ListBoxSrcDragDrop(Sender, Source: TObject;
+procedure TImportSCMWizard.ListBoxSrcDragDrop(Sender, Source: TObject;
   X, Y: integer);
 begin
   TransferItems(Source, Sender);
 end;
 
-procedure TImportSCMSwimmer.ListBoxSrcDragOver(Sender, Source: TObject;
+procedure TImportSCMWizard.ListBoxSrcDragOver(Sender, Source: TObject;
   X, Y: integer; State: TDragState; var Accept: Boolean);
 begin
   Accept := Source is TListBox;
 end;
 
-function TImportSCMSwimmer.MemberIsAssigned(obj: TObject;
+function TImportSCMWizard.MemberIsAssigned(obj: TObject;
   lbox: TListBox): Boolean;
 var
-  I: integer;
+  i: integer;
 begin
   // check if obj is used by to lboxView
   result := false;
-  for I := 0 to lbox.count - 1 do
+  for i := 0 to lbox.Count - 1 do
   begin
-    if (obj = lbox.Items.Objects[I]) then
+    if (obj = lbox.Items.Objects[i]) then
     begin
       result := true;
       break;
@@ -528,7 +595,7 @@ begin
   end;
 end;
 
-procedure TImportSCMSwimmer.PageControl1Change(Sender: TObject);
+procedure TImportSCMWizard.PageControl1Change(Sender: TObject);
 begin
   TrackStateUpdate;
   case TPageControl(Sender).TabIndex of
@@ -558,8 +625,13 @@ begin
           // UPDATE
           chkbDoProfile.Caption := 'Update squad swimmer''s profiles.';
           chkbDoProfile.Enabled := true;
-          chkbDoPB.Caption := 'Update Personal Best (PB) race-data,';
-          chkbDoHistory.Caption := 'Update swimming history.';
+          // Description
+          lblOptionProfileInfo.Caption :=
+            'Enable this option to have your swimmer''s profiles updated.';
+          // Option Select Data to UPDATE
+          rgrpOptionsData.Items.Strings[0] :=
+            'Update Personal Best (PB) race-data,';
+          rgrpOptionsData.Items.Strings[1] := 'Update swimming history.';
         end
         else
         begin
@@ -567,8 +639,13 @@ begin
           chkbDoProfile.Caption := 'Import club member''s profiles.';
           chkbDoProfile.Enabled := false;
           chkbDoProfile.Checked := true;
-          chkbDoPB.Caption := 'Import Personal Best (PB) race-data,';
-          chkbDoHistory.Caption := 'Import ALL swimming history.';
+          // Description
+          lblOptionProfileInfo.Caption :=
+            'This option is always checked when introducing new SCM swimmers to your squad.';
+          // Option Select Data to IMPORT
+          rgrpOptionsData.Items.Strings[0] :=
+            'Import Personal Best (PB) race-data,';
+          rgrpOptionsData.Items.Strings[1] := 'Import ALL swimming history.';
         end;
       end;
     5: // TABSHEET GO
@@ -577,53 +654,37 @@ begin
           lblGo.Caption := 'Click to update your squad swimmer''s data.'
         else
           lblGo.Caption :=
-            'Click to induct selected SCM members into your squad.';
+            'Click to introduce selected SCM members into your squad.';
       end;
   end;
 
 end;
 
-procedure TImportSCMSwimmer.PageControl1Changing(Sender: TObject;
+procedure TImportSCMWizard.PageControl1Changing(Sender: TObject;
   var AllowChange: Boolean);
 begin
 
-  if (TPageControl(Sender).TabIndex = 3) then // TABSHEET SELECT
-  begin
-    // Is the member's list in sync with the 'Processing Method'?
-    if (lbDest.Items.count > 0) then
-      vimgTrack3.ImageName := 'check_circle_filled'
-    else
-      vimgTrack3.ImageName := 'wizDotSmallFilled';
-  end;
+  // if (TPageControl(Sender).TabIndex = 3) then // TABSHEET SELECT
+  // begin
+  // // Is the member's list in sync with the 'Processing Method'?
+  // if (lbDest.Items.Count > 0) then
+  // vimgTrack3.ImageName := 'check_circle_filled'
+  // else
+  // vimgTrack3.ImageName := 'wizDotSmallFilled';
+  // end;
 
   if (TPageControl(Sender).TabIndex = 4) then // TABSHEET OPTION
   begin
-    if chkbDoProfile.Checked or chkbDoPB.Checked or chkbDoHistory.Checked then
-      vimgTrack4.ImageName := 'check_circle_filled'
+    if chkbDoProfile.Checked or (rgrpOptionsData.ItemIndex <> -1) then
+      // vimgTrack4.ImageName := 'check_circle_filled'
     else
-      vimgTrack4.ImageName := 'wizDotSmallFilled';
-  end;
-
-  if (TPageControl(Sender).TabIndex = 5) then // TABSHEET GO
-  begin
-    if (rgrpMethod.ItemIndex <> -1) and (lbDest.Items.count > 0) and
-    (chkbDoProfile.Checked or chkbDoPB.Checked or chkbDoHistory.Checked)
-    then
-    begin
-      btnGo.Enabled := true;
-      lblGo.Enabled := true;
-    end
-    else
-    begin
-      btnGo.Enabled := false;
-      lblGo.Enabled := false;
-    end;
+      // vimgTrack4.ImageName := 'wizDotSmallFilled';
   end;
 
   AllowChange := true;
 end;
 
-procedure TImportSCMSwimmer.rgrpMethodClick(Sender: TObject);
+procedure TImportSCMWizard.rgrpMethodClick(Sender: TObject);
 begin
   // Move to next tab-sheet
   if (fTrackState <> 3) then
@@ -635,24 +696,24 @@ begin
   end;
 
   if (rgrpMethod.ItemIndex <> -1) then
-    vimgTrack2.ImageName := 'check_circle_filled'
+    // vimgTrack2.ImageName := 'check_circle_filled'
   else
-    vimgTrack2.ImageName := 'wizDotSmallFilled';
+    // vimgTrack2.ImageName := 'wizDotSmallFilled';
 
 end;
 
-procedure TImportSCMSwimmer.TransferItems(SrcListBox, DestListBox: TObject);
+procedure TImportSCMWizard.TransferItems(SrcListBox, DestListBox: TObject);
 var
-  I: integer;
+  i: integer;
 begin
   with (SrcListBox AS TListBox) do
   begin
     try
-      for I := 0 to Items.count - 1 do
+      for i := 0 to Items.Count - 1 do
       begin
-        if Selected[I] then
+        if Selected[i] then
           // NOTE: destination MemberList is assigned source object.
-          (DestListBox AS TListBox).Items.AddObject(Items[I], Items.Objects[I]);
+          (DestListBox AS TListBox).Items.AddObject(Items[i], Items.Objects[i]);
       end;
     finally
       // NOTE: Source's assigned objects are not freed (in use).
@@ -661,19 +722,19 @@ begin
   end;
 end;
 
-procedure TImportSCMSwimmer.TrackStateConnected;
+procedure TImportSCMWizard.TrackStateConnected;
 begin
   if myConnection.Connected then
   begin
-    vimgTrack1.ImageName := 'check_circle_filled';
+    // vimgTrack1.ImageName := 'check_circle_filled';
   end
   else
   begin
-    vimgTrack1.ImageName := 'wizDotSmallFilled';
+    // vimgTrack1.ImageName := 'wizDotSmallFilled';
   end;
 end;
 
-procedure TImportSCMSwimmer.TrackStateDots;
+procedure TImportSCMWizard.TrackStateDots;
 begin
   case fTrackState of
     1:
@@ -684,11 +745,11 @@ begin
         tabOptions.TabVisible := false;
         tabFinalStep.TabVisible := false;
         tabSuccess.TabVisible := false;
-        vimgTrack2.Visible := false;
-        vimgTrack3.Visible := false;
-        vimgTrack4.Visible := false;
-        vimgTrack5.Visible := false;
-        vimgTrack6.Visible := false;
+        // vimgTrack2.Visible := false;
+        // vimgTrack3.Visible := false;
+        // vimgTrack4.Visible := false;
+        // vimgTrack5.Visible := false;
+        // vimgTrack6.Visible := false;
       end;
     2:
       begin
@@ -698,30 +759,44 @@ begin
         tabOptions.TabVisible := false;
         tabFinalStep.TabVisible := false;
         tabSuccess.TabVisible := false;
-        vimgTrack2.Visible := true;
-        vimgTrack3.Visible := false;
-        vimgTrack4.Visible := false;
-        vimgTrack5.Visible := false;
-        vimgTrack6.Visible := false;
+        // vimgTrack2.Visible := true;
+        // vimgTrack3.Visible := false;
+        // vimgTrack4.Visible := false;
+        // vimgTrack5.Visible := false;
+        // vimgTrack6.Visible := false;
       end;
     3:
+      begin
+        vimgTackDisplay.ImageName := 'WizardNodeBgrd1Grey';
+        tabMethod.TabVisible := true;
+        tabSelect.TabVisible := true;
+        tabOptions.TabVisible := true;
+        tabFinalStep.TabVisible := true;
+        tabSuccess.TabVisible := false;
+        // vimgTrack2.Visible := true;
+        // vimgTrack3.Visible := true;
+        // vimgTrack4.Visible := true;
+        // vimgTrack5.Visible := true;
+        // vimgTrack6.Visible := false;
+      end;
+    4:
       begin
         vimgTackDisplay.ImageName := 'WizardNodeBgrd';
         tabMethod.TabVisible := true;
         tabSelect.TabVisible := true;
         tabOptions.TabVisible := true;
         tabFinalStep.TabVisible := true;
-        tabSuccess.TabVisible := false;
-        vimgTrack2.Visible := true;
-        vimgTrack3.Visible := true;
-        vimgTrack4.Visible := true;
-        vimgTrack5.Visible := true;
-        vimgTrack6.Visible := false;
+        tabSuccess.TabVisible := true;
+        // vimgTrack2.Visible := true;
+        // vimgTrack3.Visible := true;
+        // vimgTrack4.Visible := true;
+        // vimgTrack5.Visible := true;
+        // vimgTrack6.Visible := true;
       end;
   end;
 end;
 
-procedure TImportSCMSwimmer.TrackStateTracker(idx: integer);
+procedure TImportSCMWizard.TrackStateTracker(idx: integer);
 begin
   case idx of
     0:
@@ -742,7 +817,7 @@ begin
   end;
 end;
 
-procedure TImportSCMSwimmer.TrackStateUpdate;
+procedure TImportSCMWizard.TrackStateUpdate;
 begin
   // Dots and base graphic
   TrackStateDots;

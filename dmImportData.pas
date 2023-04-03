@@ -57,6 +57,7 @@ var
   ident: integer;
 
 begin
+  result := false;
   if AssertConnections then
   begin
     tblHR.Connection := coachConnection;
@@ -111,7 +112,7 @@ begin
       end;
     end;
     qryMember.Close;
-
+    result := true;
   end;
 end;
 
@@ -132,29 +133,21 @@ begin
 end;
 
 function TImportData.HasFieldMiddleInitial: boolean;
-var
-  src: TFDQuery;
-  dest: TFDQuery;
-  SQL: TstringList;
-  hasMiddleInitial: boolean;
 begin
-  hasMiddleInitial := false;
+  result := false;
   if Assigned(scmConnection) AND scmConnection.Connected then
   begin
     // extract firstname, middle initial and lastname (FNAME)
     qryCheckMiddleInitial.Connection := scmConnection;
     qryCheckMiddleInitial.Open;
     if qryCheckMiddleInitial.Active then
-      hasMiddleInitial := qryCheckMiddleInitial.FieldByName('rtnValue')
+      result := qryCheckMiddleInitial.FieldByName('rtnValue')
         .AsBoolean;
     qryCheckMiddleInitial.Close;
   end;
 end;
 
 function TImportData.AssertDuplicity(AscmMemberID: integer): boolean;
-var
-  SQL: string;
-  rtnvalue: integer;
 begin
   result := true;
   if Assigned(coachConnection) AND coachConnection.Connected then
@@ -173,7 +166,7 @@ end;
 
 function TImportData.AssertUnique(AscmMemberID: integer): boolean;
 begin
-
+  result := true;
 end;
 
 constructor TImportData.CreateWithConnection(AOwner: TComponent;
@@ -187,12 +180,12 @@ end;
 function TImportData.GetLastIDENT: integer;
 var
   SQL: string;
-  ident: integer;
 begin
+  result := 0;
   if Assigned(coachConnection) then
   begin
     SQL := 'USE SCM_Coach; SELECT IDENT_CURRENT(''[SCM_Coach].[dbo].[Member]'');';
-    ident := coachConnection.ExecSQLScalar(SQL);
+    result := coachConnection.ExecSQLScalar(SQL);
   end;
 end;
 

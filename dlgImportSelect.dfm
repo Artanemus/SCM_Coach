@@ -23,7 +23,7 @@ object ImportSelect: TImportSelect
     Caption = 'Select item to import ...'
     ItemIndex = 0
     Items.Strings = (
-      'SwimClubMeet. (TCP/IP)'
+      'SwimClubMeet. (Connect to server.)'
       'SwimClubMeet export file. (.scm)'
       'HyTek swim meet results file. (.hy3).')
     TabOrder = 0

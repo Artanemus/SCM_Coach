@@ -11,6 +11,7 @@ object Main: TMain
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poMainFormCenter
+  ShowHint = True
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow

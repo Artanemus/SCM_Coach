@@ -119,7 +119,7 @@ implementation
 {$R *.dfm}
 
 uses frmSessionNew, dlgBasicLogin, SCMUtility, IniFiles, frmManageSwimmers
-, System.UITypes, dlgImportSelect, dlgImportSCMSwimmer;
+, System.UITypes, dlgImportSelect, dlgImportSCMWizard;
 
 
 function TMain.AssertConnection: boolean;
@@ -166,7 +166,7 @@ end;
 procedure TMain.File_ImportExecute(Sender: TObject);
 var
   dlgA: TImportSelect;
-  dlgB: TImportSCMSwimmer;
+  dlgB: TImportSCMWizard;
 begin
   dlgA := TImportSelect.Create(Self);
   if IsPositiveResult(dlgA.ShowModal) then
@@ -174,7 +174,7 @@ begin
     case dlgA.RtnValue of
       0:
         begin
-          dlgB := TImportSCMSwimmer.Create(Self);
+          dlgB := TImportSCMWizard.Create(Self);
           dlgB.ShowModal;
           dlgB.Free;
         end;
