@@ -50,7 +50,6 @@ type
     btnFirst: TButton;
     btnLast: TButton;
     RelativePanel2: TRelativePanel;
-    vimgTracker: TVirtualImage;
     vimgTackDisplay: TVirtualImage;
     ActionManager1: TActionManager;
     actnLogin: TAction;
@@ -69,9 +68,8 @@ type
     edtPassword: TEdit;
     edtServer: TEdit;
     edtUser: TEdit;
-    Button1: TButton;
-    Button2: TButton;
-    btnAbort: TButton;
+    btnDisconnect: TButton;
+    btnLogin: TButton;
     btnConnect: TButton;
     tabMethod: TTabSheet;
     Shape4: TShape;
@@ -105,17 +103,10 @@ type
     actnLast: TAction;
     actnPrev: TAction;
     actnNext: TAction;
-    actnAbort: TAction;
+    actnDisconnect: TAction;
     RelativePanel3: TRelativePanel;
     btnGo: TButton;
     lblGo: TLabel;
-    actnTrackSelect: TAction;
-    actnTrackStart: TAction;
-    actnTrackLogin: TAction;
-    actnTrackMethod: TAction;
-    actnTrackOptions: TAction;
-    actnTrackFinalStep: TAction;
-    actnTrackSuccess: TAction;
     actnGo: TAction;
     rgrpOptionsData: TRadioGroup;
     VirtualImage6: TVirtualImage;
@@ -126,6 +117,8 @@ type
     sbtnOptions: TSpeedButton;
     sbtnFinalStep: TSpeedButton;
     sbtnSuccess: TSpeedButton;
+    WizardCollection: TImageCollection;
+    WizardImageList: TVirtualImageList;
     procedure FormCreate(Sender: TObject);
     procedure ListBoxSrcDragOver(Sender, Source: TObject; X, Y: integer;
       State: TDragState; var Accept: Boolean);
@@ -144,37 +137,33 @@ type
     procedure rgrpMethodClick(Sender: TObject);
     procedure actnExitExecute(Sender: TObject);
     procedure PageControl1Change(Sender: TObject);
-    procedure PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
-    procedure actnTrackMethodExecute(Sender: TObject);
-    procedure actnTrackSelectExecute(Sender: TObject);
-    procedure actnTrackOptionsExecute(Sender: TObject);
-    procedure actnTrackFinalStepExecute(Sender: TObject);
-    procedure actnTrackStartExecute(Sender: TObject);
-    procedure actnTrackLoginExecute(Sender: TObject);
     procedure actnGoUpdate(Sender: TObject);
     procedure actnGoExecute(Sender: TObject);
-    procedure actnTrackSelectUpdate(Sender: TObject);
-    procedure actnTrackMethodUpdate(Sender: TObject);
-    procedure actnTrackOptionsUpdate(Sender: TObject);
+    procedure actnDisconnectUpdate(Sender: TObject);
+    procedure actnDisconnectExecute(Sender: TObject);
+    procedure sbtnGenericClick(Sender: TObject);
   private
     { Private declarations }
-    // procedure SimpleLoadSettingString(ASection, AName: string;
-    // var AValue: string);
-    // procedure SimpleMakeTemporyFDConnection(AConnection: TFDConnection; Server, User, Password: string;
-    // AOsAuthent: Boolean);
-    // procedure SimpleSaveSettingString(ASection, AName,
-    // AValue: string);
+
     scmMemberList: TObjectList;
     fTrackState: integer;
     fLastMethodState: integer;
 
+  var
+    fImportDone: Boolean;
+
     function MemberIsAssigned(obj: TObject; lbox: TListBox): Boolean;
     procedure BuildListBoxSource();
     procedure TransferItems(SrcListBox, DestListBox: TObject);
+    procedure TrackStateSync;
+    procedure TrackStateInit;
     procedure TrackStateUpdate;
-    procedure TrackStateDots;
-    procedure TrackStateTracker(idx: integer);
+    procedure TrackStateBkgrdTabs;
+
     procedure TrackStateConnected;
+    procedure TrackStateTick;
+    procedure TrackStateButtons;
+    procedure TrackStateTabs;
 
   public
     { Public declarations }
@@ -192,6 +181,20 @@ uses (*
   *) System.Math, IniFiles, SCMUtility, SCMSimpleConnect, System.StrUtils;
 
 // DON'T CALL HERE IF SCM NOT ISACTIVE
+procedure TImportSCMWizard.actnDisconnectExecute(Sender: TObject);
+begin
+  myConnection.Close;
+  TrackStateInit;
+end;
+
+procedure TImportSCMWizard.actnDisconnectUpdate(Sender: TObject);
+begin
+  if (Assigned(myConnection) and myConnection.Connected) then
+    btnDisconnect.Enabled := true
+  else
+    btnDisconnect.Enabled := false;
+end;
+
 procedure TImportSCMWizard.actnDestToSrcAllExecute(Sender: TObject);
 begin
   lbDest.SelectAll;
@@ -216,6 +219,9 @@ begin
   // ---------------------------------------------------------------
   // I M P O R T .
   // ---------------------------------------------------------------
+
+  // construct import class ...
+
   // I N T R O D U C E.
   if (rgrpMethod.ItemIndex = 1) then
   begin
@@ -224,11 +230,7 @@ begin
     begin
       obj := lbDest.Items.Objects[i];
       MemberID := TscmMember(obj).ID;
-      // collect member profile data ...
-      // 'SELECT * FROM SwimClubMeet.dbo.Member WHERE MemberID = ' + IntToStr(MemberID);
-
-      // INSERT THE MEMBER INTO SCM_Coach
-      // create new member record
+      // call import class ....
       //
     end;
   end;
@@ -237,24 +239,22 @@ end;
 
 procedure TImportSCMWizard.actnGoUpdate(Sender: TObject);
 begin
-  if (fTrackState = 3) then
+  if (rgrpMethod.ItemIndex <> -1) and (lbDest.Items.Count > 0) and
+    (chkbDoProfile.Checked or (rgrpOptionsData.ItemIndex <> -1)) then
   begin
-    if (rgrpMethod.ItemIndex <> -1) and (lbDest.Items.Count > 0) and
-      (chkbDoProfile.Checked or (rgrpOptionsData.ItemIndex <> -1)) then
+    if not TAction(Sender).Enabled then
     begin
-      if not TAction(Sender).Enabled then
-      begin
-        TAction(Sender).Enabled := true;
-        lblGo.Enabled := true;
-      end;
-    end
-    else
+      { TODO -oBSA -cGeneral : Assign disabled button image on }
+      TAction(Sender).Enabled := true;
+      lblGo.Enabled := true;
+    end;
+  end
+  else
+  begin
+    if TAction(Sender).Enabled then
     begin
-      if TAction(Sender).Enabled then
-      begin
-        TAction(Sender).Enabled := false;
-        lblGo.Enabled := false;
-      end;
+      TAction(Sender).Enabled := false;
+      lblGo.Enabled := false;
     end;
   end;
 end;
@@ -265,8 +265,7 @@ var
 begin
   // Hide the Login and abort buttons while attempting connection
   lblLoginErrMsg.Visible := false;
-  btnAbort.Visible := false;
-  btnConnect.Visible := false;
+  btnConnect.Visible := true;
   lblMsg.Visible := true;
   lblMsg.Update();
   Application.ProcessMessages();
@@ -282,20 +281,14 @@ begin
   begin
     BuildListBoxSource;
     fTrackState := 2;
-    // Dots and base graphic
-    TrackStateDots;
-    // connection circle_checked_fill
-    TrackStateConnected;
-    // move tracker to next tabsheet
+    TrackStateUpdate;
+    // move to the 'Method' tab-sheet.
     PageControl1.SelectNextPage(true, true);
-    TrackStateTracker(PageControl1.TabIndex);
   end
   else
   begin
     // show error message - let user try again or abort
     lblLoginErrMsg.Visible := true;
-    btnAbort.Visible := true;
-    btnConnect.Visible := true;
     fTrackState := 1;
     TrackStateUpdate;
   end;
@@ -306,21 +299,10 @@ end;
 
 procedure TImportSCMWizard.actnLoginUpdate(Sender: TObject);
 begin
-  // only update display if the TrackState is not syncronized.
-  if (myConnection.Connected) and (fTrackState = 1) then
-  begin
-    fTrackState := 2;
-    TrackStateUpdate;
-  end;
-  // only revert state if the TrackState is not syncronized.
-  if (not myConnection.Connected) AND (fTrackState > 1) then
-  begin
-    // page index out-of-range for the current TrackState
-    if (PageControl1.TabIndex > 1) then
-      PageControl1.TabIndex := 1;
-    fTrackState := 1;
-    TrackStateUpdate;
-  end;
+  if (Assigned(myConnection) and myConnection.Connected) then
+    btnLogin.Enabled := false
+  else
+    btnLogin.Enabled := true;
 end;
 
 procedure TImportSCMWizard.actnSrcToDestAllExecute(Sender: TObject);
@@ -332,92 +314,6 @@ end;
 procedure TImportSCMWizard.actnSrcToDestSelectedExecute(Sender: TObject);
 begin
   TransferItems(lbSrc, lbDest);
-end;
-
-procedure TImportSCMWizard.actnTrackFinalStepExecute(Sender: TObject);
-begin
-  PageControl1.ActivePageIndex := 5;
-end;
-
-procedure TImportSCMWizard.actnTrackLoginExecute(Sender: TObject);
-begin
-  PageControl1.ActivePageIndex := 1;
-end;
-
-procedure TImportSCMWizard.actnTrackMethodExecute(Sender: TObject);
-begin
-  PageControl1.ActivePageIndex := 2;
-end;
-
-procedure TImportSCMWizard.actnTrackMethodUpdate(Sender: TObject);
-begin
-  if (fTrackState = 1) then
-  begin
-    if (TAction(Sender).Enabled) then
-      TAction(Sender).Enabled := false;
-  end;
-  if (fTrackState >= 2) then
-  begin
-    if not(TAction(Sender).Enabled) then
-      TAction(Sender).Enabled := true;
-  end;
-end;
-
-procedure TImportSCMWizard.actnTrackOptionsExecute(Sender: TObject);
-begin
-  PageControl1.ActivePageIndex := 4;
-end;
-
-procedure TImportSCMWizard.actnTrackOptionsUpdate(Sender: TObject);
-begin
-
-  if (fTrackState <= 3) then
-  begin
-    if (TAction(Sender).Enabled) then
-      TAction(Sender).Enabled := false;
-  end;
-  if (fTrackState >= 4) then
-  begin
-    if not(TAction(Sender).Enabled) then
-      TAction(Sender).Enabled := true;
-  end;
-end;
-
-procedure TImportSCMWizard.actnTrackSelectExecute(Sender: TObject);
-begin
-  PageControl1.ActivePageIndex := 3;
-end;
-
-procedure TImportSCMWizard.actnTrackSelectUpdate(Sender: TObject);
-begin
-
-  if (fTrackState <= 2) then
-  begin
-    if (TAction(Sender).Enabled) then
-      TAction(Sender).Enabled := false;
-  end;
-  if (fTrackState >= 3) then
-  begin
-    if not(TAction(Sender).Enabled) then
-      TAction(Sender).Enabled := true;
-  end;
-
-  if (lbDest.Items.Count > 0) then
-  begin
-    if (TAction(Sender).ImageIndex <> 18) then
-      TAction(Sender).ImageName := 'check_circle_filled';
-  end
-  else
-  begin
-    if (TAction(Sender).ImageIndex <> 10) then
-      TAction(Sender).ImageName := 'wizDotSmallFilled';
-  end;
-
-end;
-
-procedure TImportSCMWizard.actnTrackStartExecute(Sender: TObject);
-begin
-  PageControl1.ActivePageIndex := 0;
 end;
 
 procedure TImportSCMWizard.BuildListBoxSource;
@@ -516,6 +412,9 @@ begin
   lblLoginErrMsg.Visible := false;
   lblMsg.Visible := false;
 
+  // assert initial connection state.
+  myConnection.Connected := false;
+
   // CREATE list of members from SwimClubMeet
   scmMemberList := TObjectList.Create(true);
 
@@ -542,9 +441,11 @@ begin
   rgrpOptionsData.ItemIndex := -1;
   fLastMethodState := -1;
   // TrackState WELCOME
-  fTrackState := 1;
+  fTrackState := 0;
   // INIT wizard tracker display
-  TrackStateUpdate;
+  sbtnStart.Down := true;
+  TrackStateInit;
+  fImportDone := false;
 
 end;
 
@@ -597,14 +498,39 @@ end;
 
 procedure TImportSCMWizard.PageControl1Change(Sender: TObject);
 begin
-  TrackStateUpdate;
+
+  // place a call to TrackState ticks
+  TrackStateTick;
+
+  // ------------------------------------------------------
+  // TABSHEET - data and UI, checks and updates
+  // ------------------------------------------------------
   case TPageControl(Sender).TabIndex of
+    0: // START - INTRO
+      if not sbtnStart.Down then
+        sbtnStart.Down := true;
+    1: // TABSHEET LOGIN
+      if not sbtnLogin.Down then
+        sbtnLogin.Down := true;
+    2: // TABSHEET METHOD
+      begin
+        if not sbtnMethod.Down then
+          sbtnMethod.Down := true;
+        // method assigned - but not in sync
+        if (rgrpMethod.ItemIndex <> -1) and (fTrackState < 3) then
+        begin
+          fTrackState := 3;
+          TrackStateUpdate;
+        end;
+      end;
     3: // TABSHEET SELECT
       begin
+        if not sbtnSelect.Down then
+          sbtnSelect.Down := true;
         // Is the member's list in sync with the 'Processing Method'?
         if (fLastMethodState <> rgrpMethod.ItemIndex) then
         begin
-          // changes to the RadioGroup determine the contents of the ObjectList
+          // B U I L D   M E M B E R ' S   L I S T .
           BuildListBoxSource;
           fLastMethodState := rgrpMethod.ItemIndex;
         end;
@@ -620,6 +546,8 @@ begin
       end;
     4: // TABSHEET OPTIONS
       begin
+        if not sbtnOptions.Down then
+          sbtnOptions.Down := true;
         if (rgrpMethod.ItemIndex = 0) then
         begin
           // UPDATE
@@ -650,6 +578,8 @@ begin
       end;
     5: // TABSHEET GO
       begin
+        if not sbtnFinalStep.Down then
+          sbtnFinalStep.Down := true;
         if (rgrpMethod.ItemIndex = 0) then
           lblGo.Caption := 'Click to update your squad swimmer''s data.'
         else
@@ -658,35 +588,14 @@ begin
       end;
   end;
 
-end;
+  // place a call to TrackState ticks
+  TrackStateTick;
 
-procedure TImportSCMWizard.PageControl1Changing(Sender: TObject;
-  var AllowChange: Boolean);
-begin
-
-  // if (TPageControl(Sender).TabIndex = 3) then // TABSHEET SELECT
-  // begin
-  // // Is the member's list in sync with the 'Processing Method'?
-  // if (lbDest.Items.Count > 0) then
-  // vimgTrack3.ImageName := 'check_circle_filled'
-  // else
-  // vimgTrack3.ImageName := 'wizDotSmallFilled';
-  // end;
-
-  if (TPageControl(Sender).TabIndex = 4) then // TABSHEET OPTION
-  begin
-    if chkbDoProfile.Checked or (rgrpOptionsData.ItemIndex <> -1) then
-      // vimgTrack4.ImageName := 'check_circle_filled'
-    else
-      // vimgTrack4.ImageName := 'wizDotSmallFilled';
-  end;
-
-  AllowChange := true;
 end;
 
 procedure TImportSCMWizard.rgrpMethodClick(Sender: TObject);
 begin
-  // Move to next tab-sheet
+  // User picks data method
   if (fTrackState <> 3) then
   begin
     fTrackState := 3;
@@ -694,12 +603,17 @@ begin
     // move to the 'Select' tab-sheet.
     PageControl1.SelectNextPage(true, true);
   end;
+end;
 
-  if (rgrpMethod.ItemIndex <> -1) then
-    // vimgTrack2.ImageName := 'check_circle_filled'
-  else
-    // vimgTrack2.ImageName := 'wizDotSmallFilled';
-
+procedure TImportSCMWizard.sbtnGenericClick(Sender: TObject);
+var
+  pageIndx: integer;
+begin
+  pageIndx := TSpeedButton(Sender).Tag;
+  if (PageControl1.TabIndex <> pageIndx) then
+    PageControl1.TabIndex := pageIndx;
+  if not TSpeedButton(Sender).Down then
+    TSpeedButton(Sender).Down := true;
 end;
 
 procedure TImportSCMWizard.TransferItems(SrcListBox, DestListBox: TObject);
@@ -724,107 +638,193 @@ end;
 
 procedure TImportSCMWizard.TrackStateConnected;
 begin
-  if myConnection.Connected then
+  if Assigned(myConnection) and myConnection.Connected then
   begin
-    // vimgTrack1.ImageName := 'check_circle_filled';
+    if (sbtnLogin.ImageName <> 'wizImageTick') then
+      sbtnLogin.ImageName := 'wizImageTick';
   end
   else
   begin
-    // vimgTrack1.ImageName := 'wizDotSmallFilled';
+    if (sbtnLogin.ImageName <> 'wizImage') then
+      sbtnLogin.ImageName := 'wizImage';
   end;
 end;
 
-procedure TImportSCMWizard.TrackStateDots;
+procedure TImportSCMWizard.TrackStateInit;
+begin
+  fTrackState := 1;
+  PageControl1.TabIndex := 0;
+  chkbDoProfile.Checked := false;
+  rgrpOptionsData.ItemIndex := -1;
+  lbSrc.Clear;
+  lbDest.Clear;
+  scmMemberList.Clear;
+  TrackStateUpdate;
+end;
+
+procedure TImportSCMWizard.TrackStateSync;
+
+begin
+  fTrackState := 1;
+  if Assigned(myConnection) and myConnection.Connected then
+    fTrackState := 2; // Method enabled
+  if (chkbDoProfile.Checked or (rgrpOptionsData.ItemIndex <> -1)) then
+    fTrackState := 3; // Select enabled
+  if (lbDest.Items.Count > 0) then
+    fTrackState := 4; // ALL - except Success tab
+  if fImportDone then
+    fTrackState := 5; // ALL
+end;
+
+procedure TImportSCMWizard.TrackStateTabs;
 begin
   case fTrackState of
     1:
       begin
-        vimgTackDisplay.ImageName := 'WizardNodeBgrd5Grey';
         tabMethod.TabVisible := false;
         tabSelect.TabVisible := false;
         tabOptions.TabVisible := false;
         tabFinalStep.TabVisible := false;
         tabSuccess.TabVisible := false;
-        // vimgTrack2.Visible := false;
-        // vimgTrack3.Visible := false;
-        // vimgTrack4.Visible := false;
-        // vimgTrack5.Visible := false;
-        // vimgTrack6.Visible := false;
       end;
     2:
       begin
-        vimgTackDisplay.ImageName := 'WizardNodeBgrd4Grey';
         tabMethod.TabVisible := true;
         tabSelect.TabVisible := false;
         tabOptions.TabVisible := false;
         tabFinalStep.TabVisible := false;
         tabSuccess.TabVisible := false;
-        // vimgTrack2.Visible := true;
-        // vimgTrack3.Visible := false;
-        // vimgTrack4.Visible := false;
-        // vimgTrack5.Visible := false;
-        // vimgTrack6.Visible := false;
       end;
     3:
       begin
-        vimgTackDisplay.ImageName := 'WizardNodeBgrd1Grey';
         tabMethod.TabVisible := true;
         tabSelect.TabVisible := true;
         tabOptions.TabVisible := true;
         tabFinalStep.TabVisible := true;
         tabSuccess.TabVisible := false;
-        // vimgTrack2.Visible := true;
-        // vimgTrack3.Visible := true;
-        // vimgTrack4.Visible := true;
-        // vimgTrack5.Visible := true;
-        // vimgTrack6.Visible := false;
       end;
     4:
       begin
-        vimgTackDisplay.ImageName := 'WizardNodeBgrd';
         tabMethod.TabVisible := true;
         tabSelect.TabVisible := true;
         tabOptions.TabVisible := true;
         tabFinalStep.TabVisible := true;
         tabSuccess.TabVisible := true;
-        // vimgTrack2.Visible := true;
-        // vimgTrack3.Visible := true;
-        // vimgTrack4.Visible := true;
-        // vimgTrack5.Visible := true;
-        // vimgTrack6.Visible := true;
       end;
   end;
 end;
 
-procedure TImportSCMWizard.TrackStateTracker(idx: integer);
+procedure TImportSCMWizard.TrackStateTick;
 begin
-  case idx of
-    0:
-      // Move TrackCircle
-      vimgTracker.Margins.Left := 0;
+  // LOGIN
+  TrackStateConnected;
+  // METHOD
+  if (fTrackState >= 2) and (rgrpMethod.ItemIndex <> -1) then
+  begin
+    sbtnMethod.ImageName := 'wizImageTick';
+    sbtnMethod.SelectedImageName := 'wizImageSelectedTick'
+  end
+  else
+    begin
+    sbtnMethod.ImageName := 'wizImage';
+    sbtnMethod.SelectedImageName := 'wizImageSelected';
+    end;
+  // SELECT
+  if (fTrackState >= 3) and (lbDest.Items.Count > 0) then
+    begin
+    sbtnSelect.ImageName := 'wizImageTick';
+    sbtnSelect.SelectedImageName := 'wizImageSelectedTick';
+    end
+  else
+    begin
+    sbtnSelect.ImageName := 'wizImage';
+    sbtnSelect.ImageName := 'wizImageSelected';
+    end;
+  // OPTION
+  if (fTrackState >= 3) and
+    (chkbDoProfile.Checked or (rgrpOptionsData.ItemIndex <> -1)) then
+    begin
+    sbtnOptions.ImageName := 'wizImageTick';
+    sbtnOptions.SelectedImageName := 'wizImageSelectedTick';
+    end
+  else
+    begin
+    sbtnOptions.ImageName := 'wizImage';
+    sbtnOptions.SelectedImageName := 'wizImageSelected';
+    end;
+
+end;
+
+procedure TImportSCMWizard.TrackStateButtons;
+begin
+  case fTrackState of
     1:
-      vimgTracker.Margins.Left := 111;
+      begin
+        sbtnStart.Enabled := true;
+        sbtnLogin.Enabled := true;
+        sbtnMethod.Enabled := false;
+        sbtnSelect.Enabled := false;
+        sbtnOptions.Enabled := false;
+        sbtnFinalStep.Enabled := false;
+        sbtnSuccess.Enabled := false;
+      end;
     2:
-      vimgTracker.Margins.Left := 212;
+      begin
+        sbtnStart.Enabled := true;
+        sbtnLogin.Enabled := true;
+        sbtnMethod.Enabled := true;
+        sbtnSelect.Enabled := false;
+        sbtnOptions.Enabled := false;
+        sbtnFinalStep.Enabled := false;
+        sbtnSuccess.Enabled := false;
+      end;
     3:
-      vimgTracker.Margins.Left := 314;
+      begin
+        sbtnStart.Enabled := true;
+        sbtnLogin.Enabled := true;
+        sbtnMethod.Enabled := true;
+        sbtnSelect.Enabled := true;
+        sbtnOptions.Enabled := true;
+        sbtnFinalStep.Enabled := true;
+        sbtnSuccess.Enabled := false;
+      end;
     4:
-      vimgTracker.Margins.Left := 416;
-    5:
-      vimgTracker.Margins.Left := 518;
-    6:
-      vimgTracker.Margins.Left := 628;
+      begin
+        sbtnStart.Enabled := true;
+        sbtnLogin.Enabled := true;
+        sbtnMethod.Enabled := true;
+        sbtnSelect.Enabled := true;
+        sbtnOptions.Enabled := true;
+        sbtnFinalStep.Enabled := true;
+        sbtnSuccess.Enabled := true;
+      end;
+  end;
+end;
+
+procedure TImportSCMWizard.TrackStateBkgrdTabs;
+begin
+  case fTrackState of
+    1:
+      vimgTackDisplay.ImageName := 'wizTrackState1';
+    2:
+      vimgTackDisplay.ImageName := 'wizTrackState2';
+    3:
+      vimgTackDisplay.ImageName := 'wizTrackState3';
+    4:
+      vimgTackDisplay.ImageName := 'wizTrackState4';
   end;
 end;
 
 procedure TImportSCMWizard.TrackStateUpdate;
 begin
   // Dots and base graphic
-  TrackStateDots;
-  // connection circle_checked_fill
-  TrackStateConnected;
-  // Tracker
-  TrackStateTracker(PageControl1.TabIndex);
+  TrackStateBkgrdTabs;
+  // Buttons
+  TrackStateButtons;
+  // Tick Icons
+  TrackStateTick;
+  // Tabsheets
+  TrackStateTabs;
 end;
 
 { TscmMember }
