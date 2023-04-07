@@ -14,56 +14,38 @@ uses
   FireDAC.DApt, FireDAC.Comp.DataSet, dmSCM, System.ImageList, Vcl.ImgList,
   Vcl.VirtualImageList, Vcl.WinXCtrls, Vcl.ExtCtrls, System.Actions,
   Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
-  System.Contnrs, Vcl.Buttons;
+  System.Contnrs, Vcl.Buttons, clsImportSCM;
 
 type
-  TscmMember = class(TObject)
-  private
-    { private declarations }
-    MemberID: integer;
-    FName: string;
-  protected
-    { protected declarations }
-  public
-    { public declarations }
-
-    // published
-    { published declarations }
-    constructor Create();
-    destructor Destroy(); override;
-    property ID: integer read MemberID;
-  end;
 
   TImportSCMWizard = class(TForm)
     myConnection: TFDConnection;
-    ImageCollection1: TImageCollection;
+    UICollection: TImageCollection;
     qrySCMSwimmer: TFDQuery;
     qrySCMSwimmerFNAME: TWideStringField;
     qrySCMSwimmerMemberID: TFDAutoIncField;
     qrySCMSwimmerFirstName: TWideStringField;
     qrySCMSwimmerLastName: TWideStringField;
-    RelativePanel1: TRelativePanel;
+    pnlFooter: TRelativePanel;
     btnPrev: TButton;
-    VirtualImageList1: TVirtualImageList;
+    UIImageList: TVirtualImageList;
     btnNext: TButton;
     btnCancel: TButton;
-    btnFirst: TButton;
-    btnLast: TButton;
-    RelativePanel2: TRelativePanel;
-    vimgTackDisplay: TVirtualImage;
-    ActionManager1: TActionManager;
+    pnlHeader: TRelativePanel;
+    imgTackBkgrd: TVirtualImage;
+    actnManager: TActionManager;
     actnLogin: TAction;
-    PageControl1: TPageControl;
+    pageCNTRL: TPageControl;
     tabStart: TTabSheet;
-    Label6: TLabel;
+    lblMsgStartInfo: TLabel;
     tabLogin: TTabSheet;
     Shape3: TShape;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    lblLoginErrMsg: TLabel;
-    Label5: TLabel;
-    lblMsg: TLabel;
+    lblServer: TLabel;
+    lblUserName: TLabel;
+    lblPassword: TLabel;
+    lblMsgLoginErr: TLabel;
+    lblMsgLoginInfo: TLabel;
+    lblMsgLogin: TLabel;
     chkOsAuthent: TCheckBox;
     edtPassword: TEdit;
     edtServer: TEdit;
@@ -73,20 +55,20 @@ type
     btnConnect: TButton;
     tabMethod: TTabSheet;
     Shape4: TShape;
-    Label9: TLabel;
+    lblMsgMethodInfo: TLabel;
     rgrpMethod: TRadioGroup;
     tabSelect: TTabSheet;
     Shape1: TShape;
-    VirtualImage1: TVirtualImage;
-    VirtualImage2: TVirtualImage;
-    VirtualImage3: TVirtualImage;
-    VirtualImage4: TVirtualImage;
-    VirtualImage5: TVirtualImage;
-    lblSelect: TLabel;
+    imgArrowRight: TVirtualImage;
+    imgArrowLeft: TVirtualImage;
+    imgArrowRightDbl: TVirtualImage;
+    imgArrowLeftDbl: TVirtualImage;
+    imgSearch: TVirtualImage;
+    lblMsgSelectInfo: TLabel;
     edtSearch: TEdit;
     tabOptions: TTabSheet;
     Shape2: TShape;
-    Label8: TLabel;
+    lblMsgOptionsInfo: TLabel;
     lblOptionProfileInfo: TLabel;
     chkbDoProfile: TCheckBox;
     tabFinalStep: TTabSheet;
@@ -97,19 +79,17 @@ type
     actnDestToSrcSelected: TAction;
     lbSrc: TListBox;
     lbDest: TListBox;
-    Memo1: TMemo;
+    memoStart: TMemo;
     actnExit: TAction;
-    actnFirst: TAction;
-    actnLast: TAction;
     actnPrev: TAction;
     actnNext: TAction;
     actnDisconnect: TAction;
-    RelativePanel3: TRelativePanel;
+    pnlFinalStep: TRelativePanel;
     btnGo: TButton;
     lblGo: TLabel;
     actnGo: TAction;
     rgrpOptionsData: TRadioGroup;
-    VirtualImage6: TVirtualImage;
+    imgStartBanner: TVirtualImage;
     sbtnMethod: TSpeedButton;
     sbtnLogin: TSpeedButton;
     sbtnStart: TSpeedButton;
@@ -119,6 +99,7 @@ type
     sbtnSuccess: TSpeedButton;
     WizardCollection: TImageCollection;
     WizardImageList: TVirtualImageList;
+    lblLoginDBver: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure ListBoxSrcDragOver(Sender, Source: TObject; X, Y: integer;
       State: TDragState; var Accept: Boolean);
@@ -136,12 +117,17 @@ type
     procedure edtSearchChange(Sender: TObject);
     procedure rgrpMethodClick(Sender: TObject);
     procedure actnExitExecute(Sender: TObject);
-    procedure PageControl1Change(Sender: TObject);
+    procedure pageCNTRLChange(Sender: TObject);
     procedure actnGoUpdate(Sender: TObject);
     procedure actnGoExecute(Sender: TObject);
     procedure actnDisconnectUpdate(Sender: TObject);
     procedure actnDisconnectExecute(Sender: TObject);
     procedure sbtnGenericClick(Sender: TObject);
+    procedure btnNextClick(Sender: TObject);
+    procedure actnNextUpdate(Sender: TObject);
+    procedure actnNextExecute(Sender: TObject);
+    procedure actnPrevUpdate(Sender: TObject);
+    procedure actnPrevExecute(Sender: TObject);
   private
     { Private declarations }
 
@@ -155,11 +141,15 @@ type
     function MemberIsAssigned(obj: TObject; lbox: TListBox): Boolean;
     procedure BuildListBoxSource();
     procedure TransferItems(SrcListBox, DestListBox: TObject);
-    procedure TrackStateSync;
+
+    // improves UI declared but never used (DNY).
+    procedure NavButtonState; //DNY
+
+    // WIZARD TRACK BAR
+    procedure TrackStateSync; //DNY
     procedure TrackStateInit;
     procedure TrackStateUpdate;
     procedure TrackStateBkgrdTabs;
-
     procedure TrackStateConnected;
     procedure TrackStateTick;
     procedure TrackStateButtons;
@@ -213,26 +203,23 @@ end;
 
 procedure TImportSCMWizard.actnGoExecute(Sender: TObject);
 var
-  i, MemberID: integer;
-  obj: TObject;
+  cls: TImportMember;
 begin
   // ---------------------------------------------------------------
   // I M P O R T .
   // ---------------------------------------------------------------
-
   // construct import class ...
+  cls := TImportMember.CreateWithConnection(Self, myConnection, SCM.scmConnection);
 
-  // I N T R O D U C E.
+  // I N T R O D U C E .
   if (rgrpMethod.ItemIndex = 1) then
   begin
-    // Loop across select member IDs
-    for i := 0 to lbDest.Items.Count - 1 do
-    begin
-      obj := lbDest.Items.Objects[i];
-      MemberID := TscmMember(obj).ID;
-      // call import class ....
-      //
-    end;
+    cls.CreateMembers(lbDest.Items);
+  end;
+  // U P D A T E   P R O F I L E .
+  if (rgrpMethod.ItemIndex = 0) then
+  begin
+    cls.UpdateMembers(lbDest.Items);
   end;
 
 end;
@@ -264,10 +251,10 @@ var
   sc: TSimpleConnect;
 begin
   // Hide the Login and abort buttons while attempting connection
-  lblLoginErrMsg.Visible := false;
+  lblMsgLoginErr.Visible := false;
   btnConnect.Visible := true;
-  lblMsg.Visible := true;
-  lblMsg.Update();
+  lblMsgLogin.Visible := true;
+  lblMsgLogin.Update();
   Application.ProcessMessages();
 
   sc := TSimpleConnect.CreateWithConnection(Self, myConnection);
@@ -276,19 +263,19 @@ begin
   sc.SimpleMakeTemporyConnection(edtServer.Text, edtUser.Text, edtPassword.Text,
     chkOsAuthent.Checked);
 
-  lblMsg.Visible := false;
+  lblMsgLogin.Visible := false;
   if (myConnection.Connected) then
   begin
     BuildListBoxSource;
     fTrackState := 2;
     TrackStateUpdate;
     // move to the 'Method' tab-sheet.
-    PageControl1.SelectNextPage(true, true);
+    pageCNTRL.SelectNextPage(true, true);
   end
   else
   begin
     // show error message - let user try again or abort
-    lblLoginErrMsg.Visible := true;
+    lblMsgLoginErr.Visible := true;
     fTrackState := 1;
     TrackStateUpdate;
   end;
@@ -305,6 +292,38 @@ begin
     btnLogin.Enabled := true;
 end;
 
+procedure TImportSCMWizard.actnNextExecute(Sender: TObject);
+begin
+  pageCNTRL.SelectNextPage(true,true);
+end;
+
+procedure TImportSCMWizard.actnNextUpdate(Sender: TObject);
+var
+  Page: TTabSheet;
+begin
+  Page := pageCNTRL.FindNextPage(pageCNTRL.ActivePage, true, true);
+  if (Page <> nil) then
+    TAction(Sender).Enabled := true
+  else
+    TAction(Sender).Enabled := false;
+end;
+
+procedure TImportSCMWizard.actnPrevExecute(Sender: TObject);
+begin
+  pageCNTRL.SelectNextPage(false,true);
+end;
+
+procedure TImportSCMWizard.actnPrevUpdate(Sender: TObject);
+var
+  Page: TTabSheet;
+begin
+  Page := pageCNTRL.FindNextPage(pageCNTRL.ActivePage, false, true);
+  if (Page <> nil) then
+    TAction(Sender).Enabled := true
+  else
+    TAction(Sender).Enabled := false;
+end;
+
 procedure TImportSCMWizard.actnSrcToDestAllExecute(Sender: TObject);
 begin
   lbSrc.SelectAll;
@@ -314,6 +333,11 @@ end;
 procedure TImportSCMWizard.actnSrcToDestSelectedExecute(Sender: TObject);
 begin
   TransferItems(lbSrc, lbDest);
+end;
+
+procedure TImportSCMWizard.btnNextClick(Sender: TObject);
+begin
+  pageCNTRL.SelectNextPage(true,true);
 end;
 
 procedure TImportSCMWizard.BuildListBoxSource;
@@ -409,8 +433,8 @@ var
 
 begin
   // set login visual state
-  lblLoginErrMsg.Visible := false;
-  lblMsg.Visible := false;
+  lblMsgLoginErr.Visible := false;
+  lblMsgLogin.Visible := false;
 
   // assert initial connection state.
   myConnection.Connected := false;
@@ -435,7 +459,7 @@ begin
     chkOsAuthent.Checked := false;
 
   // Select first tab-sheet
-  PageControl1.TabIndex := 0;
+  pageCNTRL.TabIndex := 0;
   // Method UNKNOWN
   rgrpMethod.ItemIndex := -1;
   rgrpOptionsData.ItemIndex := -1;
@@ -496,12 +520,12 @@ begin
   end;
 end;
 
-procedure TImportSCMWizard.PageControl1Change(Sender: TObject);
+procedure TImportSCMWizard.pageCNTRLChange(Sender: TObject);
 begin
 
   // place a call to TrackState ticks
   TrackStateTick;
-
+//  NavButtonState;
   // ------------------------------------------------------
   // TABSHEET - data and UI, checks and updates
   // ------------------------------------------------------
@@ -537,11 +561,11 @@ begin
 
         if (rgrpMethod.ItemIndex = 0) then
           // Update profiles
-          lblSelect.Caption :=
+          lblMsgSelectInfo.Caption :=
             'Select the swimmers to have their profiles updated.'
         else
           // Introduce club memeber
-          lblSelect.Caption :=
+          lblMsgSelectInfo.Caption :=
             'Select the club members to induct into your squad.';
       end;
     4: // TABSHEET OPTIONS
@@ -590,7 +614,7 @@ begin
 
   // place a call to TrackState ticks
   TrackStateTick;
-
+//  NavButtonState;
 end;
 
 procedure TImportSCMWizard.rgrpMethodClick(Sender: TObject);
@@ -601,7 +625,7 @@ begin
     fTrackState := 3;
     TrackStateUpdate;
     // move to the 'Select' tab-sheet.
-    PageControl1.SelectNextPage(true, true);
+    pageCNTRL.SelectNextPage(true, true);
   end;
 end;
 
@@ -610,8 +634,8 @@ var
   pageIndx: integer;
 begin
   pageIndx := TSpeedButton(Sender).Tag;
-  if (PageControl1.TabIndex <> pageIndx) then
-    PageControl1.TabIndex := pageIndx;
+  if (pageCNTRL.TabIndex <> pageIndx) then
+    pageCNTRL.TabIndex := pageIndx;
   if not TSpeedButton(Sender).Down then
     TSpeedButton(Sender).Down := true;
 end;
@@ -653,7 +677,7 @@ end;
 procedure TImportSCMWizard.TrackStateInit;
 begin
   fTrackState := 1;
-  PageControl1.TabIndex := 0;
+  pageCNTRL.TabIndex := 0;
   chkbDoProfile.Checked := false;
   rgrpOptionsData.ItemIndex := -1;
   lbSrc.Clear;
@@ -662,16 +686,63 @@ begin
   TrackStateUpdate;
 end;
 
+procedure TImportSCMWizard.NavButtonState;
+begin
+  case pageCNTRL.TabIndex of
+    0:
+      begin
+        btnPrev.Enabled := false
+      end;
+    1:
+      begin
+        btnPrev.Enabled := true;
+        if Assigned(myConnection) and myConnection.Connected then
+          btnNext.Enabled := true
+        else
+          btnNext.Enabled := false;
+      end;
+    2:
+      begin
+        btnPrev.Enabled := true;
+        if (rgrpMethod.ItemIndex <> -1) then
+          btnNext.Enabled := true
+        else
+          btnNext.Enabled := false;
+      end;
+    3:
+      begin
+        btnPrev.Enabled := true;
+        if (lbDest.Items.Count > 0) then
+          btnNext.Enabled := true
+        else
+          btnNext.Enabled := false;
+      end;
+    4,5:
+      begin
+        btnPrev.Enabled := true;
+        btnNext.Enabled := true;
+      end;
+    6:
+    begin
+        btnPrev.Enabled := true;
+        btnNext.Enabled := false;
+    end;
+  end;
+end;
+
 procedure TImportSCMWizard.TrackStateSync;
 
 begin
   fTrackState := 1;
   if Assigned(myConnection) and myConnection.Connected then
     fTrackState := 2; // Method enabled
-  if (chkbDoProfile.Checked or (rgrpOptionsData.ItemIndex <> -1)) then
+  if (rgrpMethod.ItemIndex <> -1) then
     fTrackState := 3; // Select enabled
   if (lbDest.Items.Count > 0) then
-    fTrackState := 4; // ALL - except Success tab
+    fTrackState := 4; // ALL - tabsheet 'Success'
+
+  // if (chkbDoProfile.Checked or (rgrpOptionsData.ItemIndex <> -1)) then
+
   if fImportDone then
     fTrackState := 5; // ALL
 end;
@@ -725,33 +796,33 @@ begin
     sbtnMethod.SelectedImageName := 'wizImageSelectedTick'
   end
   else
-    begin
+  begin
     sbtnMethod.ImageName := 'wizImage';
     sbtnMethod.SelectedImageName := 'wizImageSelected';
-    end;
+  end;
   // SELECT
   if (fTrackState >= 3) and (lbDest.Items.Count > 0) then
-    begin
+  begin
     sbtnSelect.ImageName := 'wizImageTick';
     sbtnSelect.SelectedImageName := 'wizImageSelectedTick';
-    end
+  end
   else
-    begin
+  begin
     sbtnSelect.ImageName := 'wizImage';
     sbtnSelect.ImageName := 'wizImageSelected';
-    end;
+  end;
   // OPTION
   if (fTrackState >= 3) and
     (chkbDoProfile.Checked or (rgrpOptionsData.ItemIndex <> -1)) then
-    begin
+  begin
     sbtnOptions.ImageName := 'wizImageTick';
     sbtnOptions.SelectedImageName := 'wizImageSelectedTick';
-    end
+  end
   else
-    begin
+  begin
     sbtnOptions.ImageName := 'wizImage';
     sbtnOptions.SelectedImageName := 'wizImageSelected';
-    end;
+  end;
 
 end;
 
@@ -805,13 +876,13 @@ procedure TImportSCMWizard.TrackStateBkgrdTabs;
 begin
   case fTrackState of
     1:
-      vimgTackDisplay.ImageName := 'wizTrackState1';
+      imgTackBkgrd.ImageName := 'wizTrackState1';
     2:
-      vimgTackDisplay.ImageName := 'wizTrackState2';
+      imgTackBkgrd.ImageName := 'wizTrackState2';
     3:
-      vimgTackDisplay.ImageName := 'wizTrackState3';
+      imgTackBkgrd.ImageName := 'wizTrackState3';
     4:
-      vimgTackDisplay.ImageName := 'wizTrackState4';
+      imgTackBkgrd.ImageName := 'wizTrackState4';
   end;
 end;
 
@@ -825,20 +896,6 @@ begin
   TrackStateTick;
   // Tabsheets
   TrackStateTabs;
-end;
-
-{ TscmMember }
-
-constructor TscmMember.Create;
-begin
-  MemberID := 0;
-  FName := '';
-end;
-
-destructor TscmMember.Destroy;
-begin
-
-  inherited;
 end;
 
 end.

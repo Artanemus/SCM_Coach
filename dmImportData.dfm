@@ -1,5 +1,5 @@
 object ImportData: TImportData
-  Height = 480
+  Height = 634
   Width = 640
   object TestSCMConnection: TFDConnection
     Params.Strings = (
@@ -22,7 +22,7 @@ object ImportData: TImportData
       'FROM SCM_Coach.dbo.HR'
       'WHERE [scmMemberID] = @MemberID;')
     Left = 96
-    Top = 104
+    Top = 112
     ParamData = <
       item
         Name = 'MEMBERID'
@@ -54,7 +54,7 @@ object ImportData: TImportData
       ''
       'SELECT @rtn AS rtnValue;')
     Left = 96
-    Top = 184
+    Top = 176
   end
   object tblHR: TFDTable
     IndexFieldNames = 'HRID'
@@ -62,7 +62,7 @@ object ImportData: TImportData
     UpdateOptions.KeyFields = 'HRID'
     TableName = 'SCM_Coach.dbo.HR'
     Left = 376
-    Top = 104
+    Top = 168
   end
   object TestCoachConnection: TFDConnection
     Params.Strings = (
@@ -71,7 +71,7 @@ object ImportData: TImportData
     Connected = True
     LoginPrompt = False
     Left = 376
-    Top = 24
+    Top = 32
   end
   object qryMember: TFDQuery
     Connection = TestSCMConnection
@@ -91,7 +91,7 @@ object ImportData: TImportData
       'WHERE IsSwimmer <> 0'
       '      AND MemberID = @MemberID;')
     Left = 96
-    Top = 272
+    Top = 248
     ParamData = <
       item
         Name = 'MEMBERID'
@@ -99,5 +99,33 @@ object ImportData: TImportData
         ParamType = ptInput
         Value = Null
       end>
+  end
+  object tblContactNum: TFDTable
+    ActiveStoredUsage = [auDesignTime]
+    Connection = TestCoachConnection
+    TableName = 'SCM_Coach.dbo.ContactNum'
+    Left = 376
+    Top = 232
+  end
+  object tblRaceHistory: TFDTable
+    ActiveStoredUsage = [auDesignTime]
+    IndexFieldNames = 'EventTimeID'
+    Connection = TestCoachConnection
+    UpdateOptions.KeyFields = 'EventTimeID'
+    TableName = 'SCM_Coach.dbo.EventTime'
+    Left = 376
+    Top = 296
+  end
+  object qryContactNum: TFDQuery
+    ActiveStoredUsage = [auDesignTime]
+    Connection = TestSCMConnection
+    Left = 96
+    Top = 312
+  end
+  object qryRaceHistory: TFDQuery
+    ActiveStoredUsage = [auDesignTime]
+    Connection = TestSCMConnection
+    Left = 96
+    Top = 384
   end
 end

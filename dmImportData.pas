@@ -18,6 +18,10 @@ type
     tblHR: TFDTable;
     TestCoachConnection: TFDConnection;
     qryMember: TFDQuery;
+    tblContactNum: TFDTable;
+    tblRaceHistory: TFDTable;
+    qryContactNum: TFDQuery;
+    qryRaceHistory: TFDQuery;
   private
     { Private declarations }
     scmConnection: TFDConnection;
@@ -27,16 +31,22 @@ type
     function GetLastIDENT: integer;
     function InsertMember(AscmMemberID: integer;
       DoPB, DoHistory: boolean): boolean;
+    function AddContacts(AscmMemberID: integer): boolean;
     function AddRaceHistory(AscmMemberID: integer;
       DoPBOnly: boolean = false): boolean;
 
     function AssertConnections(): boolean;
+    // STRING LOOKUP AND COMPARE (.HY3)
     function AssertUnique(AscmMemberID: integer): boolean;
+    // IDENTITY LOOKUP
     function AssertDuplicity(AscmMemberID: integer): boolean;
+
     function HasFieldMiddleInitial: boolean;
 
   public
     { Public declarations }
+    function ActivateDB: boolean;
+    function DeActivateDB: boolean;
 
     constructor CreateWithConnection(AOwner: TComponent;
       AscmConnection, AcoachConnection: TFDConnection);
@@ -116,12 +126,44 @@ begin
   end;
 end;
 
+function TImportData.ActivateDB: boolean;
+begin
+  result := false;
+  if Assigned(coachConnection) AND coachConnection.Connected then
+  begin
+    tblHR.Connection := coachConnection;
+    tblHR.Open;
+    if tblHR.Active then
+    begin
+      tblContactNum.Connection := coachConnection;
+      tblContactNum.Open;
+      if tblContactNum.Active then
+      begin
+        tblRaceHistory.Connection := coachConnection;
+        tblRaceHistory.Open;
+        result := true;
+      end;
+    end;
+  end;
+end;
+
+function TImportData.AddContacts(AscmMemberID: integer): boolean;
+begin
+  result := false;
+  if AssertConnections then
+  begin
+    result := true;
+  end;
+end;
+
 function TImportData.AddRaceHistory(AscmMemberID: integer;
   DoPBOnly: boolean): boolean;
 begin
   result := false;
-  if Assigned(scmConnection) AND Assigned(coachConnection) then
+  if AssertConnections then
+  begin
     result := true;
+  end;
 end;
 
 function TImportData.AssertConnections: boolean;
@@ -149,6 +191,7 @@ end;
 
 function TImportData.AssertDuplicity(AscmMemberID: integer): boolean;
 begin
+  // IDENTITY LOOKUP
   result := true;
   if Assigned(coachConnection) AND coachConnection.Connected then
   begin
@@ -166,6 +209,7 @@ end;
 
 function TImportData.AssertUnique(AscmMemberID: integer): boolean;
 begin
+  // STRING LOOKUP AND COMPARE   (.HY3)
   result := true;
 end;
 
@@ -175,6 +219,14 @@ begin
   inherited;
   scmConnection := AscmConnection;
   coachConnection := AcoachConnection;
+end;
+
+function TImportData.DeActivateDB: boolean;
+begin
+  tblHR.Close;
+  tblContactNum.Close;
+  tblRaceHistory.Close;
+  result := true;
 end;
 
 function TImportData.GetLastIDENT: integer;
