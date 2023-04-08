@@ -102,30 +102,56 @@ object ImportData: TImportData
   end
   object tblContactNum: TFDTable
     ActiveStoredUsage = [auDesignTime]
+    IndexFieldNames = 'ContactNumID'
     Connection = TestCoachConnection
+    UpdateOptions.KeyFields = 'ContactNumID'
     TableName = 'SCM_Coach.dbo.ContactNum'
     Left = 376
     Top = 232
   end
   object tblRaceHistory: TFDTable
     ActiveStoredUsage = [auDesignTime]
-    IndexFieldNames = 'EventTimeID'
+    IndexFieldNames = 'RaceHistoryID'
     Connection = TestCoachConnection
-    UpdateOptions.KeyFields = 'EventTimeID'
-    TableName = 'SCM_Coach.dbo.EventTime'
+    UpdateOptions.KeyFields = 'RaceHistoryID'
+    TableName = 'SCM_Coach.dbo.RaceHistory'
     Left = 376
     Top = 296
   end
   object qryContactNum: TFDQuery
     ActiveStoredUsage = [auDesignTime]
     Connection = TestSCMConnection
+    SQL.Strings = (
+      'USE SwimClubMeet;'
+      ''
+      'DECLARE @MemberID AS INTEGER;'
+      ''
+      'SET @MemberID = :MEMBERID;'
+      ''
+      'SELECT * FROM [dbo].[ContactNum] WHERE [MemberID] = @MemberID;')
     Left = 96
     Top = 312
+    ParamData = <
+      item
+        Name = 'MEMBERID'
+        DataType = ftInteger
+        ParamType = ptInput
+        Value = Null
+      end>
   end
   object qryRaceHistory: TFDQuery
     ActiveStoredUsage = [auDesignTime]
     Connection = TestSCMConnection
     Left = 96
     Top = 384
+  end
+  object tblRaceHistorySplit: TFDTable
+    ActiveStoredUsage = [auDesignTime]
+    IndexFieldNames = 'RaceHistorySplitID'
+    Connection = TestCoachConnection
+    UpdateOptions.KeyFields = 'RaceHistorySplitID'
+    TableName = 'SCM_Coach.dbo.RaceHistorySplit'
+    Left = 376
+    Top = 360
   end
 end

@@ -84,7 +84,7 @@ end;
 constructor TImportMember.CreateWithConnection(AOwner: TComponent;
   AscmConnection, AcoachConnection: TFDConnection);
 begin
-  inherited;
+  inherited Create(AOwner);
   scmConnection := AscmConnection;
   coachConnection := AcoachConnection;
   // construct database module.

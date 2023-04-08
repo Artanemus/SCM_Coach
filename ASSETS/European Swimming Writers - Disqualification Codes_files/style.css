@@ -1,0 +1,17 @@
+body {font-family:sans-serif; color: black; background:#FFFFFF;}
+td.t1_left {font-family:sans-serif;font-size:76%; background:#FFFFFF; text-align:left;}
+td.t1_right {font-family:sans-serif;font-size:76%; background:#FFFFFF; text-align:right;}
+td.t1_centre {font-family:sans-serif;font-size:76%; background:#FFFFFF; text-align:center;}
+td.t1_split {font-family:sans-serif;font-size:58%; background:#FFFFFF; text-align:right;}
+td.t2 {font-family:sans-serif;font-size:76%; font-weight:bold; background:#e5e5e5; text-align:center;}
+td.t3,p.t3 {font-family:sans-serif;font-size:14pt; font-weight:bold; text-align:center;}
+td.t4_left {font-family:sans-serif;font-size:76%; background:#e5e5e5; text-align:left;}
+td.t4_right {font-family:sans-serif;font-size:76%; background:#e5e5e5; text-align:right;}
+td.t4_centre {font-family:sans-serif;font-size:76%; background:#e5e5e5; text-align:center;}
+td.t4_split {font-family:sans-serif;font-size:58%; background:#e5e5e5; text-align:right;}
+td.t5_left {font-family:sans-serif;font-size:66%; background:#FFFFFF; text-align:left;}
+td.t5_right {font-family:sans-serif;font-size:66%; background:#FFFFFF; text-align:right;}
+td.t5_centre {font-family:sans-serif;font-size:66%; background:#FFFFFF; text-align:center;}
+td.t6_left {font-family:sans-serif;font-size:66%; background:#e5e5e5; text-align:left;}
+td.t6_right {font-family:sans-serif;font-size:66%; background:#e5e5e5; text-align:right;}
+td.t6_centre {font-family:sans-serif;font-size:66%; background:#e5e5e5; text-align:center;}
