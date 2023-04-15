@@ -28,29 +28,35 @@ type
     scmConnection: TFDConnection;
     coachConnection: TFDConnection;
     fLastIDENT: integer;
+    fCoreTablesActivated: boolean;
 
     function GetLastIDENT: integer;
-    function InsertMember(AscmMemberID: integer;
-      DoPB, DoHistory: boolean): boolean;
     function AddContacts(HRID, AscmMemberID: integer): boolean;
-    function AddRaceHistory(HRID, AscmMemberID: integer;
-  DoPBOnly: boolean): boolean;
-
-    function AssertConnections(): boolean;
-    // STRING LOOKUP AND COMPARE (.HY3)
-    function AssertUnique(AscmMemberID: integer): boolean;
-    // IDENTITY LOOKUP
-    function AssertDuplicity(AscmMemberID: integer): boolean;
-
+    function AddRaceHistory(HRID, AscmMemberID: integer): boolean;
     function HasFieldMiddleInitial: boolean;
 
   public
     { Public declarations }
-    function ActivateDB: boolean;
-    function DeActivateDB: boolean;
-
     constructor CreateWithConnection(AOwner: TComponent;
       AscmConnection, AcoachConnection: TFDConnection);
+    // rtns SCM_Coach HRID
+    function InsertMember(AscmMemberID: integer): integer;
+    // rtns record count
+    function InsertRaceHistory(AscmMemberID, AHRID: integer;
+  DoSplit: boolean): integer;
+
+    // STRING LOOKUP AND COMPARE (for use with .HY3 file type)
+    function AssertUnique(AscmMemberID: integer): boolean;
+    // IDENTITY LOOKUP
+    function AssertDuplicity(AscmMemberID: integer): boolean;
+
+    function ActivateTable: boolean;
+    function DeActivateTable: boolean;
+    function AssertConnections(): boolean;
+
+    // FLAG - true if all core FireDAC tables, queries are active.
+    property CoreTablesActivated: boolean read fCoreTablesActivated;
+
   end;
 
 var
@@ -62,13 +68,12 @@ implementation
 {$R *.dfm}
 { TImportData }
 
-function TImportData.InsertMember(AscmMemberID: integer;
-  DoPB, DoHistory: boolean): boolean;
+function TImportData.InsertMember(AscmMemberID: integer): integer;
 var
   IDENT: integer;
 
 begin
-  result := false;
+  result := 0;
   if AssertConnections then
   begin
     tblHR.Connection := coachConnection;
@@ -81,10 +86,12 @@ begin
 
     if qryMember.Active and tblHR.Active then
     begin
+      { TODO -oBSA -cGeneral : Assert single record? }
       while not qryMember.eof do
       begin
-        // INSERT PROFILE
+        // I N S E R T   P R O F I L E .
         tblHR.Insert;
+
         tblHR.FieldByName('scmMember').AsInteger :=
           qryMember.FieldByName('MemberID').AsInteger;
         tblHR.FieldByName('LastName').AsInteger :=
@@ -98,38 +105,59 @@ begin
           .AsDateTime;
         tblHR.FieldByName('RegisterStr').AsString :=
           qryMember.FieldByName('MembershipStr').AsString;
+        // INIT BIT FIELDS
+        tblHR.FieldByName('IsActive').AsBoolean := true;
+        tblHR.FieldByName('IsArchived').AsBoolean := true;
+        // TIMESTAMP
+        tblHR.FieldByName('CreatedOn').AsDateTime := Now;
+
         tblHR.Post;
 
-        IDENT := GetLastIDENT;
+        IDENT := GetLastIDENT; // ID of last SCM_Coach HR
         if (IDENT <> 0) then
-        begin
-          if DoPB and not DoHistory then
-          begin
-            // INSERT PERSONAL BEST
-            // only insert the personal best for each stroke swum
-            // call InsertPB(ident, scmMemberID)
-            ;
-          end;
-          if DoHistory then
-          begin
-            // INSERT RACE HISTORY
-            // insert all racing history ... this will include PBs
-            // call InsertHistory(ident, scmMemberID)
-            ;
-          end;
-        end;
-
-        qryMember.Next;
+          result := IDENT;
       end;
     end;
     qryMember.Close;
-    result := true;
+    tblHR.Close;
   end;
 end;
 
-function TImportData.ActivateDB: boolean;
+function TImportData.InsertRaceHistory(AscmMemberID, AHRID: integer;
+  DoSplit: boolean): integer;
 begin
-  result := false;
+  { insert the SwimClubMeet member's race history into
+    the SCM_coach RaceHistory table. }
+  result := 0; // records inserted
+  // Pull race history from SwimClubMeet
+  qryRaceHistory.Connection := scmConnection;
+  qryRaceHistory.ParamByName('MEMBERID').AsInteger := AscmMemberID;
+  qryRaceHistory.Prepare;
+  qryRaceHistory.Open;
+
+  // insert into RaceHistory
+  tblRaceHistory.Connection := coachConnection;
+  tblRaceHistory.Open;
+
+  if qryRaceHistory.Active and tblRaceHistory.Active then
+  begin
+    while not qryRaceHistory.eof do
+    begin
+      // test for duplicity ... (using EntrantID)
+      // LOOKUP RACEHISTORY.ENTRANTID
+
+      // INSERT
+    end;
+  end;
+
+  qryRaceHistory.Close;
+  tblRaceHistory.Close;
+
+end;
+
+function TImportData.ActivateTable: boolean;
+begin
+  fCoreTablesActivated := false;
   if Assigned(coachConnection) AND coachConnection.Connected then
   begin
     tblHR.Connection := coachConnection;
@@ -142,10 +170,12 @@ begin
       begin
         tblRaceHistory.Connection := coachConnection;
         tblRaceHistory.Open;
-        result := true;
+        fCoreTablesActivated := true;
       end;
     end;
   end;
+  result := fCoreTablesActivated;
+
 end;
 
 function TImportData.AddContacts(HRID, AscmMemberID: integer): boolean;
@@ -182,7 +212,7 @@ begin
           tblContactNum.FieldByName('CreatedOn').AsDateTime := Now;
 
         // ContactNumType ID's common across databases
-        {TODO -oBSA -cGeneral : Test ContactNumTypeID bounds?}
+        { TODO -oBSA -cGeneral : Test ContactNumTypeID bounds? }
         tblContactNum.FieldByName('ContactNumTypeID').AsInteger :=
           qryContactNum.FieldByName('ContactNumTypeID').AsInteger;
 
@@ -195,12 +225,11 @@ begin
   end;
 end;
 
-function TImportData.AddRaceHistory(HRID, AscmMemberID: integer;
-  DoPBOnly: boolean): boolean;
+function TImportData.AddRaceHistory(HRID, AscmMemberID: integer): boolean;
 var
   fld: TField;
   IDENT: integer;
-    SQL: string;
+  SQL: string;
 begin
   result := false;
   if AssertConnections then
@@ -216,31 +245,35 @@ begin
         tblRaceHistory.Insert;
         // INDENTIFIER HRID
         tblRaceHistory.FieldByName('HRID').AsInteger := HRID;
-        // Caption: ClubName ...
-        tblRaceHistory.FieldByName('Caption').AsString;
-        // Caption: PoolName ... weather condition, temperature, ???
-        tblRaceHistory.FieldByName('LongCaption').AsString;
 
-        tblRaceHistory.FieldByName('RaceTime').AsDateTime;
-        tblRaceHistory.FieldByName('CreatedOn').AsDateTime;
+        {
+          // Caption: ClubName ...
+          tblRaceHistory.FieldByName('Caption').AsString;
+          // Caption: PoolName ... weather condition, temperature, ???
+          tblRaceHistory.FieldByName('LongCaption').AsString;
 
-        // distance and stroke ID's common across databases
-        tblRaceHistory.FieldByName('DistanceID').AsInteger;
-        tblRaceHistory.FieldByName('StrokeID').AsInteger;
-        // club night, clubs bash, carnival, regional meet, state meet, etc...
-        tblRaceHistory.FieldByName('RaceHistoryTypeID').AsInteger;
+          tblRaceHistory.FieldByName('RaceTime').AsDateTime;
+          tblRaceHistory.FieldByName('CreatedOn').AsDateTime;
+
+          // distance and stroke ID's common across databases
+          tblRaceHistory.FieldByName('DistanceID').AsInteger;
+          tblRaceHistory.FieldByName('StrokeID').AsInteger;
+          // club night, clubs bash, carnival, regional meet, state meet, etc...
+          tblRaceHistory.FieldByName('RaceHistoryTypeID').AsInteger;
+        }
 
         tblRaceHistory.Post;
 
         // -------------------------------------------------------
-        // SPLIT TIMES ....
+        // S P L I T   T I M E S  ....
+        // -------------------------------------------------------
         SQL := 'USE SCM_Coach; SELECT IDENT_CURRENT(''[SCM_Coach].[dbo].[RaceHistory]'');';
         IDENT := coachConnection.ExecSQLScalar(SQL);
-        {TODO -oBSA -cGeneral : Add split time to RaceHistory}
+        { TODO -oBSA -cGeneral : Add split time to RaceHistory }
 
         qryContactNum.Next;
       end;
-        result := true;
+      result := true;
     end;
   end;
 end;
@@ -299,7 +332,7 @@ begin
   coachConnection := AcoachConnection;
 end;
 
-function TImportData.DeActivateDB: boolean;
+function TImportData.DeActivateTable: boolean;
 begin
   tblHR.Close;
   tblContactNum.Close;

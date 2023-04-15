@@ -12,9 +12,13 @@ type
     rgrpSelectImport: TRadioGroup;
     btnCancel: TButton;
     btnOk: TButton;
+    rbtnSCMServer: TRadioButton;
+    rbtnSCMFile: TRadioButton;
+    rbtnHyTek: TRadioButton;
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure btnCancelClick(Sender: TObject);
     procedure btnOkClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
     fRtnValue: integer;
@@ -37,11 +41,36 @@ end;
 
 procedure TImportSelect.btnOkClick(Sender: TObject);
 begin
-    fRtnValue := rgrpSelectImport.ItemIndex;
-  if rgrpSelectImport.ItemIndex >= 0 then
+  // Note: individual TRadioButtons used ... gives access to 'Enabled'
+  fRtnValue := -1;
+  if rbtnSCMServer.Checked then
+  begin
+    fRtnValue := rbtnSCMServer.Tag;
     ModalResult := mrOk
+  end
+  {TODO -oBSA -cGeneral : Import SCM filetype '.scm'}
+  else if rbtnSCMFile.Checked then
+  begin
+    fRtnValue := rbtnSCMFile.Tag;
+    ModalResult := mrOk
+  end
+  {TODO -oBSA -cGeneral : Import HyTek filetype '.hy3'}
+  else if rbtnHyTek.Checked then
+  begin
+    fRtnValue := rbtnHyTek.Tag;
+    ModalResult := mrOk
+  end
   else
     ModalResult := mrCancel;
+end;
+
+procedure TImportSelect.FormCreate(Sender: TObject);
+begin
+  // INIT
+  fRtnValue := -1;
+  rbtnSCMServer.Checked := false;
+  rbtnSCMFile.Checked := false;
+  rbtnHyTek.Checked := false;
 end;
 
 procedure TImportSelect.FormKeyDown(Sender: TObject; var Key: Word;

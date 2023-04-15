@@ -10,7 +10,7 @@ uses
   Vcl.ToolWin, Vcl.ActnCtrls, Vcl.ActnMenus, System.ImageList, Vcl.ImgList,
   Vcl.VirtualImageList, Vcl.BaseImageCollection, Vcl.ImageCollection,
   Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.WinXCtrls, Vcl.VirtualImage,
-  dmSCM, dlgBootProgress, vcl.Themes;
+  dmCoach, dlgBootProgress, vcl.Themes;
 
 type
   TMain = class(TForm)
@@ -82,6 +82,7 @@ type
     Edit_Contacts: TAction;
     Tools_Inventory: TAction;
     Help_WebHelp: TAction;
+    Tools_DisqualificationCodes: TAction;
     procedure FormCreate(Sender: TObject);
     procedure btnNewSessionClick(Sender: TObject);
     procedure Edit_SwimmersUpdate(Sender: TObject);
@@ -125,13 +126,9 @@ uses frmSessionNew, dlgBasicLogin, SCMUtility, IniFiles, frmManageSwimmers
 function TMain.AssertConnection: boolean;
 begin
   result := false;
-  // test datamodule construction
-  if Assigned(SCM) then
-  begin
-    // IsActive if TFDConnection::scmConnection && FireDAC tables are active
-//    if SCM.SCMActive then
-      result := true;
-  end;
+  if Assigned(COACH) and COACH.coachConnection.Connected and COACH.CoreTablesActivated
+  then
+    result := true;
 end;
 
 procedure TMain.btnNewSessionClick(Sender: TObject);
@@ -157,7 +154,7 @@ var
   DoEnable: boolean;
 begin
   DoEnable := false;
-  // MSSQL scmCoach connected?
+  // MSSQL scmCoach connected and tables have been activated?
   if AssertConnection then
       DoEnable := true;
   TAction(Sender).Enabled := DoEnable;
@@ -175,9 +172,13 @@ begin
       0:
         begin
           dlgB := TImportSCMWizard.Create(Self);
+          // NOTE: requires COACH connection.
           dlgB.ShowModal;
           dlgB.Free;
         end;
+      1,2:
+        {TODO -oBSA -cGeneral : Procedures for import '.scm', '.hy3' to be written}
+        ;
     end;
   end;
   dlgA.Free;
@@ -188,7 +189,7 @@ var
   DoEnable: boolean;
 begin
   DoEnable := false;
-  // MSSQL scmCoach connected?
+  // MSSQL scmCoach connected and core tables activated?
   if AssertConnection then
       DoEnable := true;
   TAction(Sender).Enabled := DoEnable;
@@ -204,11 +205,11 @@ var
 begin
 
   try
-    SCM := TSCM.Create(self);
+    COACH := TCOACH.Create(self);
   finally
     // with SCM created and the essential tables are open then
     // asserting the connection should be true
-    if not Assigned(SCM) then
+    if not Assigned(COACH) then
     begin
       MessageDlg('The SCM connection couldn''t be created!', mtError,
         [mbOK], 0);
@@ -216,7 +217,7 @@ begin
     end;
   end;
 
-  if not Assigned(SCM) then
+  if not Assigned(COACH) then
     exit;
 
   // -----------------------------------------------------------
@@ -225,17 +226,17 @@ begin
   // -----------------------------------------------------------
   aBasicLogin := TBasicLogin.Create(self);
   aBasicLogin.DBName := 'SCM_Coach';
-  aBasicLogin.DBConnection := SCM.scmConnection;
+  aBasicLogin.DBConnection := COACH.coachConnection;
   result := aBasicLogin.ShowModal;
   aBasicLogin.Free;
 
   // user has aborted .
   if (result = mrAbort) or (result = mrCancel) then
   begin
-    if (SCM.scmConnection.Connected) then
-      SCM.scmConnection.Close;
-    SCM.Free;
-    SCM := nil;
+    if (COACH.coachConnection.Connected) then
+      COACH.coachConnection.Close;
+    COACH.Free;
+    COACH := nil;
     Application.Terminate;
     exit;
   end;
@@ -248,11 +249,11 @@ begin
   bootprogress.lblProgress.Repaint;
   Application.ProcessMessages;
 
-  // scmConnectionAfterConnect calls ActivateTables
-   SCM.ActivateTable;
+  // Activate COACH Tables
+  COACH.ActivateTable;
 
   // then test 'IsActive
-  if not SCM.SCMActive then
+  if not COACH.CoreTablesActivated then
   begin
     MessageDlg('An error occurred during MSSQL table activation.' + sLineBreak +
       'The application will terminate!', mtError, [mbOK], 0);
@@ -375,11 +376,11 @@ begin
   end;
 
   // KILL DATA MODULE
-  if Assigned(SCM) then
+  if Assigned(COACH) then
   begin
-    if SCM.scmConnection.Connected then
-      SCM.scmConnection.Close;
-    SCM.Free;
+    if COACH.coachConnection.Connected then
+      COACH.coachConnection.Close;
+    COACH.Free;
   end;
 end;
 

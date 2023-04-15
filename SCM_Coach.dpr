@@ -20,11 +20,9 @@ uses
   rptMembersDetail in 'MEMBERS\rptMembersDetail.pas' {MembersDetail: TDataModule},
   rptMembersList in 'MEMBERS\rptMembersList.pas' {MembersList: TDataModule},
   rptMembersSummary in 'MEMBERS\rptMembersSummary.pas' {MembersSummary: TDataModule},
-  dmSCM in 'dmSCM.pas' {SCM: TDataModule},
+  dmCoach in 'dmCoach.pas' {COACH: TDataModule},
   dlgBootProgress in 'dlgBootProgress.pas' {BootProgress},
   dlgDOBPicker in 'dlgDOBPicker.pas' {DOBPicker},
-  dlgImportSCMWizard in 'dlgImportSCMWizard.pas' {ImportSCMWizard},
-  dlgImportSelect in 'dlgImportSelect.pas' {ImportSelect},
   exeinfo in '..\SCM_SHARED\exeinfo.pas',
   SCMSimpleConnect in '..\SCM_SHARED\SCMSimpleConnect.pas',
   dlgBasicLogin in '..\SCM_SHARED\dlgBasicLogin.pas' {BasicLogin},
@@ -32,8 +30,11 @@ uses
   SCMUtility in '..\SCM_SHARED\SCMUtility.pas',
   Vcl.PlatformVclStylesActnCtrls in '..\SCM_SHARED\Vcl.PlatformVclStylesActnCtrls.pas',
   dlgAbout in '..\SCM_SHARED\dlgAbout.pas' {About},
-  clsImportSCM in 'clsImportSCM.pas',
-  dmImportData in 'dmImportData.pas' {ImportData: TDataModule};
+  clsImportSCM in 'IMPORT\clsImportSCM.pas',
+  dlgImportSCMWizard in 'IMPORT\dlgImportSCMWizard.pas' {ImportSCMWizard},
+  dlgImportSelect in 'IMPORT\dlgImportSelect.pas' {ImportSelect},
+  dmImportData in 'IMPORT\dmImportData.pas' {ImportData: TDataModule},
+  SCMMemberObj in '..\SCM_SHARED\SCMMemberObj.pas';
 
 {$R *.res}
 

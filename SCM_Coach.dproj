@@ -167,8 +167,8 @@
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="dmSCM.pas">
-            <Form>SCM</Form>
+        <DCCReference Include="dmCoach.pas">
+            <Form>COACH</Form>
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
@@ -178,14 +178,6 @@
         </DCCReference>
         <DCCReference Include="dlgDOBPicker.pas">
             <Form>DOBPicker</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="dlgImportSCMWizard.pas">
-            <Form>ImportSCMWizard</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="dlgImportSelect.pas">
-            <Form>ImportSelect</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\SCM_SHARED\exeinfo.pas"/>
@@ -201,12 +193,21 @@
             <Form>About</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="clsImportSCM.pas"/>
-        <DCCReference Include="dmImportData.pas">
+        <DCCReference Include="IMPORT\clsImportSCM.pas"/>
+        <DCCReference Include="IMPORT\dlgImportSCMWizard.pas">
+            <Form>ImportSCMWizard</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="IMPORT\dlgImportSelect.pas">
+            <Form>ImportSelect</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="IMPORT\dmImportData.pas">
             <Form>ImportData</Form>
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
+        <DCCReference Include="..\SCM_SHARED\SCMMemberObj.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

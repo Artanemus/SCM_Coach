@@ -11,15 +11,15 @@ uses
   Data.DB, FireDAC.Comp.Client, FireDAC.Phys.MSSQL, FireDAC.Phys.MSSQLDef,
   Vcl.StdCtrls, Vcl.VirtualImage, Vcl.BaseImageCollection, Vcl.ImageCollection,
   Vcl.ComCtrls, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
-  FireDAC.DApt, FireDAC.Comp.DataSet, dmSCM, System.ImageList, Vcl.ImgList,
+  FireDAC.DApt, FireDAC.Comp.DataSet, dmCOACH, System.ImageList, Vcl.ImgList,
   Vcl.VirtualImageList, Vcl.WinXCtrls, Vcl.ExtCtrls, System.Actions,
   Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
-  System.Contnrs, Vcl.Buttons, clsImportSCM;
+  System.Contnrs, Vcl.Buttons, clsImportSCM, SCMMemberObj;
 
 type
 
   TImportSCMWizard = class(TForm)
-    myConnection: TFDConnection;
+    wizSCMConnection: TFDConnection;
     UICollection: TImageCollection;
     qrySCMSwimmer: TFDQuery;
     qrySCMSwimmerFNAME: TWideStringField;
@@ -88,7 +88,6 @@ type
     btnGo: TButton;
     lblGo: TLabel;
     actnGo: TAction;
-    rgrpOptionsData: TRadioGroup;
     imgStartBanner: TVirtualImage;
     sbtnMethod: TSpeedButton;
     sbtnLogin: TSpeedButton;
@@ -100,6 +99,7 @@ type
     WizardCollection: TImageCollection;
     WizardImageList: TVirtualImageList;
     lblLoginDBver: TLabel;
+    chkbDoRaceHistory: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure ListBoxSrcDragOver(Sender, Source: TObject; X, Y: integer;
       State: TDragState; var Accept: Boolean);
@@ -128,25 +128,23 @@ type
     procedure actnNextExecute(Sender: TObject);
     procedure actnPrevUpdate(Sender: TObject);
     procedure actnPrevExecute(Sender: TObject);
+
   private
     { Private declarations }
-
     scmMemberList: TObjectList;
     fTrackState: integer;
     fLastMethodState: integer;
-
-  var
     fImportDone: Boolean;
 
+    function AssertAllConnections: Boolean;
     function MemberIsAssigned(obj: TObject; lbox: TListBox): Boolean;
     procedure BuildListBoxSource();
     procedure TransferItems(SrcListBox, DestListBox: TObject);
 
-    // improves UI declared but never used (DNY).
-    procedure NavButtonState; //DNY
+    procedure NavButtonState; // improves UI declared but never used (DNY).
 
     // WIZARD TRACK BAR
-    procedure TrackStateSync; //DNY
+    procedure TrackStateSync; // DNY
     procedure TrackStateInit;
     procedure TrackStateUpdate;
     procedure TrackStateBkgrdTabs;
@@ -157,6 +155,7 @@ type
 
   public
     { Public declarations }
+
   end;
 
 var
@@ -173,13 +172,13 @@ uses (*
 // DON'T CALL HERE IF SCM NOT ISACTIVE
 procedure TImportSCMWizard.actnDisconnectExecute(Sender: TObject);
 begin
-  myConnection.Close;
+  wizSCMConnection.Close;
   TrackStateInit;
 end;
 
 procedure TImportSCMWizard.actnDisconnectUpdate(Sender: TObject);
 begin
-  if (Assigned(myConnection) and myConnection.Connected) then
+  if (Assigned(wizSCMConnection) and wizSCMConnection.Connected) then
     btnDisconnect.Enabled := true
   else
     btnDisconnect.Enabled := false;
@@ -208,26 +207,32 @@ begin
   // ---------------------------------------------------------------
   // I M P O R T .
   // ---------------------------------------------------------------
-  // construct import class ...
-  cls := TImportMember.CreateWithConnection(Self, myConnection, SCM.scmConnection);
+  // Note: Connections and import state asserted in TAction.Update.
+  // To remove clutter from the wizards dialogue and improve code readability
+  // a SCM import class is constructed ...
+  cls := TImportMember.CreateWithConnections(Self, wizSCMConnection,
+    COACH.coachConnection);
 
-  // I N T R O D U C E .
+  // I N T R O D U C E  N E W   M E M B E R (S)  T O   S QU A D .
   if (rgrpMethod.ItemIndex = 1) then
   begin
-    cls.CreateMembers(lbDest.Items);
+    cls.InsertMember(lbDest.Items, chkbDoRaceHistory.Checked);
   end;
-  // U P D A T E   P R O F I L E .
+  // U P D A T E   P R O F I L E A N D   R A C E   H I S T O R Y .
   if (rgrpMethod.ItemIndex = 0) then
   begin
     cls.UpdateMembers(lbDest.Items);
   end;
 
+  cls.Free;
+
 end;
 
 procedure TImportSCMWizard.actnGoUpdate(Sender: TObject);
 begin
-  if (rgrpMethod.ItemIndex <> -1) and (lbDest.Items.Count > 0) and
-    (chkbDoProfile.Checked or (rgrpOptionsData.ItemIndex <> -1)) then
+  if AssertAllConnections and (rgrpMethod.ItemIndex <> -1) and
+    (lbDest.Items.Count > 0) and
+    (chkbDoProfile.Checked or chkbDoRaceHistory.Checked) then
   begin
     if not TAction(Sender).Enabled then
     begin
@@ -257,14 +262,14 @@ begin
   lblMsgLogin.Update();
   Application.ProcessMessages();
 
-  sc := TSimpleConnect.CreateWithConnection(Self, myConnection);
-  // default : SwimClubMeet : change to connect to other databases.
+  sc := TSimpleConnect.CreateWithConnection(Self, wizSCMConnection);
+  // OMITTED - The default database used by TSimpleConnect is SwimClubMeet.
   // sc.DatabaseName := 'SwimClubMeet';
   sc.SimpleMakeTemporyConnection(edtServer.Text, edtUser.Text, edtPassword.Text,
     chkOsAuthent.Checked);
 
   lblMsgLogin.Visible := false;
-  if (myConnection.Connected) then
+  if (wizSCMConnection.Connected) then
   begin
     BuildListBoxSource;
     fTrackState := 2;
@@ -286,7 +291,7 @@ end;
 
 procedure TImportSCMWizard.actnLoginUpdate(Sender: TObject);
 begin
-  if (Assigned(myConnection) and myConnection.Connected) then
+  if (Assigned(wizSCMConnection) and wizSCMConnection.Connected) then
     btnLogin.Enabled := false
   else
     btnLogin.Enabled := true;
@@ -294,7 +299,7 @@ end;
 
 procedure TImportSCMWizard.actnNextExecute(Sender: TObject);
 begin
-  pageCNTRL.SelectNextPage(true,true);
+  pageCNTRL.SelectNextPage(true, true);
 end;
 
 procedure TImportSCMWizard.actnNextUpdate(Sender: TObject);
@@ -310,7 +315,7 @@ end;
 
 procedure TImportSCMWizard.actnPrevExecute(Sender: TObject);
 begin
-  pageCNTRL.SelectNextPage(false,true);
+  pageCNTRL.SelectNextPage(false, true);
 end;
 
 procedure TImportSCMWizard.actnPrevUpdate(Sender: TObject);
@@ -335,16 +340,24 @@ begin
   TransferItems(lbSrc, lbDest);
 end;
 
+function TImportSCMWizard.AssertAllConnections: Boolean;
+begin
+  result := false;
+  if Assigned(COACH) and COACH.coachConnection.Connected and Assigned(wizSCMConnection)
+    and wizSCMConnection.Connected then
+    result := true;
+end;
+
 procedure TImportSCMWizard.btnNextClick(Sender: TObject);
 begin
-  pageCNTRL.SelectNextPage(true,true);
+  pageCNTRL.SelectNextPage(true, true);
 end;
 
 procedure TImportSCMWizard.BuildListBoxSource;
 var
   Count: integer;
   s: string;
-  obj: TscmMember;
+  obj: TscmMemberObj;
   j: integer;
 
 begin
@@ -354,7 +367,7 @@ begin
   scmMemberList.Clear;
 
   // Gather ALL swimmers in SwimClubMeet
-  if myConnection.Connected then
+  if wizSCMConnection.Connected then
   begin
     // -------------------------------------------------------------------
     // Method  : INTRODUCE
@@ -363,22 +376,22 @@ begin
     // -------------------------------------------------------------------
     if (rgrpMethod.ItemIndex = 1) then
     begin
-      qrySCMSwimmer.Connection := myConnection;
+      qrySCMSwimmer.Connection := wizSCMConnection;
       qrySCMSwimmer.Open;
       if qrySCMSwimmer.Active then
       Begin
         while not qrySCMSwimmer.eof do
         begin
-          Count := SCM.scmConnection.ExecSQLScalar
+          Count := COACH.coachConnection.ExecSQLScalar
             ('SELECT COUNT(SCMMemberID) FROM HR WHERE HR.SCMMemberID = :ID',
             [qrySCMSwimmer.FieldByName('MemberID').AsInteger]);
 
           if ((Count = 0) and (rgrpMethod.ItemIndex = 1)) OR
             ((Count > 0) and (rgrpMethod.ItemIndex = 0)) then
           begin
-            obj := TscmMember.Create;
-            obj.MemberID := qrySCMSwimmer.FieldByName('MemberID').AsInteger;
-            obj.FName := qrySCMSwimmer.FieldByName('FName').AsString;
+            obj := TscmMemberObj.Create;
+            obj.ID := qrySCMSwimmer.FieldByName('MemberID').AsInteger;
+            obj.Name := qrySCMSwimmer.FieldByName('FName').AsString;
             j := scmMemberList.Add(obj);
             s := qrySCMSwimmer.FieldByName('FName').AsString;
             lbSrc.Items.AddObject(s, scmMemberList.Items[j]);
@@ -403,18 +416,18 @@ end;
 procedure TImportSCMWizard.edtSearchChange(Sender: TObject);
 var
   i: integer;
-  obj: TscmMember;
+  obj: TscmMemberObj;
   s: string;
 begin
   // Rebuild SOURCE LISTBOX using the objectlist.
   lbSrc.Clear;
   for i := 0 to scmMemberList.Count - 1 do
   begin
-    obj := (scmMemberList.Items[i] as TscmMember);
+    obj := (scmMemberList.Items[i] as TscmMemberObj);
     // Already assigned to right-listbox.
     if MemberIsAssigned(obj, lbDest) then
       continue;
-    s := obj.FName;
+    s := obj.Name;
     // DO ALL
     if (length(edtSearch.Text) = 0) then
       lbSrc.Items.AddObject(s, obj)
@@ -437,7 +450,7 @@ begin
   lblMsgLogin.Visible := false;
 
   // assert initial connection state.
-  myConnection.Connected := false;
+  wizSCMConnection.Connected := false;
 
   // CREATE list of members from SwimClubMeet
   scmMemberList := TObjectList.Create(true);
@@ -462,7 +475,8 @@ begin
   pageCNTRL.TabIndex := 0;
   // Method UNKNOWN
   rgrpMethod.ItemIndex := -1;
-  rgrpOptionsData.ItemIndex := -1;
+  chkbDoProfile.Checked := true;
+  chkbDoRaceHistory.Checked := true;
   fLastMethodState := -1;
   // TrackState WELCOME
   fTrackState := 0;
@@ -525,7 +539,7 @@ begin
 
   // place a call to TrackState ticks
   TrackStateTick;
-//  NavButtonState;
+  // NavButtonState;
   // ------------------------------------------------------
   // TABSHEET - data and UI, checks and updates
   // ------------------------------------------------------
@@ -580,10 +594,8 @@ begin
           // Description
           lblOptionProfileInfo.Caption :=
             'Enable this option to have your swimmer''s profiles updated.';
-          // Option Select Data to UPDATE
-          rgrpOptionsData.Items.Strings[0] :=
-            'Update Personal Best (PB) race-data,';
-          rgrpOptionsData.Items.Strings[1] := 'Update swimming history.';
+          // Option race-history
+          chkbDoRaceHistory.Caption := 'Update swimming history.';
         end
         else
         begin
@@ -594,10 +606,8 @@ begin
           // Description
           lblOptionProfileInfo.Caption :=
             'This option is always checked when introducing new SCM swimmers to your squad.';
-          // Option Select Data to IMPORT
-          rgrpOptionsData.Items.Strings[0] :=
-            'Import Personal Best (PB) race-data,';
-          rgrpOptionsData.Items.Strings[1] := 'Import ALL swimming history.';
+          // Option race-history
+          chkbDoRaceHistory.Caption := 'Import swimming history.';
         end;
       end;
     5: // TABSHEET GO
@@ -614,7 +624,7 @@ begin
 
   // place a call to TrackState ticks
   TrackStateTick;
-//  NavButtonState;
+  // NavButtonState;
 end;
 
 procedure TImportSCMWizard.rgrpMethodClick(Sender: TObject);
@@ -662,7 +672,7 @@ end;
 
 procedure TImportSCMWizard.TrackStateConnected;
 begin
-  if Assigned(myConnection) and myConnection.Connected then
+  if Assigned(wizSCMConnection) and wizSCMConnection.Connected then
   begin
     if (sbtnLogin.ImageName <> 'wizImageTick') then
       sbtnLogin.ImageName := 'wizImageTick';
@@ -679,7 +689,7 @@ begin
   fTrackState := 1;
   pageCNTRL.TabIndex := 0;
   chkbDoProfile.Checked := false;
-  rgrpOptionsData.ItemIndex := -1;
+  chkbDoRaceHistory.Checked := false;
   lbSrc.Clear;
   lbDest.Clear;
   scmMemberList.Clear;
@@ -696,7 +706,7 @@ begin
     1:
       begin
         btnPrev.Enabled := true;
-        if Assigned(myConnection) and myConnection.Connected then
+        if Assigned(wizSCMConnection) and wizSCMConnection.Connected then
           btnNext.Enabled := true
         else
           btnNext.Enabled := false;
@@ -717,16 +727,16 @@ begin
         else
           btnNext.Enabled := false;
       end;
-    4,5:
+    4, 5:
       begin
         btnPrev.Enabled := true;
         btnNext.Enabled := true;
       end;
     6:
-    begin
+      begin
         btnPrev.Enabled := true;
         btnNext.Enabled := false;
-    end;
+      end;
   end;
 end;
 
@@ -734,7 +744,7 @@ procedure TImportSCMWizard.TrackStateSync;
 
 begin
   fTrackState := 1;
-  if Assigned(myConnection) and myConnection.Connected then
+  if Assigned(wizSCMConnection) and wizSCMConnection.Connected then
     fTrackState := 2; // Method enabled
   if (rgrpMethod.ItemIndex <> -1) then
     fTrackState := 3; // Select enabled
@@ -812,8 +822,8 @@ begin
     sbtnSelect.ImageName := 'wizImageSelected';
   end;
   // OPTION
-  if (fTrackState >= 3) and
-    (chkbDoProfile.Checked or (rgrpOptionsData.ItemIndex <> -1)) then
+  if (fTrackState >= 3) and (chkbDoProfile.Checked or chkbDoRaceHistory.Checked)
+  then
   begin
     sbtnOptions.ImageName := 'wizImageTick';
     sbtnOptions.SelectedImageName := 'wizImageSelectedTick';

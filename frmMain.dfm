@@ -563,6 +563,9 @@ object Main: TMain
               item
                 Action = Tools_Inventory
                 Caption = '&Equipment Inventory...'
+              end
+              item
+                Action = Tools_DisqualificationCodes
               end>
             Caption = '&Tools'
             ImageIndex = 0
@@ -756,6 +759,11 @@ object Main: TMain
     object Help_WebHelp: TAction
       Category = 'Help'
       Caption = 'Web Coach Wiki...'
+    end
+    object Tools_DisqualificationCodes: TAction
+      Category = 'Tools'
+      Caption = 'Disqualification Codes...'
+      Enabled = False
     end
   end
   object ImageCollectionCoach: TImageCollection

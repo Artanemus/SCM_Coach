@@ -81,31 +81,30 @@ type
     procedure qryMemberAfterDelete(DataSet: TDataSet);
   private
     { Private declarations }
-    fManageMemberDataActive: boolean;
+    fCoreTablesActivated: boolean;
     fRecordCount: Integer;
-    FConnection: TFDConnection;
+    FcoachConnection: TFDConnection;
     procedure UpdateMembersPersonalBest;
 
   public
     { Public declarations }
     constructor CreateWithConnection(AOwner: TComponent;
-      AConnection: TFDConnection);
+      AscmConnection: TFDConnection);
     procedure ActivateTable();
     procedure UpdateDOB(DOB: TDateTime);
     procedure UpdateMember(SwimClubID: Integer;
       hideArchived, hideInactive, hideNonSwimmer: boolean);
     procedure FixNullBooleans();
     function LocateMember(MemberID: Integer): boolean;
-    property ManageMemberDataActive: boolean read fManageMemberDataActive
-      write fManageMemberDataActive;
+
+    // FLAG - true if all core FireDAC tables, queries are active.
+    property CoreTablesActivated: boolean read fCoreTablesActivated;
     property RecordCount: Integer read fRecordCount;
-    property Connection: TFDConnection read FConnection write FConnection;
 
   end;
 
 const
-  SCMMEMBERPREF = 'SCM_MemberPref.ini';
-  USEDSHAREDINIFILE = True; // NOTE: Always true. 26/09/2022
+  COACHMEMBERPREF = 'COACH_MemberPref.ini';
 
 var
   ManageMemberData: TManageMemberData;
@@ -117,61 +116,61 @@ implementation
 
 uses
   System.IOUtils, IniFiles, SCMUtility, SCMDefines, Winapi.Windows,
-  Winapi.Messages, vcl.Dialogs, System.UITypes, Vcl.Forms;
+  Winapi.Messages, vcl.Dialogs, System.UITypes, vcl.Forms;
 
 procedure TManageMemberData.ActivateTable;
 begin
-  fManageMemberDataActive := false;
-  if Assigned(FConnection) and FConnection.Connected then
+  fCoreTablesActivated := false;
+  if Assigned(FcoachConnection) and FcoachConnection.Connected then
   begin
-    qryMember.Connection := FConnection;
-    qryContactNum.Connection := FConnection;
-    qryMemberPB.Connection :=FConnection;
+    qryMember.Connection := FcoachConnection;
+    qryContactNum.Connection := FcoachConnection;
+    qryMemberPB.Connection := FcoachConnection;
     // prepare lookup tables.
-    tblStroke.Connection := FConnection;
-    tblDistance.Connection := FConnection;
-//    tblMemberType.Connection := FConnection;
-    tblGender.Connection := FConnection;
-    tblContactNumType.Connection := FConnection;
-      // Lookup tables used by member
-      tblStroke.Open;
-      tblDistance.Open;
-//      tblMemberType.Open;
-      tblGender.Open;
-      qryMember.Open;
-      if qryMember.Active then
+    tblStroke.Connection := FcoachConnection;
+    tblDistance.Connection := FcoachConnection;
+    // tblMemberType.Connection := FConnection;
+    tblGender.Connection := FcoachConnection;
+    tblContactNumType.Connection := FcoachConnection;
+    // Lookup tables used by member
+    tblStroke.Open;
+    tblDistance.Open;
+    // tblMemberType.Open;
+    tblGender.Open;
+    qryMember.Open;
+    if qryMember.Active then
+    begin
+      // Lookup table used by contactnum
+      tblContactNumType.Open;
+      qryContactNum.Open;
+      if qryContactNum.Active then
       begin
-        // Lookup table used by contactnum
-        tblContactNumType.Open;
-        qryContactNum.Open;
-        if qryContactNum.Active then
-        begin
-          fManageMemberDataActive := True;
-        end;
+        fCoreTablesActivated := True;
       end;
+    end;
   end;
 end;
 
 constructor TManageMemberData.CreateWithConnection(AOwner: TComponent;
-  AConnection: TFDConnection);
+  AscmConnection: TFDConnection);
 begin
   inherited Create(AOwner);
-  FConnection := AConnection;
+  FcoachConnection := AscmConnection;
 end;
 
 procedure TManageMemberData.DataModuleCreate(Sender: TObject);
 begin
   // TODO:
-  if Assigned(FConnection) then
+  if Assigned(FcoachConnection) then
     ActivateTable;
 end;
 
 procedure TManageMemberData.FixNullBooleans;
 begin
-if Assigned(FConnection) then
+  if Assigned(FcoachConnection) then
   begin
-    cmdFixNullBooleans.Connection := FConnection;
-    if FConnection.Connected then
+    cmdFixNullBooleans.Connection := FcoachConnection;
+    if FcoachConnection.Connected then
       cmdFixNullBooleans.Execute();
   end;
 end;
@@ -245,8 +244,8 @@ begin
   if MemberID <> 0 then
   begin
     // second chance to abort delete - but only displayed if there is entrant data with race-times
-    // could have used SCMConnection.ExecScalar(SQL, [MemberID]).
-    qryEntrantDataCount.Connection := FConnection;
+    // Alternative - SCMConnection.ExecScalar(SQL, [MemberID]).
+    qryEntrantDataCount.Connection := FcoachConnection;
     // FYI - assignment of connection typically sets DS state to closed.
     qryEntrantDataCount.Close;
     qryEntrantDataCount.ParamByName('MEMBERID').AsInteger := MemberID;
@@ -271,28 +270,28 @@ begin
     // remove all the relationships in associated tables for this member
     SQL := 'DELETE FROM [SwimClubMeet].[dbo].[ContactNum] WHERE MemberID = ' +
       IntToStr(MemberID) + ';';
-    FConnection.ExecSQL(SQL);
+    FcoachConnection.ExecSQL(SQL);
     { TODO -oBen -cGeneral : db.Split and dbo.TeamSplit need to be handled prior to cleaning dbo.Entrant. }
     SQL := 'UPDATE [SwimClubMeet].[dbo].[Entrant] SET [MemberID] = NULL, ' +
       '[RaceTime] = NULL, [TimeToBeat] = NULL, [PersonalBest] = NULL, ' +
       '[IsDisqualified] = 0,[IsScratched] = 0 WHERE MemberID = ' +
       IntToStr(MemberID) + ';';
-    FConnection.ExecSQL(SQL);
+    FcoachConnection.ExecSQL(SQL);
     { TODO -oBen -cGeneral : TeamEntrant table design incomplete. Additional fields needed. }
     SQL := 'UPDATE [SwimClubMeet].[dbo].[TeamEntrant] SET [MemberID] = NULL,  [RaceTime] = NULL WHERE MemberID = '
       + IntToStr(MemberID) + ';';
-    FConnection.ExecSQL(SQL);
+    FcoachConnection.ExecSQL(SQL);
     { TODO -oBen -cGeneral : DELETE from TeamNominee - remove all member's nominations to relay events. }
     SQL := 'DELETE FROM [SwimClubMeet].[dbo].[Nominee] WHERE MemberID = ' +
       IntToStr(MemberID) + ';';
-    FConnection.ExecSQL(SQL);
+    FcoachConnection.ExecSQL(SQL);
 
     { TODO -oBen -cGeneral : Remove link }
     (*
-    SQL := 'DELETE FROM [SwimClubMeet].[dbo].[lnkSwimClubMember] WHERE MemberID = '
+      SQL := 'DELETE FROM [SwimClubMeet].[dbo].[lnkSwimClubMember] WHERE MemberID = '
       + IntToStr(MemberID) + ' AND SwimClubID = ' +
       IntToStr(qrySwimClub.FieldByName('SwimClubID').AsInteger) + ';';
-    FConnection.ExecSQL(SQL);
+      FConnection.ExecSQL(SQL);
     *)
 
     qryMember.EnableControls;
@@ -315,9 +314,10 @@ end;
 procedure TManageMemberData.UpdateMember(SwimClubID: Integer;
   hideArchived, hideInactive, hideNonSwimmer: boolean);
 begin
-  if not Assigned(FConnection) then
+  if not Assigned(FcoachConnection) then
     exit;
-  if not qrymember.Active then exit;
+  if not qryMember.Active then
+    exit;
 
   qryMember.DisableControls;
   qryMember.Close;
@@ -333,7 +333,7 @@ begin
     begin
       fRecordCount := qryMember.RecordCount;
       if not Assigned(qryContactNum.Connection) then
-        qryContactNum.Connection := FConnection;
+        qryContactNum.Connection := FcoachConnection;
       if not qryContactNum.Active then
         qryContactNum.Open;
     end
@@ -350,20 +350,20 @@ end;
 
 procedure TManageMemberData.UpdateMembersPersonalBest;
 begin
-  if not Assigned(FConnection) then
+  if not Assigned(FcoachConnection) then
     exit;
   if not dsMember.DataSet.Active then
     exit;
   // to improve loading performance of the Member's Dialogue
   // the 'personal bests' for a member are loaded on demand.
-  qrymemberPb.DisableControls;
+  qryMemberPB.DisableControls;
   qryMemberPB.Close();
   qryMemberPB.ParamByName('MEMBERID').AsInteger :=
     dsMember.DataSet.FieldByName('MemberID').AsInteger;
   // ensures params changes are used
   qryMemberPB.Prepare();
   qryMemberPB.Open();
-  qrymemberPb.enableControls;
+  qryMemberPB.EnableControls;
 end;
 
 end.

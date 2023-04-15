@@ -142,8 +142,40 @@ object ImportData: TImportData
   object qryRaceHistory: TFDQuery
     ActiveStoredUsage = [auDesignTime]
     Connection = TestSCMConnection
+    SQL.Strings = (
+      'Use SwimClubMeet;'
+      ''
+      'DECLARE @MemberID AS INTEGER;'
+      ''
+      'SET @MemberID = :MEMBERID;'
+      ''
+      'SELECT SessionStart'
+      ',[Session].Caption AS SessionStr'
+      ', CONCAT(Distance.Caption, '#39' '#39', Stroke.Caption) as EventStr'
+      ', Entrant.RaceTime'
+      ', [Distance].DistanceID'
+      ', [Stroke].StrokeID'
+      ', [Entrant].EntrantID'
+      ',[Entrant].IsDisqualified'
+      ',[Entrant].IsScratched'
+      ' FROM [Session]'
+      'LEFT JOIN [Event] ON [Session].[SessionID] = [Event].[SessionID]'
+      'LEFT JOIN [Stroke] on [Event].StrokeID = Stroke.StrokeID'
+      'LEFT JOIN [Distance] on [Event].DistanceID = Distance.DistanceID'
+      
+        'LEFT JOIN [HeatIndividual] ON [Event].[EventID] = [HeatIndividua' +
+        'l].[EventID]'
+      'LEFT JOIN [Entrant] ON HeatIndividual.HeatID = [Entrant].HeatID'
+      'WHERE [Entrant].[MemberID] = @MemberID;')
     Left = 96
     Top = 384
+    ParamData = <
+      item
+        Name = 'MEMBERID'
+        DataType = ftInteger
+        ParamType = ptInput
+        Value = Null
+      end>
   end
   object tblRaceHistorySplit: TFDTable
     ActiveStoredUsage = [auDesignTime]

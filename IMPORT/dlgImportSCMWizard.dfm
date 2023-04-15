@@ -3,8 +3,8 @@ object ImportSCMWizard: TImportSCMWizard
   Top = 0
   BorderStyle = bsDialog
   Caption = 'Wizard - Import SwimClubMeet Members'
-  ClientHeight = 771
-  ClientWidth = 681
+  ClientHeight = 769
+  ClientWidth = 673
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,8 +18,8 @@ object ImportSCMWizard: TImportSCMWizard
   TextHeight = 21
   object pnlFooter: TRelativePanel
     Left = 0
-    Top = 675
-    Width = 681
+    Top = 673
+    Width = 673
     Height = 96
     ControlCollection = <
       item
@@ -53,10 +53,8 @@ object ImportSCMWizard: TImportSCMWizard
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitLeft = 1
-    ExplicitTop = 677
     DesignSize = (
-      681
+      673
       96)
     object btnPrev: TButton
       AlignWithMargins = True
@@ -88,7 +86,7 @@ object ImportSCMWizard: TImportSCMWizard
     end
     object btnCancel: TButton
       AlignWithMargins = True
-      Left = 576
+      Left = 568
       Top = 14
       Width = 85
       Height = 68
@@ -105,7 +103,7 @@ object ImportSCMWizard: TImportSCMWizard
   object pnlHeader: TRelativePanel
     Left = 0
     Top = 0
-    Width = 681
+    Width = 673
     Height = 81
     ControlCollection = <
       item
@@ -183,9 +181,8 @@ object ImportSCMWizard: TImportSCMWizard
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 677
     DesignSize = (
-      681
+      673
       81)
     object imgTackBkgrd: TVirtualImage
       AlignWithMargins = True
@@ -373,9 +370,9 @@ object ImportSCMWizard: TImportSCMWizard
   object pageCNTRL: TPageControl
     Left = 0
     Top = 81
-    Width = 681
-    Height = 594
-    ActivePage = tabMethod
+    Width = 673
+    Height = 592
+    ActivePage = tabFinalStep
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -388,8 +385,6 @@ object ImportSCMWizard: TImportSCMWizard
     TabOrder = 2
     TabWidth = 90
     OnChange = pageCNTRLChange
-    ExplicitWidth = 677
-    ExplicitHeight = 593
     object tabStart: TTabSheet
       Caption = 'Start'
       object lblMsgStartInfo: TLabel
@@ -459,8 +454,8 @@ object ImportSCMWizard: TImportSCMWizard
       Caption = 'Login'
       ImageIndex = 1
       DesignSize = (
-        673
-        544)
+        665
+        542)
       object Shape3: TShape
         Left = 6
         Top = 32
@@ -566,8 +561,8 @@ object ImportSCMWizard: TImportSCMWizard
       end
       object btnDisconnect: TButton
         AlignWithMargins = True
-        Left = 193
-        Top = 360
+        Left = 184
+        Top = 358
         Width = 85
         Height = 83
         Margins.Left = 20
@@ -576,11 +571,13 @@ object ImportSCMWizard: TImportSCMWizard
         ImageAlignment = iaTop
         Images = UIImageList
         TabOrder = 4
+        ExplicitLeft = 189
+        ExplicitTop = 359
       end
       object btnLogin: TButton
         AlignWithMargins = True
-        Left = 89
-        Top = 360
+        Left = 84
+        Top = 358
         Width = 85
         Height = 83
         Margins.Left = 20
@@ -589,6 +586,8 @@ object ImportSCMWizard: TImportSCMWizard
         ImageAlignment = iaTop
         Images = UIImageList
         TabOrder = 5
+        ExplicitLeft = 87
+        ExplicitTop = 359
       end
       object btnConnect: TButton
         Left = 163
@@ -809,15 +808,14 @@ object ImportSCMWizard: TImportSCMWizard
         State = cbChecked
         TabOrder = 0
       end
-      object rgrpOptionsData: TRadioGroup
+      object chkbDoRaceHistory: TCheckBox
         Left = 48
-        Top = 248
-        Width = 385
-        Height = 145
-        Caption = 'Select the data to import. '
-        Items.Strings = (
-          'Import only personal best (PB) race-data.'
-          'Import all swimming history.')
+        Top = 225
+        Width = 217
+        Height = 24
+        Caption = 'Import swimming history.'
+        Checked = True
+        State = cbChecked
         TabOrder = 1
       end
     end
@@ -827,8 +825,8 @@ object ImportSCMWizard: TImportSCMWizard
       object pnlFinalStep: TRelativePanel
         Left = 0
         Top = 0
-        Width = 673
-        Height = 544
+        Width = 669
+        Height = 543
         ControlCollection = <
           item
             Control = btnGo
@@ -852,13 +850,15 @@ object ImportSCMWizard: TImportSCMWizard
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitWidth = 665
+        ExplicitHeight = 542
         DesignSize = (
-          673
-          544)
+          665
+          542)
         object btnGo: TButton
           AlignWithMargins = True
-          Left = 294
-          Top = 238
+          Left = 290
+          Top = 237
           Width = 85
           Height = 68
           Margins.Left = 20
@@ -875,8 +875,8 @@ object ImportSCMWizard: TImportSCMWizard
         end
         object lblGo: TLabel
           AlignWithMargins = True
-          Left = 284
-          Top = 319
+          Left = 280
+          Top = 318
           Width = 105
           Height = 21
           Margins.Top = 10
@@ -891,11 +891,11 @@ object ImportSCMWizard: TImportSCMWizard
       ImageIndex = 5
     end
   end
-  object myConnection: TFDConnection
+  object wizSCMConnection: TFDConnection
     ConnectedStoredUsage = [auDesignTime]
     LoginPrompt = False
     Left = 528
-    Top = 496
+    Top = 232
   end
   object UICollection: TImageCollection
     Images = <
@@ -1545,7 +1545,7 @@ object ImportSCMWizard: TImportSCMWizard
     Top = 552
   end
   object qrySCMSwimmer: TFDQuery
-    Connection = myConnection
+    Connection = wizSCMConnection
     SQL.Strings = (
       'USE SwimClubMeet;'
       ''

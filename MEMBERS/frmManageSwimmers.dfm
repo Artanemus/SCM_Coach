@@ -2,8 +2,8 @@ object ManageSwimmers: TManageSwimmers
   Left = 0
   Top = 0
   Caption = 'Human Resources - Squad Swimmers.'
-  ClientHeight = 842
-  ClientWidth = 1342
+  ClientHeight = 841
+  ClientWidth = 1338
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,7 +19,7 @@ object ManageSwimmers: TManageSwimmers
   object Panel1: TPanel
     Left = 0
     Top = 42
-    Width = 1342
+    Width = 1338
     Height = 37
     Align = alTop
     BevelEdges = []
@@ -55,8 +55,8 @@ object ManageSwimmers: TManageSwimmers
   end
   object Panel3: TPanel
     Left = 0
-    Top = 776
-    Width = 1342
+    Top = 775
+    Width = 1338
     Height = 66
     Align = alBottom
     BevelEdges = []
@@ -81,8 +81,8 @@ object ManageSwimmers: TManageSwimmers
   object PageControl1: TPageControl
     Left = 0
     Top = 79
-    Width = 1342
-    Height = 697
+    Width = 1338
+    Height = 696
     ActivePage = TabSheet1
     Align = alClient
     MultiLine = True
@@ -96,8 +96,8 @@ object ManageSwimmers: TManageSwimmers
       object Panel7: TPanel
         Left = 0
         Top = 0
-        Width = 1338
-        Height = 648
+        Width = 1330
+        Height = 646
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
@@ -665,7 +665,7 @@ object ManageSwimmers: TManageSwimmers
   object ActionToolBar1: TActionToolBar
     Left = 0
     Top = 0
-    Width = 1342
+    Width = 1338
     Height = 42
     ActionManager = ActnManagerMember
     Caption = 'ActionToolBar1'
@@ -681,6 +681,7 @@ object ManageSwimmers: TManageSwimmers
     Font.Style = []
     ParentFont = False
     Spacing = 0
+    ExplicitWidth = 1342
   end
   object ImageList1: TImageList
     Height = 24

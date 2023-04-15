@@ -127,7 +127,7 @@ type
     fColorBgColor: TColor;
 
     function FindMember(MemberID: Integer): Boolean;
-    function AssertConnection: Boolean;
+    function AssertSCMConnection: Boolean;
 
     procedure ReadPreferences();
     procedure WritePreferences();
@@ -172,14 +172,14 @@ begin
   FreeAndNil(dlg);
 end;
 
-function TManageSwimmers.AssertConnection: Boolean;
+function TManageSwimmers.AssertSCMConnection: Boolean;
 begin
   result := false;
   // test datamodule construction
   if Assigned(ManageMemberData) then
   begin
     // IsActive if TFDConnection::scmConnection && FireDAC tables are active
-    if ManageMemberData.ManageMemberDataActive then
+    if ManageMemberData.CoreTablesActivated then
       result := true;
   end;
 end;
@@ -761,14 +761,14 @@ begin
   // ----------------------------------------------------
   // D I S P L A Y   F O R M   C A P T I O N   I N F O .
   // ----------------------------------------------------
-  if not AssertConnection then
+  if not AssertSCMConnection then
     exit;
 
 end;
 
 procedure TManageSwimmers.ManageMemberAfterScroll(var Msg: TMessage);
 begin
-  if not AssertConnection then
+  if not AssertSCMConnection then
     exit;
   // DATE-OF-BIRTH - DATETIME PICKER INIT
   dtpickDOB.Date := ManageMemberData.qryMember.FieldByName('DOB').AsDateTime;
@@ -777,7 +777,7 @@ end;
 
 procedure TManageSwimmers.ManageMemberUpdate(var Msg: TMessage);
 begin
-  if not AssertConnection then
+  if not AssertSCMConnection then
     exit;
   // UPDATE THE NUMBER OF RECORDS.
   lblCount.Caption := IntToStr(ManageMemberData.RecordCount);
@@ -825,7 +825,7 @@ begin
   // Check that ManageMemberData is active .
   // ----------------------------------------------------
   ManageMemberData.ActivateTable;
-  if not ManageMemberData.ManageMemberDataActive then
+  if not ManageMemberData.CoreTablesActivated then
   begin
     MessageDlg('An error occurred during MSSQL table activation.' + sLineBreak +
       'The database''s schema may need updating.' + sLineBreak +

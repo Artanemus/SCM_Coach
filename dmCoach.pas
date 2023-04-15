@@ -1,4 +1,4 @@
-unit dmSCM;
+unit dmCoach;
 
 interface
 
@@ -9,13 +9,12 @@ uses
   Data.DB, FireDAC.Comp.Client;
 
 type
-  TSCM = class(TDataModule)
-    scmConnection: TFDConnection;
+  TCOACH = class(TDataModule)
+    coachConnection: TFDConnection;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
-    fSCMActive: boolean;
-
+    fCoreTablesActivated: boolean;
 
   public
     { Public declarations }
@@ -24,9 +23,8 @@ type
     procedure ActivateTable();
     procedure DeActivateTable();
 
-
-    // FLAG - true if all FireDAC tables, queries are active.
-    property SCMActive: boolean read FSCMActive write FSCMActive;
+    // FLAG - true if all core FireDAC tables, queries are active.
+    property CoreTablesActivated: boolean read fCoreTablesActivated;
 
   end;
 
@@ -36,32 +34,31 @@ const
   SCMCONFIGFILENAME = 'SCMCoachConfig.ini';
 
 var
-  SCM: TSCM;
+  COACH: TCOACH;
 
 implementation
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
-
 {$R *.dfm}
+
 uses
   System.IOUtils, IniFiles, SCMUtility;
 
 { TSCM }
 
-procedure TSCM.ActivateTable;
+procedure TCOACH.ActivateTable;
 begin
-fSCMActive := true;
+  fCoreTablesActivated := true;
 end;
 
-procedure TSCM.DataModuleCreate(Sender: TObject);
+procedure TCOACH.DataModuleCreate(Sender: TObject);
 begin
   // TODO: INIT SCM datamodule
 end;
 
-procedure TSCM.DeActivateTable;
+procedure TCOACH.DeActivateTable;
 begin
-fSCMActive := false;
+  fCoreTablesActivated := false;
 end;
-
 
 end.
