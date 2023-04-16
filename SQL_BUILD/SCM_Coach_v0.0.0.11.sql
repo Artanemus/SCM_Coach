@@ -2,7 +2,7 @@
  * ER/Studio Data Architect SQL Code Generation
  * Project :      SCM_Coach_v1.0.1.0.DM1
  *
- * Date Created : Thursday, March 16, 2023 11:09:18
+ * Date Created : Sunday, April 16, 2023 10:03:21
  * Target DBMS : Microsoft SQL Server 2017
  */
 
@@ -40,6 +40,8 @@ go
 CREATE TABLE ContactNum(
     ContactNumID        int             IDENTITY(1,1),
     Number              nvarchar(30)    NULL,
+    IsArchived          bit             DEFAULT 0 NOT NULL,
+    CreatedOn           datetime        NULL,
     ContactNumTypeID    int             NULL,
     HRID                int             NOT NULL,
     CONSTRAINT PK_ContactNum PRIMARY KEY NONCLUSTERED (ContactNumID)
@@ -256,72 +258,6 @@ ELSE
 go
 
 /* 
- * TABLE: EventTime 
- */
-
-CREATE TABLE EventTime(
-    EventTimeID        int               IDENTITY(1,1),
-    Caption            nvarchar(128)     NULL,
-    LongCaption        nvarchar(1024)    NULL,
-    RaceTime           time(7)           NULL,
-    CreatedOn          datetime          NULL,
-    DistanceID         int               NOT NULL,
-    strokeID           int               NOT NULL,
-    HRID               int               NOT NULL,
-    EventTimeTypeID    int               NULL,
-    CONSTRAINT PK_PB PRIMARY KEY CLUSTERED (EventTimeID)
-)
-go
-
-
-
-IF OBJECT_ID('EventTime') IS NOT NULL
-    PRINT '<<< CREATED TABLE EventTime >>>'
-ELSE
-    PRINT '<<< FAILED CREATING TABLE EventTime >>>'
-go
-
-/* 
- * TABLE: EventTimeSplit 
- */
-
-CREATE TABLE EventTimeSplit(
-    EventTimeSplitID    int         IDENTITY(1,1),
-    Lap                 smallint    NULL,
-    RaceTime            time(7)     NULL,
-    EventTimeID         int         NULL,
-    CONSTRAINT PK_PBSplit PRIMARY KEY CLUSTERED (EventTimeSplitID)
-)
-go
-
-
-
-IF OBJECT_ID('EventTimeSplit') IS NOT NULL
-    PRINT '<<< CREATED TABLE EventTimeSplit >>>'
-ELSE
-    PRINT '<<< FAILED CREATING TABLE EventTimeSplit >>>'
-go
-
-/* 
- * TABLE: EventTimeType 
- */
-
-CREATE TABLE EventTimeType(
-    EventTimeTypeID    int              IDENTITY(1,1),
-    Caption            nvarchar(128)    NULL,
-    CONSTRAINT PK62 PRIMARY KEY CLUSTERED (EventTimeTypeID)
-)
-go
-
-
-
-IF OBJECT_ID('EventTimeType') IS NOT NULL
-    PRINT '<<< CREATED TABLE EventTimeType >>>'
-ELSE
-    PRINT '<<< FAILED CREATING TABLE EventTimeType >>>'
-go
-
-/* 
  * TABLE: evTime 
  */
 
@@ -489,49 +425,6 @@ ELSE
 go
 
 /* 
- * TABLE: line 
- */
-
-CREATE TABLE line(
-    lineID        int         IDENTITY(1,1),
-    reps          char(10)    NULL,
-    CreatedOn     datetime    NULL,
-    ModifiedOn    datetime    NULL,
-    lineTypeID    int         NOT NULL,
-    CONSTRAINT PK_line PRIMARY KEY NONCLUSTERED (lineID)
-)
-go
-
-
-
-IF OBJECT_ID('line') IS NOT NULL
-    PRINT '<<< CREATED TABLE line >>>'
-ELSE
-    PRINT '<<< FAILED CREATING TABLE line >>>'
-go
-
-/* 
- * TABLE: lineType 
- */
-
-CREATE TABLE lineType(
-    lineTypeID      int              IDENTITY(1,1),
-    Caption         nvarchar(128)    NULL,
-    ShortCaption    nvarchar(16)     NULL,
-    ABREV           nvarchar(5)      NULL,
-    CONSTRAINT PK_lineType PRIMARY KEY CLUSTERED (lineTypeID)
-)
-go
-
-
-
-IF OBJECT_ID('lineType') IS NOT NULL
-    PRINT '<<< CREATED TABLE lineType >>>'
-ELSE
-    PRINT '<<< FAILED CREATING TABLE lineType >>>'
-go
-
-/* 
  * TABLE: memberLink 
  */
 
@@ -576,6 +469,27 @@ ELSE
 go
 
 /* 
+ * TABLE: NodeType 
+ */
+
+CREATE TABLE NodeType(
+    NodeTypeID      int              IDENTITY(1,1),
+    Caption         nvarchar(128)    NULL,
+    ShortCaption    nvarchar(16)     NULL,
+    ABREV           nvarchar(5)      NULL,
+    CONSTRAINT PK_lineType PRIMARY KEY CLUSTERED (NodeTypeID)
+)
+go
+
+
+
+IF OBJECT_ID('NodeType') IS NOT NULL
+    PRINT '<<< CREATED TABLE NodeType >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE NodeType >>>'
+go
+
+/* 
  * TABLE: pool 
  */
 
@@ -594,6 +508,73 @@ IF OBJECT_ID('pool') IS NOT NULL
     PRINT '<<< CREATED TABLE pool >>>'
 ELSE
     PRINT '<<< FAILED CREATING TABLE pool >>>'
+go
+
+/* 
+ * TABLE: RaceHistory 
+ */
+
+CREATE TABLE RaceHistory(
+    RaceHistoryID        int               IDENTITY(1,1),
+    Caption              nvarchar(128)     NULL,
+    LongCaption          nvarchar(1024)    NULL,
+    RaceTime             time(7)           NULL,
+    CreatedOn            datetime          NULL,
+    EntrantID            int               NULL,
+    DistanceID           int               NOT NULL,
+    strokeID             int               NOT NULL,
+    HRID                 int               NOT NULL,
+    RaceHistoryTypeID    int               NULL,
+    CONSTRAINT PK_PB PRIMARY KEY CLUSTERED (RaceHistoryID)
+)
+go
+
+
+
+IF OBJECT_ID('RaceHistory') IS NOT NULL
+    PRINT '<<< CREATED TABLE RaceHistory >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE RaceHistory >>>'
+go
+
+/* 
+ * TABLE: RaceHistorySplit 
+ */
+
+CREATE TABLE RaceHistorySplit(
+    RaceHistorySplitID    int         IDENTITY(1,1),
+    Lap                   smallint    NULL,
+    RaceTime              time(7)     NULL,
+    RaceHistoryID         int         NULL,
+    CONSTRAINT PK_PBSplit PRIMARY KEY CLUSTERED (RaceHistorySplitID)
+)
+go
+
+
+
+IF OBJECT_ID('RaceHistorySplit') IS NOT NULL
+    PRINT '<<< CREATED TABLE RaceHistorySplit >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE RaceHistorySplit >>>'
+go
+
+/* 
+ * TABLE: RaceHistoryType 
+ */
+
+CREATE TABLE RaceHistoryType(
+    RaceHistoryTypeID    int              IDENTITY(1,1),
+    Caption              nvarchar(128)    NULL,
+    CONSTRAINT PK62 PRIMARY KEY CLUSTERED (RaceHistoryTypeID)
+)
+go
+
+
+
+IF OBJECT_ID('RaceHistoryType') IS NOT NULL
+    PRINT '<<< CREATED TABLE RaceHistoryType >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE RaceHistoryType >>>'
 go
 
 /* 
@@ -717,10 +698,10 @@ CREATE TABLE task(
     equipmentID        int               NOT NULL,
     DistanceID         int               NOT NULL,
     strokeID           int               NOT NULL,
-    lineID             int               NOT NULL,
     miscTermID         int               NOT NULL,
     gradeID            int               NULL,
     drillID            int               NULL,
+    TreeNodeID         int               NULL,
     CONSTRAINT PK_task PRIMARY KEY NONCLUSTERED (taskID)
 )
 go
@@ -753,6 +734,53 @@ ELSE
 go
 
 /* 
+ * TABLE: TreeNode 
+ */
+
+CREATE TABLE TreeNode(
+    TreeNodeID    int              IDENTITY(1,1),
+    Caption       nvarchar(128)    NULL,
+    RepsStr       char(10)         NULL,
+    RepNum        int              NULL,
+    SortIndx      int              NULL,
+    CreatedOn     datetime         NULL,
+    ModifiedOn    datetime         NULL,
+    Child         int              NULL,
+    TreeRootID    int              NULL,
+    NodeTypeID    int              NULL,
+    CONSTRAINT PK70 PRIMARY KEY CLUSTERED (TreeNodeID)
+)
+go
+
+
+
+IF OBJECT_ID('TreeNode') IS NOT NULL
+    PRINT '<<< CREATED TABLE TreeNode >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE TreeNode >>>'
+go
+
+/* 
+ * TABLE: TreeRoot 
+ */
+
+CREATE TABLE TreeRoot(
+    TreeRootID    int              IDENTITY(1,1),
+    Caption       nvarchar(128)    NULL,
+    WorkOutID     int              NULL,
+    CONSTRAINT PK69 PRIMARY KEY CLUSTERED (TreeRootID)
+)
+go
+
+
+
+IF OBJECT_ID('TreeRoot') IS NOT NULL
+    PRINT '<<< CREATED TABLE TreeRoot >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE TreeRoot >>>'
+go
+
+/* 
  * TABLE: WorkOut 
  */
 
@@ -773,28 +801,6 @@ IF OBJECT_ID('WorkOut') IS NOT NULL
     PRINT '<<< CREATED TABLE WorkOut >>>'
 ELSE
     PRINT '<<< FAILED CREATING TABLE WorkOut >>>'
-go
-
-/* 
- * TABLE: WorkOutLink 
- */
-
-CREATE TABLE WorkOutLink(
-    WorkOutLinkID    int    IDENTITY(1,1),
-    WorkOutID        int    NOT NULL,
-    lineID           int    NOT NULL,
-    ChildLine        int    NULL,
-    ChildSortIndx    int    NULL,
-    CONSTRAINT PK_WorkOutLink PRIMARY KEY CLUSTERED (WorkOutLinkID, WorkOutID, lineID)
-)
-go
-
-
-
-IF OBJECT_ID('WorkOutLink') IS NOT NULL
-    PRINT '<<< CREATED TABLE WorkOutLink >>>'
-ELSE
-    PRINT '<<< FAILED CREATING TABLE WorkOutLink >>>'
 go
 
 /* 
@@ -858,41 +864,6 @@ go
 
 
 /* 
- * TABLE: EventTime 
- */
-
-ALTER TABLE EventTime ADD CONSTRAINT RefEventTimeType113 
-    FOREIGN KEY (EventTimeTypeID)
-    REFERENCES EventTimeType(EventTimeTypeID)
-go
-
-ALTER TABLE EventTime ADD CONSTRAINT Distance_PB 
-    FOREIGN KEY (DistanceID)
-    REFERENCES Distance(DistanceID)
-go
-
-ALTER TABLE EventTime ADD CONSTRAINT HR_PB 
-    FOREIGN KEY (HRID)
-    REFERENCES HR(HRID)
-go
-
-ALTER TABLE EventTime ADD CONSTRAINT stroke_PB 
-    FOREIGN KEY (strokeID)
-    REFERENCES stroke(strokeID)
-go
-
-
-/* 
- * TABLE: EventTimeSplit 
- */
-
-ALTER TABLE EventTimeSplit ADD CONSTRAINT PB_PBSplit 
-    FOREIGN KEY (EventTimeID)
-    REFERENCES EventTime(EventTimeID)
-go
-
-
-/* 
  * TABLE: evTime 
  */
 
@@ -933,16 +904,6 @@ go
 
 
 /* 
- * TABLE: line 
- */
-
-ALTER TABLE line ADD CONSTRAINT lineType_line 
-    FOREIGN KEY (lineTypeID)
-    REFERENCES lineType(lineTypeID)
-go
-
-
-/* 
  * TABLE: memberLink 
  */
 
@@ -968,6 +929,41 @@ go
 
 
 /* 
+ * TABLE: RaceHistory 
+ */
+
+ALTER TABLE RaceHistory ADD CONSTRAINT RefRaceHistoryType118 
+    FOREIGN KEY (RaceHistoryTypeID)
+    REFERENCES RaceHistoryType(RaceHistoryTypeID)
+go
+
+ALTER TABLE RaceHistory ADD CONSTRAINT Distance_PB 
+    FOREIGN KEY (DistanceID)
+    REFERENCES Distance(DistanceID)
+go
+
+ALTER TABLE RaceHistory ADD CONSTRAINT HR_PB 
+    FOREIGN KEY (HRID)
+    REFERENCES HR(HRID)
+go
+
+ALTER TABLE RaceHistory ADD CONSTRAINT stroke_PB 
+    FOREIGN KEY (strokeID)
+    REFERENCES stroke(strokeID)
+go
+
+
+/* 
+ * TABLE: RaceHistorySplit 
+ */
+
+ALTER TABLE RaceHistorySplit ADD CONSTRAINT PB_PBSplit 
+    FOREIGN KEY (RaceHistoryID)
+    REFERENCES RaceHistory(RaceHistoryID)
+go
+
+
+/* 
  * TABLE: session 
  */
 
@@ -985,6 +981,11 @@ go
 /* 
  * TABLE: task 
  */
+
+ALTER TABLE task ADD CONSTRAINT RefTreeNode126 
+    FOREIGN KEY (TreeNodeID)
+    REFERENCES TreeNode(TreeNodeID)
+go
 
 ALTER TABLE task ADD CONSTRAINT Distance_task 
     FOREIGN KEY (DistanceID)
@@ -1011,11 +1012,6 @@ ALTER TABLE task ADD CONSTRAINT intensity_task
     REFERENCES intensity(intensityID)
 go
 
-ALTER TABLE task ADD CONSTRAINT line_task 
-    FOREIGN KEY (lineID)
-    REFERENCES line(lineID)
-go
-
 ALTER TABLE task ADD CONSTRAINT miscTerm_task 
     FOREIGN KEY (miscTermID)
     REFERENCES miscTerm(miscTermID)
@@ -1024,6 +1020,36 @@ go
 ALTER TABLE task ADD CONSTRAINT stroke_task 
     FOREIGN KEY (strokeID)
     REFERENCES stroke(strokeID)
+go
+
+
+/* 
+ * TABLE: TreeNode 
+ */
+
+ALTER TABLE TreeNode ADD CONSTRAINT RefTreeRoot127 
+    FOREIGN KEY (TreeRootID)
+    REFERENCES TreeRoot(TreeRootID)
+go
+
+ALTER TABLE TreeNode ADD CONSTRAINT RefNodeType128 
+    FOREIGN KEY (NodeTypeID)
+    REFERENCES NodeType(NodeTypeID)
+go
+
+ALTER TABLE TreeNode ADD CONSTRAINT RefTreeNode129 
+    FOREIGN KEY (Child)
+    REFERENCES TreeNode(TreeNodeID)
+go
+
+
+/* 
+ * TABLE: TreeRoot 
+ */
+
+ALTER TABLE TreeRoot ADD CONSTRAINT RefWorkOut130 
+    FOREIGN KEY (WorkOutID)
+    REFERENCES WorkOut(WorkOutID)
 go
 
 
@@ -1039,26 +1065,6 @@ go
 ALTER TABLE WorkOut ADD CONSTRAINT team_WorkOut 
     FOREIGN KEY (teamID)
     REFERENCES team(teamID)
-go
-
-
-/* 
- * TABLE: WorkOutLink 
- */
-
-ALTER TABLE WorkOutLink ADD CONSTRAINT line_WorkOutLi9 
-    FOREIGN KEY (ChildLine)
-    REFERENCES line(lineID)
-go
-
-ALTER TABLE WorkOutLink ADD CONSTRAINT line_WorkOutLink 
-    FOREIGN KEY (lineID)
-    REFERENCES line(lineID)
-go
-
-ALTER TABLE WorkOutLink ADD CONSTRAINT WorkOut_WorkOutLink 
-    FOREIGN KEY (WorkOutID)
-    REFERENCES WorkOut(WorkOutID)
 go
 
 

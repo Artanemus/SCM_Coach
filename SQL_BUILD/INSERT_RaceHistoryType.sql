@@ -1,17 +1,17 @@
 USE [SCM_Coach]
 GO
 
-DELETE FROM [dbo].[EventTimeType]
+DELETE FROM [dbo].[RaceHistoryType]
 GO
 
-SET IDENTITY_INSERT [dbo].[EventTimeType] ON;
+SET IDENTITY_INSERT [dbo].[RaceHistoryType] ON;
 
 -- POOL EventTimeType 
 -- (+ user custom - prefix with #)
 
-INSERT INTO [dbo].[EventTimeType]
+INSERT INTO [dbo].[RaceHistoryType]
 (
-    EventTimeTypeID
+    [RaceHistoryTypeID]
   , [Caption]
 )
 VALUES
@@ -22,7 +22,7 @@ VALUES
 , (5, 'Nationals')
 GO
 
-SET IDENTITY_INSERT [dbo].[EventTimeType] OFF;
+SET IDENTITY_INSERT [dbo].[RaceHistoryType] OFF;
 
 
 
