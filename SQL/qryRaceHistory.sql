@@ -13,6 +13,10 @@ SELECT SessionStart
 , [Entrant].EntrantID
 ,[Entrant].IsDisqualified
 ,[Entrant].IsScratched
+,[Entrant].Lane
+-- PoolType
+-- NumOfLanes
+-- LenOfPool (Metres)
  FROM [Session]
 LEFT JOIN [Event] ON [Session].[SessionID] = [Event].[SessionID]
 LEFT JOIN [Stroke] on [Event].StrokeID = Stroke.StrokeID

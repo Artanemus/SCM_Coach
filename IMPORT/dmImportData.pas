@@ -13,7 +13,8 @@ uses
 type
   TImportData = class(TDataModule)
     TestSCMConnection: TFDConnection;
-    sqlAssertDuplicity: TFDQuery;
+    qryIsDupMembers: TFDQuery;
+    qryIsDupRaceHistory: TFDQuery;
     qryCheckMiddleInitial: TFDQuery;
     tblHR: TFDTable;
     TestCoachConnection: TFDConnection;
@@ -23,6 +24,7 @@ type
     qryContactNum: TFDQuery;
     qryRaceHistory: TFDQuery;
     tblRaceHistorySplit: TFDTable;
+    qrySplit: TFDQuery;
   private
     { Private declarations }
     scmConnection: TFDConnection;
@@ -31,8 +33,8 @@ type
     fCoreTablesActivated: boolean;
 
     function GetLastIDENT: integer;
-    function AddContacts(HRID, AscmMemberID: integer): boolean;
-    function AddRaceHistory(HRID, AscmMemberID: integer): boolean;
+    function AddContacts(HRID, scmMemberID: integer): boolean;
+    function AddSplits(RaceHistoryID, EntrantID: integer): boolean;
     function HasFieldMiddleInitial: boolean;
 
   public
@@ -40,15 +42,16 @@ type
     constructor CreateWithConnection(AOwner: TComponent;
       AscmConnection, AcoachConnection: TFDConnection);
     // rtns SCM_Coach HRID
-    function InsertMember(AscmMemberID: integer): integer;
+    function InsertMember(scmMemberID: integer): integer;
     // rtns record count
-    function InsertRaceHistory(AscmMemberID, AHRID: integer;
-  DoSplit: boolean): integer;
+    function InsertRaceHistory(scmMemberID, HRID: integer;
+      DoSplit: boolean): integer;
 
     // STRING LOOKUP AND COMPARE (for use with .HY3 file type)
-    function AssertUnique(AscmMemberID: integer): boolean;
+    function AssertUnique(scmMemberID: integer): boolean;
     // IDENTITY LOOKUP
-    function AssertDuplicity(AscmMemberID: integer): boolean;
+    function IsDupMember(scmMemberID: integer): boolean;
+    function IsDupRaceHistory(EntrantID: integer): boolean;
 
     function ActivateTable: boolean;
     function DeActivateTable: boolean;
@@ -68,7 +71,7 @@ implementation
 {$R *.dfm}
 { TImportData }
 
-function TImportData.InsertMember(AscmMemberID: integer): integer;
+function TImportData.InsertMember(scmMemberID: integer): integer;
 var
   IDENT: integer;
 
@@ -80,7 +83,7 @@ begin
     tblHR.Open;
 
     qryMember.Connection := scmConnection;
-    qryMember.ParamByName('MEMBERID').AsInteger := AscmMemberID;
+    qryMember.ParamByName('MEMBERID').AsInteger := scmMemberID;
     qryMember.Prepare;
     qryMember.Open;
 
@@ -105,17 +108,30 @@ begin
           .AsDateTime;
         tblHR.FieldByName('RegisterStr').AsString :=
           qryMember.FieldByName('MembershipStr').AsString;
+
+        // WARNING : SwimClubMeet and SCM_Coach dbo.Gender tables must be clones.
+        tblHR.FieldByName('GenderID').AsInteger :=
+          qryMember.FieldByName('GenderID').AsInteger;
+
         // INIT BIT FIELDS
         tblHR.FieldByName('IsActive').AsBoolean := true;
-        tblHR.FieldByName('IsArchived').AsBoolean := true;
+        tblHR.FieldByName('IsArchived').AsBoolean := false;
         // TIMESTAMP
         tblHR.FieldByName('CreatedOn').AsDateTime := Now;
+        // SPECIFY HR TYPE - SQUAD SWIMMER
+        tblHR.FieldByName('HRTypeID').AsInteger := 1;
+
+        { TODO -oBSA -cGeneral : Option - specify squad swimmers GradeID }
+        // SPECIFY SWIMMER INITIAL GRADE ...  ???
+        // tblHR.FieldByName('GradeID').AsInteger :=
 
         tblHR.Post;
 
         IDENT := GetLastIDENT; // ID of last SCM_Coach HR
         if (IDENT <> 0) then
           result := IDENT;
+        // iterate
+        qryMember.Next;
       end;
     end;
     qryMember.Close;
@@ -123,15 +139,18 @@ begin
   end;
 end;
 
-function TImportData.InsertRaceHistory(AscmMemberID, AHRID: integer;
+function TImportData.InsertRaceHistory(scmMemberID, HRID: integer;
   DoSplit: boolean): integer;
+var
+  IDENT, EntrantID: integer;
+  SQL: string;
 begin
   { insert the SwimClubMeet member's race history into
     the SCM_coach RaceHistory table. }
   result := 0; // records inserted
   // Pull race history from SwimClubMeet
   qryRaceHistory.Connection := scmConnection;
-  qryRaceHistory.ParamByName('MEMBERID').AsInteger := AscmMemberID;
+  qryRaceHistory.ParamByName('MEMBERID').AsInteger := scmMemberID;
   qryRaceHistory.Prepare;
   qryRaceHistory.Open;
 
@@ -144,9 +163,82 @@ begin
     while not qryRaceHistory.eof do
     begin
       // test for duplicity ... (using EntrantID)
-      // LOOKUP RACEHISTORY.ENTRANTID
+      EntrantID := qryRaceHistory.FieldByName('EntrantID').AsInteger;
+      if (EntrantID <> 0) AND (not IsDupRaceHistory(EntrantID)) then
+      begin
+        tblRaceHistory.Insert;
+        tblRaceHistory.FieldByName('HRID').AsInteger := HRID;
 
-      // INSERT
+        { SessionStart
+          ,[Session].Caption AS SessionStr
+          , CONCAT(Distance.Caption, ' ', Stroke.Caption) as EventStr
+          , Entrant.RaceTime
+          , [Distance].DistanceID
+          , [Stroke].StrokeID
+          , [Entrant].EntrantID
+          ,[Entrant].IsDisqualified
+          ,[Entrant].IsScratched
+        }
+
+        { TODO -oBSA -cGeneral : Improve all caption strings for RaceHistory }
+        // Caption: ClubName ...
+        tblRaceHistory.FieldByName('Caption').AsString :=
+          qryRaceHistory.FieldByName('SessionStr').AsString;
+
+        // Caption: Event String ??? ClubName ?? PoolName ... weather condition, temperature, ???
+        tblRaceHistory.FieldByName('LongCaption').AsString :=
+          qryRaceHistory.FieldByName('EventStr').AsString;
+
+        tblRaceHistory.FieldByName('RaceTime').AsDateTime :=
+          qryRaceHistory.FieldByName('RaceTime').AsDateTime;
+        tblRaceHistory.FieldByName('CreatedOn').AsDateTime :=
+          qryRaceHistory.FieldByName('SessionStart').AsDateTime;
+
+        // NOTE: distance and stroke ID's common across databases
+        tblRaceHistory.FieldByName('DistanceID').AsInteger :=
+          qryRaceHistory.FieldByName('DistanceID').AsInteger;
+        tblRaceHistory.FieldByName('StrokeID').AsInteger :=
+          qryRaceHistory.FieldByName('StrokeID').AsInteger;
+
+        // EntrantID - specific to SCM ONLY
+        tblRaceHistory.FieldByName('EntrantID').AsInteger :=
+          qryRaceHistory.FieldByName('EntrantID').AsInteger;
+
+        tblRaceHistory.FieldByName('Lane').AsInteger :=
+          qryRaceHistory.FieldByName('Lane').AsInteger;
+
+        { TODO -oBSA -cGeneral : Additional pool data }
+        // tblRaceHistory.FieldByName('NumOfLanes').AsInteger :=
+        // tblRaceHistory.FieldByName('LenOfPool').AsInteger :=
+        // tblRaceHistory.FieldByName('PoolTypeID').AsInteger :=
+
+        tblRaceHistory.FieldByName('IsScratch').AsBoolean :=
+          qryRaceHistory.FieldByName('IsScratch').AsBoolean;
+
+        tblRaceHistory.FieldByName('IsDisqualified').AsBoolean :=
+          qryRaceHistory.FieldByName('IsDisqualified').AsBoolean;
+
+        { TODO -oBSA -cGeneral : Qualification data }
+        // tblRaceHistory.FieldByName('DisqualifiedID').AsInteger :=
+
+        // 1.club night, clubs bash, carnival, regional meet, state meet, etc...
+        tblRaceHistory.FieldByName('RaceHistoryTypeID').AsInteger := 1;
+
+        tblRaceHistory.Post;
+
+        // -------------------------------------------------------
+        // I D E N T   N E E D E D   F O R   S P L I T   T I M E S  ....
+        // -------------------------------------------------------
+        SQL := 'USE SCM_Coach; SELECT IDENT_CURRENT(''[SCM_Coach].[dbo].[RaceHistory]'');';
+        IDENT := coachConnection.ExecSQLScalar(SQL);
+
+        if DoSplit and (IDENT <> 0) then
+        begin
+          AddSplits(IDENT, EntrantID);
+        end;
+        // iterate
+        qryRaceHistory.Next;
+      end;
     end;
   end;
 
@@ -170,7 +262,13 @@ begin
       begin
         tblRaceHistory.Connection := coachConnection;
         tblRaceHistory.Open;
-        fCoreTablesActivated := true;
+        if tblRaceHistory.Active then
+        begin
+          tblRaceHistorySplit.Connection := coachConnection;
+          tblRaceHistorySplit.Open;
+          if tblRaceHistory.Active then
+            fCoreTablesActivated := true;
+        end;
       end;
     end;
   end;
@@ -178,7 +276,7 @@ begin
 
 end;
 
-function TImportData.AddContacts(HRID, AscmMemberID: integer): boolean;
+function TImportData.AddContacts(HRID, scmMemberID: integer): boolean;
 var
   fld: TField;
 begin
@@ -186,7 +284,7 @@ begin
   if AssertConnections then
   begin
     qryContactNum.Connection := scmConnection;
-    qryContactNum.ParamByName('MEMBERID').AsInteger := AscmMemberID;
+    qryContactNum.ParamByName('MEMBERID').AsInteger := scmMemberID;
     qryContactNum.Prepare;
     qryContactNum.Open;
     if qryContactNum.Active then
@@ -217,15 +315,15 @@ begin
           qryContactNum.FieldByName('ContactNumTypeID').AsInteger;
 
         tblContactNum.Post;
-
+        // iterate
         qryContactNum.Next;
       end;
-      result := true;
     end;
+    result := true;
   end;
 end;
 
-function TImportData.AddRaceHistory(HRID, AscmMemberID: integer): boolean;
+function TImportData.AddSplits(RaceHistoryID, EntrantID: integer): boolean;
 var
   fld: TField;
   IDENT: integer;
@@ -234,44 +332,30 @@ begin
   result := false;
   if AssertConnections then
   begin
-    qryRaceHistory.Connection := scmConnection;
-    qryRaceHistory.ParamByName('MEMBERID').AsInteger := AscmMemberID;
-    qryRaceHistory.Prepare;
-    qryRaceHistory.Open;
-    if qryRaceHistory.Active then
+    qrySplit.Connection := scmConnection;
+    qrySplit.ParamByName('ENTRANTID').AsInteger := EntrantID;
+    qrySplit.Prepare;
+    qrySplit.Open;
+    if qrySplit.Active then
     begin
-      while not qryRaceHistory.eof do
+      while not qrySplit.eof do
       begin
-        tblRaceHistory.Insert;
-        // INDENTIFIER HRID
-        tblRaceHistory.FieldByName('HRID').AsInteger := HRID;
-
-        {
-          // Caption: ClubName ...
-          tblRaceHistory.FieldByName('Caption').AsString;
-          // Caption: PoolName ... weather condition, temperature, ???
-          tblRaceHistory.FieldByName('LongCaption').AsString;
-
-          tblRaceHistory.FieldByName('RaceTime').AsDateTime;
-          tblRaceHistory.FieldByName('CreatedOn').AsDateTime;
-
-          // distance and stroke ID's common across databases
-          tblRaceHistory.FieldByName('DistanceID').AsInteger;
-          tblRaceHistory.FieldByName('StrokeID').AsInteger;
-          // club night, clubs bash, carnival, regional meet, state meet, etc...
-          tblRaceHistory.FieldByName('RaceHistoryTypeID').AsInteger;
-        }
-
-        tblRaceHistory.Post;
-
         // -------------------------------------------------------
         // S P L I T   T I M E S  ....
         // -------------------------------------------------------
-        SQL := 'USE SCM_Coach; SELECT IDENT_CURRENT(''[SCM_Coach].[dbo].[RaceHistory]'');';
-        IDENT := coachConnection.ExecSQLScalar(SQL);
-        { TODO -oBSA -cGeneral : Add split time to RaceHistory }
+        tblRaceHistorySplit.Insert;
 
-        qryContactNum.Next;
+        tblRaceHistorySplit.FieldByName('RaceTime').AsDateTime :=
+          qrySplit.FieldByName('SplitTime').AsDateTime;
+        tblRaceHistorySplit.FieldByName('Lap').AsInteger :=
+          qrySplit.FieldByName('Lap').AsInteger;
+        // IDENT for join
+        tblRaceHistorySplit.FieldByName('RaceHistoryID').AsInteger :=
+          RaceHistoryID;
+
+        tblRaceHistorySplit.Post;
+        // iterate
+        qrySplit.Next;
       end;
       result := true;
     end;
@@ -300,25 +384,45 @@ begin
   end;
 end;
 
-function TImportData.AssertDuplicity(AscmMemberID: integer): boolean;
+function TImportData.IsDupMember(scmMemberID: integer): boolean;
 begin
   // IDENTITY LOOKUP
   result := true;
   if Assigned(coachConnection) AND coachConnection.Connected then
   begin
-    sqlAssertDuplicity.Connection := coachConnection;
-    sqlAssertDuplicity.ParamByName('MEMBERID').AsInteger := AscmMemberID;
-    sqlAssertDuplicity.Prepare;
-    sqlAssertDuplicity.Open;
-    if sqlAssertDuplicity.Active then
+    qryIsDupMembers.Connection := coachConnection;
+    qryIsDupMembers.ParamByName('MEMBERID').AsInteger := scmMemberID;
+    qryIsDupMembers.Prepare;
+    qryIsDupMembers.Open;
+    if qryIsDupMembers.Active then
     begin
-      result := sqlAssertDuplicity.FieldByName('rtnValue').AsBoolean;
+      if (qryIsDupMembers.FieldByName('rtnValue').AsInteger = 0) then
+        result := false;
     end;
-    sqlAssertDuplicity.Close;
+    qryIsDupMembers.Close;
   end;
 end;
 
-function TImportData.AssertUnique(AscmMemberID: integer): boolean;
+function TImportData.IsDupRaceHistory(EntrantID: integer): boolean;
+begin
+  result := true;
+  if Assigned(coachConnection) AND coachConnection.Connected then
+  begin
+    qryIsDupRaceHistory.Connection := coachConnection;
+    qryIsDupRaceHistory.ParamByName('ENTRANTID').AsInteger := EntrantID;
+    qryIsDupRaceHistory.Prepare;
+    qryIsDupRaceHistory.Open;
+    if qryIsDupRaceHistory.Active then
+    begin
+      if (qryIsDupRaceHistory.FieldByName('rtnValue').AsInteger = 0) then
+        result := false;
+    end;
+    qryIsDupRaceHistory.Close;
+  end;
+
+end;
+
+function TImportData.AssertUnique(scmMemberID: integer): boolean;
 begin
   // STRING LOOKUP AND COMPARE   (.HY3)
   result := true;
@@ -337,6 +441,7 @@ begin
   tblHR.Close;
   tblContactNum.Close;
   tblRaceHistory.Close;
+  tblRaceHistorySplit.Close;
   result := true;
 end;
 

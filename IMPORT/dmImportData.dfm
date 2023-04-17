@@ -10,7 +10,7 @@ object ImportData: TImportData
     Left = 96
     Top = 32
   end
-  object sqlAssertDuplicity: TFDQuery
+  object qryIsDupMembers: TFDQuery
     Connection = TestSCMConnection
     SQL.Strings = (
       'USE SCM_Coach;'
@@ -22,7 +22,7 @@ object ImportData: TImportData
       'FROM SCM_Coach.dbo.HR'
       'WHERE [scmMemberID] = @MemberID;')
     Left = 96
-    Top = 112
+    Top = 168
     ParamData = <
       item
         Name = 'MEMBERID'
@@ -54,7 +54,7 @@ object ImportData: TImportData
       ''
       'SELECT @rtn AS rtnValue;')
     Left = 96
-    Top = 176
+    Top = 232
   end
   object tblHR: TFDTable
     IndexFieldNames = 'HRID'
@@ -62,7 +62,7 @@ object ImportData: TImportData
     UpdateOptions.KeyFields = 'HRID'
     TableName = 'SCM_Coach.dbo.HR'
     Left = 376
-    Top = 168
+    Top = 248
   end
   object TestCoachConnection: TFDConnection
     Params.Strings = (
@@ -87,11 +87,12 @@ object ImportData: TImportData
       '     , DOB'
       '     , MembershipNum'
       '     , MembershipStr'
+      '     , GenderID'
       'FROM Member'
       'WHERE IsSwimmer <> 0'
       '      AND MemberID = @MemberID;')
     Left = 96
-    Top = 248
+    Top = 304
     ParamData = <
       item
         Name = 'MEMBERID'
@@ -107,7 +108,7 @@ object ImportData: TImportData
     UpdateOptions.KeyFields = 'ContactNumID'
     TableName = 'SCM_Coach.dbo.ContactNum'
     Left = 376
-    Top = 232
+    Top = 312
   end
   object tblRaceHistory: TFDTable
     ActiveStoredUsage = [auDesignTime]
@@ -116,7 +117,7 @@ object ImportData: TImportData
     UpdateOptions.KeyFields = 'RaceHistoryID'
     TableName = 'SCM_Coach.dbo.RaceHistory'
     Left = 376
-    Top = 296
+    Top = 376
   end
   object qryContactNum: TFDQuery
     ActiveStoredUsage = [auDesignTime]
@@ -130,7 +131,7 @@ object ImportData: TImportData
       ''
       'SELECT * FROM [dbo].[ContactNum] WHERE [MemberID] = @MemberID;')
     Left = 96
-    Top = 312
+    Top = 368
     ParamData = <
       item
         Name = 'MEMBERID'
@@ -158,6 +159,10 @@ object ImportData: TImportData
       ', [Entrant].EntrantID'
       ',[Entrant].IsDisqualified'
       ',[Entrant].IsScratched'
+      ',[Entrant].Lane'
+      '-- PoolType'
+      '-- NumOfLanes'
+      '-- LenOfPool (Metres)'
       ' FROM [Session]'
       'LEFT JOIN [Event] ON [Session].[SessionID] = [Event].[SessionID]'
       'LEFT JOIN [Stroke] on [Event].StrokeID = Stroke.StrokeID'
@@ -168,7 +173,7 @@ object ImportData: TImportData
       'LEFT JOIN [Entrant] ON HeatIndividual.HeatID = [Entrant].HeatID'
       'WHERE [Entrant].[MemberID] = @MemberID;')
     Left = 96
-    Top = 384
+    Top = 440
     ParamData = <
       item
         Name = 'MEMBERID'
@@ -184,6 +189,49 @@ object ImportData: TImportData
     UpdateOptions.KeyFields = 'RaceHistorySplitID'
     TableName = 'SCM_Coach.dbo.RaceHistorySplit'
     Left = 376
-    Top = 360
+    Top = 440
+  end
+  object qryIsDupRaceHistory: TFDQuery
+    Connection = TestSCMConnection
+    SQL.Strings = (
+      'USE SCM_Coach ;'
+      ''
+      'DECLARE @EntrantID AS INTEGER;'
+      'SET @EntrantID = :ENTRANTID;'
+      ''
+      'SELECT COUNT(RaceHistoryID) AS rtnValue'
+      'FROM RaceHistory'
+      'WHERE EntrantID <> @EntrantID;')
+    Left = 376
+    Top = 192
+    ParamData = <
+      item
+        Name = 'ENTRANTID'
+        DataType = ftInteger
+        ParamType = ptInput
+        Value = Null
+      end>
+  end
+  object qrySplit: TFDQuery
+    Connection = TestSCMConnection
+    SQL.Strings = (
+      'USE SwimClubMeet;'
+      ''
+      'DECLARE @EntrantID AS INTEGER;'
+      'SET @EntrantID = :SPLITID;'
+      ''
+      'SELECT SplitID'
+      ', SplitTime'
+      'FROM dbo.Split'
+      'WHERE EntrantID = @EntrantID;')
+    Left = 88
+    Top = 520
+    ParamData = <
+      item
+        Name = 'SPLITID'
+        DataType = ftInteger
+        ParamType = ptInput
+        Value = Null
+      end>
   end
 end

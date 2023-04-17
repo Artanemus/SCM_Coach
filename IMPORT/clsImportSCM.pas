@@ -60,11 +60,12 @@ begin
     MemberID := TSCMMemberObj(obj).ID; // A SwimClubMeet Member's ID
     // Test for duplicity ...
     // LookUp - SCM_coach.dbo.HR Field 'scmMemberID';
-    if not ImportData.AssertDuplicity(MemberID) then
+    if not ImportData.IsDupMember(MemberID) then
     begin
       // insert this SCM member into the squad ....
       HRID := ImportData.InsertMember(MemberID);
-      if DoRaceHistory then
+      // insert swimmers SCM race-history (exclude duplications)
+      if DoRaceHistory and (HRID <> 0) then
       begin
         recCount := ImportData.InsertRaceHistory(MemberID, HRID, fDoSplit);
       end;
