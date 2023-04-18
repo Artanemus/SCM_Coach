@@ -688,8 +688,8 @@ procedure TImportSCMWizard.TrackStateInit;
 begin
   fTrackState := 1;
   pageCNTRL.TabIndex := 0;
-  chkbDoProfile.Checked := false;
-  chkbDoRaceHistory.Checked := false;
+  chkbDoProfile.Checked := true;
+  chkbDoRaceHistory.Checked := true;
   lbSrc.Clear;
   lbDest.Clear;
   scmMemberList.Clear;

@@ -53,6 +53,8 @@ object ImportSCMWizard: TImportSCMWizard
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 672
+    ExplicitWidth = 669
     DesignSize = (
       673
       96)
@@ -181,6 +183,7 @@ object ImportSCMWizard: TImportSCMWizard
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitWidth = 669
     DesignSize = (
       673
       81)
@@ -372,7 +375,7 @@ object ImportSCMWizard: TImportSCMWizard
     Top = 81
     Width = 673
     Height = 592
-    ActivePage = tabFinalStep
+    ActivePage = tabOptions
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -385,6 +388,8 @@ object ImportSCMWizard: TImportSCMWizard
     TabOrder = 2
     TabWidth = 90
     OnChange = pageCNTRLChange
+    ExplicitWidth = 669
+    ExplicitHeight = 591
     object tabStart: TTabSheet
       Caption = 'Start'
       object lblMsgStartInfo: TLabel
@@ -561,7 +566,7 @@ object ImportSCMWizard: TImportSCMWizard
       end
       object btnDisconnect: TButton
         AlignWithMargins = True
-        Left = 184
+        Left = 183
         Top = 358
         Width = 85
         Height = 83
@@ -571,12 +576,10 @@ object ImportSCMWizard: TImportSCMWizard
         ImageAlignment = iaTop
         Images = UIImageList
         TabOrder = 4
-        ExplicitLeft = 189
-        ExplicitTop = 359
       end
       object btnLogin: TButton
         AlignWithMargins = True
-        Left = 84
+        Left = 83
         Top = 358
         Width = 85
         Height = 83
@@ -586,8 +589,6 @@ object ImportSCMWizard: TImportSCMWizard
         ImageAlignment = iaTop
         Images = UIImageList
         TabOrder = 5
-        ExplicitLeft = 87
-        ExplicitTop = 359
       end
       object btnConnect: TButton
         Left = 163
@@ -825,8 +826,8 @@ object ImportSCMWizard: TImportSCMWizard
       object pnlFinalStep: TRelativePanel
         Left = 0
         Top = 0
-        Width = 669
-        Height = 543
+        Width = 665
+        Height = 542
         ControlCollection = <
           item
             Control = btnGo
@@ -850,8 +851,8 @@ object ImportSCMWizard: TImportSCMWizard
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 665
-        ExplicitHeight = 542
+        ExplicitWidth = 661
+        ExplicitHeight = 541
         DesignSize = (
           665
           542)

@@ -88,6 +88,7 @@ object ImportData: TImportData
       '     , MembershipNum'
       '     , MembershipStr'
       '     , GenderID'
+      '     , Email'
       'FROM Member'
       'WHERE IsSwimmer <> 0'
       '      AND MemberID = @MemberID;')

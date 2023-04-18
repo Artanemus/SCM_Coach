@@ -29,11 +29,8 @@ type
     { Private declarations }
     scmConnection: TFDConnection;
     coachConnection: TFDConnection;
-    fLastIDENT: integer;
     fCoreTablesActivated: boolean;
 
-    function GetLastIDENT: integer;
-    function AddContacts(HRID, scmMemberID: integer): boolean;
     function AddSplits(RaceHistoryID, EntrantID: integer): boolean;
     function HasFieldMiddleInitial: boolean;
 
@@ -43,9 +40,11 @@ type
       AscmConnection, AcoachConnection: TFDConnection);
     // rtns SCM_Coach HRID
     function InsertMember(scmMemberID: integer): integer;
-    // rtns record count
+    // rtns count of races added
     function InsertRaceHistory(scmMemberID, HRID: integer;
       DoSplit: boolean): integer;
+    // rtns count of contacts added
+    function InsertContacts(HRID, scmMemberID: integer): integer;
 
     // STRING LOOKUP AND COMPARE (for use with .HY3 file type)
     function AssertUnique(scmMemberID: integer): boolean;
@@ -69,19 +68,177 @@ implementation
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 {$R *.dfm}
+
+uses System.Variants;
+
 { TImportData }
 
-function TImportData.InsertMember(scmMemberID: integer): integer;
-var
-  IDENT: integer;
+constructor TImportData.CreateWithConnection(AOwner: TComponent;
+  AscmConnection, AcoachConnection: TFDConnection);
+begin
+  inherited Create(AOwner);
+  scmConnection := AscmConnection;
+  coachConnection := AcoachConnection;
+end;
 
+function TImportData.ActivateTable: boolean;
+begin
+  fCoreTablesActivated := false;
+  if Assigned(coachConnection) AND coachConnection.Connected then
+  begin
+    tblHR.Connection := coachConnection;
+    tblHR.Open;
+    if tblHR.Active then
+    begin
+      tblContactNum.Connection := coachConnection;
+      tblContactNum.Open;
+      if tblContactNum.Active then
+      begin
+        tblRaceHistory.Connection := coachConnection;
+        tblRaceHistory.Open;
+        if tblRaceHistory.Active then
+        begin
+          tblRaceHistorySplit.Connection := coachConnection;
+          tblRaceHistorySplit.Open;
+          if tblRaceHistory.Active then
+            fCoreTablesActivated := true;
+        end;
+      end;
+    end;
+  end;
+  result := fCoreTablesActivated;
+
+end;
+
+function TImportData.AddSplits(RaceHistoryID, EntrantID: integer): boolean;
+begin
+  result := false;
+  if AssertConnections then
+  begin
+    qrySplit.Connection := scmConnection;
+    qrySplit.ParamByName('ENTRANTID').AsInteger := EntrantID;
+    qrySplit.Prepare;
+    qrySplit.Open;
+    if qrySplit.Active then
+    begin
+      while not qrySplit.eof do
+      begin
+        // -------------------------------------------------------
+        // S P L I T   T I M E S  ....
+        // -------------------------------------------------------
+        tblRaceHistorySplit.Insert;
+
+        tblRaceHistorySplit.FieldByName('RaceTime').AsDateTime :=
+          qrySplit.FieldByName('SplitTime').AsDateTime;
+        tblRaceHistorySplit.FieldByName('Lap').AsInteger :=
+          qrySplit.FieldByName('Lap').AsInteger;
+        // IDENT for join
+        tblRaceHistorySplit.FieldByName('RaceHistoryID').AsInteger :=
+          RaceHistoryID;
+
+        tblRaceHistorySplit.Post;
+        // iterate
+        qrySplit.Next;
+      end;
+      result := true;
+    end;
+  end;
+end;
+
+function TImportData.AssertConnections: boolean;
+begin
+  result := false;
+  if Assigned(scmConnection) AND scmConnection.Connected AND
+    Assigned(coachConnection) AND coachConnection.Connected then
+    result := true;
+end;
+
+function TImportData.AssertUnique(scmMemberID: integer): boolean;
+begin
+  // STRING LOOKUP AND COMPARE   (.HY3)
+  result := true;
+end;
+
+function TImportData.DeActivateTable: boolean;
+begin
+  tblHR.Close;
+  tblContactNum.Close;
+  tblRaceHistory.Close;
+  tblRaceHistorySplit.Close;
+  result := true;
+end;
+
+function TImportData.HasFieldMiddleInitial: boolean;
+begin
+  result := false;
+  if Assigned(scmConnection) AND scmConnection.Connected then
+  begin
+    // extract firstname, middle initial and lastname (FNAME)
+    qryCheckMiddleInitial.Connection := scmConnection;
+    qryCheckMiddleInitial.Open;
+    if qryCheckMiddleInitial.Active then
+      result := qryCheckMiddleInitial.FieldByName('rtnValue').AsBoolean;
+    qryCheckMiddleInitial.Close;
+  end;
+end;
+
+function TImportData.InsertContacts(HRID, scmMemberID: integer): integer;
+var
+  fld: TField;
 begin
   result := 0;
   if AssertConnections then
   begin
-    tblHR.Connection := coachConnection;
-    tblHR.Open;
+    qryContactNum.Connection := scmConnection;
+    qryContactNum.ParamByName('MEMBERID').AsInteger := scmMemberID;
+    qryContactNum.Prepare;
+    qryContactNum.Open;
+    if qryContactNum.Active and tblContactNum.Active then
+    begin
+      while not qryContactNum.eof do
+      begin
+        tblContactNum.Insert;
 
+        // INDENTIFIER HRID
+        tblContactNum.FieldByName('HRID').AsInteger := HRID;
+        // 128 nvarchar
+        tblContactNum.FieldByName('Number').AsString :=
+          qryContactNum.FieldByName('Number').AsString;
+        // All contact numbers are transfered - including expired.
+        tblContactNum.FieldByName('IsArchived').AsBoolean :=
+          qryContactNum.FieldByName('IsArchived').AsBoolean;
+        // SCM field not implemented version 1.5.2.0
+        fld := qryContactNum.FindField('CreatedOn');
+        if (fld <> nil) then
+          tblContactNum.FieldByName('CreatedOn').AsDateTime :=
+            qryContactNum.FieldByName('CreatedOn').AsDateTime
+        else
+          tblContactNum.FieldByName('CreatedOn').AsDateTime := Now;
+
+        // ContactNumType ID's common across databases
+        { TODO -oBSA -cGeneral : Test ContactNumTypeID bounds? }
+        tblContactNum.FieldByName('ContactNumTypeID').AsInteger :=
+          qryContactNum.FieldByName('ContactNumTypeID').AsInteger;
+
+        tblContactNum.Post;
+
+        result := result + 1;
+        // iterate
+        qryContactNum.Next;
+      end;
+    end;
+  end;
+end;
+
+function TImportData.InsertMember(scmMemberID: integer): integer;
+var
+  IDENT: integer;
+  SQL: string;
+  v: variant;
+begin
+  result := 0;
+  if AssertConnections then
+  begin
     qryMember.Connection := scmConnection;
     qryMember.ParamByName('MEMBERID').AsInteger := scmMemberID;
     qryMember.Prepare;
@@ -95,17 +252,22 @@ begin
         // I N S E R T   P R O F I L E .
         tblHR.Insert;
 
-        tblHR.FieldByName('scmMember').AsInteger :=
+        tblHR.FieldByName('scmMemberID').AsInteger :=
           qryMember.FieldByName('MemberID').AsInteger;
-        tblHR.FieldByName('LastName').AsInteger :=
-          qryMember.FieldByName('LastName').AsInteger;
+        tblHR.FieldByName('LastName').AsString :=
+          qryMember.FieldByName('LastName').AsString;
         if HasFieldMiddleInitial() then
-          tblHR.FieldByName('MiddleInitial').AsInteger :=
-            qryMember.FieldByName('MiddleInitial').AsInteger;
-        tblHR.FieldByName('FirstName').AsInteger :=
-          qryMember.FieldByName('FirstName').AsInteger;
+          tblHR.FieldByName('MiddleInitial').AsString :=
+            qryMember.FieldByName('MiddleInitial').AsString;
+        tblHR.FieldByName('FirstName').AsString :=
+          qryMember.FieldByName('FirstName').AsString;
         tblHR.FieldByName('DOB').AsDateTime := qryMember.FieldByName('DOB')
           .AsDateTime;
+
+        {TODO -oBSA -cGeneral : Complete all registration fields}
+        // tblHR.FieldByName('RegisterNum').AsInteger :=
+        // tblHR.FieldByName('RegisterStr').AsString :=
+        // Tempory assignment ...
         tblHR.FieldByName('RegisterStr').AsString :=
           qryMember.FieldByName('MembershipStr').AsString;
 
@@ -125,11 +287,30 @@ begin
         // SPECIFY SWIMMER INITIAL GRADE ...  ???
         // tblHR.FieldByName('GradeID').AsInteger :=
 
+        // EMAIL
+        tblHR.FieldByName('Email').AsString :=
+          qryMember.FieldByName('Email').AsString;
+
         tblHR.Post;
 
-        IDENT := GetLastIDENT; // ID of last SCM_Coach HR
-        if (IDENT <> 0) then
-          result := IDENT;
+        // -------------------------------------------------------
+        // I D E N T   N E E D E D   F O R   H R I D .
+        // -------------------------------------------------------
+        {TODO -oBSA -cGeneral : modify SQL to always return INT}
+        // Exception class EVariantTypeCastError with message
+        // 'Could not convert variant of type (Null) into type (Integer)'.
+        SQL := 'USE SCM_Coach; SELECT IDENT_CURRENT(''[SCM_Coach].[dbo].[HR]'');';
+        v := coachConnection.ExecSQLScalar(SQL);
+        if VarIsNull(v) then
+          IDENT := 0
+        else
+        begin
+          if VarIsNumeric(v) then
+            IDENT := integer(v)
+          else
+            IDENT := 0;
+        end;
+
         // iterate
         qryMember.Next;
       end;
@@ -144,6 +325,7 @@ function TImportData.InsertRaceHistory(scmMemberID, HRID: integer;
 var
   IDENT, EntrantID: integer;
   SQL: string;
+  v: variant;
 begin
   { insert the SwimClubMeet member's race history into
     the SCM_coach RaceHistory table. }
@@ -153,10 +335,6 @@ begin
   qryRaceHistory.ParamByName('MEMBERID').AsInteger := scmMemberID;
   qryRaceHistory.Prepare;
   qryRaceHistory.Open;
-
-  // insert into RaceHistory
-  tblRaceHistory.Connection := coachConnection;
-  tblRaceHistory.Open;
 
   if qryRaceHistory.Active and tblRaceHistory.Active then
   begin
@@ -168,17 +346,6 @@ begin
       begin
         tblRaceHistory.Insert;
         tblRaceHistory.FieldByName('HRID').AsInteger := HRID;
-
-        { SessionStart
-          ,[Session].Caption AS SessionStr
-          , CONCAT(Distance.Caption, ' ', Stroke.Caption) as EventStr
-          , Entrant.RaceTime
-          , [Distance].DistanceID
-          , [Stroke].StrokeID
-          , [Entrant].EntrantID
-          ,[Entrant].IsDisqualified
-          ,[Entrant].IsScratched
-        }
 
         { TODO -oBSA -cGeneral : Improve all caption strings for RaceHistory }
         // Caption: ClubName ...
@@ -229,8 +396,18 @@ begin
         // -------------------------------------------------------
         // I D E N T   N E E D E D   F O R   S P L I T   T I M E S  ....
         // -------------------------------------------------------
+        {TODO -oBSA -cGeneral : modify SQL to always return INT}
         SQL := 'USE SCM_Coach; SELECT IDENT_CURRENT(''[SCM_Coach].[dbo].[RaceHistory]'');';
-        IDENT := coachConnection.ExecSQLScalar(SQL);
+        v := coachConnection.ExecSQLScalar(SQL);
+        if VarIsNull(v) then
+          IDENT := 0
+        else
+        begin
+          if VarIsNumeric(v) then
+            IDENT := integer(v)
+          else
+            IDENT := 0;
+        end;
 
         if DoSplit and (IDENT <> 0) then
         begin
@@ -245,143 +422,6 @@ begin
   qryRaceHistory.Close;
   tblRaceHistory.Close;
 
-end;
-
-function TImportData.ActivateTable: boolean;
-begin
-  fCoreTablesActivated := false;
-  if Assigned(coachConnection) AND coachConnection.Connected then
-  begin
-    tblHR.Connection := coachConnection;
-    tblHR.Open;
-    if tblHR.Active then
-    begin
-      tblContactNum.Connection := coachConnection;
-      tblContactNum.Open;
-      if tblContactNum.Active then
-      begin
-        tblRaceHistory.Connection := coachConnection;
-        tblRaceHistory.Open;
-        if tblRaceHistory.Active then
-        begin
-          tblRaceHistorySplit.Connection := coachConnection;
-          tblRaceHistorySplit.Open;
-          if tblRaceHistory.Active then
-            fCoreTablesActivated := true;
-        end;
-      end;
-    end;
-  end;
-  result := fCoreTablesActivated;
-
-end;
-
-function TImportData.AddContacts(HRID, scmMemberID: integer): boolean;
-var
-  fld: TField;
-begin
-  result := false;
-  if AssertConnections then
-  begin
-    qryContactNum.Connection := scmConnection;
-    qryContactNum.ParamByName('MEMBERID').AsInteger := scmMemberID;
-    qryContactNum.Prepare;
-    qryContactNum.Open;
-    if qryContactNum.Active then
-    begin
-      while not qryContactNum.eof do
-      begin
-        tblContactNum.Insert;
-
-        // INDENTIFIER HRID
-        tblContactNum.FieldByName('HRID').AsInteger := HRID;
-        // 128 nvarchar
-        tblContactNum.FieldByName('Number').AsString :=
-          qryContactNum.FieldByName('Number').AsString;
-        // All contact numbers are transfered - including expired.
-        tblContactNum.FieldByName('IsArchived').AsBoolean :=
-          qryContactNum.FieldByName('IsArchived').AsBoolean;
-        // SCM field not implemented version 1.5.2.0
-        fld := qryContactNum.FindField('CreatedOn');
-        if (fld <> nil) then
-          tblContactNum.FieldByName('CreatedOn').AsDateTime :=
-            qryContactNum.FieldByName('CreatedOn').AsDateTime
-        else
-          tblContactNum.FieldByName('CreatedOn').AsDateTime := Now;
-
-        // ContactNumType ID's common across databases
-        { TODO -oBSA -cGeneral : Test ContactNumTypeID bounds? }
-        tblContactNum.FieldByName('ContactNumTypeID').AsInteger :=
-          qryContactNum.FieldByName('ContactNumTypeID').AsInteger;
-
-        tblContactNum.Post;
-        // iterate
-        qryContactNum.Next;
-      end;
-    end;
-    result := true;
-  end;
-end;
-
-function TImportData.AddSplits(RaceHistoryID, EntrantID: integer): boolean;
-var
-  fld: TField;
-  IDENT: integer;
-  SQL: string;
-begin
-  result := false;
-  if AssertConnections then
-  begin
-    qrySplit.Connection := scmConnection;
-    qrySplit.ParamByName('ENTRANTID').AsInteger := EntrantID;
-    qrySplit.Prepare;
-    qrySplit.Open;
-    if qrySplit.Active then
-    begin
-      while not qrySplit.eof do
-      begin
-        // -------------------------------------------------------
-        // S P L I T   T I M E S  ....
-        // -------------------------------------------------------
-        tblRaceHistorySplit.Insert;
-
-        tblRaceHistorySplit.FieldByName('RaceTime').AsDateTime :=
-          qrySplit.FieldByName('SplitTime').AsDateTime;
-        tblRaceHistorySplit.FieldByName('Lap').AsInteger :=
-          qrySplit.FieldByName('Lap').AsInteger;
-        // IDENT for join
-        tblRaceHistorySplit.FieldByName('RaceHistoryID').AsInteger :=
-          RaceHistoryID;
-
-        tblRaceHistorySplit.Post;
-        // iterate
-        qrySplit.Next;
-      end;
-      result := true;
-    end;
-  end;
-end;
-
-function TImportData.AssertConnections: boolean;
-begin
-  result := false;
-  if Assigned(scmConnection) AND scmConnection.Connected AND
-    Assigned(coachConnection) AND coachConnection.Connected then
-    result := true;
-end;
-
-function TImportData.HasFieldMiddleInitial: boolean;
-begin
-  result := false;
-  if Assigned(scmConnection) AND scmConnection.Connected then
-  begin
-    // extract firstname, middle initial and lastname (FNAME)
-    qryCheckMiddleInitial.Connection := scmConnection;
-    qryCheckMiddleInitial.Open;
-    if qryCheckMiddleInitial.Active then
-      result := qryCheckMiddleInitial.FieldByName('rtnValue').AsBoolean;
-    qryCheckMiddleInitial.Close;
-  end;
 end;
 
 function TImportData.IsDupMember(scmMemberID: integer): boolean;
@@ -420,41 +460,6 @@ begin
     qryIsDupRaceHistory.Close;
   end;
 
-end;
-
-function TImportData.AssertUnique(scmMemberID: integer): boolean;
-begin
-  // STRING LOOKUP AND COMPARE   (.HY3)
-  result := true;
-end;
-
-constructor TImportData.CreateWithConnection(AOwner: TComponent;
-  AscmConnection, AcoachConnection: TFDConnection);
-begin
-  inherited Create(AOwner);
-  scmConnection := AscmConnection;
-  coachConnection := AcoachConnection;
-end;
-
-function TImportData.DeActivateTable: boolean;
-begin
-  tblHR.Close;
-  tblContactNum.Close;
-  tblRaceHistory.Close;
-  tblRaceHistorySplit.Close;
-  result := true;
-end;
-
-function TImportData.GetLastIDENT: integer;
-var
-  SQL: string;
-begin
-  result := 0;
-  if Assigned(coachConnection) then
-  begin
-    SQL := 'USE SCM_Coach; SELECT IDENT_CURRENT(''[SCM_Coach].[dbo].[Member]'');';
-    result := coachConnection.ExecSQLScalar(SQL);
-  end;
 end;
 
 end.
