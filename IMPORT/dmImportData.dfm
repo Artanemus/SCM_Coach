@@ -10,19 +10,20 @@ object ImportData: TImportData
     Left = 96
     Top = 32
   end
-  object qryIsDupMembers: TFDQuery
+  object qryIsDupSCMMember: TFDQuery
+    ActiveStoredUsage = [auDesignTime]
     Connection = TestSCMConnection
     SQL.Strings = (
       'USE SCM_Coach;'
       ''
-      'DECLARE @MemberID AS INTEGER;'
-      'SET @MemberID = :MEMBERID;'
+      'DECLARE @scmMemberID AS INTEGER;'
+      'SET @scmMemberID = :MEMBERID;'
       ''
-      'SELECT COUNT([scmMemberID]) AS rtnValue'
+      'SELECT COUNT([SCMMemberID]) AS rtnValue'
       'FROM SCM_Coach.dbo.HR'
-      'WHERE [scmMemberID] = @MemberID;')
-    Left = 96
-    Top = 168
+      'WHERE [scmMemberID] = @scmMemberID;')
+    Left = 376
+    Top = 128
     ParamData = <
       item
         Name = 'MEMBERID'
@@ -32,6 +33,7 @@ object ImportData: TImportData
       end>
   end
   object qryCheckMiddleInitial: TFDQuery
+    ActiveStoredUsage = [auDesignTime]
     Connection = TestSCMConnection
     SQL.Strings = (
       'USE SwimClubMeet;'
@@ -57,6 +59,7 @@ object ImportData: TImportData
     Top = 232
   end
   object tblHR: TFDTable
+    ActiveStoredUsage = [auDesignTime]
     IndexFieldNames = 'HRID'
     Connection = TestCoachConnection
     UpdateOptions.KeyFields = 'HRID'
@@ -74,6 +77,7 @@ object ImportData: TImportData
     Top = 32
   end
   object qryMember: TFDQuery
+    ActiveStoredUsage = [auDesignTime]
     Connection = TestSCMConnection
     SQL.Strings = (
       'USE SwimClubMeet;'
@@ -193,6 +197,7 @@ object ImportData: TImportData
     Top = 440
   end
   object qryIsDupRaceHistory: TFDQuery
+    ActiveStoredUsage = [auDesignTime]
     Connection = TestSCMConnection
     SQL.Strings = (
       'USE SCM_Coach ;'
@@ -214,6 +219,7 @@ object ImportData: TImportData
       end>
   end
   object qrySplit: TFDQuery
+    ActiveStoredUsage = [auDesignTime]
     Connection = TestSCMConnection
     SQL.Strings = (
       'USE SwimClubMeet;'

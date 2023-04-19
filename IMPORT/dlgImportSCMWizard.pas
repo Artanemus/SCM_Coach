@@ -14,7 +14,8 @@ uses
   FireDAC.DApt, FireDAC.Comp.DataSet, dmCOACH, System.ImageList, Vcl.ImgList,
   Vcl.VirtualImageList, Vcl.WinXCtrls, Vcl.ExtCtrls, System.Actions,
   Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
-  System.Contnrs, Vcl.Buttons, clsImportSCM, SCMMemberObj;
+  System.Contnrs, Vcl.Buttons, clsImportSCM, SCMMemberObj, Vcl.Grids,
+  Vcl.DBGrids;
 
 type
 
@@ -100,6 +101,10 @@ type
     WizardImageList: TVirtualImageList;
     lblLoginDBver: TLabel;
     chkbDoRaceHistory: TCheckBox;
+    FDMemTable1: TFDMemTable;
+    DataSource1: TDataSource;
+    DBGrid1: TDBGrid;
+    Label1: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure ListBoxSrcDragOver(Sender, Source: TObject; X, Y: integer;
       State: TDragState; var Accept: Boolean);
@@ -212,16 +217,25 @@ begin
   // a SCM import class is constructed ...
   cls := TImportMember.CreateWithConnections(Self, wizSCMConnection,
     COACH.coachConnection);
+  // O P T I O N S .
+  cls.DoContactNum := true;
+  cls.DoRaceHistory := chkbDoRaceHistory.Checked;
+  cls.DoSplit := true;
 
   // I N T R O D U C E  N E W   M E M B E R (S)  T O   S QU A D .
   if (rgrpMethod.ItemIndex = 1) then
-  begin
-    cls.InsertMember(lbDest.Items, chkbDoRaceHistory.Checked);
-  end;
+    cls.InsertMember(lbDest.Items)
   // U P D A T E   P R O F I L E A N D   R A C E   H I S T O R Y .
-  if (rgrpMethod.ItemIndex = 0) then
-  begin
+  { TODO -oBSA -cGeneral : Complete Action GO }
+  else if (rgrpMethod.ItemIndex = 0) then
     cls.UpdateMembers(lbDest.Items);
+
+  if (cls.State = 1) then // success - no errors.
+  begin
+    fTrackState := 4;
+    TrackStateUpdate;
+    // move to the 'Method' tab-sheet.
+    pageCNTRL.SelectNextPage(true, true);
   end;
 
   cls.Free;
@@ -343,8 +357,8 @@ end;
 function TImportSCMWizard.AssertAllConnections: Boolean;
 begin
   result := false;
-  if Assigned(COACH) and COACH.coachConnection.Connected and Assigned(wizSCMConnection)
-    and wizSCMConnection.Connected then
+  if Assigned(COACH) and COACH.coachConnection.Connected and
+    Assigned(wizSCMConnection) and wizSCMConnection.Connected then
     result := true;
 end;
 
@@ -534,6 +548,50 @@ begin
   end;
 end;
 
+procedure TImportSCMWizard.NavButtonState;
+begin
+  case pageCNTRL.TabIndex of
+    0:
+      begin
+        btnPrev.Enabled := false
+      end;
+    1:
+      begin
+        btnPrev.Enabled := true;
+        if Assigned(wizSCMConnection) and wizSCMConnection.Connected then
+          btnNext.Enabled := true
+        else
+          btnNext.Enabled := false;
+      end;
+    2:
+      begin
+        btnPrev.Enabled := true;
+        if (rgrpMethod.ItemIndex <> -1) then
+          btnNext.Enabled := true
+        else
+          btnNext.Enabled := false;
+      end;
+    3:
+      begin
+        btnPrev.Enabled := true;
+        if (lbDest.Items.Count > 0) then
+          btnNext.Enabled := true
+        else
+          btnNext.Enabled := false;
+      end;
+    4, 5:
+      begin
+        btnPrev.Enabled := true;
+        btnNext.Enabled := true;
+      end;
+    6:
+      begin
+        btnPrev.Enabled := true;
+        btnNext.Enabled := false;
+      end;
+  end;
+end;
+
 procedure TImportSCMWizard.pageCNTRLChange(Sender: TObject);
 begin
 
@@ -694,50 +752,6 @@ begin
   lbDest.Clear;
   scmMemberList.Clear;
   TrackStateUpdate;
-end;
-
-procedure TImportSCMWizard.NavButtonState;
-begin
-  case pageCNTRL.TabIndex of
-    0:
-      begin
-        btnPrev.Enabled := false
-      end;
-    1:
-      begin
-        btnPrev.Enabled := true;
-        if Assigned(wizSCMConnection) and wizSCMConnection.Connected then
-          btnNext.Enabled := true
-        else
-          btnNext.Enabled := false;
-      end;
-    2:
-      begin
-        btnPrev.Enabled := true;
-        if (rgrpMethod.ItemIndex <> -1) then
-          btnNext.Enabled := true
-        else
-          btnNext.Enabled := false;
-      end;
-    3:
-      begin
-        btnPrev.Enabled := true;
-        if (lbDest.Items.Count > 0) then
-          btnNext.Enabled := true
-        else
-          btnNext.Enabled := false;
-      end;
-    4, 5:
-      begin
-        btnPrev.Enabled := true;
-        btnNext.Enabled := true;
-      end;
-    6:
-      begin
-        btnPrev.Enabled := true;
-        btnNext.Enabled := false;
-      end;
-  end;
 end;
 
 procedure TImportSCMWizard.TrackStateSync;

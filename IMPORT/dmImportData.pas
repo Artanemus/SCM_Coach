@@ -13,7 +13,7 @@ uses
 type
   TImportData = class(TDataModule)
     TestSCMConnection: TFDConnection;
-    qryIsDupMembers: TFDQuery;
+    qryIsDupSCMMember: TFDQuery;
     qryIsDupRaceHistory: TFDQuery;
     qryCheckMiddleInitial: TFDQuery;
     tblHR: TFDTable;
@@ -49,11 +49,11 @@ type
     // STRING LOOKUP AND COMPARE (for use with .HY3 file type)
     function AssertUnique(scmMemberID: integer): boolean;
     // IDENTITY LOOKUP
-    function IsDupMember(scmMemberID: integer): boolean;
+    function IsDupSCMMember(scmMemberID: integer): boolean;
     function IsDupRaceHistory(EntrantID: integer): boolean;
 
-    function ActivateTable: boolean;
-    function DeActivateTable: boolean;
+    function ActivateTables: boolean;
+    function DeActivateTables: boolean;
     function AssertConnections(): boolean;
 
     // FLAG - true if all core FireDAC tables, queries are active.
@@ -81,8 +81,10 @@ begin
   coachConnection := AcoachConnection;
 end;
 
-function TImportData.ActivateTable: boolean;
+function TImportData.ActivateTables: boolean;
 begin
+  // TFDTable are the only DB components to be activated for the life
+  // of this class.
   fCoreTablesActivated := false;
   if Assigned(coachConnection) AND coachConnection.Connected then
   begin
@@ -159,7 +161,7 @@ begin
   result := true;
 end;
 
-function TImportData.DeActivateTable: boolean;
+function TImportData.DeActivateTables: boolean;
 begin
   tblHR.Close;
   tblContactNum.Close;
@@ -247,8 +249,11 @@ begin
     if qryMember.Active and tblHR.Active then
     begin
       { TODO -oBSA -cGeneral : Assert single record? }
-      while not qryMember.eof do
+      if (qryMember.RecordCount > 0) then
       begin
+
+        qryMember.First; // REDUNDANT
+
         // I N S E R T   P R O F I L E .
         tblHR.Insert;
 
@@ -264,7 +269,7 @@ begin
         tblHR.FieldByName('DOB').AsDateTime := qryMember.FieldByName('DOB')
           .AsDateTime;
 
-        {TODO -oBSA -cGeneral : Complete all registration fields}
+        { TODO -oBSA -cGeneral : Complete all registration fields }
         // tblHR.FieldByName('RegisterNum').AsInteger :=
         // tblHR.FieldByName('RegisterStr').AsString :=
         // Tempory assignment ...
@@ -296,7 +301,7 @@ begin
         // -------------------------------------------------------
         // I D E N T   N E E D E D   F O R   H R I D .
         // -------------------------------------------------------
-        {TODO -oBSA -cGeneral : modify SQL to always return INT}
+        { TODO -oBSA -cGeneral : modify SQL to always return INT }
         // Exception class EVariantTypeCastError with message
         // 'Could not convert variant of type (Null) into type (Integer)'.
         SQL := 'USE SCM_Coach; SELECT IDENT_CURRENT(''[SCM_Coach].[dbo].[HR]'');';
@@ -307,16 +312,15 @@ begin
         begin
           if VarIsNumeric(v) then
             IDENT := integer(v)
+          else if VarIsStr(v) then
+            IDENT := StrToIntDef(v, 0)
           else
             IDENT := 0;
         end;
-
-        // iterate
-        qryMember.Next;
+        result := IDENT // processed one record.
       end;
     end;
     qryMember.Close;
-    tblHR.Close;
   end;
 end;
 
@@ -396,7 +400,7 @@ begin
         // -------------------------------------------------------
         // I D E N T   N E E D E D   F O R   S P L I T   T I M E S  ....
         // -------------------------------------------------------
-        {TODO -oBSA -cGeneral : modify SQL to always return INT}
+        { TODO -oBSA -cGeneral : modify SQL to always return INT }
         SQL := 'USE SCM_Coach; SELECT IDENT_CURRENT(''[SCM_Coach].[dbo].[RaceHistory]'');';
         v := coachConnection.ExecSQLScalar(SQL);
         if VarIsNull(v) then
@@ -405,6 +409,8 @@ begin
         begin
           if VarIsNumeric(v) then
             IDENT := integer(v)
+          else if VarIsStr(v) then
+            IDENT := StrToIntDef(v, 0)
           else
             IDENT := 0;
         end;
@@ -420,26 +426,25 @@ begin
   end;
 
   qryRaceHistory.Close;
-  tblRaceHistory.Close;
 
 end;
 
-function TImportData.IsDupMember(scmMemberID: integer): boolean;
+function TImportData.IsDupSCMMember(scmMemberID: integer): boolean;
 begin
   // IDENTITY LOOKUP
   result := true;
   if Assigned(coachConnection) AND coachConnection.Connected then
   begin
-    qryIsDupMembers.Connection := coachConnection;
-    qryIsDupMembers.ParamByName('MEMBERID').AsInteger := scmMemberID;
-    qryIsDupMembers.Prepare;
-    qryIsDupMembers.Open;
-    if qryIsDupMembers.Active then
+    qryIsDupSCMMember.Connection := coachConnection;
+    qryIsDupSCMMember.ParamByName('MEMBERID').AsInteger := scmMemberID;
+    qryIsDupSCMMember.Prepare;
+    qryIsDupSCMMember.Open;
+    if qryIsDupSCMMember.Active then
     begin
-      if (qryIsDupMembers.FieldByName('rtnValue').AsInteger = 0) then
+      if (qryIsDupSCMMember.FieldByName('rtnValue').AsInteger = 0) then
         result := false;
     end;
-    qryIsDupMembers.Close;
+    qryIsDupSCMMember.Close;
   end;
 end;
 

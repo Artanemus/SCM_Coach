@@ -375,7 +375,7 @@ object ImportSCMWizard: TImportSCMWizard
     Top = 81
     Width = 673
     Height = 592
-    ActivePage = tabOptions
+    ActivePage = tabMethod
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -566,7 +566,7 @@ object ImportSCMWizard: TImportSCMWizard
       end
       object btnDisconnect: TButton
         AlignWithMargins = True
-        Left = 183
+        Left = 182
         Top = 358
         Width = 85
         Height = 83
@@ -579,7 +579,7 @@ object ImportSCMWizard: TImportSCMWizard
       end
       object btnLogin: TButton
         AlignWithMargins = True
-        Left = 83
+        Left = 82
         Top = 358
         Width = 85
         Height = 83
@@ -851,8 +851,6 @@ object ImportSCMWizard: TImportSCMWizard
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 661
-        ExplicitHeight = 541
         DesignSize = (
           665
           542)
@@ -890,13 +888,33 @@ object ImportSCMWizard: TImportSCMWizard
     object tabSuccess: TTabSheet
       Caption = 'Success'
       ImageIndex = 5
+      object Label1: TLabel
+        Left = 16
+        Top = 16
+        Width = 50
+        Height = 21
+        Caption = 'Results'
+      end
+      object DBGrid1: TDBGrid
+        Left = 16
+        Top = 43
+        Width = 633
+        Height = 241
+        DataSource = DataSource1
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -16
+        TitleFont.Name = 'Segoe UI'
+        TitleFont.Style = []
+      end
     end
   end
   object wizSCMConnection: TFDConnection
     ConnectedStoredUsage = [auDesignTime]
     LoginPrompt = False
-    Left = 528
-    Top = 232
+    Left = 64
+    Top = 488
   end
   object UICollection: TImageCollection
     Images = <
@@ -1655,7 +1673,7 @@ object ImportSCMWizard: TImportSCMWizard
   object actnManager: TActionManager
     Images = UIImageList
     Left = 528
-    Top = 432
+    Top = 488
     StyleName = 'Platform Default'
     object actnLogin: TAction
       Category = 'Login'
@@ -2631,5 +2649,21 @@ object ImportSCMWizard: TImportSCMWizard
     Height = 48
     Left = 344
     Top = 488
+  end
+  object FDMemTable1: TFDMemTable
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 56
+    Top = 352
+  end
+  object DataSource1: TDataSource
+    DataSet = FDMemTable1
+    Left = 160
+    Top = 352
   end
 end

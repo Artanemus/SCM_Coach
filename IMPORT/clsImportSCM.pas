@@ -4,23 +4,25 @@ unit clsImportSCM;
 // Member must be UNIQUE;
 // All connection must be VALID;
 interface
-  // Missing $(FrameworkType) in stand alone class
-  // Might be a better way to sort this out!
-  {$Define VCL}
+
+// Missing $(FrameworkType) in stand alone class
+// Might be a better way to sort this out!
+{$DEFINE VCL}
 
 uses
-  {$IFDEF VCL}
+{$IFDEF VCL}
   Classes, FireDAC.Comp.Client, dmImportData, SCMMemberObj;
-  {$IFEND}
-type
+{$IFEND}
 
+type
 
   TImportMember = class(TComponent)
   private
     { private declarations }
     scmConnection: TFDConnection;
     coachConnection: TFDConnection;
-    fDoSplit, fDoContactNum: boolean;
+    fDoSplit, fDoContactNum, fDoRaceHistory: boolean;
+    fState: integer;
   protected
     { protected declarations }
   public
@@ -32,13 +34,18 @@ type
     constructor CreateWithConnections(AOwner: TComponent;
       AscmConnection, AcoachConnection: TFDConnection);
     destructor Destroy; override;
-    procedure InsertMember(list: TStrings; DoRaceHistory: boolean);
+    procedure InsertMember(list: TStrings);
     procedure UpdateMembers(list: TStrings);
+
+    // 0 Unknown; 1 complete no errors; 2 err#
+    property State: integer read fState;
+    property DoContactNum: boolean read FDoContactNum write FDoContactNum;
+    property DoSplit: boolean read FDoSplit write FDoSplit;
+    property DoRaceHistory: boolean read FDoRaceHistory write FDoRaceHistory;
 
   published
     { published declarations }
   end;
-
 
 implementation
 
@@ -51,29 +58,32 @@ begin
   inherited;
   { TODO -oBSa -cGeneral : Expose DoSplit }
   fDoSplit := true;
+  fDoRaceHistory := true;
+  fDoContactNum := true;
   countHRs := 0;
   countContacts := 0;
   countRaces := 0;
+  fState := 0; // UNKNOWN
 end;
 
-procedure TImportMember.InsertMember(list: TStrings; DoRaceHistory: boolean);
+procedure TImportMember.InsertMember(list: TStrings);
 var
   i, MemberID, HRID, count: integer;
   obj: TObject;
 begin
   // INIT
-  fDoSplit := true;
   countHRs := 0;
   countContacts := 0;
   countRaces := 0;
+  fState := 0;
 
   // Loop across select IDs. (wit: SwimClubMeet member ID's)
-  for i := 0 to list.Count - 1 do
+  for i := 0 to list.count - 1 do
   begin
     obj := list.Objects[i];
     MemberID := TSCMMemberObj(obj).ID;
     // Test for duplicity. LookUp - SCM_coach.dbo.HR Field 'scmMemberID';
-    if not ImportData.IsDupMember(MemberID) then
+    if not ImportData.IsDupSCMMember(MemberID) then
     begin
       // C R E A T E   N E W   S Q U A D   M E M B E R .
       // insert this SCM member into the squad ....
@@ -89,7 +99,7 @@ begin
         end;
         // R A C E   H I S T O R Y .
         // insert swimmer's SCM race-history (exclude duplications)
-        if DoRaceHistory then
+        if fDoRaceHistory then
         begin
           count := ImportData.InsertRaceHistory(MemberID, HRID, fDoSplit);
           countRaces := countRaces + count;
@@ -97,6 +107,8 @@ begin
       end;
     end;
   end;
+  if (countHRs > 0) then
+    fState := 1;
 end;
 
 constructor TImportMember.CreateWithConnections(AOwner: TComponent;
@@ -108,12 +120,12 @@ begin
   // construct database module.
   ImportData := TImportData.CreateWithConnection(Self, scmConnection,
     coachConnection);
-  ImportData.ActivateTable();
+  ImportData.ActivateTables();
 end;
 
 destructor TImportMember.Destroy;
 begin
-  ImportData.DeActivateTable(); // - auto-close on destroy
+  ImportData.DeActivateTables(); // - auto-close on destroy
   FreeAndNil(ImportData); // - auto-free on destory
   inherited;
 end;
@@ -121,8 +133,7 @@ end;
 procedure TImportMember.UpdateMembers(list: TStrings);
 begin
   // Update the profile and race history of the squad member.
-  {TODO -oBSA -cGeneral : UpdateMember}
+  { TODO -oBSA -cGeneral : UpdateMember }
 end;
-
 
 end.
