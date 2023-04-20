@@ -78,7 +78,12 @@ object ImportData: TImportData
   end
   object qryMember: TFDQuery
     ActiveStoredUsage = [auDesignTime]
+    IndexFieldNames = 'MemberID'
     Connection = TestSCMConnection
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
+    UpdateOptions.EnableDelete = False
+    UpdateOptions.EnableInsert = False
+    UpdateOptions.EnableUpdate = False
     SQL.Strings = (
       'USE SwimClubMeet;'
       ''
@@ -126,7 +131,12 @@ object ImportData: TImportData
   end
   object qryContactNum: TFDQuery
     ActiveStoredUsage = [auDesignTime]
+    IndexFieldNames = 'ContactNumID'
     Connection = TestSCMConnection
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
+    UpdateOptions.EnableDelete = False
+    UpdateOptions.EnableInsert = False
+    UpdateOptions.EnableUpdate = False
     SQL.Strings = (
       'USE SwimClubMeet;'
       ''
@@ -147,7 +157,12 @@ object ImportData: TImportData
   end
   object qryRaceHistory: TFDQuery
     ActiveStoredUsage = [auDesignTime]
+    IndexFieldNames = 'EntrantID'
     Connection = TestSCMConnection
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
+    UpdateOptions.EnableDelete = False
+    UpdateOptions.EnableInsert = False
+    UpdateOptions.EnableUpdate = False
     SQL.Strings = (
       'Use SwimClubMeet;'
       ''
@@ -207,7 +222,7 @@ object ImportData: TImportData
       ''
       'SELECT COUNT(RaceHistoryID) AS rtnValue'
       'FROM RaceHistory'
-      'WHERE EntrantID <> @EntrantID;')
+      'WHERE EntrantID = @EntrantID;')
     Left = 376
     Top = 192
     ParamData = <
@@ -220,12 +235,17 @@ object ImportData: TImportData
   end
   object qrySplit: TFDQuery
     ActiveStoredUsage = [auDesignTime]
+    IndexFieldNames = 'SplitID'
     Connection = TestSCMConnection
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
+    UpdateOptions.EnableDelete = False
+    UpdateOptions.EnableInsert = False
+    UpdateOptions.EnableUpdate = False
     SQL.Strings = (
       'USE SwimClubMeet;'
       ''
       'DECLARE @EntrantID AS INTEGER;'
-      'SET @EntrantID = :SPLITID;'
+      'SET @EntrantID = :ENTRANTID;'
       ''
       'SELECT SplitID'
       ', SplitTime'
@@ -235,7 +255,7 @@ object ImportData: TImportData
     Top = 520
     ParamData = <
       item
-        Name = 'SPLITID'
+        Name = 'ENTRANTID'
         DataType = ftInteger
         ParamType = ptInput
         Value = Null

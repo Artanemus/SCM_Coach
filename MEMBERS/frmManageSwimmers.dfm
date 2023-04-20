@@ -25,7 +25,7 @@ object ManageSwimmers: TManageSwimmers
     BevelEdges = []
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 1346
+    ExplicitWidth = 1334
     object lblMemberCount: TLabel
       Left = 1159
       Top = 6
@@ -62,8 +62,8 @@ object ManageSwimmers: TManageSwimmers
     BevelEdges = []
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitTop = 777
-    ExplicitWidth = 1346
+    ExplicitTop = 774
+    ExplicitWidth = 1334
     object DBNavigator1: TDBNavigator
       Left = 385
       Top = 6
@@ -89,8 +89,8 @@ object ManageSwimmers: TManageSwimmers
     TabHeight = 40
     TabOrder = 2
     TabWidth = 160
-    ExplicitWidth = 1346
-    ExplicitHeight = 698
+    ExplicitWidth = 1334
+    ExplicitHeight = 695
     object TabSheet1: TTabSheet
       Caption = 'Swimmer'#39's Details'
       object Panel7: TPanel
@@ -101,8 +101,8 @@ object ManageSwimmers: TManageSwimmers
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 1342
-        ExplicitHeight = 649
+        ExplicitWidth = 1326
+        ExplicitHeight = 645
         object Label3: TLabel
           Left = 153
           Top = 139
@@ -300,7 +300,7 @@ object ManageSwimmers: TManageSwimmers
           Width = 124
           Height = 27
           DataField = 'RegisterNum'
-          DataSource = ManageMemberData.dsMember
+          DataSource = ManageMemberData.dsHR
           TabOrder = 8
         end
         object DBchkIsActive: TDBCheckBox
@@ -348,7 +348,7 @@ object ManageSwimmers: TManageSwimmers
           Width = 283
           Height = 27
           DataField = 'RegisterStr'
-          DataSource = ManageMemberData.dsMember
+          DataSource = ManageMemberData.dsHR
           TabOrder = 7
         end
         object dtpickDOB: TCalendarPicker
@@ -381,7 +381,7 @@ object ManageSwimmers: TManageSwimmers
           Top = 247
           Width = 321
           Height = 382
-          DataSource = ManageMemberData.dsMemberPB
+          DataSource = ManageMemberData.dsHRPB
           TabOrder = 10
           TitleFont.Charset = DEFAULT_CHARSET
           TitleFont.Color = clWindowText
@@ -391,15 +391,19 @@ object ManageSwimmers: TManageSwimmers
           Columns = <
             item
               Expanded = False
-              FieldName = 'EventStr'
-              Title.Caption = 'Event'
-              Width = 140
+              FieldName = 'HRID'
+              Width = 0
               Visible = True
             end
             item
               Expanded = False
-              FieldName = 'PB'
-              Width = 80
+              FieldName = 'EventStr'
+              Width = 180
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'RaceTime'
               Visible = True
             end>
         end
@@ -465,10 +469,11 @@ object ManageSwimmers: TManageSwimmers
       object DBGrid3: TDBGrid
         Left = 0
         Top = 0
-        Width = 1342
-        Height = 649
+        Width = 1330
+        Height = 646
         Align = alClient
         BorderStyle = bsNone
+        DataSource = ManageMemberData.dsHR
         DefaultDrawing = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -681,7 +686,7 @@ object ManageSwimmers: TManageSwimmers
     Font.Style = []
     ParentFont = False
     Spacing = 0
-    ExplicitWidth = 1342
+    ExplicitWidth = 1334
   end
   object ImageList1: TImageList
     Height = 24

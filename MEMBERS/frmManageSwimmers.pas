@@ -119,7 +119,6 @@ type
 
   private
     { Private declarations }
-    fSwimClubID: Integer;
     fDoDelete: Boolean;
     FConnection: TFDConnection;
     fColorEditBoxFocused: TColor;
@@ -141,15 +140,15 @@ type
 
   public
     { Public declarations }
-    procedure Prepare(AConnection: TFDConnection; ASwimClubID: Integer = 1;
-      AMemberID: Integer = 0);
+    procedure Prepare(AConnection: TFDConnection;
+  AHRTypeID, AMemberID: Integer);
     procedure ClearAllFilters();
 
   end;
 
 const
-  INIFILE_SCM_MEMBERPREF = 'SCM_MemberPref.ini';
-  INIFILE_SECTION = 'SCM_Member';
+  INIFILE_SCM_COACHPREF = 'SCM_COACHPref.ini';
+  INIFILE_SECTION = 'SCM_HR';
 
 var
   ManageSwimmers: TManageSwimmers;
@@ -186,18 +185,18 @@ end;
 
 procedure TManageSwimmers.btnClearClick(Sender: TObject);
 begin
-  if Assigned(ManageMemberData) and (ManageMemberData.qryMember.Active) then
+  if Assigned(ManageMemberData) and (ManageMemberData.qryHR.Active) then
   begin
-    if (ManageMemberData.qryMember.State <> dsInsert) or
-      (ManageMemberData.qryMember.State <> dsEdit) then
-      ManageMemberData.qryMember.Edit();
+    if (ManageMemberData.qryHR.State <> dsInsert) or
+      (ManageMemberData.qryHR.State <> dsEdit) then
+      ManageMemberData.qryHR.Edit();
     case TButton(Sender).Tag of
       1:
-        ManageMemberData.qryMember.FieldByName('GenderID').Clear();
+        ManageMemberData.qryHR.FieldByName('GenderID').Clear();
       2:
-        ManageMemberData.qryMember.FieldByName('MembershipTypeID').Clear();
+        ManageMemberData.qryHR.FieldByName('MembershipTypeID').Clear();
       3:
-        ManageMemberData.qryMember.FieldByName('HouseID').Clear();
+        ManageMemberData.qryHR.FieldByName('HouseID').Clear();
     end;
   end;
 end;
@@ -208,7 +207,7 @@ rpt: TMembersDetail;
 begin
   if not Assigned(ManageMemberData) then exit;
     rpt := TMembersDetail.Create(self);
-    rpt.RunReport(FConnection, FSwimClubID);
+    rpt.RunReport(FConnection, 1);
     rpt.Free;
 end;
 
@@ -218,7 +217,7 @@ rpt: TMembersList;
 begin
   if not Assigned(ManageMemberData) then exit;
     rpt := TMembersList.Create(self);
-    rpt.RunReport(FConnection, FSwimClubID);
+    rpt.RunReport(FConnection, 1);
     rpt.Free;
 end;
 
@@ -228,7 +227,7 @@ rpt: TMembersSummary;
 begin
   if not Assigned(ManageMemberData) then exit;
     rpt := TMembersSummary.Create(self);
-    rpt.RunReport(FConnection, FSwimClubID);
+    rpt.RunReport(FConnection, 1);
     rpt.Free;
 end;
 
@@ -237,7 +236,7 @@ var
   dlg: TFindMember;
 begin
   dlg := TFindMember.Create(Self);
-  dlg.Prepare(FConnection, fSwimClubID);
+  dlg.Prepare(FConnection, 1);
   if IsPositiveResult(dlg.ShowModal()) then
   begin
     // LOCATE MEMBER IN qryMember
@@ -254,7 +253,7 @@ begin
   if Assigned(ManageMemberData) then
   begin
     dlg := TGotoMember.Create(Self);
-    dlg.Prepare(FConnection, fSwimClubID);
+    dlg.Prepare(FConnection, 1);
     rtn := dlg.ShowModal;
     if IsPositiveResult(rtn) then
     begin
@@ -273,7 +272,7 @@ begin
   if Assigned(ManageMemberData) then
   begin
     dlg := TGotoMembership.Create(Self);
-    dlg.Prepare(FConnection, fSwimClubID);
+    dlg.Prepare(FConnection, 1);
     rtn := dlg.ShowModal;
     if IsPositiveResult(rtn) then
     begin
@@ -292,10 +291,10 @@ var
 begin
   if not Assigned(ManageMemberData) then
     exit;
-  MemberID := ManageMemberData.dsMember.DataSet.FieldByName('MemberID')
+  MemberID := ManageMemberData.dsHR.DataSet.FieldByName('MemberID')
     .AsInteger;
   rpt := TMemberDetail.Create(Self);
-  rpt.RunReport(FConnection, fSwimClubID, MemberID);
+  rpt.RunReport(FConnection, 1, MemberID);
   rpt.Free;
 end;
 
@@ -306,10 +305,10 @@ var
 begin
   if not Assigned(ManageMemberData) then
     exit;
-  MemberID := ManageMemberData.dsMember.DataSet.FieldByName('MemberID')
+  MemberID := ManageMemberData.dsHR.DataSet.FieldByName('MemberID')
     .AsInteger;
   rpt := TMemberHistory.Create(Self);
-  rpt.RunReport(FConnection, fSwimClubID, MemberID);
+  rpt.RunReport(FConnection, 1, MemberID);
   rpt.Free;
 end;
 
@@ -537,8 +536,8 @@ begin
     fDoDelete := false;
     dlg := TDeleteMember.Create(Self);
     // get the fullname of the member to delete
-    FName := ManageMemberData.dsMember.DataSet.FieldByName('FName').AsString;
-    ID := ManageMemberData.dsMember.DataSet.FieldByName('MemberID').AsInteger;
+    FName := ManageMemberData.dsHR.DataSet.FieldByName('FName').AsString;
+    ID := ManageMemberData.dsHR.DataSet.FieldByName('MemberID').AsInteger;
     s := IntToStr(ID);
     dlg.lblTitle.Caption := 'Delete (ID: ' + s + ') ' + FName +
       ' from the SwimClubMeet database ?';
@@ -659,11 +658,11 @@ end;
 
 procedure TManageSwimmers.dtpickDOBChange(Sender: TObject);
 begin
-  if Assigned(ManageMemberData) and (ManageMemberData.qryMember.Active) then
+  if Assigned(ManageMemberData) and (ManageMemberData.qryHR.Active) then
   begin
-    if (ManageMemberData.qryMember.State <> dsEdit) then
-      ManageMemberData.qryMember.Edit();
-    ManageMemberData.qryMember.FieldByName('DOB').AsDateTime := dtpickDOB.Date;
+    if (ManageMemberData.qryHR.State <> dsEdit) then
+      ManageMemberData.qryHR.Edit();
+    ManageMemberData.qryHR.FieldByName('DOB').AsDateTime := dtpickDOB.Date;
     // let user perform manual post
     // ManageMemberData.qryMember.Post();
   end;
@@ -676,7 +675,7 @@ var
   rtn: TModalResult;
 begin
   result := false;
-  b := ManageMemberData.LocateMember(MemberID);
+  b := ManageMemberData.LocateHR(MemberID);
   if b then
     result := true
   else
@@ -687,7 +686,7 @@ begin
     if IsPositiveResult(rtn) then
     begin
       ClearAllFilters;
-      b := ManageMemberData.LocateMember(MemberID);
+      b := ManageMemberData.LocateHR(MemberID);
       if b then
         result := true;
     end;
@@ -697,11 +696,11 @@ end;
 procedure TManageSwimmers.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
   // Test database state
-  if Assigned(ManageMemberData) and (ManageMemberData.qryMember.Active) then
+  if Assigned(ManageMemberData) and (ManageMemberData.qryHR.Active) then
   begin
-    if (ManageMemberData.qryMember.State = dsEdit) or
-      (ManageMemberData.qryMember.State = dsInsert) then
-      ManageMemberData.qryMember.Post();
+    if (ManageMemberData.qryHR.State = dsEdit) or
+      (ManageMemberData.qryHR.State = dsInsert) then
+      ManageMemberData.qryHR.Post();
   end;
 end;
 
@@ -721,7 +720,6 @@ begin
   // ----------------------------------------------------
   // I N I T I A L I Z E   P A R A M S .
   // ----------------------------------------------------
-  fSwimClubID := 1;
 
   // Special color assignment - used in TDBGrid painting...
   // -------------------------------------------
@@ -771,7 +769,7 @@ begin
   if not AssertSCMConnection then
     exit;
   // DATE-OF-BIRTH - DATETIME PICKER INIT
-  dtpickDOB.Date := ManageMemberData.qryMember.FieldByName('DOB').AsDateTime;
+  dtpickDOB.Date := ManageMemberData.qryHR.FieldByName('DOB').AsDateTime;
 
 end;
 
@@ -803,10 +801,9 @@ begin
 end;
 
 procedure TManageSwimmers.Prepare(AConnection: TFDConnection;
-  ASwimClubID, AMemberID: Integer);
+  AHRTypeID, AMemberID: Integer);
 begin
   FConnection := AConnection;
-  fSwimClubID := ASwimClubID;
 
   // ----------------------------------------------------
   // C R E A T E   D A T A M O D U L E   S C M .
@@ -839,7 +836,7 @@ begin
   // ----------------------------------------------------
   // Prepares all core queries  (Master+Child)
   // ----------------------------------------------------
-  ManageMemberData.UpdateMember(fSwimClubID, Hide_Archived.Checked,
+  ManageMemberData.UpdateHR(Hide_Archived.Checked,
     Hide_InActive.Checked, true);
 
   // Cue-to-member
@@ -853,7 +850,7 @@ var
   ini: TIniFile;
 begin
   // C:\Users\<#USERNAME#>\AppData\Roaming\Artanemus\ManageMemberData\ + SCMMEMBERPREF
-  ini := TIniFile.Create(GetSCMAppDataDir + INIFILE_SCM_MEMBERPREF);
+  ini := TIniFile.Create(GetSCMAppDataDir + INIFILE_SCM_COACHPREF);
   try
     Hide_Archived.Checked := ini.ReadBool(INIFILE_SECTION,
       'HideArchived', true);
@@ -881,7 +878,7 @@ var
   ini: TIniFile;
 begin
   // C:\Users\<#USERNAME#>\AppData\Roaming\Artanemus\ManageMember\ + SCMMEMBERPREF
-  ini := TIniFile.Create(GetSCMAppDataDir + INIFILE_SCM_MEMBERPREF);
+  ini := TIniFile.Create(GetSCMAppDataDir + INIFILE_SCM_COACHPREF);
   try
     ini.WriteBool(INIFILE_SECTION, 'HideArchived', Hide_Archived.Checked);
     ini.WriteBool(INIFILE_SECTION, 'HideInActive', Hide_InActive.Checked);

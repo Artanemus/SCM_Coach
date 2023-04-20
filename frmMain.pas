@@ -145,6 +145,7 @@ var
 dlg: TManageSwimmers;
 begin
   dlg := TManageSwimmers.Create(Self);
+  dlg.Prepare(COACH.coachConnection, 1, 0);
   dlg.ShowModal;
   dlg.Free;
 end;

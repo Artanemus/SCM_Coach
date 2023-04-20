@@ -14,7 +14,7 @@ object ManageMemberData: TManageMemberData
     UpdateOptions.UpdateTableName = 'SwimClubMeet..ContactNumType'
     TableName = 'SwimClubMeet..ContactNumType'
     Left = 64
-    Top = 552
+    Top = 616
     object tblContactNumTypeContactNumTypeID: TFDAutoIncField
       FieldName = 'ContactNumTypeID'
       Origin = 'ContactNumTypeID'
@@ -35,7 +35,7 @@ object ManageMemberData: TManageMemberData
     UpdateOptions.UpdateTableName = 'SwimClubMeet..Stroke'
     TableName = 'SwimClubMeet..Stroke'
     Left = 64
-    Top = 400
+    Top = 464
   end
   object tblDistance: TFDTable
     ActiveStoredUsage = [auDesignTime]
@@ -45,10 +45,11 @@ object ManageMemberData: TManageMemberData
     UpdateOptions.UpdateTableName = 'SwimClubMeet..Distance'
     TableName = 'SwimClubMeet..Distance'
     Left = 64
-    Top = 472
+    Top = 536
   end
   object tblHRType: TFDTable
     ActiveStoredUsage = [auDesignTime]
+    Active = True
     IndexFieldNames = 'HRTypeID'
     Connection = FDTempDesignConnection
     UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
@@ -58,12 +59,12 @@ object ManageMemberData: TManageMemberData
     UpdateOptions.KeyFields = 'HRTypeID'
     TableName = 'dbo.HRType'
     Left = 64
-    Top = 256
+    Top = 320
   end
-  object dsMemberType: TDataSource
+  object dsHRType: TDataSource
     DataSet = tblHRType
     Left = 168
-    Top = 256
+    Top = 320
   end
   object tblGender: TFDTable
     ActiveStoredUsage = [auDesignTime]
@@ -73,12 +74,12 @@ object ManageMemberData: TManageMemberData
     UpdateOptions.UpdateTableName = 'SwimClubMeet..Gender'
     TableName = 'SwimClubMeet..Gender'
     Left = 64
-    Top = 320
+    Top = 384
   end
   object dsGender: TDataSource
     DataSet = tblGender
     Left = 168
-    Top = 320
+    Top = 384
   end
   object dsContactNum: TDataSource
     DataSet = qryContactNum
@@ -87,19 +88,19 @@ object ManageMemberData: TManageMemberData
   end
   object qryContactNum: TFDQuery
     ActiveStoredUsage = [auDesignTime]
+    Active = True
     Indexes = <
       item
         Active = True
         Selected = True
-        Name = 'mcMember_ContactNum'
-        Fields = 'MemberID;ContactNumID'
+        Name = 'indx_ContactNum'
+        Fields = 'HRID;ContactNumID'
         DescFields = 'ContactNumID'
       end>
-    IndexName = 'mcMember_ContactNum'
-    MasterFields = 'MemberID'
-    DetailFields = 'MemberID'
+    IndexName = 'indx_ContactNum'
+    MasterFields = 'HRID'
     Connection = FDTempDesignConnection
-    UpdateOptions.UpdateTableName = 'SwimClubMeet..ContactNum'
+    UpdateOptions.UpdateTableName = 'SCM_Coach.dbo.ContactNum'
     UpdateOptions.KeyFields = 'ContactNumID'
     SQL.Strings = (
       'USE [SCM_Coach];'
@@ -126,10 +127,6 @@ object ManageMemberData: TManageMemberData
       FieldName = 'ContactNumTypeID'
       Origin = 'ContactNumTypeID'
     end
-    object qryContactNumMemberID: TIntegerField
-      FieldName = 'MemberID'
-      Origin = 'MemberID'
-    end
     object qryContactNumlu: TStringField
       FieldKind = fkLookup
       FieldName = 'luContactNumType'
@@ -139,8 +136,13 @@ object ManageMemberData: TManageMemberData
       KeyFields = 'ContactNumTypeID'
       Lookup = True
     end
+    object qryContactNumHRID: TIntegerField
+      FieldName = 'HRID'
+      Origin = 'HRID'
+      Required = True
+    end
   end
-  object qryFindMember: TFDQuery
+  object qryFindHR: TFDQuery
     ActiveStoredUsage = [auDesignTime]
     Filtered = True
     FilterOptions = [foCaseInsensitive]
@@ -184,7 +186,7 @@ object ManageMemberData: TManageMemberData
       #9#9#9#9#9'ORDER BY Member.LastName')
     Left = 616
     Top = 56
-    object qryFindMemberMemberID: TFDAutoIncField
+    object qryFindHRMemberID: TFDAutoIncField
       Alignment = taCenter
       DisplayLabel = '  ID'
       DisplayWidth = 5
@@ -194,14 +196,14 @@ object ManageMemberData: TManageMemberData
       ReadOnly = True
       DisplayFormat = '0000'
     end
-    object qryFindMemberMembershipNum: TIntegerField
+    object qryFindHRMembershipNum: TIntegerField
       DisplayLabel = 'Num#'
       DisplayWidth = 6
       FieldName = 'MembershipNum'
       Origin = 'MembershipNum'
       DisplayFormat = '##00'
     end
-    object qryFindMemberFName: TWideStringField
+    object qryFindHRFName: TWideStringField
       DisplayLabel = 'Member'#39's Name'
       DisplayWidth = 160
       FieldName = 'FName'
@@ -210,7 +212,7 @@ object ManageMemberData: TManageMemberData
       Required = True
       Size = 258
     end
-    object qryFindMemberdtDOB: TWideStringField
+    object qryFindHRdtDOB: TWideStringField
       Alignment = taCenter
       DisplayLabel = '  DOB'
       DisplayWidth = 11
@@ -219,7 +221,7 @@ object ManageMemberData: TManageMemberData
       ReadOnly = True
       Size = 4000
     end
-    object qryFindMemberAge: TIntegerField
+    object qryFindHRAge: TIntegerField
       Alignment = taCenter
       DisplayWidth = 3
       FieldName = 'Age'
@@ -227,55 +229,55 @@ object ManageMemberData: TManageMemberData
       ReadOnly = True
       DisplayFormat = '#0'
     end
-    object qryFindMemberIsActive: TBooleanField
+    object qryFindHRIsActive: TBooleanField
       DisplayLabel = 'Active'
       DisplayWidth = 6
       FieldName = 'IsActive'
       Origin = 'IsActive'
     end
-    object qryFindMembercGender: TWideStringField
+    object qryFindHRcGender: TWideStringField
       DisplayLabel = 'Gender'
       DisplayWidth = 7
       FieldName = 'cGender'
       Origin = 'cGender'
     end
-    object qryFindMembercMembershipType: TWideStringField
+    object qryFindHRcMembershipType: TWideStringField
       DisplayLabel = 'Membership Type'
       DisplayWidth = 30
       FieldName = 'cMembershipType'
       Origin = 'cMembershipType'
       Size = 64
     end
-    object qryFindMemberFirstName: TWideStringField
+    object qryFindHRFirstName: TWideStringField
       FieldName = 'FirstName'
       Origin = 'FirstName'
       Visible = False
       Size = 128
     end
-    object qryFindMemberLastName: TWideStringField
+    object qryFindHRLastName: TWideStringField
       FieldName = 'LastName'
       Origin = 'LastName'
       Visible = False
       Size = 128
     end
-    object qryFindMemberGenderID: TIntegerField
+    object qryFindHRGenderID: TIntegerField
       FieldName = 'GenderID'
       Origin = 'GenderID'
       Visible = False
     end
-    object qryFindMemberMemberShipTypeID: TIntegerField
+    object qryFindHRMemberShipTypeID: TIntegerField
       FieldName = 'MemberShipTypeID'
       Origin = 'MemberShipTypeID'
       Visible = False
     end
-    object qryFindMemberIsSwimmer: TBooleanField
+    object qryFindHRIsSwimmer: TBooleanField
       FieldName = 'IsSwimmer'
       Origin = 'IsSwimmer'
       Visible = False
     end
   end
   object dsFindMember: TDataSource
-    DataSet = qryFindMember
+    DataSet = qryFindHR
     Left = 718
     Top = 56
   end
@@ -283,6 +285,8 @@ object ManageMemberData: TManageMemberData
     ActiveStoredUsage = [auDesignTime]
     IndexFieldNames = 'MemberID'
     SQL.Strings = (
+      'USE SwimClubMeet;'
+      ''
       'SELECT MemberID, MembershipNum FROM Member WHERE SwimClubID = 1')
     Left = 696
     Top = 184
@@ -344,14 +348,14 @@ object ManageMemberData: TManageMemberData
     Left = 696
     Top = 336
   end
-  object dsMemberPB: TDataSource
-    DataSet = qryMemberPB
+  object dsHRPB: TDataSource
+    DataSet = qryHRPB
     Left = 737
     Top = 448
   end
-  object qryMemberPB: TFDQuery
+  object qryHRPB: TFDQuery
     ActiveStoredUsage = [auDesignTime]
-    IndexFieldNames = 'MemberID'
+    IndexFieldNames = 'HRID'
     Connection = FDTempDesignConnection
     FormatOptions.AssignedValues = [fvFmtDisplayTime]
     FormatOptions.FmtDisplayTime = 'nn:ss.zzz'
@@ -360,28 +364,28 @@ object ManageMemberData: TManageMemberData
     UpdateOptions.EnableInsert = False
     UpdateOptions.EnableUpdate = False
     UpdateOptions.UpdateTableName = 'SwimClubMeet..Member'
-    UpdateOptions.KeyFields = 'MemberID'
+    UpdateOptions.KeyFields = 'HRID'
     SQL.Strings = (
       'USE SCM_Coach'
       ';'
       ''
-      'DECLARE @memberid AS INT'
-      'SET @memberid = :MEMBERID'
+      'DECLARE @HRID AS INT'
+      'SET @HRID = :HRID'
       ''
       'SELECT '
-      '       PB.PBID'
-      '     , PB.DistanceID'
-      '     , PB.StrokeID'
+      '       RaceHistory.HRID'
+      '     , RaceHistory.DistanceID'
+      '     , RaceHistory.StrokeID'
       '     , RaceTime'
       
         '     , (CONCAT(distance.caption, '#39' '#39', stroke.caption)) AS EventS' +
         'tr'
-      'FROM PB'
+      'FROM RaceHistory'
       '    INNER JOIN stroke'
-      '        ON pb.strokeID = stroke.strokeID'
+      '        ON RaceHistory.strokeID = stroke.strokeID'
       '    INNER JOIN distance'
-      '        ON pb.distanceID = distance.distanceID'
-      'WHERE PB.PBID = @memberid'
+      '        ON RaceHistory.distanceID = distance.distanceID'
+      'WHERE RaceHistory.HRID = @HRID'
       '      AND RaceTime IS NOT NULL'
       'ORDER BY HRID'
       '       , DistanceID'
@@ -391,42 +395,37 @@ object ManageMemberData: TManageMemberData
     Top = 448
     ParamData = <
       item
-        Name = 'MEMBERID'
+        Name = 'HRID'
         DataType = ftInteger
         ParamType = ptInput
         Value = Null
       end>
-    object qryMemberPBEventStr: TWideStringField
+    object qryHRPBHRID: TIntegerField
+      FieldName = 'HRID'
+      Origin = 'HRID'
+      Required = True
+    end
+    object qryHRPBDistanceID: TIntegerField
+      FieldName = 'DistanceID'
+      Origin = 'DistanceID'
+      Required = True
+    end
+    object qryHRPBStrokeID: TIntegerField
+      FieldName = 'StrokeID'
+      Origin = 'StrokeID'
+      Required = True
+    end
+    object qryHRPBRaceTime: TTimeField
+      FieldName = 'RaceTime'
+      Origin = 'RaceTime'
+      DisplayFormat = 'nn:ss.zzz'
+    end
+    object qryHRPBEventStr: TWideStringField
       FieldName = 'EventStr'
       Origin = 'EventStr'
       ReadOnly = True
       Required = True
       Size = 257
-    end
-    object qryMemberPBPB: TTimeField
-      FieldName = 'PB'
-      Origin = 'PB'
-      ReadOnly = True
-      DisplayFormat = 'nn:ss.zzz'
-    end
-    object qryMemberPBMemberID: TFDAutoIncField
-      FieldName = 'MemberID'
-      Origin = 'MemberID'
-      ProviderFlags = [pfInWhere, pfInKey]
-      ReadOnly = True
-      Visible = False
-    end
-    object qryMemberPBDistanceID: TFDAutoIncField
-      FieldName = 'DistanceID'
-      Origin = 'DistanceID'
-      ReadOnly = True
-      Visible = False
-    end
-    object qryMemberPBStrokeID: TFDAutoIncField
-      FieldName = 'StrokeID'
-      Origin = 'StrokeID'
-      ReadOnly = True
-      Visible = False
     end
   end
   object FDTempDesignConnection: TFDConnection
@@ -438,28 +437,28 @@ object ManageMemberData: TManageMemberData
     Left = 112
     Top = 32
   end
-  object dsMember: TDataSource
-    DataSet = qryMember
+  object dsHR: TDataSource
+    DataSet = qryHR
     Left = 168
     Top = 120
   end
-  object qryMember: TFDQuery
+  object qryHR: TFDQuery
     ActiveStoredUsage = [auDesignTime]
-    AfterInsert = qryMemberAfterInsert
-    BeforeDelete = qryMemberBeforeDelete
-    AfterDelete = qryMemberAfterDelete
-    AfterScroll = qryMemberAfterScroll
-    IndexFieldNames = 'MemberID'
+    AfterInsert = qryHRAfterInsert
+    BeforeDelete = qryHRBeforeDelete
+    AfterDelete = qryHRAfterDelete
+    AfterScroll = qryHRAfterScroll
+    IndexFieldNames = 'HRID'
     DetailFields = 'SwimClubID'
     Connection = FDTempDesignConnection
     UpdateOptions.UpdateTableName = 'SCM_Coach..Member'
-    UpdateOptions.KeyFields = 'MemberID'
+    UpdateOptions.KeyFields = 'HRID'
     SQL.Strings = (
       'USE SCM_Coach;'
       ''
       'DECLARE @HideInActive BIT;'
       'DECLARE @HideArchived BIT;'
-      'DECLARE @HideNonSwimmers BIT;'
+      '-- DECLARE @HideNonSwimmers BIT;'
       ''
       'SET @HideInActive = :HIDE_INACTIVE;'
       'SET @HideArchived = :HIDE_ARCHIVED;'
@@ -482,7 +481,7 @@ object ManageMemberData: TManageMemberData
       '     , ArchivedOn'
       '     , SCMMemberID'
       'FROM [dbo].[HR]'
-      'WHERE HRTypeID = 3'
+      'WHERE HRTypeID = 1'
       '      AND'
       '      ('
       '          (IsActive >= CASE'
@@ -531,88 +530,89 @@ object ManageMemberData: TManageMemberData
         ParamType = ptInput
         Value = False
       end>
-    object qryMemberHRID: TFDAutoIncField
+    object qryHRHRID: TFDAutoIncField
       FieldName = 'HRID'
       Origin = 'HRID'
+      ProviderFlags = [pfInWhere, pfInKey]
       ReadOnly = True
     end
-    object qryMemberRegisterNum: TIntegerField
+    object qryHRRegisterNum: TIntegerField
       FieldName = 'RegisterNum'
       Origin = 'RegisterNum'
     end
-    object qryMemberRegisterStr: TWideStringField
+    object qryHRRegisterStr: TWideStringField
       FieldName = 'RegisterStr'
       Origin = 'RegisterStr'
       Size = 24
     end
-    object qryMemberFirstName: TStringField
+    object qryHRFirstName: TStringField
       FieldName = 'FirstName'
       Origin = 'FirstName'
       FixedChar = True
       Size = 64
     end
-    object qryMemberLastName: TStringField
+    object qryHRLastName: TStringField
       FieldName = 'LastName'
       Origin = 'LastName'
       FixedChar = True
       Size = 64
     end
-    object qryMemberDOB: TSQLTimeStampField
+    object qryHRDOB: TSQLTimeStampField
       FieldName = 'DOB'
       Origin = 'DOB'
     end
-    object qryMemberSwimmerAge: TIntegerField
+    object qryHRSwimmerAge: TIntegerField
       FieldName = 'SwimmerAge'
       Origin = 'SwimmerAge'
       ReadOnly = True
     end
-    object qryMemberIsActive: TBooleanField
+    object qryHRIsActive: TBooleanField
       FieldName = 'IsActive'
       Origin = 'IsActive'
     end
-    object qryMemberIsArchived: TBooleanField
+    object qryHRIsArchived: TBooleanField
       FieldName = 'IsArchived'
       Origin = 'IsArchived'
     end
-    object qryMemberEmail: TWideStringField
+    object qryHREmail: TWideStringField
       FieldName = 'Email'
       Origin = 'Email'
       Size = 256
     end
-    object qryMemberGenderID: TIntegerField
+    object qryHRGenderID: TIntegerField
       FieldName = 'GenderID'
       Origin = 'GenderID'
       Required = True
     end
-    object qryMemberHRTypeID: TIntegerField
+    object qryHRHRTypeID: TIntegerField
       FieldName = 'HRTypeID'
       Origin = 'HRTypeID'
       Required = True
     end
-    object qryMemberFName: TStringField
+    object qryHRFName: TStringField
       FieldName = 'FName'
       Origin = 'FName'
       ReadOnly = True
       Required = True
       Size = 129
     end
-    object qryMembergradeID: TIntegerField
+    object qryHRgradeID: TIntegerField
       FieldName = 'gradeID'
       Origin = 'gradeID'
     end
-    object qryMemberCreatedOn: TSQLTimeStampField
+    object qryHRCreatedOn: TSQLTimeStampField
       FieldName = 'CreatedOn'
       Origin = 'CreatedOn'
     end
-    object qryMemberArchivedOn: TSQLTimeStampField
+    object qryHRArchivedOn: TSQLTimeStampField
       FieldName = 'ArchivedOn'
       Origin = 'ArchivedOn'
     end
-    object qryMemberSCMMemberID: TIntegerField
+    object qryHRSCMMemberID: TIntegerField
       FieldName = 'SCMMemberID'
       Origin = 'SCMMemberID'
     end
-    object qryMemberluGender: TStringField
+    object qryHRluGender: TStringField
       FieldKind = fkLookup
       FieldName = 'luGender'
       LookupDataSet = tblGender

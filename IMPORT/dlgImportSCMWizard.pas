@@ -105,6 +105,8 @@ type
     DataSource1: TDataSource;
     DBGrid1: TDBGrid;
     Label1: TLabel;
+    chkbDoContactNum: TCheckBox;
+    chkbDoSplit: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure ListBoxSrcDragOver(Sender, Source: TObject; X, Y: integer;
       State: TDragState; var Accept: Boolean);
@@ -146,10 +148,10 @@ type
     procedure BuildListBoxSource();
     procedure TransferItems(SrcListBox, DestListBox: TObject);
 
-    procedure NavButtonState; // improves UI declared but never used (DNY).
+    procedure NavButtonState; // improves UI ? NOT USED.
 
     // WIZARD TRACK BAR
-    procedure TrackStateSync; // DNY
+    procedure TrackStateSync; // NOT USED.
     procedure TrackStateInit;
     procedure TrackStateUpdate;
     procedure TrackStateBkgrdTabs;
@@ -229,6 +231,8 @@ begin
   { TODO -oBSA -cGeneral : Complete Action GO }
   else if (rgrpMethod.ItemIndex = 0) then
     cls.UpdateMembers(lbDest.Items);
+
+  {TODO -oBSA -cGeneral : Progress bar}
 
   if (cls.State = 1) then // success - no errors.
   begin
@@ -847,6 +851,20 @@ begin
     sbtnOptions.ImageName := 'wizImage';
     sbtnOptions.SelectedImageName := 'wizImageSelected';
   end;
+
+  // SUCCESS
+  if (fTrackState >= 4) and (tabSuccess.Visible)
+  then
+  begin
+    sbtnFinalStep.ImageName := 'wizImageTick';
+    sbtnFinalStep.SelectedImageName := 'wizImageSelectedTick';
+  end
+  else
+  begin
+    sbtnFinalStep.ImageName := 'wizImage';
+    sbtnFinalStep.SelectedImageName := 'wizImageSelected';
+  end;
+
 
 end;
 

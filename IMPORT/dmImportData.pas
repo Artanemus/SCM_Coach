@@ -31,8 +31,9 @@ type
     coachConnection: TFDConnection;
     fCoreTablesActivated: boolean;
 
-    function AddSplits(RaceHistoryID, EntrantID: integer): boolean;
+    function InsertSplits(RaceHistoryID, EntrantID: integer): boolean;
     function HasFieldMiddleInitial: boolean;
+    function CnvVarToInt(v: variant): integer;
 
   public
     { Public declarations }
@@ -112,41 +113,6 @@ begin
 
 end;
 
-function TImportData.AddSplits(RaceHistoryID, EntrantID: integer): boolean;
-begin
-  result := false;
-  if AssertConnections then
-  begin
-    qrySplit.Connection := scmConnection;
-    qrySplit.ParamByName('ENTRANTID').AsInteger := EntrantID;
-    qrySplit.Prepare;
-    qrySplit.Open;
-    if qrySplit.Active then
-    begin
-      while not qrySplit.eof do
-      begin
-        // -------------------------------------------------------
-        // S P L I T   T I M E S  ....
-        // -------------------------------------------------------
-        tblRaceHistorySplit.Insert;
-
-        tblRaceHistorySplit.FieldByName('RaceTime').AsDateTime :=
-          qrySplit.FieldByName('SplitTime').AsDateTime;
-        tblRaceHistorySplit.FieldByName('Lap').AsInteger :=
-          qrySplit.FieldByName('Lap').AsInteger;
-        // IDENT for join
-        tblRaceHistorySplit.FieldByName('RaceHistoryID').AsInteger :=
-          RaceHistoryID;
-
-        tblRaceHistorySplit.Post;
-        // iterate
-        qrySplit.Next;
-      end;
-      result := true;
-    end;
-  end;
-end;
-
 function TImportData.AssertConnections: boolean;
 begin
   result := false;
@@ -159,6 +125,29 @@ function TImportData.AssertUnique(scmMemberID: integer): boolean;
 begin
   // STRING LOOKUP AND COMPARE   (.HY3)
   result := true;
+end;
+
+function TImportData.CnvVarToInt(v: variant): integer;
+var
+  I, Code: integer;
+begin
+  I := 0;
+  // Exception class EVariantTypeCastError with message
+  // 'Could not convert variant of type (Null) into type (Integer)'.
+  if VarIsNull(v) then
+    I := 0
+  else
+  begin
+    if VarIsStr(v) then
+    begin
+      System.Val(v, Code, I);
+      if Code <> 0 then // on error
+        I := 0;
+    end
+    else
+      I := v; // Should work!
+  end;
+  result := I;
 end;
 
 function TImportData.DeActivateTables: boolean;
@@ -234,7 +223,6 @@ end;
 
 function TImportData.InsertMember(scmMemberID: integer): integer;
 var
-  IDENT: integer;
   SQL: string;
   v: variant;
 begin
@@ -302,22 +290,9 @@ begin
         // I D E N T   N E E D E D   F O R   H R I D .
         // -------------------------------------------------------
         { TODO -oBSA -cGeneral : modify SQL to always return INT }
-        // Exception class EVariantTypeCastError with message
-        // 'Could not convert variant of type (Null) into type (Integer)'.
         SQL := 'USE SCM_Coach; SELECT IDENT_CURRENT(''[SCM_Coach].[dbo].[HR]'');';
         v := coachConnection.ExecSQLScalar(SQL);
-        if VarIsNull(v) then
-          IDENT := 0
-        else
-        begin
-          if VarIsNumeric(v) then
-            IDENT := integer(v)
-          else if VarIsStr(v) then
-            IDENT := StrToIntDef(v, 0)
-          else
-            IDENT := 0;
-        end;
-        result := IDENT // processed one record.
+        result := CnvVarToInt(v);
       end;
     end;
     qryMember.Close;
@@ -327,7 +302,7 @@ end;
 function TImportData.InsertRaceHistory(scmMemberID, HRID: integer;
   DoSplit: boolean): integer;
 var
-  IDENT, EntrantID: integer;
+  IDENT, scmEntrantID: integer;
   SQL: string;
   v: variant;
 begin
@@ -345,8 +320,9 @@ begin
     while not qryRaceHistory.eof do
     begin
       // test for duplicity ... (using EntrantID)
-      EntrantID := qryRaceHistory.FieldByName('EntrantID').AsInteger;
-      if (EntrantID <> 0) AND (not IsDupRaceHistory(EntrantID)) then
+      scmEntrantID := qryRaceHistory.FieldByName('EntrantID').AsInteger;
+      // does the entrant ID (swimming race) already exists
+      if (scmEntrantID <> 0) AND (not IsDupRaceHistory(scmEntrantID)) then
       begin
         tblRaceHistory.Insert;
         tblRaceHistory.FieldByName('HRID').AsInteger := HRID;
@@ -371,9 +347,9 @@ begin
         tblRaceHistory.FieldByName('StrokeID').AsInteger :=
           qryRaceHistory.FieldByName('StrokeID').AsInteger;
 
-        // EntrantID - specific to SCM ONLY
-        tblRaceHistory.FieldByName('EntrantID').AsInteger :=
-          qryRaceHistory.FieldByName('EntrantID').AsInteger;
+        // SCM EntrantID - specific to SCM IMPORT
+        // Used to test for duplications
+        tblRaceHistory.FieldByName('EntrantID').AsInteger := scmEntrantID;
 
         tblRaceHistory.FieldByName('Lane').AsInteger :=
           qryRaceHistory.FieldByName('Lane').AsInteger;
@@ -382,9 +358,10 @@ begin
         // tblRaceHistory.FieldByName('NumOfLanes').AsInteger :=
         // tblRaceHistory.FieldByName('LenOfPool').AsInteger :=
         // tblRaceHistory.FieldByName('PoolTypeID').AsInteger :=
+        // tblRaceHistory.FieldByName('PoolName').AsInteger :=
 
-        tblRaceHistory.FieldByName('IsScratch').AsBoolean :=
-          qryRaceHistory.FieldByName('IsScratch').AsBoolean;
+        tblRaceHistory.FieldByName('IsScratched').AsBoolean :=
+          qryRaceHistory.FieldByName('IsScratched').AsBoolean;
 
         tblRaceHistory.FieldByName('IsDisqualified').AsBoolean :=
           qryRaceHistory.FieldByName('IsDisqualified').AsBoolean;
@@ -403,30 +380,56 @@ begin
         { TODO -oBSA -cGeneral : modify SQL to always return INT }
         SQL := 'USE SCM_Coach; SELECT IDENT_CURRENT(''[SCM_Coach].[dbo].[RaceHistory]'');';
         v := coachConnection.ExecSQLScalar(SQL);
-        if VarIsNull(v) then
-          IDENT := 0
-        else
-        begin
-          if VarIsNumeric(v) then
-            IDENT := integer(v)
-          else if VarIsStr(v) then
-            IDENT := StrToIntDef(v, 0)
-          else
-            IDENT := 0;
-        end;
-
+        IDENT := CnvVarToInt(v);
         if DoSplit and (IDENT <> 0) then
         begin
-          AddSplits(IDENT, EntrantID);
+          InsertSplits(IDENT, scmEntrantID);
         end;
-        // iterate
-        qryRaceHistory.Next;
+
       end;
+      // iterate
+      qryRaceHistory.Next;
     end;
   end;
 
   qryRaceHistory.Close;
 
+end;
+
+function TImportData.InsertSplits(RaceHistoryID, EntrantID: integer): boolean;
+begin
+  result := false;
+  if AssertConnections then
+  begin
+    qrySplit.Connection := scmConnection;
+    qrySplit.ParamByName('ENTRANTID').AsInteger := EntrantID;
+    qrySplit.Prepare;
+    qrySplit.Open;
+    if qrySplit.Active then
+    begin
+      while not qrySplit.eof do
+      begin
+        // -------------------------------------------------------
+        // S P L I T   T I M E S  ....
+        // -------------------------------------------------------
+        tblRaceHistorySplit.Insert;
+
+        tblRaceHistorySplit.FieldByName('SplitTime').AsDateTime :=
+          qrySplit.FieldByName('SplitTime').AsDateTime;
+        tblRaceHistorySplit.FieldByName('Lap').AsInteger :=
+          qrySplit.FieldByName('Lap').AsInteger;
+        // IDENT for join
+        tblRaceHistorySplit.FieldByName('RaceHistoryID').AsInteger :=
+          RaceHistoryID;
+
+        tblRaceHistorySplit.Post;
+        // iterate
+        qrySplit.Next;
+      end;
+
+      result := true;
+    end;
+  end;
 end;
 
 function TImportData.IsDupSCMMember(scmMemberID: integer): boolean;

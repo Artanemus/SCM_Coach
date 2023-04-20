@@ -3,8 +3,8 @@ object ImportSCMWizard: TImportSCMWizard
   Top = 0
   BorderStyle = bsDialog
   Caption = 'Wizard - Import SwimClubMeet Members'
-  ClientHeight = 769
-  ClientWidth = 673
+  ClientHeight = 768
+  ClientWidth = 669
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,8 +18,8 @@ object ImportSCMWizard: TImportSCMWizard
   TextHeight = 21
   object pnlFooter: TRelativePanel
     Left = 0
-    Top = 673
-    Width = 673
+    Top = 672
+    Width = 669
     Height = 96
     ControlCollection = <
       item
@@ -53,10 +53,8 @@ object ImportSCMWizard: TImportSCMWizard
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = 672
-    ExplicitWidth = 669
     DesignSize = (
-      673
+      669
       96)
     object btnPrev: TButton
       AlignWithMargins = True
@@ -88,7 +86,7 @@ object ImportSCMWizard: TImportSCMWizard
     end
     object btnCancel: TButton
       AlignWithMargins = True
-      Left = 568
+      Left = 564
       Top = 14
       Width = 85
       Height = 68
@@ -105,7 +103,7 @@ object ImportSCMWizard: TImportSCMWizard
   object pnlHeader: TRelativePanel
     Left = 0
     Top = 0
-    Width = 673
+    Width = 669
     Height = 81
     ControlCollection = <
       item
@@ -183,9 +181,8 @@ object ImportSCMWizard: TImportSCMWizard
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 669
     DesignSize = (
-      673
+      669
       81)
     object imgTackBkgrd: TVirtualImage
       AlignWithMargins = True
@@ -373,9 +370,9 @@ object ImportSCMWizard: TImportSCMWizard
   object pageCNTRL: TPageControl
     Left = 0
     Top = 81
-    Width = 673
-    Height = 592
-    ActivePage = tabMethod
+    Width = 669
+    Height = 591
+    ActivePage = tabSuccess
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -388,8 +385,6 @@ object ImportSCMWizard: TImportSCMWizard
     TabOrder = 2
     TabWidth = 90
     OnChange = pageCNTRLChange
-    ExplicitWidth = 669
-    ExplicitHeight = 591
     object tabStart: TTabSheet
       Caption = 'Start'
       object lblMsgStartInfo: TLabel
@@ -459,8 +454,8 @@ object ImportSCMWizard: TImportSCMWizard
       Caption = 'Login'
       ImageIndex = 1
       DesignSize = (
-        665
-        542)
+        661
+        541)
       object Shape3: TShape
         Left = 6
         Top = 32
@@ -566,8 +561,8 @@ object ImportSCMWizard: TImportSCMWizard
       end
       object btnDisconnect: TButton
         AlignWithMargins = True
-        Left = 182
-        Top = 358
+        Left = 337
+        Top = 357
         Width = 85
         Height = 83
         Margins.Left = 20
@@ -576,11 +571,13 @@ object ImportSCMWizard: TImportSCMWizard
         ImageAlignment = iaTop
         Images = UIImageList
         TabOrder = 4
+        ExplicitLeft = 341
+        ExplicitTop = 358
       end
       object btnLogin: TButton
         AlignWithMargins = True
-        Left = 82
-        Top = 358
+        Left = 238
+        Top = 357
         Width = 85
         Height = 83
         Margins.Left = 20
@@ -589,6 +586,8 @@ object ImportSCMWizard: TImportSCMWizard
         ImageAlignment = iaTop
         Images = UIImageList
         TabOrder = 5
+        ExplicitLeft = 241
+        ExplicitTop = 358
       end
       object btnConnect: TButton
         Left = 163
@@ -629,7 +628,7 @@ object ImportSCMWizard: TImportSCMWizard
         Left = 24
         Top = 136
         Width = 609
-        Height = 113
+        Height = 137
         Caption = 'Select method ...'
         Items.Strings = (
           
@@ -811,13 +810,35 @@ object ImportSCMWizard: TImportSCMWizard
       end
       object chkbDoRaceHistory: TCheckBox
         Left = 48
-        Top = 225
+        Top = 321
         Width = 217
         Height = 24
         Caption = 'Import swimming history.'
         Checked = True
         State = cbChecked
         TabOrder = 1
+      end
+      object chkbDoContactNum: TCheckBox
+        Left = 72
+        Top = 232
+        Width = 193
+        Height = 17
+        Caption = 'Include Contact details.'
+        Checked = True
+        Enabled = False
+        State = cbChecked
+        TabOrder = 2
+      end
+      object chkbDoSplit: TCheckBox
+        Left = 72
+        Top = 376
+        Width = 193
+        Height = 17
+        Caption = 'Include Split Times.'
+        Checked = True
+        Enabled = False
+        State = cbChecked
+        TabOrder = 3
       end
     end
     object tabFinalStep: TTabSheet
@@ -852,12 +873,12 @@ object ImportSCMWizard: TImportSCMWizard
         BevelOuter = bvNone
         TabOrder = 0
         DesignSize = (
-          665
-          542)
+          661
+          541)
         object btnGo: TButton
           AlignWithMargins = True
-          Left = 290
-          Top = 237
+          Left = 288
+          Top = 236
           Width = 85
           Height = 68
           Margins.Left = 20
@@ -874,8 +895,8 @@ object ImportSCMWizard: TImportSCMWizard
         end
         object lblGo: TLabel
           AlignWithMargins = True
-          Left = 280
-          Top = 318
+          Left = 278
+          Top = 317
           Width = 105
           Height = 21
           Margins.Top = 10
@@ -899,8 +920,10 @@ object ImportSCMWizard: TImportSCMWizard
         Left = 16
         Top = 43
         Width = 633
-        Height = 241
+        Height = 470
         DataSource = DataSource1
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+        ReadOnly = True
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText

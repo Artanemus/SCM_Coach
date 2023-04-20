@@ -18,7 +18,7 @@ type
     tblStroke: TFDTable;
     tblDistance: TFDTable;
     tblHRType: TFDTable;
-    dsMemberType: TDataSource;
+    dsHRType: TDataSource;
     tblGender: TFDTable;
     dsGender: TDataSource;
     dsContactNum: TDataSource;
@@ -26,59 +26,59 @@ type
     qryContactNumContactNumID: TFDAutoIncField;
     qryContactNumNumber: TWideStringField;
     qryContactNumContactNumTypeID: TIntegerField;
-    qryContactNumMemberID: TIntegerField;
     qryContactNumlu: TStringField;
-    qryFindMember: TFDQuery;
-    qryFindMemberMemberID: TFDAutoIncField;
-    qryFindMemberMembershipNum: TIntegerField;
-    qryFindMemberFName: TWideStringField;
-    qryFindMemberdtDOB: TWideStringField;
-    qryFindMemberAge: TIntegerField;
-    qryFindMemberIsActive: TBooleanField;
-    qryFindMembercGender: TWideStringField;
-    qryFindMembercMembershipType: TWideStringField;
-    qryFindMemberFirstName: TWideStringField;
-    qryFindMemberLastName: TWideStringField;
-    qryFindMemberGenderID: TIntegerField;
-    qryFindMemberMemberShipTypeID: TIntegerField;
-    qryFindMemberIsSwimmer: TBooleanField;
+    qryFindHR: TFDQuery;
+    qryFindHRMemberID: TFDAutoIncField;
+    qryFindHRMembershipNum: TIntegerField;
+    qryFindHRFName: TWideStringField;
+    qryFindHRdtDOB: TWideStringField;
+    qryFindHRAge: TIntegerField;
+    qryFindHRIsActive: TBooleanField;
+    qryFindHRcGender: TWideStringField;
+    qryFindHRcMembershipType: TWideStringField;
+    qryFindHRFirstName: TWideStringField;
+    qryFindHRLastName: TWideStringField;
+    qryFindHRGenderID: TIntegerField;
+    qryFindHRMemberShipTypeID: TIntegerField;
+    qryFindHRIsSwimmer: TBooleanField;
     dsFindMember: TDataSource;
     qAssertMemberID: TFDQuery;
     qryEntrantDataCount: TFDQuery;
     cmdFixNullBooleans: TFDCommand;
-    dsMemberPB: TDataSource;
-    qryMemberPB: TFDQuery;
-    qryMemberPBEventStr: TWideStringField;
-    qryMemberPBPB: TTimeField;
-    qryMemberPBMemberID: TFDAutoIncField;
-    qryMemberPBDistanceID: TFDAutoIncField;
-    qryMemberPBStrokeID: TFDAutoIncField;
+    dsHRPB: TDataSource;
+    qryHRPB: TFDQuery;
     FDTempDesignConnection: TFDConnection;
-    dsMember: TDataSource;
-    qryMember: TFDQuery;
-    qryMemberHRID: TFDAutoIncField;
-    qryMemberRegisterNum: TIntegerField;
-    qryMemberRegisterStr: TWideStringField;
-    qryMemberFirstName: TStringField;
-    qryMemberLastName: TStringField;
-    qryMemberDOB: TSQLTimeStampField;
-    qryMemberSwimmerAge: TIntegerField;
-    qryMemberIsActive: TBooleanField;
-    qryMemberIsArchived: TBooleanField;
-    qryMemberEmail: TWideStringField;
-    qryMemberGenderID: TIntegerField;
-    qryMemberHRTypeID: TIntegerField;
-    qryMemberFName: TStringField;
-    qryMembergradeID: TIntegerField;
-    qryMemberCreatedOn: TSQLTimeStampField;
-    qryMemberArchivedOn: TSQLTimeStampField;
-    qryMemberSCMMemberID: TIntegerField;
-    qryMemberluGender: TStringField;
+    dsHR: TDataSource;
+    qryHR: TFDQuery;
+    qryHRHRID: TFDAutoIncField;
+    qryHRRegisterNum: TIntegerField;
+    qryHRRegisterStr: TWideStringField;
+    qryHRFirstName: TStringField;
+    qryHRLastName: TStringField;
+    qryHRDOB: TSQLTimeStampField;
+    qryHRSwimmerAge: TIntegerField;
+    qryHRIsActive: TBooleanField;
+    qryHRIsArchived: TBooleanField;
+    qryHREmail: TWideStringField;
+    qryHRGenderID: TIntegerField;
+    qryHRHRTypeID: TIntegerField;
+    qryHRFName: TStringField;
+    qryHRgradeID: TIntegerField;
+    qryHRCreatedOn: TSQLTimeStampField;
+    qryHRArchivedOn: TSQLTimeStampField;
+    qryHRSCMMemberID: TIntegerField;
+    qryHRluGender: TStringField;
+    qryContactNumHRID: TIntegerField;
+    qryHRPBHRID: TIntegerField;
+    qryHRPBDistanceID: TIntegerField;
+    qryHRPBStrokeID: TIntegerField;
+    qryHRPBRaceTime: TTimeField;
+    qryHRPBEventStr: TWideStringField;
     procedure DataModuleCreate(Sender: TObject);
-    procedure qryMemberAfterScroll(DataSet: TDataSet);
-    procedure qryMemberAfterInsert(DataSet: TDataSet);
-    procedure qryMemberBeforeDelete(DataSet: TDataSet);
-    procedure qryMemberAfterDelete(DataSet: TDataSet);
+    procedure qryHRAfterScroll(DataSet: TDataSet);
+    procedure qryHRAfterInsert(DataSet: TDataSet);
+    procedure qryHRBeforeDelete(DataSet: TDataSet);
+    procedure qryHRAfterDelete(DataSet: TDataSet);
   private
     { Private declarations }
     fCoreTablesActivated: boolean;
@@ -92,10 +92,9 @@ type
       AscmConnection: TFDConnection);
     procedure ActivateTable();
     procedure UpdateDOB(DOB: TDateTime);
-    procedure UpdateMember(SwimClubID: Integer;
-      hideArchived, hideInactive, hideNonSwimmer: boolean);
+    procedure UpdateHR(hideArchived, hideInactive, hideNonSwimmer: boolean);
     procedure FixNullBooleans();
-    function LocateMember(MemberID: Integer): boolean;
+    function LocateHR(MemberID: Integer): boolean;
 
     // FLAG - true if all core FireDAC tables, queries are active.
     property CoreTablesActivated: boolean read fCoreTablesActivated;
@@ -123,25 +122,29 @@ begin
   fCoreTablesActivated := false;
   if Assigned(FcoachConnection) and FcoachConnection.Connected then
   begin
-    qryMember.Connection := FcoachConnection;
+
+    qryHR.Connection := FcoachConnection;
     qryContactNum.Connection := FcoachConnection;
-    qryMemberPB.Connection := FcoachConnection;
+    qryHRPB.Connection := FcoachConnection;
+
     // prepare lookup tables.
     tblStroke.Connection := FcoachConnection;
-    tblDistance.Connection := FcoachConnection;
-    // tblMemberType.Connection := FConnection;
-    tblGender.Connection := FcoachConnection;
-    tblContactNumType.Connection := FcoachConnection;
-    // Lookup tables used by member
     tblStroke.Open;
+    tblDistance.Connection := FcoachConnection;
     tblDistance.Open;
-    // tblMemberType.Open;
+    tblHRType.Connection := FcoachConnection;
+    tblHRType.Open;
+    tblGender.Connection := FcoachConnection;
     tblGender.Open;
-    qryMember.Open;
-    if qryMember.Active then
+    tblContactNumType.Connection := FcoachConnection;
+    tblContactNumType.Open;
+
+    // Lookup tables used by member
+    // tblMemberType.Open;
+    qryHR.Open;
+    if qryHR.Active then
     begin
       // Lookup table used by contactnum
-      tblContactNumType.Open;
       qryContactNum.Open;
       if qryContactNum.Active then
       begin
@@ -175,7 +178,7 @@ begin
   end;
 end;
 
-function TManageMemberData.LocateMember(MemberID: Integer): boolean;
+function TManageMemberData.LocateHR(MemberID: Integer): boolean;
 var
   SearchOptions: TLocateOptions;
 begin
@@ -183,7 +186,7 @@ begin
   SearchOptions := [loPartialKey];
   try
     begin
-      result := qryMember.Locate('MemberID', MemberID, SearchOptions);
+      result := qryHR.Locate('MemberID', MemberID, SearchOptions);
     end
   except
     on E: Exception do
@@ -191,12 +194,12 @@ begin
   end;
 end;
 
-procedure TManageMemberData.qryMemberAfterDelete(DataSet: TDataSet);
+procedure TManageMemberData.qryHRAfterDelete(DataSet: TDataSet);
 begin
   // Refresh display ?
 end;
 
-procedure TManageMemberData.qryMemberAfterInsert(DataSet: TDataSet);
+procedure TManageMemberData.qryHRAfterInsert(DataSet: TDataSet);
 var
   fld: TField;
 begin
@@ -223,7 +226,7 @@ begin
 
 end;
 
-procedure TManageMemberData.qryMemberAfterScroll(DataSet: TDataSet);
+procedure TManageMemberData.qryHRAfterScroll(DataSet: TDataSet);
 begin
   // Display Members Personal Best
   UpdateMembersPersonalBest();
@@ -233,7 +236,7 @@ begin
     PostMessage(TForm(Owner).Handle, SCM_AFTERSCROLL, 0, 0);
 end;
 
-procedure TManageMemberData.qryMemberBeforeDelete(DataSet: TDataSet);
+procedure TManageMemberData.qryHRBeforeDelete(DataSet: TDataSet);
 var
   SQL: string;
   MemberID, result: Integer;
@@ -266,7 +269,7 @@ begin
       end;
       qryEntrantDataCount.Close;
     end;
-    qryMember.DisableControls; // will it stop refresh of contact table?
+    qryHR.DisableControls; // will it stop refresh of contact table?
     // remove all the relationships in associated tables for this member
     SQL := 'DELETE FROM [SwimClubMeet].[dbo].[ContactNum] WHERE MemberID = ' +
       IntToStr(MemberID) + ';';
@@ -294,53 +297,47 @@ begin
       FConnection.ExecSQL(SQL);
     *)
 
-    qryMember.EnableControls;
+    qryHR.EnableControls;
   end;
 end;
 
 procedure TManageMemberData.UpdateDOB(DOB: TDateTime);
 begin
-  if Assigned(qryMember.Connection) and (qryMember.Active) then
+  if Assigned(qryHR.Connection) and (qryHR.Active) then
   begin
-    qryMember.DisableControls;
-    qryMember.Edit;
-    qryMember.FieldByName('DOB').AsDateTime := DOB;
-    qryMember.Post;
-    qryMember.EnableControls;
+    qryHR.DisableControls;
+    qryHR.Edit;
+    qryHR.FieldByName('DOB').AsDateTime := DOB;
+    qryHR.Post;
+    qryHR.EnableControls;
   end;
 
 end;
 
-procedure TManageMemberData.UpdateMember(SwimClubID: Integer;
-  hideArchived, hideInactive, hideNonSwimmer: boolean);
+procedure TManageMemberData.UpdateHR(hideArchived, hideInactive, hideNonSwimmer: boolean);
 begin
   if not Assigned(FcoachConnection) then
     exit;
-  if not qryMember.Active then
+  if not qryHR.Active then
     exit;
 
-  qryMember.DisableControls;
-  qryMember.Close;
-  if SwimClubID <> 0 then
+  qryHR.DisableControls;
+  qryHR.Close;
+  qryHR.ParamByName('HIDE_ARCHIVED').AsBoolean := hideArchived;
+  qryHR.ParamByName('HIDE_INACTIVE').AsBoolean := hideInactive;
+  qryHR.Prepare;
+  qryHR.Open;
+  if qryHR.Active then
   begin
-    qryMember.ParamByName('SWIMCLUBID').AsInteger := SwimClubID;
-    qryMember.ParamByName('HIDE_ARCHIVED').AsBoolean := hideArchived;
-    qryMember.ParamByName('HIDE_INACTIVE').AsBoolean := hideInactive;
-    qryMember.ParamByName('HIDE_NONSWIMMERS').AsBoolean := hideNonSwimmer;
-    qryMember.Prepare;
-    qryMember.Open;
-    if qryMember.Active then
-    begin
-      fRecordCount := qryMember.RecordCount;
-      if not Assigned(qryContactNum.Connection) then
-        qryContactNum.Connection := FcoachConnection;
-      if not qryContactNum.Active then
-        qryContactNum.Open;
-    end
-    else
-      fRecordCount := 0;
-  end;
-  qryMember.EnableControls;
+    fRecordCount := qryHR.RecordCount;
+    if not Assigned(qryContactNum.Connection) then
+      qryContactNum.Connection := FcoachConnection;
+    if not qryContactNum.Active then
+      qryContactNum.Open;
+  end
+  else
+    fRecordCount := 0;
+  qryHR.EnableControls;
   // Post directly to parent form : TForm(Self.GetOwner).Handle;
   // Uses : Vcl.Forms
   if Owner is TForm then
@@ -352,18 +349,20 @@ procedure TManageMemberData.UpdateMembersPersonalBest;
 begin
   if not Assigned(FcoachConnection) then
     exit;
-  if not dsMember.DataSet.Active then
+  if not dsHR.DataSet.Active then
     exit;
   // to improve loading performance of the Member's Dialogue
   // the 'personal bests' for a member are loaded on demand.
-  qryMemberPB.DisableControls;
-  qryMemberPB.Close();
-  qryMemberPB.ParamByName('MEMBERID').AsInteger :=
-    dsMember.DataSet.FieldByName('MemberID').AsInteger;
+  {
+  qryHRPB.DisableControls;
+  qryHRPB.Close();
+  qryHRPB.ParamByName('HRID').AsInteger :=
+    dsHR.DataSet.FieldByName('HRID').AsInteger;
   // ensures params changes are used
-  qryMemberPB.Prepare();
-  qryMemberPB.Open();
-  qryMemberPB.EnableControls;
+  qryHRPB.Prepare();
+  qryHRPB.Open();
+  qryHRPB.EnableControls;
+  }
 end;
 
 end.

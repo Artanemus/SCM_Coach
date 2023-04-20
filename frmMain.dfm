@@ -422,7 +422,7 @@ object Main: TMain
                 Action = Edit_Preferences
                 Caption = '&Preferences...'
               end>
-            Caption = '&Edit'
+            Caption = 'HR'
             ImageIndex = 0
             ImageName = 'MenuDots'
           end
@@ -566,6 +566,7 @@ object Main: TMain
               end
               item
                 Action = Tools_DisqualificationCodes
+                Caption = 'D&isqualification Codes...'
               end>
             Caption = '&Tools'
             ImageIndex = 0
