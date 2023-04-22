@@ -119,8 +119,8 @@ implementation
 
 {$R *.dfm}
 
-uses frmSessionNew, dlgBasicLogin, SCMUtility, IniFiles, frmManageSwimmers
-, System.UITypes, dlgImportSelect, dlgImportSCMWizard;
+uses frmSessionNew, dlgBasicLogin, SCMUtility, IniFiles
+, System.UITypes, dlgImportSelect, dlgImportSCMWizard, frmHR;
 
 
 function TMain.AssertConnection: boolean;
@@ -142,9 +142,9 @@ end;
 
 procedure TMain.Edit_SwimmersExecute(Sender: TObject);
 var
-dlg: TManageSwimmers;
+dlg: THR;
 begin
-  dlg := TManageSwimmers.Create(Self);
+  dlg := THR.Create(Self);
   dlg.Prepare(COACH.coachConnection, 1, 0);
   dlg.ShowModal;
   dlg.Free;

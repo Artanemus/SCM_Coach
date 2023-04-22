@@ -117,56 +117,6 @@
         </DCCReference>
         <DCCReference Include="LINTER\Lexer.pas"/>
         <DCCReference Include="LINTER\SimpleLexer.pas"/>
-        <DCCReference Include="MEMBERS\dlgDeleteMember.pas">
-            <Form>DeleteMember</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="MEMBERS\dlgFindMember.pas">
-            <Form>FindMember</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="MEMBERS\dlgGotoMember.pas">
-            <Form>GotoMember</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="MEMBERS\dlgGotoMembership.pas">
-            <Form>GotoMembership</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="MEMBERS\dmManageMemberData.pas">
-            <Form>ManageMemberData</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
-        <DCCReference Include="MEMBERS\frmManageSwimmers.pas">
-            <Form>ManageSwimmers</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="MEMBERS\rptMemberDetail.pas">
-            <Form>MemberDetail</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
-        <DCCReference Include="MEMBERS\rptMemberHistory.pas">
-            <Form>MemberHistory</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
-        <DCCReference Include="MEMBERS\rptMembersDetail.pas">
-            <Form>MembersDetail</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
-        <DCCReference Include="MEMBERS\rptMembersList.pas">
-            <Form>MembersList</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
-        <DCCReference Include="MEMBERS\rptMembersSummary.pas">
-            <Form>MembersSummary</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
         <DCCReference Include="dmCoach.pas">
             <Form>COACH</Form>
             <FormType>dfm</FormType>
@@ -208,6 +158,57 @@
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="..\SCM_SHARED\SCMMemberObj.pas"/>
+        <DCCReference Include="HR\dlgDeleteHR.pas">
+            <Form>DeleteHR</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="HR\dlgFindHR.pas">
+            <Form>FindHR</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="HR\dlgGotoHR.pas">
+            <Form>GotoHR</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="HR\dlgGotoHRRegNum.pas">
+            <Form>GotoHRRegNum</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="HR\dmHRData.pas">
+            <Form>HRData</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="HR\frmHR.pas">
+            <Form>HR</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="HR\rptFullHRDetail.pas">
+            <Form>FullHRDetailRPT</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="HR\rptFullHRList.pas">
+            <Form>FullHRListRPT</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="HR\rptFullHRSummary.pas">
+            <Form>FullHRSummaryRPT</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="HR\rptHRDetail.pas">
+            <Form>HRDetailRPT</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="HR\rptHRHistory.pas">
+            <Form>HRHistoryRPT</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="unitUtility.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -229,8 +230,6 @@
                     <Source Name="MainSource">SCM_Coach.dpr</Source>
                 </Source>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\TMSVCLUIPackPkgALEX.bpl">TMS VCL UI Pack</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\TMSVCLUIPackPkgExALEX.bpl">TMS VCL UI Pack Extra</Excluded_Packages>
                     <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\TMSVCLUIPackPkgEdALEX.bpl">TMS VCL UI Pack design time support</Excluded_Packages>
                     <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\TMSVCLUIPackPkgWizALEX.bpl">TMS VCL UI Pack Wizards</Excluded_Packages>
                     <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\TMSVCLUIPackPkgXlsALEX.bpl">TMS TAdvStringGrid Excel support</Excluded_Packages>

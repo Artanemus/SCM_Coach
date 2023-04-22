@@ -1,4 +1,4 @@
-unit frmManageSwimmers;
+unit frmHR;
 
 interface
 
@@ -12,13 +12,13 @@ uses
   FireDAC.Comp.Client, FireDAC.Comp.DataSet, Vcl.StdCtrls, VclTee.TeEngine,
   VclTee.TeeSpline, VclTee.Series, VclTee.TeeProcs, VclTee.Chart,
   VclTee.DBChart, Vcl.ComCtrls, Vcl.Grids, Vcl.DBGrids, Vcl.DBCtrls, Vcl.Mask,
-  Vcl.ExtCtrls, Vcl.Menus, Vcl.WinXCalendars, dmManageMemberData, SCMDefines,
+  Vcl.ExtCtrls, Vcl.Menus, Vcl.WinXCalendars, dmHRData, SCMDefines,
   Vcl.VirtualImageList, Vcl.BaseImageCollection, Vcl.ImageCollection,
   System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
   Vcl.ToolWin, Vcl.ActnCtrls, Vcl.ActnMenus, Vcl.VirtualImage;
 
 type
-  TManageSwimmers = class(TForm)
+  THR = class(TForm)
     Panel1: TPanel;
     lblMemberCount: TLabel;
     Panel3: TPanel;
@@ -92,7 +92,7 @@ type
     procedure DBGrid3KeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure DrawCheckBoxes(oGrid: TObject; Rect: TRect; Column: TColumn;
-  fontColor, bgColor: TColor);
+      fontColor, bgColor: TColor);
     procedure dtpickDOBChange(Sender: TObject);
     procedure chkbHideArchivedClick(Sender: TObject);
     procedure chkbHideInActiveClick(Sender: TObject);
@@ -133,15 +133,13 @@ type
 
   protected
     // windows messages ....
-    procedure ManageMemberAfterScroll(var Msg: TMessage);
-      message SCM_AFTERSCROLL;
-    procedure ManageMemberUpdate(var Msg: TMessage);
-      message SCM_UPDATE;
+    procedure HRAfterScroll(var Msg: TMessage); message SCM_AFTERSCROLL;
+    procedure HRDataUpdate(var Msg: TMessage); message SCM_UPDATE;
 
   public
     { Public declarations }
     procedure Prepare(AConnection: TFDConnection;
-  AHRTypeID, AMemberID: Integer);
+      AHRTypeID, AMemberID: Integer);
     procedure ClearAllFilters();
 
   end;
@@ -151,18 +149,18 @@ const
   INIFILE_SECTION = 'SCM_HR';
 
 var
-  ManageSwimmers: TManageSwimmers;
+  HR: THR;
 
 implementation
 
 {$R *.dfm}
 
 uses SCMUtility, dlgBasicLogin, System.IniFiles, System.UITypes, dlgAbout,
-  dlgDOBPicker, dlgFindMember, dlgGotoMember, dlgGotoMembership,
-  System.IOUtils, Winapi.ShellAPI, dlgDeleteMember, vcl.Themes, rptMemberDetail,
-  rptMemberHistory, rptMembersList, rptMembersDetail, rptMembersSummary;
+  dlgDOBPicker, dlgFindHR, dlgGotoHR, dlgGotoHRRegNum,
+  System.IOUtils, Winapi.ShellAPI, dlgDeleteHR, Vcl.Themes, rptHRDetail,
+  rptHRHistory, rptFullHRList, rptFullHRDetail, rptFullHRSummary;
 
-procedure TManageSwimmers.About2Click(Sender: TObject);
+procedure THR.About2Click(Sender: TObject);
 var
   dlg: TAbout;
 begin
@@ -171,180 +169,180 @@ begin
   FreeAndNil(dlg);
 end;
 
-function TManageSwimmers.AssertSCMConnection: Boolean;
+function THR.AssertSCMConnection: Boolean;
 begin
   result := false;
   // test datamodule construction
-  if Assigned(ManageMemberData) then
+  if Assigned(HRData) then
   begin
     // IsActive if TFDConnection::scmConnection && FireDAC tables are active
-    if ManageMemberData.CoreTablesActivated then
+    if HRData.CoreTablesActivated then
       result := true;
   end;
 end;
 
-procedure TManageSwimmers.btnClearClick(Sender: TObject);
+procedure THR.btnClearClick(Sender: TObject);
 begin
-  if Assigned(ManageMemberData) and (ManageMemberData.qryHR.Active) then
+  if Assigned(HRData) and (HRData.qryHR.Active) then
   begin
-    if (ManageMemberData.qryHR.State <> dsInsert) or
-      (ManageMemberData.qryHR.State <> dsEdit) then
-      ManageMemberData.qryHR.Edit();
+    if (HRData.qryHR.State <> dsInsert) or (HRData.qryHR.State <> dsEdit) then
+      HRData.qryHR.Edit();
     case TButton(Sender).Tag of
       1:
-        ManageMemberData.qryHR.FieldByName('GenderID').Clear();
+        HRData.qryHR.FieldByName('GenderID').Clear();
       2:
-        ManageMemberData.qryHR.FieldByName('MembershipTypeID').Clear();
+        HRData.qryHR.FieldByName('MembershipTypeID').Clear();
       3:
-        ManageMemberData.qryHR.FieldByName('HouseID').Clear();
+        HRData.qryHR.FieldByName('HouseID').Clear();
     end;
   end;
 end;
 
-procedure TManageSwimmers.btnClubMembersDetailedClick(Sender: TObject);
+procedure THR.btnClubMembersDetailedClick(Sender: TObject);
 var
-rpt: TMembersDetail;
+  rpt: TFullHRDetailRPT;
 begin
-  if not Assigned(ManageMemberData) then exit;
-    rpt := TMembersDetail.Create(self);
-    rpt.RunReport(FConnection, 1);
-    rpt.Free;
+  if not Assigned(HRData) then
+    exit;
+  rpt := TFullHRDetailRPT.Create(Self);
+  rpt.RunReport(FConnection, 1);
+  rpt.Free;
 end;
 
-procedure TManageSwimmers.btnClubMembersListClick(Sender: TObject);
+procedure THR.btnClubMembersListClick(Sender: TObject);
 var
-rpt: TMembersList;
+  rpt: TFullHRListRPT;
 begin
-  if not Assigned(ManageMemberData) then exit;
-    rpt := TMembersList.Create(self);
-    rpt.RunReport(FConnection, 1);
-    rpt.Free;
+  if not Assigned(HRData) then
+    exit;
+  rpt := TFullHRListRPT.Create(Self);
+  rpt.RunReport(FConnection, 1);
+  rpt.Free;
 end;
 
-procedure TManageSwimmers.btnClubMembersSummaryClick(Sender: TObject);
+procedure THR.btnClubMembersSummaryClick(Sender: TObject);
 var
-rpt: TMembersSummary;
+  rpt: TFullHRSummaryRPT;
 begin
-  if not Assigned(ManageMemberData) then exit;
-    rpt := TMembersSummary.Create(self);
-    rpt.RunReport(FConnection, 1);
-    rpt.Free;
+  if not Assigned(HRData) then
+    exit;
+  rpt := TFullHRSummaryRPT.Create(Self);
+  rpt.RunReport(FConnection, 1);
+  rpt.Free;
 end;
 
-procedure TManageSwimmers.btnFindMemberClick(Sender: TObject);
+procedure THR.btnFindMemberClick(Sender: TObject);
 var
-  dlg: TFindMember;
+  dlg: TFindHR;
 begin
-  dlg := TFindMember.Create(Self);
+  dlg := TFindHR.Create(Self);
   dlg.Prepare(FConnection, 1);
   if IsPositiveResult(dlg.ShowModal()) then
   begin
     // LOCATE MEMBER IN qryMember
-    FindMember(dlg.MemberID)
+    FindMember(dlg.HRID)
   end;
   dlg.Free;
 end;
 
-procedure TManageSwimmers.btnGotoMemberIDClick(Sender: TObject);
+procedure THR.btnGotoMemberIDClick(Sender: TObject);
 var
-  dlg: TGotoMember;
+  dlg: TGotoHR;
   rtn: TModalResult;
 begin
-  if Assigned(ManageMemberData) then
+  if Assigned(HRData) then
   begin
-    dlg := TGotoMember.Create(Self);
+    dlg := TGotoHR.Create(Self);
     dlg.Prepare(FConnection, 1);
     rtn := dlg.ShowModal;
     if IsPositiveResult(rtn) then
     begin
       // LOCATE MEMBER IN qryMember
-      FindMember(dlg.MemberID)
+      FindMember(dlg.HRID)
     end;
     dlg.Free;
   end;
 end;
 
-procedure TManageSwimmers.btnGotoMembershipClick(Sender: TObject);
+procedure THR.btnGotoMembershipClick(Sender: TObject);
 var
-  dlg: TGotoMembership;
+  dlg: TGotoHRRegNum;
   rtn: TModalResult;
 begin
-  if Assigned(ManageMemberData) then
+  if Assigned(HRData) then
   begin
-    dlg := TGotoMembership.Create(Self);
+    dlg := TGotoHRRegNum.Create(Self);
     dlg.Prepare(FConnection, 1);
     rtn := dlg.ShowModal;
     if IsPositiveResult(rtn) then
     begin
       // NOTE: returns both MembershipNum and MemberID
       // LOCATE MEMBER IN qryMember
-      FindMember(dlg.MemberID)
+      FindMember(dlg.HRID)
     end;
     dlg.Free;
   end;
 end;
 
-procedure TManageSwimmers.btnMemberDetailClick(Sender: TObject);
+procedure THR.btnMemberDetailClick(Sender: TObject);
 var
-  rpt: TMemberDetail;
+  rpt: THRDetailRPT;
   MemberID: Integer;
 begin
-  if not Assigned(ManageMemberData) then
+  if not Assigned(HRData) then
     exit;
-  MemberID := ManageMemberData.dsHR.DataSet.FieldByName('MemberID')
-    .AsInteger;
-  rpt := TMemberDetail.Create(Self);
+  MemberID := HRData.dsHR.DataSet.FieldByName('MemberID').AsInteger;
+  rpt := THRDetailRPT.Create(Self);
   rpt.RunReport(FConnection, 1, MemberID);
   rpt.Free;
 end;
 
-procedure TManageSwimmers.btnMemberHistoryClick(Sender: TObject);
+procedure THR.btnMemberHistoryClick(Sender: TObject);
 var
-  rpt: TMemberHistory;
+  rpt: THRHistoryRPT;
   MemberID: Integer;
 begin
-  if not Assigned(ManageMemberData) then
+  if not Assigned(HRData) then
     exit;
-  MemberID := ManageMemberData.dsHR.DataSet.FieldByName('MemberID')
-    .AsInteger;
-  rpt := TMemberHistory.Create(Self);
+  MemberID := HRData.dsHR.DataSet.FieldByName('MemberID').AsInteger;
+  rpt := THRHistoryRPT.Create(Self);
   rpt.RunReport(FConnection, 1, MemberID);
   rpt.Free;
 end;
 
-procedure TManageSwimmers.chkbHideArchivedClick(Sender: TObject);
+procedure THR.chkbHideArchivedClick(Sender: TObject);
 begin
-  if Assigned(ManageMemberData) then
-//    ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-//      chkbHideInActive.Checked, true);
+  if Assigned(HRData) then
+    // HRData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
+    // chkbHideInActive.Checked, true);
 end;
 
-procedure TManageSwimmers.chkbHideInActiveClick(Sender: TObject);
+procedure THR.chkbHideInActiveClick(Sender: TObject);
 begin
-  if Assigned(ManageMemberData) then
-//    ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-//      chkbHideInActive.Checked, true);
+  if Assigned(HRData) then
+    // HRData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
+    // chkbHideInActive.Checked, true);
 end;
 
-procedure TManageSwimmers.chkbHideNonSwimmersClick(Sender: TObject);
+procedure THR.chkbHideNonSwimmersClick(Sender: TObject);
 begin
-  if Assigned(ManageMemberData) then
-//    ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-//      chkbHideInActive.Checked, true);
+  if Assigned(HRData) then
+    // HRData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
+    // chkbHideInActive.Checked, true);
 end;
 
-procedure TManageSwimmers.ClearAllFilters;
+procedure THR.ClearAllFilters;
 begin
-  if Assigned(ManageMemberData) then
+  if Assigned(HRData) then
   begin
     Hide_Archived.Checked := false;
     Hide_InActive.Checked := false;
-//    ManageMemberData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
-//      chkbHideInActive.Checked, true);
+    // HRData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
+    // chkbHideInActive.Checked, true);
   end;
 end;
 
-procedure TManageSwimmers.DBGrid3CellClick(Column: TColumn);
+procedure THR.DBGrid3CellClick(Column: TColumn);
 begin
   if Assigned(Column.Field) and (Column.Field.DataType = ftBoolean) then
   begin
@@ -359,7 +357,7 @@ begin
   end;
 end;
 
-procedure TManageSwimmers.DBGrid3ColEnter(Sender: TObject);
+procedure THR.DBGrid3ColEnter(Sender: TObject);
 begin
   // By default, two clicks on the same cell enacts the cell editing mode.
   // The grid draws a TEditBox over the cell, killing the checkbox draw UI.
@@ -372,22 +370,21 @@ begin
   end;
 end;
 
-procedure TManageSwimmers.DBGrid3ColExit(Sender: TObject);
+procedure THR.DBGrid3ColExit(Sender: TObject);
 begin
   with Sender as TDBGrid do
-  if Assigned(SelectedField) and   (SelectedField.DataType = ftBoolean) then
-    Options := Options + [dgEditing];
+    if Assigned(SelectedField) and (SelectedField.DataType = ftBoolean) then
+      Options := Options + [dgEditing];
 end;
 
-procedure TManageSwimmers.DBGrid3DrawColumnCell(Sender: TObject;
-  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+procedure THR.DBGrid3DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
 var
   clFont, clBg: TColor;
 begin
   // NOTE : DEFAULT DRAWING IS DISABLED ....
   if (Column.Field.FieldName = 'IsActive') or
-    (Column.Field.FieldName = 'IsArchived') or
-    (Column.Field.FieldName = 'IsSwimmer') then
+    (Column.Field.FieldName = 'IsArchived') then
   begin
     if gdFocused in State then
       clFont := fColorEditBoxFocused
@@ -407,7 +404,7 @@ begin
   end;
 end;
 
-procedure TManageSwimmers.DBGrid3EditButtonClick(Sender: TObject);
+procedure THR.DBGrid3EditButtonClick(Sender: TObject);
 var
   fld: TField;
   cal: TDOBPicker;
@@ -430,7 +427,7 @@ begin
       if (TDBGrid(Sender).DataSource.State <> dsEdit) or
         (TDBGrid(Sender).DataSource.State <> dsInsert) then
       begin
-        // ALT: ManageMemberData.UpdateDOB(cal.CalendarView1.Date);
+        // ALT: HRData.UpdateDOB(cal.CalendarView1.Date);
         TDBGrid(Sender).DataSource.Edit;
         fld.Value := cal.CalendarView1.Date;
       end;
@@ -440,104 +437,104 @@ begin
   end;
 end;
 
-procedure TManageSwimmers.DBGrid3KeyDown(Sender: TObject; var Key: Word;
+procedure THR.DBGrid3KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
   fld: TField;
 begin
 
-  With Sender as TDBGrid do begin
-  if Assigned(SelectedField) then
+  With Sender as TDBGrid do
   begin
-
-    if (SelectedField.DataType = ftBoolean) then
+    if Assigned(SelectedField) then
     begin
-      // If the selected field is a boolean,
-      // then enable SPACE key to toggle the value.
-      fld := SelectedField;
-      if (Key = vkSpace) then
-      begin
-        if (DataSource.DataSet.State <> dsEdit) or
-          (DataSource.DataSet.State <> dsInsert) then
-        begin
-          DataSource.DataSet.Edit();
-        end;
-        fld.Value := not fld.AsBoolean;
-        Key := NULL;
-      end;
-      // Y, y, T, t
-      if (Key = $59) or (Key = $79) or (Key = $54) or (Key = $74) then
-      begin
-        if (DataSource.DataSet.State <> dsEdit) or
-          (DataSource.DataSet.State <> dsInsert) then
-        begin
-          DataSource.DataSet.Edit();
-        end;
-        fld.Value := 1;
-        Key := NULL;
-      end;
-      // N, n, F, f
-      if (Key = $4E) or (Key = $6E) or (Key = $46) or (Key = $66) then
-      begin
-        if (DataSource.DataSet.State <> dsEdit) or
-          (DataSource.DataSet.State <> dsInsert) then
-        begin
-          DataSource.DataSet.Edit();
-        end;
-        fld.Value := 0;
-        Key := NULL;
-      end;
-    end;
 
-    // DROPDOWN COMBOBOX
-    if (SelectedField.FieldKind = fkLookup) then
-    begin
-      // NullValueKey - Alt+BkSp - CLEAR
-      if (Key = vkBack) and (ssAlt in Shift) then
+      if (SelectedField.DataType = ftBoolean) then
       begin
+        // If the selected field is a boolean,
+        // then enable SPACE key to toggle the value.
         fld := SelectedField;
-        if (fld.FieldName = 'luHouse') then
+        if (Key = vkSpace) then
         begin
-          DataSource.DataSet.Edit();
-          DataSource.DataSet.FieldByName('HouseID').Clear();
-          DataSource.DataSet.Post();
+          if (DataSource.DataSet.State <> dsEdit) or
+            (DataSource.DataSet.State <> dsInsert) then
+          begin
+            DataSource.DataSet.Edit();
+          end;
+          fld.Value := not fld.AsBoolean;
           Key := NULL;
         end;
-        if (fld.FieldName = 'luMembershipType') then
+        // Y, y, T, t
+        if (Key = $59) or (Key = $79) or (Key = $54) or (Key = $74) then
         begin
-          DataSource.DataSet.Edit();
-          DataSource.DataSet.FieldByName('MembershipTypeID').Clear();
-          DataSource.DataSet.Post();
+          if (DataSource.DataSet.State <> dsEdit) or
+            (DataSource.DataSet.State <> dsInsert) then
+          begin
+            DataSource.DataSet.Edit();
+          end;
+          fld.Value := 1;
           Key := NULL;
         end;
-        if (fld.FieldName = 'luGender') then
+        // N, n, F, f
+        if (Key = $4E) or (Key = $6E) or (Key = $46) or (Key = $66) then
         begin
-          DataSource.DataSet.Edit();
-          DataSource.DataSet.FieldByName('GenderID').Clear();
-          DataSource.DataSet.Post();
+          if (DataSource.DataSet.State <> dsEdit) or
+            (DataSource.DataSet.State <> dsInsert) then
+          begin
+            DataSource.DataSet.Edit();
+          end;
+          fld.Value := 0;
           Key := NULL;
         end;
       end;
+
+      // DROPDOWN COMBOBOX
+      if (SelectedField.FieldKind = fkLookup) then
+      begin
+        // NullValueKey - Alt+BkSp - CLEAR
+        if (Key = vkBack) and (ssAlt in Shift) then
+        begin
+          fld := SelectedField;
+          if (fld.FieldName = 'luHouse') then
+          begin
+            DataSource.DataSet.Edit();
+            DataSource.DataSet.FieldByName('HouseID').Clear();
+            DataSource.DataSet.Post();
+            Key := NULL;
+          end;
+          if (fld.FieldName = 'luMembershipType') then
+          begin
+            DataSource.DataSet.Edit();
+            DataSource.DataSet.FieldByName('MembershipTypeID').Clear();
+            DataSource.DataSet.Post();
+            Key := NULL;
+          end;
+          if (fld.FieldName = 'luGender') then
+          begin
+            DataSource.DataSet.Edit();
+            DataSource.DataSet.FieldByName('GenderID').Clear();
+            DataSource.DataSet.Post();
+            Key := NULL;
+          end;
+        end;
+      end;
     end;
-  end;
   end;
 
 end;
 
-procedure TManageSwimmers.DBNavigator1BeforeAction(Sender: TObject;
-  Button: TNavigateBtn);
+procedure THR.DBNavigator1BeforeAction(Sender: TObject; Button: TNavigateBtn);
 var
-  dlg: TDeleteMember;
+  dlg: TDeleteHR;
   FName, s: string;
   ID: Integer;
 begin
   if Button = nbDelete then
   begin
     fDoDelete := false;
-    dlg := TDeleteMember.Create(Self);
+    dlg := TDeleteHR.Create(Self);
     // get the fullname of the member to delete
-    FName := ManageMemberData.dsHR.DataSet.FieldByName('FName').AsString;
-    ID := ManageMemberData.dsHR.DataSet.FieldByName('MemberID').AsInteger;
+    FName := HRData.dsHR.DataSet.FieldByName('FName').AsString;
+    ID := HRData.dsHR.DataSet.FieldByName('MemberID').AsInteger;
     s := IntToStr(ID);
     dlg.lblTitle.Caption := 'Delete (ID: ' + s + ') ' + FName +
       ' from the SwimClubMeet database ?';
@@ -554,8 +551,7 @@ begin
   end;
 end;
 
-procedure TManageSwimmers.DBNavigator1Click(Sender: TObject;
-  Button: TNavigateBtn);
+procedure THR.DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
 begin
   if Button = nbDelete then
   begin
@@ -567,13 +563,13 @@ end;
 // ---------------------------------------------------------------------------
 // Draw a very basic checkbox (ticked) - not a nice as TCheckListBox
 // ---------------------------------------------------------------------------
-procedure TManageSwimmers.DrawCheckBoxes(oGrid: TObject; Rect: TRect; Column: TColumn;
+procedure THR.DrawCheckBoxes(oGrid: TObject; Rect: TRect; Column: TColumn;
   fontColor, bgColor: TColor);
 var
   MyRect: TRect;
   oField: TField;
-  iPos, iFactor: integer;
-  bValue: boolean;
+  iPos, iFactor: Integer;
+  bValue: Boolean;
   g: TDBGrid;
   points: Array [0 .. 4] of TPoint;
 begin
@@ -584,7 +580,7 @@ begin
   g := TDBGrid(oGrid);
   // is the cell checked?
   oField := Column.Field;
-  if (oField.value = -1) then
+  if (oField.Value = -1) then
     bValue := true
   else
     bValue := false;
@@ -656,26 +652,26 @@ begin
   end;
 end;
 
-procedure TManageSwimmers.dtpickDOBChange(Sender: TObject);
+procedure THR.dtpickDOBChange(Sender: TObject);
 begin
-  if Assigned(ManageMemberData) and (ManageMemberData.qryHR.Active) then
+  if Assigned(HRData) and (HRData.qryHR.Active) then
   begin
-    if (ManageMemberData.qryHR.State <> dsEdit) then
-      ManageMemberData.qryHR.Edit();
-    ManageMemberData.qryHR.FieldByName('DOB').AsDateTime := dtpickDOB.Date;
+    if (HRData.qryHR.State <> dsEdit) then
+      HRData.qryHR.Edit();
+    HRData.qryHR.FieldByName('DOB').AsDateTime := dtpickDOB.Date;
     // let user perform manual post
-    // ManageMemberData.qryMember.Post();
+    // HRData.qryMember.Post();
   end;
 end;
 
-function TManageSwimmers.FindMember(MemberID: Integer): Boolean;
+function THR.FindMember(MemberID: Integer): Boolean;
 var
   b: Boolean;
   s: string;
   rtn: TModalResult;
 begin
   result := false;
-  b := ManageMemberData.LocateHR(MemberID);
+  b := HRData.LocateHR(MemberID);
   if b then
     result := true
   else
@@ -686,25 +682,24 @@ begin
     if IsPositiveResult(rtn) then
     begin
       ClearAllFilters;
-      b := ManageMemberData.LocateHR(MemberID);
+      b := HRData.LocateHR(MemberID);
       if b then
         result := true;
     end;
   end;
 end;
 
-procedure TManageSwimmers.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+procedure THR.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
   // Test database state
-  if Assigned(ManageMemberData) and (ManageMemberData.qryHR.Active) then
+  if Assigned(HRData) and (HRData.qryHR.Active) then
   begin
-    if (ManageMemberData.qryHR.State = dsEdit) or
-      (ManageMemberData.qryHR.State = dsInsert) then
-      ManageMemberData.qryHR.Post();
+    if (HRData.qryHR.State = dsEdit) or (HRData.qryHR.State = dsInsert) then
+      HRData.qryHR.Post();
   end;
 end;
 
-procedure TManageSwimmers.FormCreate(Sender: TObject);
+procedure THR.FormCreate(Sender: TObject);
 var
   css: TCustomStyleServices;
 
@@ -742,12 +737,16 @@ begin
 
 end;
 
-procedure TManageSwimmers.FormDestroy(Sender: TObject);
+procedure THR.FormDestroy(Sender: TObject);
 begin
   WritePreferences;
+
+  // Clean memory allocation.
+  if Assigned(HRData) then
+    FreeAndNil(HRData);
 end;
 
-procedure TManageSwimmers.FormShow(Sender: TObject);
+procedure THR.FormShow(Sender: TObject);
 begin
   // ----------------------------------------------------
   // R E A D   P R E F E R E N C E S .
@@ -764,34 +763,34 @@ begin
 
 end;
 
-procedure TManageSwimmers.ManageMemberAfterScroll(var Msg: TMessage);
+procedure THR.HRAfterScroll(var Msg: TMessage);
 begin
   if not AssertSCMConnection then
     exit;
   // DATE-OF-BIRTH - DATETIME PICKER INIT
-  dtpickDOB.Date := ManageMemberData.qryHR.FieldByName('DOB').AsDateTime;
+  dtpickDOB.Date := HRData.qryHR.FieldByName('DOB').AsDateTime;
 
 end;
 
-procedure TManageSwimmers.ManageMemberUpdate(var Msg: TMessage);
+procedure THR.HRDataUpdate(var Msg: TMessage);
 begin
   if not AssertSCMConnection then
     exit;
   // UPDATE THE NUMBER OF RECORDS.
-  lblCount.Caption := IntToStr(ManageMemberData.RecordCount);
+  lblCount.Caption := IntToStr(HRData.RecordCount);
 end;
 
-procedure TManageSwimmers.MemFile_ExitExecute(Sender: TObject);
+procedure THR.MemFile_ExitExecute(Sender: TObject);
 begin
   Close();
 end;
 
-procedure TManageSwimmers.Search_FindSwimmerExecute(Sender: TObject);
+procedure THR.Search_FindSwimmerExecute(Sender: TObject);
 begin
   btnFindMemberClick(Self);
 end;
 
-procedure TManageSwimmers.Onlinehelp1Click(Sender: TObject);
+procedure THR.Onlinehelp1Click(Sender: TObject);
 var
   base_URL: string;
 begin
@@ -800,7 +799,7 @@ begin
 
 end;
 
-procedure TManageSwimmers.Prepare(AConnection: TFDConnection;
+procedure THR.Prepare(AConnection: TFDConnection;
   AHRTypeID, AMemberID: Integer);
 begin
   FConnection := AConnection;
@@ -809,35 +808,33 @@ begin
   // C R E A T E   D A T A M O D U L E   S C M .
   // ----------------------------------------------------
   try
-    ManageMemberData := TManageMemberData.CreateWithConnection(Self,
-      FConnection);
+    HRData := THRData.CreateWithConnection(Self, FConnection);
   finally
-    // with ManageMemberData created and the essential tables are open then
+    // with HRData created and the essential tables are open then
     // asserting the connection should be true
-    if not Assigned(ManageMemberData) then
+    if not Assigned(HRData) then
       raise Exception.Create('Manage Member''s Data Module creation error.');
   end;
 
   // ----------------------------------------------------
-  // Check that ManageMemberData is active .
+  // Check that HRData is active .
   // ----------------------------------------------------
-  ManageMemberData.ActivateTable;
-  if not ManageMemberData.CoreTablesActivated then
+  HRData.ActivateTable;
+  if not HRData.CoreTablesActivated then
   begin
     MessageDlg('An error occurred during MSSQL table activation.' + sLineBreak +
       'The database''s schema may need updating.' + sLineBreak +
       'The application will terminate!', mtError, [mbOk], 0);
-    raise Exception.Create('ManageMemberData Member not active.');
+    raise Exception.Create('HRData Member not active.');
   end;
 
   // execute SQL. Make all null IsArchived, IsActive, IsSwimmer = 0;
-  //  ManageMemberData.FixNullBooleans;
+  HRData.FixNullBooleans;
 
   // ----------------------------------------------------
   // Prepares all core queries  (Master+Child)
   // ----------------------------------------------------
-  ManageMemberData.UpdateHR(Hide_Archived.Checked,
-    Hide_InActive.Checked, true);
+  HRData.UpdateHR(Hide_Archived.Checked, Hide_InActive.Checked, true);
 
   // Cue-to-member
   if AMemberID > 0 then
@@ -845,11 +842,11 @@ begin
 
 end;
 
-procedure TManageSwimmers.ReadPreferences;
+procedure THR.ReadPreferences;
 var
   ini: TIniFile;
 begin
-  // C:\Users\<#USERNAME#>\AppData\Roaming\Artanemus\ManageMemberData\ + SCMMEMBERPREF
+  // C:\Users\<#USERNAME#>\AppData\Roaming\Artanemus\HRData\ + SCMMEMBERPREF
   ini := TIniFile.Create(GetSCMAppDataDir + INIFILE_SCM_COACHPREF);
   try
     Hide_Archived.Checked := ini.ReadBool(INIFILE_SECTION,
@@ -861,7 +858,7 @@ begin
   end;
 end;
 
-procedure TManageSwimmers.SCMwebsite1Click(Sender: TObject);
+procedure THR.SCMwebsite1Click(Sender: TObject);
 var
   base_URL: string;
 begin
@@ -873,7 +870,7 @@ begin
 
 end;
 
-procedure TManageSwimmers.WritePreferences;
+procedure THR.WritePreferences;
 var
   ini: TIniFile;
 begin

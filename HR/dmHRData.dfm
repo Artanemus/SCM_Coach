@@ -1,4 +1,4 @@
-object ManageMemberData: TManageMemberData
+object HRData: THRData
   OnCreate = DataModuleCreate
   Height = 800
   Width = 1306
@@ -444,6 +444,7 @@ object ManageMemberData: TManageMemberData
   end
   object qryHR: TFDQuery
     ActiveStoredUsage = [auDesignTime]
+    Active = True
     AfterInsert = qryHRAfterInsert
     BeforeDelete = qryHRBeforeDelete
     AfterDelete = qryHRAfterDelete

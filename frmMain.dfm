@@ -142,7 +142,7 @@ object Main: TMain
       ImageIndex = 1
       object Splitter1: TSplitter
         Left = 0
-        Top = 705
+        Top = 716
         Width = 1347
         Height = 20
         Cursor = crVSplit
@@ -152,12 +152,13 @@ object Main: TMain
       end
       object PageControl2: TPageControl
         Left = 0
-        Top = 725
+        Top = 736
         Width = 1347
         Height = 193
         ActivePage = TabSheet3
         Align = alBottom
         TabOrder = 0
+        ExplicitTop = 725
         object TabSheet3: TTabSheet
           Caption = 'Output'
         end
@@ -170,16 +171,17 @@ object Main: TMain
         Left = 0
         Top = 0
         Width = 1347
-        Height = 705
+        Height = 716
         Align = alClient
         BevelOuter = bvNone
         Caption = 'Panel1'
         TabOrder = 1
+        ExplicitHeight = 705
         object relpnlPrgBuilderToolBar: TRelativePanel
           Left = 0
           Top = 0
           Width = 97
-          Height = 705
+          Height = 716
           ControlCollection = <
             item
               Control = VirtualImage1
@@ -238,6 +240,7 @@ object Main: TMain
           Align = alLeft
           BevelOuter = bvNone
           TabOrder = 0
+          ExplicitHeight = 705
           DesignSize = (
             97
             705)
@@ -422,7 +425,7 @@ object Main: TMain
                 Action = Edit_Preferences
                 Caption = '&Preferences...'
               end>
-            Caption = 'HR'
+            Caption = '&HR'
             ImageIndex = 0
             ImageName = 'MenuDots'
           end
@@ -582,7 +585,7 @@ object Main: TMain
                 Action = Help_WebHelp
                 Caption = '&Web Coach Wiki...'
               end>
-            Caption = '&Help'
+            Caption = 'H&elp'
             ImageIndex = 0
             ImageName = 'MenuDots'
           end>

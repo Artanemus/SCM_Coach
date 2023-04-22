@@ -1,32 +1,31 @@
-unit rptMembersSummary;
+unit rptHRHistory;
 
 interface
 
 uses
   System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
-  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, frxExportMail, Data.DB,
-  FireDAC.Comp.DataSet, FireDAC.Comp.Client, frxExportXLS, frxExportPDF,
-  frxClass, frxExportBaseDialog, frxExportHTML, frxDBSet;
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, frxClass, frxDBSet,
+  frxExportPDF, frxExportHTML, frxExportBaseDialog, frxExportXLS, Data.DB,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client;
 
 type
-  TMembersSummary = class(TDataModule)
+  THRHistoryRPT = class(TDataModule)
     frxReport1: TfrxReport;
-    frxDSReport: TfrxDBDataset;
+    qryReport: TFDQuery;
+    frxXLSExport1: TfrxXLSExport;
     frxHTMLExport1: TfrxHTMLExport;
     frxPDFExport1: TfrxPDFExport;
-    frxXLSExport1: TfrxXLSExport;
-    qryReport: TFDQuery;
-    frxMailExport1: TfrxMailExport;
+    frxDSReport: TfrxDBDataset;
   private
     { Private declarations }
   public
     { Public declarations }
-    procedure RunReport(AConnection: TFDConnection; ASwimClubID: integer);
+    procedure RunReport(AConnection: TFDConnection; ASwimClubID, AMemberID: integer);
   end;
 
 var
-  MembersSummary: TMembersSummary;
+  HRHistoryRPT: THRHistoryRPT;
 
 implementation
 
@@ -34,12 +33,12 @@ implementation
 
 {$R *.dfm}
 
-{ TMemberSummaryRpt }
-
-procedure TMembersSummary.RunReport(AConnection: TFDConnection; ASwimClubID: integer);
+procedure THRHistoryRPT.RunReport(AConnection: TFDConnection;
+  ASwimClubID, AMemberID: integer);
 begin
 	qryReport.Connection := AConnection;
 	qryReport.ParamByName('SWIMCLUBID').AsInteger := aSwimClubID;
+	qryReport.ParamByName('MEMBERID').AsInteger := aMemberID;
 	qryReport.Prepare;
 	qryReport.Open;
 	if qryReport.Active then

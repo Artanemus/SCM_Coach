@@ -9,17 +9,6 @@ uses
   dlgSquadNew in 'dlgSquadNew.pas' {SquadNew},
   Lexer in 'LINTER\Lexer.pas',
   SimpleLexer in 'LINTER\SimpleLexer.pas',
-  dlgDeleteMember in 'MEMBERS\dlgDeleteMember.pas' {DeleteMember},
-  dlgFindMember in 'MEMBERS\dlgFindMember.pas' {FindMember},
-  dlgGotoMember in 'MEMBERS\dlgGotoMember.pas' {GotoMember},
-  dlgGotoMembership in 'MEMBERS\dlgGotoMembership.pas' {GotoMembership},
-  dmManageMemberData in 'MEMBERS\dmManageMemberData.pas' {ManageMemberData: TDataModule},
-  frmManageSwimmers in 'MEMBERS\frmManageSwimmers.pas' {ManageSwimmers},
-  rptMemberDetail in 'MEMBERS\rptMemberDetail.pas' {MemberDetail: TDataModule},
-  rptMemberHistory in 'MEMBERS\rptMemberHistory.pas' {MemberHistory: TDataModule},
-  rptMembersDetail in 'MEMBERS\rptMembersDetail.pas' {MembersDetail: TDataModule},
-  rptMembersList in 'MEMBERS\rptMembersList.pas' {MembersList: TDataModule},
-  rptMembersSummary in 'MEMBERS\rptMembersSummary.pas' {MembersSummary: TDataModule},
   dmCoach in 'dmCoach.pas' {COACH: TDataModule},
   dlgBootProgress in 'dlgBootProgress.pas' {BootProgress},
   dlgDOBPicker in 'dlgDOBPicker.pas' {DOBPicker},
@@ -34,7 +23,19 @@ uses
   dlgImportSCMWizard in 'IMPORT\dlgImportSCMWizard.pas' {ImportSCMWizard},
   dlgImportSelect in 'IMPORT\dlgImportSelect.pas' {ImportSelect},
   dmImportData in 'IMPORT\dmImportData.pas' {ImportData: TDataModule},
-  SCMMemberObj in '..\SCM_SHARED\SCMMemberObj.pas';
+  SCMMemberObj in '..\SCM_SHARED\SCMMemberObj.pas',
+  dlgDeleteHR in 'HR\dlgDeleteHR.pas' {DeleteHR},
+  dlgFindHR in 'HR\dlgFindHR.pas' {FindHR},
+  dlgGotoHR in 'HR\dlgGotoHR.pas' {GotoHR},
+  dlgGotoHRRegNum in 'HR\dlgGotoHRRegNum.pas' {GotoHRRegNum},
+  dmHRData in 'HR\dmHRData.pas' {HRData: TDataModule},
+  frmHR in 'HR\frmHR.pas' {HR},
+  rptFullHRDetail in 'HR\rptFullHRDetail.pas' {FullHRDetailRPT: TDataModule},
+  rptFullHRList in 'HR\rptFullHRList.pas' {FullHRListRPT: TDataModule},
+  rptFullHRSummary in 'HR\rptFullHRSummary.pas' {FullHRSummaryRPT: TDataModule},
+  rptHRDetail in 'HR\rptHRDetail.pas' {HRDetailRPT: TDataModule},
+  rptHRHistory in 'HR\rptHRHistory.pas' {HRHistoryRPT: TDataModule},
+  unitUtility in 'unitUtility.pas';
 
 {$R *.res}
 

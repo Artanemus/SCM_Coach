@@ -1,9 +1,9 @@
-object ManageSwimmers: TManageSwimmers
+object HR: THR
   Left = 0
   Top = 0
   Caption = 'Human Resources - Squad Swimmers.'
-  ClientHeight = 841
-  ClientWidth = 1338
+  ClientHeight = 839
+  ClientWidth = 1330
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,13 +19,13 @@ object ManageSwimmers: TManageSwimmers
   object Panel1: TPanel
     Left = 0
     Top = 42
-    Width = 1338
+    Width = 1330
     Height = 37
     Align = alTop
     BevelEdges = []
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 1334
+    ExplicitWidth = 1326
     object lblMemberCount: TLabel
       Left = 1159
       Top = 6
@@ -55,15 +55,15 @@ object ManageSwimmers: TManageSwimmers
   end
   object Panel3: TPanel
     Left = 0
-    Top = 775
-    Width = 1338
+    Top = 773
+    Width = 1330
     Height = 66
     Align = alBottom
     BevelEdges = []
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitTop = 774
-    ExplicitWidth = 1334
+    ExplicitTop = 772
+    ExplicitWidth = 1326
     object DBNavigator1: TDBNavigator
       Left = 385
       Top = 6
@@ -81,28 +81,28 @@ object ManageSwimmers: TManageSwimmers
   object PageControl1: TPageControl
     Left = 0
     Top = 79
-    Width = 1338
-    Height = 696
-    ActivePage = TabSheet1
+    Width = 1330
+    Height = 694
+    ActivePage = TabSheet2
     Align = alClient
     MultiLine = True
     TabHeight = 40
     TabOrder = 2
     TabWidth = 160
-    ExplicitWidth = 1334
-    ExplicitHeight = 695
+    ExplicitWidth = 1326
+    ExplicitHeight = 693
     object TabSheet1: TTabSheet
       Caption = 'Swimmer'#39's Details'
       object Panel7: TPanel
         Left = 0
         Top = 0
-        Width = 1330
-        Height = 646
+        Width = 1322
+        Height = 644
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 1326
-        ExplicitHeight = 645
+        ExplicitWidth = 1318
+        ExplicitHeight = 643
         object Label3: TLabel
           Left = 153
           Top = 139
@@ -273,7 +273,7 @@ object ManageSwimmers: TManageSwimmers
           Font.Style = []
           KeyField = 'GenderID'
           ListField = 'Caption'
-          ListSource = ManageMemberData.dsGender
+          ListSource = HRData.dsGender
           NullValueKey = 32776
           ParentFont = False
           TabOrder = 3
@@ -284,6 +284,7 @@ object ManageSwimmers: TManageSwimmers
           Width = 292
           Height = 27
           DataField = 'FirstName'
+          DataSource = HRData.dsHR
           TabOrder = 0
         end
         object DBedtLastName: TDBEdit
@@ -292,6 +293,7 @@ object ManageSwimmers: TManageSwimmers
           Width = 292
           Height = 27
           DataField = 'LastName'
+          DataSource = HRData.dsHR
           TabOrder = 1
         end
         object DBedtMembershipNum: TDBEdit
@@ -300,7 +302,7 @@ object ManageSwimmers: TManageSwimmers
           Width = 124
           Height = 27
           DataField = 'RegisterNum'
-          DataSource = ManageMemberData.dsHR
+          DataSource = HRData.dsHR
           TabOrder = 8
         end
         object DBchkIsActive: TDBCheckBox
@@ -310,6 +312,7 @@ object ManageSwimmers: TManageSwimmers
           Height = 17
           Caption = 'Is Active. '
           DataField = 'IsActive'
+          DataSource = HRData.dsHR
           TabOrder = 6
         end
         object DBEdtEmail: TDBEdit
@@ -318,6 +321,7 @@ object ManageSwimmers: TManageSwimmers
           Width = 421
           Height = 27
           DataField = 'Email'
+          DataSource = HRData.dsHR
           TabOrder = 9
         end
         object DBchkIsArchived: TDBCheckBox
@@ -327,6 +331,7 @@ object ManageSwimmers: TManageSwimmers
           Height = 17
           Caption = 'Is Archived - Retired from squad.'
           DataField = 'IsArchived'
+          DataSource = HRData.dsHR
           TabOrder = 5
         end
         object btnClearGender: TButton
@@ -348,7 +353,7 @@ object ManageSwimmers: TManageSwimmers
           Width = 283
           Height = 27
           DataField = 'RegisterStr'
-          DataSource = ManageMemberData.dsHR
+          DataSource = HRData.dsHR
           TabOrder = 7
         end
         object dtpickDOB: TCalendarPicker
@@ -381,7 +386,7 @@ object ManageSwimmers: TManageSwimmers
           Top = 247
           Width = 321
           Height = 382
-          DataSource = ManageMemberData.dsHRPB
+          DataSource = HRData.dsHRPB
           TabOrder = 10
           TitleFont.Charset = DEFAULT_CHARSET
           TitleFont.Color = clWindowText
@@ -412,7 +417,7 @@ object ManageSwimmers: TManageSwimmers
           Top = 23
           Width = 321
           Height = 204
-          DataSource = ManageMemberData.dsContactNum
+          DataSource = HRData.dsContactNum
           Options = [dgEditing, dgAlwaysShowEditor, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
           TabOrder = 11
           TitleFont.Charset = DEFAULT_CHARSET
@@ -441,7 +446,7 @@ object ManageSwimmers: TManageSwimmers
           Top = 23
           Width = 60
           Height = 204
-          DataSource = ManageMemberData.dsContactNum
+          DataSource = HRData.dsContactNum
           VisibleButtons = [nbInsert, nbDelete, nbPost, nbCancel]
           Hints.Strings = (
             'First record'
@@ -469,11 +474,11 @@ object ManageSwimmers: TManageSwimmers
       object DBGrid3: TDBGrid
         Left = 0
         Top = 0
-        Width = 1330
-        Height = 646
+        Width = 1322
+        Height = 644
         Align = alClient
         BorderStyle = bsNone
-        DataSource = ManageMemberData.dsHR
+        DataSource = HRData.dsHR
         DefaultDrawing = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -670,7 +675,7 @@ object ManageSwimmers: TManageSwimmers
   object ActionToolBar1: TActionToolBar
     Left = 0
     Top = 0
-    Width = 1338
+    Width = 1330
     Height = 42
     ActionManager = ActnManagerMember
     Caption = 'ActionToolBar1'

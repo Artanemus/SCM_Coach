@@ -33,7 +33,6 @@ type
 
     function InsertSplits(RaceHistoryID, EntrantID: integer): boolean;
     function HasFieldMiddleInitial: boolean;
-    function CnvVarToInt(v: variant): integer;
 
   public
     { Public declarations }
@@ -70,7 +69,7 @@ implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 {$R *.dfm}
 
-uses System.Variants;
+uses System.Variants, unitUtility;
 
 { TImportData }
 
@@ -125,29 +124,6 @@ function TImportData.AssertUnique(scmMemberID: integer): boolean;
 begin
   // STRING LOOKUP AND COMPARE   (.HY3)
   result := true;
-end;
-
-function TImportData.CnvVarToInt(v: variant): integer;
-var
-  I, Code: integer;
-begin
-  I := 0;
-  // Exception class EVariantTypeCastError with message
-  // 'Could not convert variant of type (Null) into type (Integer)'.
-  if VarIsNull(v) then
-    I := 0
-  else
-  begin
-    if VarIsStr(v) then
-    begin
-      System.Val(v, Code, I);
-      if Code <> 0 then // on error
-        I := 0;
-    end
-    else
-      I := v; // Should work!
-  end;
-  result := I;
 end;
 
 function TImportData.DeActivateTables: boolean;
@@ -274,7 +250,7 @@ begin
         // TIMESTAMP
         tblHR.FieldByName('CreatedOn').AsDateTime := Now;
         // SPECIFY HR TYPE - SQUAD SWIMMER
-        tblHR.FieldByName('HRTypeID').AsInteger := 1;
+        tblHR.FieldByName('HRTypeID').AsInteger := 3;
 
         { TODO -oBSA -cGeneral : Option - specify squad swimmers GradeID }
         // SPECIFY SWIMMER INITIAL GRADE ...  ???

@@ -1,4 +1,4 @@
-unit dlgFindMember;
+unit dlgFindHR;
 
 interface
 
@@ -14,81 +14,78 @@ uses
   FireDAC.Phys, FireDAC.Phys.MSSQL, FireDAC.Phys.MSSQLDef, FireDAC.VCLUI.Wait;
 
 type
-  TFindMember = class(TForm)
+  TFindHR = class(TForm)
     Panel1: TPanel;
     Edit1: TEdit;
     Panel2: TPanel;
-    btnGotoMember: TButton;
+    btnGotoHR: TButton;
     DBGrid1: TDBGrid;
     ImageCollection1: TImageCollection;
     VirtualImage1: TVirtualImage;
     lblFound: TLabel;
-    qryFindMember: TFDQuery;
-    dsFindMember: TDataSource;
-    qryFindMemberMemberID: TFDAutoIncField;
-    qryFindMemberMembershipNum: TIntegerField;
-    qryFindMemberFName: TWideStringField;
-    qryFindMemberSwimClubID: TIntegerField;
+    qryFindHR: TFDQuery;
+    dsFindHR: TDataSource;
+    FDTestConnection: TFDConnection;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure btnGotoMemberClick(Sender: TObject);
+    procedure btnGotoHRClick(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
     procedure Edit1Change(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
-    fMemberID, fSwimClubID: integer;
+    fHRID: integer;
     fConnection: TFDConnection;
   public
     { Public declarations }
-    procedure Prepare(AConnection: TFDConnection; ASwimClubID: integer);
-    property MemberID: integer read fMemberID write fMemberID;
+    procedure Prepare(AConnection: TFDConnection; AHRTypeID: integer);
+    property HRID: integer read fHRID write fHRID;
   end;
 
 var
-  FindMember: TFindMember;
+  FindHR: TFindHR;
 
 implementation
 
 {$R *.dfm}
 
-procedure TFindMember.btnGotoMemberClick(Sender: TObject);
+procedure TFindHR.btnGotoHRClick(Sender: TObject);
 begin
-  if qryFindMember.Active then
+  if qryFindHR.Active then
+  begin
+    fHRID := qryFindHR.FieldByName('HRID').AsInteger;
+    if (fHRID > 0) then
     begin
-      fMemberID := qryFindMember.FieldByName('MemberID').AsInteger;
-      if (fMemberID > 0) then
-      begin
-        ModalResult := mrOk;
-      end;
+      ModalResult := mrOk;
     end;
+  end;
 end;
 
-procedure TFindMember.DBGrid1DblClick(Sender: TObject);
+procedure TFindHR.DBGrid1DblClick(Sender: TObject);
 begin
-  btnGotoMemberClick(self);
+  btnGotoHRClick(self);
 end;
 
-procedure TFindMember.Edit1Change(Sender: TObject);
+procedure TFindHR.Edit1Change(Sender: TObject);
 var
   LocateSuccess: boolean;
   SearchOptions: TLocateOptions;
-  MemberID: integer;
+  HRID: integer;
   fs: string;
 begin
 
   LocateSuccess := false;
-  if not qryFindMember.Active then
+  if not qryFindHR.Active then
     exit;
 
   fs := '';
-  qryFindMember.DisableControls();
+  qryFindHR.DisableControls();
 
-  // LOCATE AND STORE THE CURRENT MEMBERID
-  MemberID := qryFindMember.FieldByName('MemberID').AsInteger;
+  // LOCATE AND STORE THE CURRENT HRID
+  HRID := qryFindHR.FieldByName('HRID').AsInteger;
 
   // ---------------------------------
-  // MEMBER'S FULLNAME ....
+  // HR'S FULLNAME ....
   // ---------------------------------
   if (Length(Edit1.Text) > 0) then
   begin
@@ -96,77 +93,78 @@ begin
   end;
 
   if (fs.IsEmpty()) then
-    qryFindMember.Filtered := false
+    qryFindHR.Filtered := false
   else
   begin
-    qryFindMember.Filter := fs;
-    if not(qryFindMember.Filtered) then
-      qryFindMember.Filtered := true;
+    qryFindHR.Filter := fs;
+    if not(qryFindHR.Filtered) then
+      qryFindHR.Filtered := true;
   end;
 
   // DISPLAY NUMBER OF RECORDS FOUND
-  qryFindMember.Last();
-  lblFound.Caption := 'Found: ' + IntToStr(qryFindMember.RecordCount);
-  // RE_LOCATE TO THE MEMBERID
-  if (MemberID <> 0) then
+  qryFindHR.Last();
+  lblFound.Caption := 'Found: ' + IntToStr(qryFindHR.RecordCount);
+  // RE_LOCATE TO THE HRID
+  if (HRID <> 0) then
   begin
     SearchOptions := [];
     try
       begin
-        LocateSuccess := qryFindMember.Locate('MemberID', MemberID,
-          SearchOptions);
+        LocateSuccess := qryFindHR.Locate('HRID', HRID, SearchOptions);
       end;
     except
       on E: Exception do
         LocateSuccess := false;
     end;
   end;
-  // IF MEMBER NOT FOUND ... BROWSE TO FIRST RECORD.
+  // IF HRID NOT FOUND ... BROWSE TO FIRST RECORD.
   if (LocateSuccess = false) then
-    qryFindMember.First();
+    qryFindHR.First();
 
-  qryFindMember.EnableControls();
+  qryFindHR.EnableControls();
 end;
 
-procedure TFindMember.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TFindHR.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  qryFindMember.Close;
+  qryFindHR.Close;
 end;
 
-procedure TFindMember.FormCreate(Sender: TObject);
+procedure TFindHR.FormCreate(Sender: TObject);
 begin
-  fMemberID := 0;
-  fSwimClubID := 0;
+  fHRID := 0;
   fConnection := nil;
 end;
 
-procedure TFindMember.FormKeyDown(Sender: TObject; var Key: Word;
+procedure TFindHR.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if Key = VK_ESCAPE then
     ModalResult := mrCancel;
 end;
 
-
-procedure TFindMember.Prepare(AConnection: TFDConnection; ASwimClubID: integer);
+procedure TFindHR.Prepare(AConnection: TFDConnection; AHRTypeID: integer);
+var
+  s, SQL: string;
 begin
   if Assigned(AConnection) then
   begin
     fConnection := AConnection;
-    fSwimClubID := ASwimClubID;
-    qryFindMember.Connection := AConnection;
-    qryFindMember.ParamByName('SWIMCLUBID').AsInteger := fSwimClubID;
-    qryFindMember.Open;
+    qryFindHR.Connection := AConnection;
+    qryFindHR.ParamByName('HRTypeID').AsInteger := AHRTypeID;
+    qryFindHR.Open;
+    // Modify caption on button
+    SQL := 'SELECT Caption FROM [SCM_Coach].[dbo].[HRType] WHERE HRTypeID = :id';
+    s := fConnection.ExecSQLScalar(SQL, [AHRTypeID]); // returns variant
+    if (Length(s) > 0) then
+      btnGotoHR.Caption := 'Goto ' + s;
   end;
-  if qryFindMember.Active then
+  if qryFindHR.Active then
   begin
     // A s s i g n m e n t   r e q u i r e d  !
-    DBGrid1.DataSource := dsFindMember;
+    DBGrid1.DataSource := dsFindHR;
     // Results in Edit1Change event!   (Sets up filters and record count.)
     Edit1.Text := '';
   end;
 end;
-
-
 
 end.

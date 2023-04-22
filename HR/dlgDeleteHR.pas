@@ -1,4 +1,4 @@
-unit dlgDeleteMember;
+unit dlgDeleteHR;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   Vcl.VirtualImage, Vcl.BaseImageCollection, Vcl.ImageCollection, Vcl.StdCtrls;
 
 type
-  TDeleteMember = class(TForm)
+  TDeleteHR = class(TForm)
     ImageCollection1: TImageCollection;
     VirtualImage1: TVirtualImage;
     RelativePanel1: TRelativePanel;
@@ -32,30 +32,30 @@ type
   end;
 
 var
-  DeleteMember: TDeleteMember;
+  DeleteHR: TDeleteHR;
 
 implementation
 
 {$R *.dfm}
 
-procedure TDeleteMember.btnNoClick(Sender: TObject);
+procedure TDeleteHR.btnNoClick(Sender: TObject);
 begin
   ModalResult := mrNo;
 end;
 
-procedure TDeleteMember.btnYesClick(Sender: TObject);
+procedure TDeleteHR.btnYesClick(Sender: TObject);
 begin
   ModalResult := mrYes;
 end;
 
-procedure TDeleteMember.FormKeyDown(Sender: TObject; var Key: Word;
+procedure TDeleteHR.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if key = VK_ESCAPE then
     ModalResult := mrNo;
 end;
 
-procedure TDeleteMember.FormShow(Sender: TObject);
+procedure TDeleteHR.FormShow(Sender: TObject);
 begin
   btnNo.SetFocus;
 end;

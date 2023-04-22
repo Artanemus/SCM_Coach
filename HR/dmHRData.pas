@@ -1,4 +1,4 @@
-unit dmManageMemberData;
+unit dmHRData;
 
 interface
 
@@ -11,7 +11,7 @@ uses
   FireDAC.Phys.MSSQLDef;
 
 type
-  TManageMemberData = class(TDataModule)
+  THRData = class(TDataModule)
     tblContactNumType: TFDTable;
     tblContactNumTypeContactNumTypeID: TFDAutoIncField;
     tblContactNumTypeCaption: TWideStringField;
@@ -106,7 +106,7 @@ const
   COACHMEMBERPREF = 'COACH_MemberPref.ini';
 
 var
-  ManageMemberData: TManageMemberData;
+  HRData: THRData;
 
 implementation
 
@@ -117,7 +117,7 @@ uses
   System.IOUtils, IniFiles, SCMUtility, SCMDefines, Winapi.Windows,
   Winapi.Messages, vcl.Dialogs, System.UITypes, vcl.Forms;
 
-procedure TManageMemberData.ActivateTable;
+procedure THRData.ActivateTable;
 begin
   fCoreTablesActivated := false;
   if Assigned(FcoachConnection) and FcoachConnection.Connected then
@@ -154,21 +154,20 @@ begin
   end;
 end;
 
-constructor TManageMemberData.CreateWithConnection(AOwner: TComponent;
+constructor THRData.CreateWithConnection(AOwner: TComponent;
   AscmConnection: TFDConnection);
 begin
   inherited Create(AOwner);
   FcoachConnection := AscmConnection;
 end;
 
-procedure TManageMemberData.DataModuleCreate(Sender: TObject);
+procedure THRData.DataModuleCreate(Sender: TObject);
 begin
-  // TODO:
-  if Assigned(FcoachConnection) then
-    ActivateTable;
+  // NOTE: Tables are activated by owner (grmHR) after creation.
+  // See routine : frmHR.Prepare
 end;
 
-procedure TManageMemberData.FixNullBooleans;
+procedure THRData.FixNullBooleans;
 begin
   if Assigned(FcoachConnection) then
   begin
@@ -178,7 +177,7 @@ begin
   end;
 end;
 
-function TManageMemberData.LocateHR(MemberID: Integer): boolean;
+function THRData.LocateHR(MemberID: Integer): boolean;
 var
   SearchOptions: TLocateOptions;
 begin
@@ -194,12 +193,12 @@ begin
   end;
 end;
 
-procedure TManageMemberData.qryHRAfterDelete(DataSet: TDataSet);
+procedure THRData.qryHRAfterDelete(DataSet: TDataSet);
 begin
   // Refresh display ?
 end;
 
-procedure TManageMemberData.qryHRAfterInsert(DataSet: TDataSet);
+procedure THRData.qryHRAfterInsert(DataSet: TDataSet);
 var
   fld: TField;
 begin
@@ -226,7 +225,7 @@ begin
 
 end;
 
-procedure TManageMemberData.qryHRAfterScroll(DataSet: TDataSet);
+procedure THRData.qryHRAfterScroll(DataSet: TDataSet);
 begin
   // Display Members Personal Best
   UpdateMembersPersonalBest();
@@ -236,30 +235,30 @@ begin
     PostMessage(TForm(Owner).Handle, SCM_AFTERSCROLL, 0, 0);
 end;
 
-procedure TManageMemberData.qryHRBeforeDelete(DataSet: TDataSet);
+procedure THRData.qryHRBeforeDelete(DataSet: TDataSet);
 var
   SQL: string;
-  MemberID, result: Integer;
+  HRID, result: Integer;
 begin
   // Best to finalize any editing - prior to calling execute statements.
   DataSet.CheckBrowseMode;
-  MemberID := DataSet.FieldByName('MemberID').AsInteger;
-  if MemberID <> 0 then
+  HRID := DataSet.FieldByName('HRID').AsInteger;
+  if HRID <> 0 then
   begin
     // second chance to abort delete - but only displayed if there is entrant data with race-times
     // Alternative - SCMConnection.ExecScalar(SQL, [MemberID]).
     qryEntrantDataCount.Connection := FcoachConnection;
     // FYI - assignment of connection typically sets DS state to closed.
     qryEntrantDataCount.Close;
-    qryEntrantDataCount.ParamByName('MEMBERID').AsInteger := MemberID;
+    qryEntrantDataCount.ParamByName('HRID').AsInteger := HRID;
     qryEntrantDataCount.Prepare;
     qryEntrantDataCount.Open;
     if qryEntrantDataCount.Active then
     begin
       if qryEntrantDataCount.FieldByName('TOT').AsInteger > 0 then
       begin
-        result := MessageDlg('This member has race-time data!' + sLineBreak +
-          'Are you sure you want to delete the member?',
+        result := MessageDlg('This swimmer has race-history!' + sLineBreak +
+          'Are you sure you want to delete the swimmer?',
           TMsgDlgType.mtConfirmation, [mbYes, mbNo], 0, mbNo);
         if IsNegativeResult(result) then
         begin
@@ -270,28 +269,35 @@ begin
       qryEntrantDataCount.Close;
     end;
     qryHR.DisableControls; // will it stop refresh of contact table?
-    // remove all the relationships in associated tables for this member
-    SQL := 'DELETE FROM [SwimClubMeet].[dbo].[ContactNum] WHERE MemberID = ' +
-      IntToStr(MemberID) + ';';
-    FcoachConnection.ExecSQL(SQL);
-    { TODO -oBen -cGeneral : db.Split and dbo.TeamSplit need to be handled prior to cleaning dbo.Entrant. }
-    SQL := 'UPDATE [SwimClubMeet].[dbo].[Entrant] SET [MemberID] = NULL, ' +
-      '[RaceTime] = NULL, [TimeToBeat] = NULL, [PersonalBest] = NULL, ' +
-      '[IsDisqualified] = 0,[IsScratched] = 0 WHERE MemberID = ' +
-      IntToStr(MemberID) + ';';
-    FcoachConnection.ExecSQL(SQL);
-    { TODO -oBen -cGeneral : TeamEntrant table design incomplete. Additional fields needed. }
-    SQL := 'UPDATE [SwimClubMeet].[dbo].[TeamEntrant] SET [MemberID] = NULL,  [RaceTime] = NULL WHERE MemberID = '
-      + IntToStr(MemberID) + ';';
-    FcoachConnection.ExecSQL(SQL);
-    { TODO -oBen -cGeneral : DELETE from TeamNominee - remove all member's nominations to relay events. }
-    SQL := 'DELETE FROM [SwimClubMeet].[dbo].[Nominee] WHERE MemberID = ' +
-      IntToStr(MemberID) + ';';
+
+    // remove all the relationships in associated tables for this HR
+    SQL := 'DELETE FROM [SCM_Coach].[dbo].[ContactNum] WHERE HRID = ' +
+      IntToStr(HRID) + ';';
     FcoachConnection.ExecSQL(SQL);
 
+    { TODO -oBen -cGeneral : db.Split and dbo.TeamSplit need to be handled prior to cleaning dbo.Entrant. }
+    {
+    SQL := 'UPDATE [SCM_Coach].[dbo].[Entrant] SET [MemberID] = NULL, ' +
+      '[RaceTime] = NULL, [TimeToBeat] = NULL, [PersonalBest] = NULL, ' +
+      '[IsDisqualified] = 0,[IsScratched] = 0 WHERE MemberID = ' +
+      IntToStr(HRID) + ';';
+    FcoachConnection.ExecSQL(SQL);
+    }
+    { TODO -oBen -cGeneral : TeamEntrant table design incomplete. Additional fields needed. }
+    {
+    SQL := 'UPDATE [SCM_Coach].[dbo].[TeamEntrant] SET [MemberID] = NULL,  [RaceTime] = NULL WHERE MemberID = '
+      + IntToStr(HRID) + ';';
+    FcoachConnection.ExecSQL(SQL);
+    }
+    { TODO -oBen -cGeneral : DELETE from TeamNominee - remove all member's nominations to relay events. }
+    {
+    SQL := 'DELETE FROM [SCM_Coach].[dbo].[Nominee] WHERE MemberID = ' +
+      IntToStr(HRID) + ';';
+    FcoachConnection.ExecSQL(SQL);
+    }
     { TODO -oBen -cGeneral : Remove link }
     (*
-      SQL := 'DELETE FROM [SwimClubMeet].[dbo].[lnkSwimClubMember] WHERE MemberID = '
+      SQL := 'DELETE FROM [SCM_Coach].[dbo].[lnkSwimClubMember] WHERE MemberID = '
       + IntToStr(MemberID) + ' AND SwimClubID = ' +
       IntToStr(qrySwimClub.FieldByName('SwimClubID').AsInteger) + ';';
       FConnection.ExecSQL(SQL);
@@ -301,7 +307,7 @@ begin
   end;
 end;
 
-procedure TManageMemberData.UpdateDOB(DOB: TDateTime);
+procedure THRData.UpdateDOB(DOB: TDateTime);
 begin
   if Assigned(qryHR.Connection) and (qryHR.Active) then
   begin
@@ -314,7 +320,7 @@ begin
 
 end;
 
-procedure TManageMemberData.UpdateHR(hideArchived, hideInactive, hideNonSwimmer: boolean);
+procedure THRData.UpdateHR(hideArchived, hideInactive, hideNonSwimmer: boolean);
 begin
   if not Assigned(FcoachConnection) then
     exit;
@@ -345,7 +351,7 @@ begin
 
 end;
 
-procedure TManageMemberData.UpdateMembersPersonalBest;
+procedure THRData.UpdateMembersPersonalBest;
 begin
   if not Assigned(FcoachConnection) then
     exit;

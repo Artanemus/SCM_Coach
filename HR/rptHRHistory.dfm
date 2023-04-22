@@ -1,4 +1,4 @@
-object MemberHistory: TMemberHistory
+object HRHistoryRPT: THRHistoryRPT
   Height = 570
   Width = 479
   object frxReport1: TfrxReport
@@ -326,7 +326,6 @@ object MemberHistory: TMemberHistory
   object qryReport: TFDQuery
     ActiveStoredUsage = [auDesignTime]
     IndexFieldNames = 'MemberID'
-    Connection = SCM.scmConnection
     FormatOptions.AssignedValues = [fvFmtDisplayDateTime, fvFmtDisplayDate, fvFmtDisplayTime]
     FormatOptions.FmtDisplayDateTime = 'dd DDDD MMMM YYYY'
     FormatOptions.FmtDisplayDate = 'DDDD MMMM YYYY'

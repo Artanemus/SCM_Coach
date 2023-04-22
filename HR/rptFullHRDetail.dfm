@@ -1,6 +1,6 @@
-object MembersList: TMembersList
-  Height = 458
-  Width = 395
+object FullHRDetailRPT: TFullHRDetailRPT
+  Height = 547
+  Width = 422
   object frxReport1: TfrxReport
     Version = '6.6.11'
     DotMatrixReport = False
@@ -17,8 +17,8 @@ object MembersList: TMembersList
       'begin'
       ''
       'end.')
-    Left = 224
-    Top = 96
+    Left = 264
+    Top = 296
     Datasets = <
       item
         DataSet = frxDSReport
@@ -450,8 +450,8 @@ object MembersList: TMembersList
       'Age=Age')
     DataSet = qryReport
     BCDToCurrency = False
-    Left = 144
-    Top = 96
+    Left = 160
+    Top = 296
   end
   object frxHTMLExport1: TfrxHTMLExport
     UseFileCache = True
@@ -465,8 +465,8 @@ object MembersList: TMembersList
     EmptyLines = True
     Print = False
     PictureType = gpPNG
-    Left = 72
-    Top = 320
+    Left = 120
+    Top = 136
   end
   object frxPDFExport1: TfrxPDFExport
     UseFileCache = True
@@ -492,8 +492,8 @@ object MembersList: TMembersList
     PdfA = False
     PDFStandard = psNone
     PDFVersion = pv17
-    Left = 72
-    Top = 256
+    Left = 120
+    Top = 72
   end
   object frxXLSExport1: TfrxXLSExport
     UseFileCache = True
@@ -507,8 +507,8 @@ object MembersList: TMembersList
     PageBreaks = True
     EmptyLines = True
     SuppressPageHeadersFooters = False
-    Left = 168
-    Top = 256
+    Left = 232
+    Top = 80
   end
   object frxMailExport1: TfrxMailExport
     UseFileCache = True
@@ -523,12 +523,11 @@ object MembersList: TMembersList
     ConfurmReading = False
     UseMAPI = SMTP
     MAPISendFlag = 0
-    Left = 168
-    Top = 320
+    Left = 232
+    Top = 136
   end
   object qryReport: TFDQuery
     ActiveStoredUsage = [auDesignTime]
-    Connection = SCM.scmConnection
     SQL.Strings = (
       'USE SwimClubMeet'
       ''
@@ -564,8 +563,8 @@ object MembersList: TMembersList
         'ershipType.MembershipTypeID'
       'WHERE        (Member.SwimClubID = @SwimClubID )'
       'ORDER BY Member.LastName')
-    Left = 72
-    Top = 96
+    Left = 64
+    Top = 296
     ParamData = <
       item
         Name = 'SWIMCLUBID'

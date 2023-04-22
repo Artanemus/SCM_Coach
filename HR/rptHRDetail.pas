@@ -1,4 +1,4 @@
-unit rptMemberDetail;
+unit rptHRDetail;
 
 interface
 
@@ -12,7 +12,7 @@ uses
   FireDAC.Phys.MSSQLDef, FireDAC.VCLUI.Wait;
 
 type
-  TMemberDetail = class(TDataModule)
+  THRDetailRPT = class(TDataModule)
     frxReport1: TfrxReport;
     frxDSReport: TfrxDBDataset;
     frxHTMLExport1: TfrxHTMLExport;
@@ -41,7 +41,7 @@ type
   end;
 
 var
-  MemberDetail: TMemberDetail;
+  HRDetailRPT: THRDetailRPT;
 
 implementation
 
@@ -51,7 +51,7 @@ implementation
 
 { TDataModule1MemberDetailRpt }
 
-procedure TMemberDetail.RunReport(AConnection: TFDConnection;
+procedure THRDetailRPT.RunReport(AConnection: TFDConnection;
   ASwimClubID, AMemberID: integer);
 begin
 	qryReport.Connection := AConnection;

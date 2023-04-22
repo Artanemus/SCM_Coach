@@ -1,4 +1,4 @@
-object FindMember: TFindMember
+object FindHR: TFindHR
   Left = 0
   Top = 0
   BorderStyle = bsDialog
@@ -25,7 +25,7 @@ object FindMember: TFindMember
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 357
+    ExplicitWidth = 349
     object VirtualImage1: TVirtualImage
       Left = 8
       Top = 7
@@ -55,8 +55,8 @@ object FindMember: TFindMember
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 480
-    ExplicitWidth = 357
+    ExplicitTop = 478
+    ExplicitWidth = 349
     DesignSize = (
       353
       51)
@@ -67,16 +67,16 @@ object FindMember: TFindMember
       Height = 19
       Caption = 'Found :'
     end
-    object btnGotoMember: TButton
-      Left = 193
+    object btnGotoHR: TButton
+      Left = 185
       Top = 10
       Width = 131
       Height = 30
       Anchors = [akTop, akRight]
-      Caption = 'Goto Member'
+      Caption = 'Goto HR'
       TabOrder = 0
-      OnClick = btnGotoMemberClick
-      ExplicitLeft = 201
+      OnClick = btnGotoHRClick
+      ExplicitLeft = 181
     end
   end
   object DBGrid1: TDBGrid
@@ -85,7 +85,7 @@ object FindMember: TFindMember
     Width = 353
     Height = 430
     Align = alClient
-    DataSource = dsFindMember
+    DataSource = dsFindHR
     Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
     ReadOnly = True
     TabOrder = 1
@@ -152,70 +152,56 @@ object FindMember: TFindMember
     Left = 232
     Top = 112
   end
-  object qryFindMember: TFDQuery
+  object qryFindHR: TFDQuery
     ActiveStoredUsage = [auDesignTime]
+    Active = True
     Filtered = True
     FilterOptions = [foCaseInsensitive]
-    IndexFieldNames = 'MemberID'
+    IndexFieldNames = 'HRID'
+    Connection = FDTestConnection
+    FormatOptions.AssignedValues = [fvSE2Null, fvStrsTrim2Len]
     UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
     UpdateOptions.EnableDelete = False
     UpdateOptions.EnableInsert = False
     UpdateOptions.EnableUpdate = False
+    UpdateOptions.KeyFields = 'HRID'
     SQL.Strings = (
-      'USE SwimClubMeet;'
-      'DECLARE @SwimClubID AS INTEGER;'
-      'SET @SwimClubID = :SWIMCLUBID;'
+      'USE SCM_Coach;'
+      'DECLARE @HRTypeID AS INTEGER;'
+      'SET @HRTypeID = :HRTypeID;'
       ''
       'SELECT        '
-      ' Member.MemberID'
-      ', Member.MembershipNum'
-      ', CONCAT(UPPER([LastName]), '#39', '#39', Member.FirstName ) AS FName'
-      ', Member.SwimClubID'
-      'FROM            Member WHERE [Member].[SwimClubID] = @SwimClubID'
-      'ORDER BY Member.LastName;')
-    Left = 97
-    Top = 176
+      ' HR.HRID'
+      ', HR.RegisterNum'
+      ', HR.scmMemberID'
+      
+        ', CONCAT(TRIM(UPPER([LastName])), '#39', '#39', TRIM(HR.FirstName), '#39'.'#39',' +
+        ' TRIM(HR.MiddleInitial) ) AS FName'
+      'FROM  HR '
+      'WHERE [HR].[HRTypeID] = @HRTypeID'
+      'ORDER BY HR.LastName;')
+    Left = 105
+    Top = 336
     ParamData = <
       item
-        Name = 'SWIMCLUBID'
+        Name = 'HRTYPEID'
         DataType = ftInteger
         ParamType = ptInput
         Value = 1
       end>
-    object qryFindMemberMemberID: TFDAutoIncField
-      DisplayLabel = 'ID'
-      DisplayWidth = 5
-      FieldName = 'MemberID'
-      Origin = 'MemberID'
-      ReadOnly = True
-      Visible = False
-    end
-    object qryFindMemberMembershipNum: TIntegerField
-      Alignment = taLeftJustify
-      DisplayLabel = 'Num'
-      DisplayWidth = 5
-      FieldName = 'MembershipNum'
-      Origin = 'MembershipNum'
-      Visible = False
-    end
-    object qryFindMemberFName: TWideStringField
-      DisplayLabel = 'Member'#39's Name'
-      DisplayWidth = 300
-      FieldName = 'FName'
-      Origin = 'FName'
-      ReadOnly = True
-      Required = True
-      Size = 258
-    end
-    object qryFindMemberSwimClubID: TIntegerField
-      FieldName = 'SwimClubID'
-      Origin = 'SwimClubID'
-      Visible = False
-    end
   end
-  object dsFindMember: TDataSource
-    DataSet = qryFindMember
-    Left = 193
-    Top = 176
+  object dsFindHR: TDataSource
+    DataSet = qryFindHR
+    Left = 201
+    Top = 336
+  end
+  object FDTestConnection: TFDConnection
+    Params.Strings = (
+      'ConnectionDef=MSSQL_SCM_Coach')
+    ConnectedStoredUsage = [auDesignTime]
+    Connected = True
+    LoginPrompt = False
+    Left = 144
+    Top = 216
   end
 end

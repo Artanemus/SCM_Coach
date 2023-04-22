@@ -1,8 +1,8 @@
-object GotoMember: TGotoMember
+object GotoHR: TGotoHR
   Left = 0
   Top = 0
   BorderStyle = bsDialog
-  Caption = 'Goto Member'#39's ID'
+  Caption = 'Goto HR'#39's ID'
   ClientHeight = 200
   ClientWidth = 432
   Color = clBtnFace
@@ -12,12 +12,10 @@ object GotoMember: TGotoMember
   Font.Name = 'Tahoma'
   Font.Style = []
   KeyPreview = True
-  OldCreateOrder = False
   Position = poOwnerFormCenter
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  PixelsPerInch = 96
   TextHeight = 19
   object Panel1: TPanel
     Left = 0
@@ -27,12 +25,14 @@ object GotoMember: TGotoMember
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 143
+    ExplicitWidth = 428
     object btnGoto: TButton
       Left = 124
       Top = 13
       Width = 184
       Height = 29
-      Caption = 'Goto Member ID'
+      Caption = 'Goto HR ID'
       TabOrder = 0
       OnClick = btnGotoClick
     end
@@ -45,20 +45,22 @@ object GotoMember: TGotoMember
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitTop = 7
     object Label1: TLabel
-      Left = 142
+      Left = 186
       Top = 40
-      Width = 121
+      Width = 85
       Height = 19
-      Caption = 'Enter Member ID'
+      Alignment = taRightJustify
+      Caption = 'Enter HR ID'
     end
     object lblErrMsg: TLabel
-      Left = 142
+      Left = 150
       Top = 83
       Width = 263
       Height = 27
       AutoSize = False
-      Caption = 'The Member ID doesn'#39't exist.'
+      Caption = 'The HR ID doesn'#39't exist.'
     end
     object VirtualImage1: TVirtualImage
       Left = 21
@@ -72,7 +74,7 @@ object GotoMember: TGotoMember
       ImageName = 'SCM_GotoID_800x800'
     end
     object Edit1: TEdit
-      Left = 275
+      Left = 283
       Top = 37
       Width = 78
       Height = 27
@@ -22261,15 +22263,16 @@ object GotoMember: TGotoMember
               837FF00FFE5F1DFFFA17F8FF7B90219AC29551AC0000000049454E44AE426082}
           end>
       end>
-    Left = 224
-    Top = 104
+    Left = 72
+    Top = 128
   end
-  object qAssertMemberID: TFDQuery
-    ActiveStoredUsage = [auDesignTime]
-    IndexFieldNames = 'MemberID'
-    SQL.Strings = (
-      'SELECT MemberID, MembershipNum FROM Member WHERE SwimClubID = 1')
-    Left = 320
-    Top = 108
+  object FDTestConnection: TFDConnection
+    Params.Strings = (
+      'ConnectionDef=MSSQL_SCM_Coach')
+    ConnectedStoredUsage = [auDesignTime]
+    Connected = True
+    LoginPrompt = False
+    Left = 344
+    Top = 124
   end
 end

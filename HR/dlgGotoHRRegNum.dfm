@@ -1,9 +1,9 @@
-object GotoMembership: TGotoMembership
+object GotoHRRegNum: TGotoHRRegNum
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
-  Caption = 'Goto Membership Number'
+  Caption = 'Goto Registration Number'
   ClientHeight = 200
   ClientWidth = 432
   Color = clBtnFace
@@ -13,12 +13,10 @@ object GotoMembership: TGotoMembership
   Font.Name = 'Tahoma'
   Font.Style = []
   KeyPreview = True
-  OldCreateOrder = False
   Position = poOwnerFormCenter
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  PixelsPerInch = 96
   TextHeight = 19
   object Panel1: TPanel
     Left = 0
@@ -28,12 +26,14 @@ object GotoMembership: TGotoMembership
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 146
+    ExplicitWidth = 428
     object btnGoto: TButton
       Left = 91
       Top = 12
       Width = 250
       Height = 29
-      Caption = 'Goto Membership Number'
+      Caption = 'Goto Registration Number'
       TabOrder = 0
       OnClick = btnGotoClick
     end
@@ -46,12 +46,15 @@ object GotoMembership: TGotoMembership
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitWidth = 428
+    ExplicitHeight = 146
     object Label1: TLabel
       Left = 136
       Top = 41
-      Width = 140
+      Width = 138
       Height = 19
-      Caption = 'Enter Membership#'
+      Alignment = taRightJustify
+      Caption = 'Enter Registration#'
     end
     object lblErrMsg: TLabel
       Left = 136
@@ -59,7 +62,7 @@ object GotoMembership: TGotoMembership
       Width = 323
       Height = 19
       AutoSize = False
-      Caption = 'The Membership number doesn'#39't exist.'
+      Caption = 'The registration number doesn'#39't exist.'
       WordWrap = True
     end
     object VirtualImage1: TVirtualImage
@@ -22685,14 +22688,36 @@ object GotoMembership: TGotoMembership
           end>
       end>
     Left = 352
-    Top = 72
+    Top = 112
   end
   object qAssertMemberID: TFDQuery
     ActiveStoredUsage = [auDesignTime]
-    IndexFieldNames = 'MemberID'
+    IndexFieldNames = 'HRID'
+    Connection = FDTestConnection
     SQL.Strings = (
-      'SELECT MemberID, MembershipNum FROM Member WHERE SwimClubID = 1')
-    Left = 352
-    Top = 12
+      'USE SCM_Coach;'
+      ''
+      'DECLARE @HRTypeID AS INTEGER;'
+      'SET @HRTypeID = :HRTYPEID;'
+      ''
+      'SELECT HRID, RegisterNum FROM HR WHERE HRTypeID = @HRTypeID;')
+    Left = 56
+    Top = 108
+    ParamData = <
+      item
+        Name = 'HRTYPEID'
+        DataType = ftInteger
+        ParamType = ptInput
+        Value = 1
+      end>
+  end
+  object FDTestConnection: TFDConnection
+    Params.Strings = (
+      'ConnectionDef=MSSQL_SCM_Coach')
+    ConnectedStoredUsage = [auDesignTime]
+    Connected = True
+    LoginPrompt = False
+    Left = 184
+    Top = 108
   end
 end

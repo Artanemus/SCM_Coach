@@ -1,23 +1,23 @@
-unit rptMembersList;
+unit rptFullHRSummary;
 
 interface
 
 uses
   System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
-  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, Data.DB,
-  FireDAC.Comp.DataSet, FireDAC.Comp.Client, frxExportMail, frxExportXLS,
-  frxExportPDF, frxClass, frxExportBaseDialog, frxExportHTML, frxDBSet;
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, frxExportMail, Data.DB,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, frxExportXLS, frxExportPDF,
+  frxClass, frxExportBaseDialog, frxExportHTML, frxDBSet;
 
 type
-  TMembersList = class(TDataModule)
+  TFullHRSummaryRPT = class(TDataModule)
     frxReport1: TfrxReport;
     frxDSReport: TfrxDBDataset;
     frxHTMLExport1: TfrxHTMLExport;
     frxPDFExport1: TfrxPDFExport;
     frxXLSExport1: TfrxXLSExport;
-    frxMailExport1: TfrxMailExport;
     qryReport: TFDQuery;
+    frxMailExport1: TfrxMailExport;
   private
     { Private declarations }
   public
@@ -26,7 +26,7 @@ type
   end;
 
 var
-  MembersList: TMembersList;
+  FullHRSummaryRPT: TFullHRSummaryRPT;
 
 implementation
 
@@ -34,10 +34,9 @@ implementation
 
 {$R *.dfm}
 
-{ TMembersList }
+{ TMemberSummaryRpt }
 
-procedure TMembersList.RunReport(AConnection: TFDConnection;
-  ASwimClubID: integer);
+procedure TFullHRSummaryRPT.RunReport(AConnection: TFDConnection; ASwimClubID: integer);
 begin
 	qryReport.Connection := AConnection;
 	qryReport.ParamByName('SWIMCLUBID').AsInteger := aSwimClubID;
