@@ -15,7 +15,7 @@ uses
   Vcl.ExtCtrls, Vcl.Menus, Vcl.WinXCalendars, dmHRData, SCMDefines,
   Vcl.VirtualImageList, Vcl.BaseImageCollection, Vcl.ImageCollection,
   System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
-  Vcl.ToolWin, Vcl.ActnCtrls, Vcl.ActnMenus, Vcl.VirtualImage;
+  Vcl.ToolWin, Vcl.ActnCtrls, Vcl.ActnMenus, Vcl.VirtualImage, dmCoach;
 
 type
   THR = class(TForm)
@@ -74,7 +74,7 @@ type
     ActnManagerMember: TActionManager;
     MemFile_AutoEdit: TAction;
     MemFile_Exit: TAction;
-    Search_GotoHRNUM: TAction;
+    Search_GotoRegNum: TAction;
     Search_GotoSwimmerID: TAction;
     Search_FindSwimmer: TAction;
     ImageCollectMember: TImageCollection;
@@ -99,9 +99,8 @@ type
     procedure chkbHideNonSwimmersClick(Sender: TObject);
     procedure DBGrid3EditButtonClick(Sender: TObject);
     procedure btnClearClick(Sender: TObject);
-    procedure btnFindMemberClick(Sender: TObject);
-    procedure btnGotoMemberIDClick(Sender: TObject);
-    procedure btnGotoMembershipClick(Sender: TObject);
+    procedure Search_GotoIDExecute(Sender: TObject);
+    procedure Search_GotoRegNumExecute(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Onlinehelp1Click(Sender: TObject);
     procedure SCMwebsite1Click(Sender: TObject);
@@ -120,12 +119,12 @@ type
   private
     { Private declarations }
     fDoDelete: Boolean;
-    FConnection: TFDConnection;
     fColorEditBoxFocused: TColor;
     fColorEditBoxNormal: TColor;
     fColorBgColor: TColor;
+    MyConnection: TFDConnection;
 
-    function FindMember(MemberID: Integer): Boolean;
+    function LocateHR(HRID: Integer): Boolean;
     function AssertSCMConnection: Boolean;
 
     procedure ReadPreferences();
@@ -138,8 +137,7 @@ type
 
   public
     { Public declarations }
-    procedure Prepare(AConnection: TFDConnection;
-      AHRTypeID, AMemberID: Integer);
+    procedure Prepare(AHRTypeID, AMemberID: Integer);
     procedure ClearAllFilters();
 
   end;
@@ -205,7 +203,7 @@ begin
   if not Assigned(HRData) then
     exit;
   rpt := TFullHRDetailRPT.Create(Self);
-  rpt.RunReport(FConnection, 1);
+  rpt.RunReport(MyConnection, 1);
   rpt.Free;
 end;
 
@@ -216,7 +214,7 @@ begin
   if not Assigned(HRData) then
     exit;
   rpt := TFullHRListRPT.Create(Self);
-  rpt.RunReport(FConnection, 1);
+  rpt.RunReport(MyConnection, Integer(hrSwimmer));
   rpt.Free;
 end;
 
@@ -227,61 +225,8 @@ begin
   if not Assigned(HRData) then
     exit;
   rpt := TFullHRSummaryRPT.Create(Self);
-  rpt.RunReport(FConnection, 1);
+  rpt.RunReport(MyConnection, Integer(hrSwimmer));
   rpt.Free;
-end;
-
-procedure THR.btnFindMemberClick(Sender: TObject);
-var
-  dlg: TFindHR;
-begin
-  dlg := TFindHR.Create(Self);
-  dlg.Prepare(FConnection, 1);
-  if IsPositiveResult(dlg.ShowModal()) then
-  begin
-    // LOCATE MEMBER IN qryMember
-    FindMember(dlg.HRID)
-  end;
-  dlg.Free;
-end;
-
-procedure THR.btnGotoMemberIDClick(Sender: TObject);
-var
-  dlg: TGotoHR;
-  rtn: TModalResult;
-begin
-  if Assigned(HRData) then
-  begin
-    dlg := TGotoHR.Create(Self);
-    dlg.Prepare(FConnection, 1);
-    rtn := dlg.ShowModal;
-    if IsPositiveResult(rtn) then
-    begin
-      // LOCATE MEMBER IN qryMember
-      FindMember(dlg.HRID)
-    end;
-    dlg.Free;
-  end;
-end;
-
-procedure THR.btnGotoMembershipClick(Sender: TObject);
-var
-  dlg: TGotoHRRegNum;
-  rtn: TModalResult;
-begin
-  if Assigned(HRData) then
-  begin
-    dlg := TGotoHRRegNum.Create(Self);
-    dlg.Prepare(FConnection, 1);
-    rtn := dlg.ShowModal;
-    if IsPositiveResult(rtn) then
-    begin
-      // NOTE: returns both MembershipNum and MemberID
-      // LOCATE MEMBER IN qryMember
-      FindMember(dlg.HRID)
-    end;
-    dlg.Free;
-  end;
 end;
 
 procedure THR.btnMemberDetailClick(Sender: TObject);
@@ -293,7 +238,7 @@ begin
     exit;
   MemberID := HRData.dsHR.DataSet.FieldByName('MemberID').AsInteger;
   rpt := THRDetailRPT.Create(Self);
-  rpt.RunReport(FConnection, 1, MemberID);
+  rpt.RunReport(MyConnection, Integer(hrSwimmer), MemberID);
   rpt.Free;
 end;
 
@@ -306,7 +251,7 @@ begin
     exit;
   MemberID := HRData.dsHR.DataSet.FieldByName('MemberID').AsInteger;
   rpt := THRHistoryRPT.Create(Self);
-  rpt.RunReport(FConnection, 1, MemberID);
+  rpt.RunReport(MyConnection, Integer(hrSwimmer), MemberID);
   rpt.Free;
 end;
 
@@ -664,14 +609,14 @@ begin
   end;
 end;
 
-function THR.FindMember(MemberID: Integer): Boolean;
+function THR.LocateHR(HRID: Integer): Boolean;
 var
   b: Boolean;
   s: string;
   rtn: TModalResult;
 begin
   result := false;
-  b := HRData.LocateHR(MemberID);
+  b := HRData.LocateHR(HRID);
   if b then
     result := true
   else
@@ -682,7 +627,7 @@ begin
     if IsPositiveResult(rtn) then
     begin
       ClearAllFilters;
-      b := HRData.LocateHR(MemberID);
+      b := HRData.LocateHR(HRID);
       if b then
         result := true;
     end;
@@ -702,11 +647,47 @@ end;
 procedure THR.FormCreate(Sender: TObject);
 var
   css: TCustomStyleServices;
-
 begin
+
+  MyConnection := nil;
+
+  // For peace of mind : nothing should pass here
+  // {TODO -oBSA -cGeneral : Make these exceptions}
+  if not Assigned(COACH) then
+    exit;
+  if not COACH.coachConnection.Connected then
+    exit;
+
+  // ----------------------------------------------------
+  // C R E A T E   D A T A M O D U L E   S C M .
+  // ----------------------------------------------------
+  try
+    HRData := THRData.CreateWithConnection(Self, COACH.coachConnection);
+  finally
+    // with HRData created and the essential tables are open then
+    // asserting the connection should be true
+    if not Assigned(HRData) then
+      raise Exception.Create('Manage Member''s Data Module creation error.');
+  end;
+
+  // Used to call HR dialogues...
+  MyConnection := COACH.coachConnection;
+
+  // ----------------------------------------------------
+  // CHECK ACTIVATE TABLES.
+  // ----------------------------------------------------
+  if not HRData.CoreTablesActivated then
+  begin
+    MessageDlg('An error occurred during MSSQL table activation.' + sLineBreak +
+      'The database''s schema may need updating.' + sLineBreak +
+      'The application will terminate!', mtError, [mbOk], 0);
+    raise Exception.Create('HRData Member not active.');
+  end;
+
   // ----------------------------------------------------
   // R E G I S T E R   W I N D O W S   M E S S A G E S  .
   // var defined in winMsgDef.pas
+  // NOTE: I using a different assignment hook - code no required
   // ----------------------------------------------------
   // WM_SCMAFTERSCOLL := RegisterWindowMessage('WM_SCMAFTERSCOLL');
   // WM_SCMREQUERY := RegisterWindowMessage('WM_SCMREQUERY');
@@ -785,11 +766,6 @@ begin
   Close();
 end;
 
-procedure THR.Search_FindSwimmerExecute(Sender: TObject);
-begin
-  btnFindMemberClick(Self);
-end;
-
 procedure THR.Onlinehelp1Click(Sender: TObject);
 var
   base_URL: string;
@@ -799,47 +775,18 @@ begin
 
 end;
 
-procedure THR.Prepare(AConnection: TFDConnection;
-  AHRTypeID, AMemberID: Integer);
+procedure THR.Prepare(AHRTypeID, AMemberID: Integer);
 begin
-  FConnection := AConnection;
-
-  // ----------------------------------------------------
-  // C R E A T E   D A T A M O D U L E   S C M .
-  // ----------------------------------------------------
-  try
-    HRData := THRData.CreateWithConnection(Self, FConnection);
-  finally
-    // with HRData created and the essential tables are open then
-    // asserting the connection should be true
-    if not Assigned(HRData) then
-      raise Exception.Create('Manage Member''s Data Module creation error.');
-  end;
-
-  // ----------------------------------------------------
-  // Check that HRData is active .
-  // ----------------------------------------------------
-  HRData.ActivateTable;
-  if not HRData.CoreTablesActivated then
-  begin
-    MessageDlg('An error occurred during MSSQL table activation.' + sLineBreak +
-      'The database''s schema may need updating.' + sLineBreak +
-      'The application will terminate!', mtError, [mbOk], 0);
-    raise Exception.Create('HRData Member not active.');
-  end;
-
   // execute SQL. Make all null IsArchived, IsActive, IsSwimmer = 0;
-  HRData.FixNullBooleans;
-
+  // HRData.FixNullBooleans;
   // ----------------------------------------------------
   // Prepares all core queries  (Master+Child)
   // ----------------------------------------------------
-  HRData.UpdateHR(Hide_Archived.Checked, Hide_InActive.Checked, true);
-
+  if Assigned(HRData) then
+    HRData.UpdateHR(Hide_Archived.Checked, Hide_InActive.Checked, true);
   // Cue-to-member
   if AMemberID > 0 then
-    FindMember(AMemberID);
-
+    LocateHR(AMemberID);
 end;
 
 procedure THR.ReadPreferences;
@@ -868,6 +815,62 @@ begin
   base_URL := 'http://artanemus.github.io';
   ShellExecute(0, 'open', PChar(base_URL), NIL, NIL, SW_SHOWNORMAL);
 
+end;
+
+procedure THR.Search_FindSwimmerExecute(Sender: TObject);
+var
+  dlg: TFindHR;
+begin
+  if Assigned(MyCOnnection) then
+  begin
+    dlg := TFindHR.Create(Self);
+    dlg.Prepare(MyConnection, Integer(hrSwimmer));
+    if IsPositiveResult(dlg.ShowModal()) then
+    begin
+      // LOCATE MEMBER IN qryMember
+      LocateHR(dlg.HRID)
+    end;
+    dlg.Free;
+  end;
+end;
+
+procedure THR.Search_GotoIDExecute(Sender: TObject);
+var
+  dlg: TGotoHR;
+  rtn: TModalResult;
+begin
+  if Assigned(HRData) then
+  begin
+    dlg := TGotoHR.Create(Self);
+    dlg.Prepare(MyConnection, Integer(hrSwimmer));
+    rtn := dlg.ShowModal;
+    if IsPositiveResult(rtn) then
+    begin
+      // LOCATE MEMBER IN qryMember
+      LocateHR(dlg.HRID)
+    end;
+    dlg.Free;
+  end;
+end;
+
+procedure THR.Search_GotoRegNumExecute(Sender: TObject);
+var
+  dlg: TGotoHRRegNum;
+  rtn: TModalResult;
+begin
+  if Assigned(HRData) then
+  begin
+    dlg := TGotoHRRegNum.Create(Self);
+    dlg.Prepare(MyConnection, Integer(hrSwimmer));
+    rtn := dlg.ShowModal;
+    if IsPositiveResult(rtn) then
+    begin
+      // NOTE: returns both MembershipNum and MemberID
+      // LOCATE MEMBER IN qryMember
+      LocateHR(dlg.HRID)
+    end;
+    dlg.Free;
+  end;
 end;
 
 procedure THR.WritePreferences;

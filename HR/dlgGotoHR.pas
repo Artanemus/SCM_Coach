@@ -33,18 +33,13 @@ type
   private
     { Private declarations }
     fHRID: integer;
-    fHRTypeID: integer;
     fHRTypeStr: string;
-    fConnection: TFDConnection;
+    MyConnection: TFDConnection;
     function AssertHRID(AHRID: integer): boolean;
-
   public
     { Public declarations }
     procedure Prepare(AConnection: TFDConnection; AHRTypeID: integer);
     property HRID: integer read fHRID write fHRID;
-    property HRTypeID: integer read fHRTypeID write fHRTypeID;
-    property Connection: TFDConnection read fConnection write fConnection;
-
   end;
 
 var
@@ -62,9 +57,9 @@ var
   i: integer;
 begin
   result := false;
-  if Assigned(fConnection) then
+  if Assigned(MyConnection) then
   begin
-    v := fConnection.ExecSQLScalar
+    v := MyConnection.ExecSQLScalar
       ('SELECT HRID FROM [SCM_Coach].[dbo].[HR] WHERE HRID = :id', [AHRID]);
     i := CnvVarToInt(v);
     if (i <> 0) then
@@ -129,11 +124,10 @@ end;
 procedure TGotoHR.FormCreate(Sender: TObject);
 begin
   fHRID := 0;
-  fHRTypeID := 0;
   fHRTypeStr := '';
   lblErrMsg.Caption := '';
   Edit1.Text := '';
-  fConnection := nil;
+  MyConnection := nil;
 end;
 
 procedure TGotoHR.FormKeyDown(Sender: TObject; var Key: Word;
@@ -157,16 +151,13 @@ procedure TGotoHR.Prepare(AConnection: TFDConnection; AHRTypeID: integer);
 var
   SQL: string;
 begin
-  if Assigned(AConnection) then
+  if Assigned(AConnection) and AConnection.Connected then
   begin
-    fConnection := AConnection;
-    fHRTypeID := AHRTypeID;
-    fHRTypeStr := '';
-
+    MyConnection := AConnection;
     // Get string for captions
     SQL := 'SELECT Caption FROM [SCM_Coach].[dbo].[HRType] WHERE HRTypeID = :id';
     // returns variant
-    fHRTypeStr := fConnection.ExecSQLScalar(SQL, [AHRTypeID]);
+    fHRTypeStr := MyConnection.ExecSQLScalar(SQL, [AHRTypeID]);
     // assign captions else leave as designed
     if (Length(fHRTypeStr) > 0) then
     begin

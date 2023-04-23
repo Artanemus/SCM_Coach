@@ -45,7 +45,8 @@ object GotoHR: TGotoHR
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitTop = 7
+    ExplicitWidth = 428
+    ExplicitHeight = 143
     object Label1: TLabel
       Left = 186
       Top = 40

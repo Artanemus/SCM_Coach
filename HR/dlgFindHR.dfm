@@ -68,7 +68,7 @@ object FindHR: TFindHR
       Caption = 'Found :'
     end
     object btnGotoHR: TButton
-      Left = 185
+      Left = 181
       Top = 10
       Width = 131
       Height = 30
@@ -76,7 +76,7 @@ object FindHR: TFindHR
       Caption = 'Goto HR'
       TabOrder = 0
       OnClick = btnGotoHRClick
-      ExplicitLeft = 181
+      ExplicitLeft = 177
     end
   end
   object DBGrid1: TDBGrid
@@ -98,21 +98,25 @@ object FindHR: TFindHR
     Columns = <
       item
         Expanded = False
-        FieldName = 'MemberID'
-        Title.Alignment = taCenter
+        FieldName = 'HRID'
+        Width = -1
         Visible = False
       end
       item
-        Alignment = taCenter
         Expanded = False
-        FieldName = 'MembershipNum'
-        Title.Alignment = taCenter
+        FieldName = 'RegisterNum'
+        Visible = False
+      end
+      item
+        Expanded = False
+        FieldName = 'scmMemberID'
         Visible = False
       end
       item
         Expanded = False
         FieldName = 'FName'
-        Width = 300
+        Title.Caption = 'Full Name'
+        Width = 260
         Visible = True
       end>
   end
@@ -158,7 +162,7 @@ object FindHR: TFindHR
     Filtered = True
     FilterOptions = [foCaseInsensitive]
     IndexFieldNames = 'HRID'
-    Connection = FDTestConnection
+    Connection = COACH.coachConnection
     FormatOptions.AssignedValues = [fvSE2Null, fvStrsTrim2Len]
     UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
     UpdateOptions.EnableDelete = False
@@ -187,21 +191,12 @@ object FindHR: TFindHR
         Name = 'HRTYPEID'
         DataType = ftInteger
         ParamType = ptInput
-        Value = 1
+        Value = 3
       end>
   end
   object dsFindHR: TDataSource
     DataSet = qryFindHR
     Left = 201
     Top = 336
-  end
-  object FDTestConnection: TFDConnection
-    Params.Strings = (
-      'ConnectionDef=MSSQL_SCM_Coach')
-    ConnectedStoredUsage = [auDesignTime]
-    Connected = True
-    LoginPrompt = False
-    Left = 144
-    Top = 216
   end
 end

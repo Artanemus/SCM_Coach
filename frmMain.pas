@@ -10,7 +10,7 @@ uses
   Vcl.ToolWin, Vcl.ActnCtrls, Vcl.ActnMenus, System.ImageList, Vcl.ImgList,
   Vcl.VirtualImageList, Vcl.BaseImageCollection, Vcl.ImageCollection,
   Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.WinXCtrls, Vcl.VirtualImage,
-  dmCoach, dlgBootProgress, vcl.Themes;
+  dmCoach, dlgBootProgress, vcl.Themes, SCMDefines;
 
 type
   TMain = class(TForm)
@@ -145,7 +145,7 @@ var
 dlg: THR;
 begin
   dlg := THR.Create(Self);
-  dlg.Prepare(COACH.coachConnection, 1, 0);
+  dlg.Prepare(integer(scmHRType.hrSwimmer), 0);
   dlg.ShowModal;
   dlg.Free;
 end;

@@ -10,7 +10,7 @@ object FullHRDetailRPT: TFullHRDetailRPT
     PrintOptions.Printer = 'Default'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 43429.469572048600000000
-    ReportOptions.LastChange = 43660.498981192100000000
+    ReportOptions.LastChange = 45038.645271678200000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       ''
@@ -48,43 +48,6 @@ object FullHRDetailRPT: TFullHRDetailRPT
         Height = 79.370130000000000000
         Top = 18.897650000000000000
         Width = 1046.929810000000000000
-        object frxDSNickName: TfrxMemoView
-          AllowVectorExport = True
-          Left = 3.779530000000000000
-          Top = 21.677180000000000000
-          Width = 400.630180000000000000
-          Height = 18.897650000000000000
-          DataField = 'NickName'
-          DataSet = frxDSReport
-          DataSetName = 'frxDS'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'segoe UI'
-          Font.Style = []
-          Frame.Typ = []
-          Memo.UTF8W = (
-            '[frxDS."NickName"]')
-          ParentFont = False
-        end
-        object frxDScSwimClub: TfrxMemoView
-          AllowVectorExport = True
-          Left = 3.779530000000000000
-          Width = 400.630180000000000000
-          Height = 18.897650000000000000
-          DataField = 'cSwimClub'
-          DataSet = frxDSReport
-          DataSetName = 'frxDS'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -16
-          Font.Name = 'segoe UI'
-          Font.Style = [fsBold]
-          Frame.Typ = []
-          Memo.UTF8W = (
-            '[frxDS."cSwimClub"]')
-          ParentFont = False
-        end
         object Line1: TfrxLineView
           AllowVectorExport = True
           Left = 5.559060000000000000
@@ -110,7 +73,7 @@ object FullHRDetailRPT: TFullHRDetailRPT
           Frame.Typ = []
           HAlign = haCenter
           Memo.UTF8W = (
-            'Membership'
+            'Registration'
             'Number')
           ParentFont = False
         end
@@ -207,25 +170,7 @@ object FullHRDetailRPT: TFullHRDetailRPT
           Font.Style = []
           Frame.Typ = []
           Memo.UTF8W = (
-            'Membership Type')
-          ParentFont = False
-        end
-        object Memo8: TfrxMemoView
-          AllowVectorExport = True
-          Left = 907.087200000000000000
-          Top = 37.795300000000000000
-          Width = 120.944960000000000000
-          Height = 34.015770000000000000
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'segoe UI'
-          Font.Style = []
-          Frame.Typ = []
-          HAlign = haCenter
-          Memo.UTF8W = (
-            'Membership'
-            'Due')
+            'HR Type')
           ParentFont = False
         end
         object Memo9: TfrxMemoView
@@ -246,8 +191,8 @@ object FullHRDetailRPT: TFullHRDetailRPT
         end
         object Memo10: TfrxMemoView
           AllowVectorExport = True
-          Left = 3.779530000000000000
-          Top = 22.677180000000000000
+          Left = 5.112863340000000000
+          Top = 4.010513330000000000
           Width = 1024.252630000000000000
           Height = 18.897650000000000000
           DataSet = frxDSReport
@@ -317,6 +262,7 @@ object FullHRDetailRPT: TFullHRDetailRPT
           Left = 820.158010000000000000
           Width = 75.590600000000000000
           Height = 18.897650000000000000
+          DataField = 'RegisterNum'
           DataSet = frxDSReport
           DataSetName = 'frxDS'
           Font.Charset = DEFAULT_CHARSET
@@ -327,7 +273,7 @@ object FullHRDetailRPT: TFullHRDetailRPT
           Frame.Typ = []
           HAlign = haRight
           Memo.UTF8W = (
-            '[frxDS."MembershipNum"]')
+            '[frxDS."RegisterNum"]')
           ParentFont = False
         end
         object frxDSFName: TfrxMemoView
@@ -335,6 +281,7 @@ object FullHRDetailRPT: TFullHRDetailRPT
           Left = 60.252010000000000000
           Width = 230.551330000000000000
           Height = 18.897650000000000000
+          DataField = 'ucFName'
           DataSet = frxDSReport
           DataSetName = 'frxDS'
           Frame.Typ = []
@@ -346,6 +293,7 @@ object FullHRDetailRPT: TFullHRDetailRPT
           Left = 291.023810000000000000
           Width = 98.267780000000000000
           Height = 18.897650000000000000
+          DataField = 'DOB'
           DataSet = frxDSReport
           DataSetName = 'frxDS'
           Frame.Typ = []
@@ -390,39 +338,28 @@ object FullHRDetailRPT: TFullHRDetailRPT
         end
         object frxDScMembershipType: TfrxMemoView
           AllowVectorExport = True
-          Left = 570.709030000000000000
+          Left = 571.209030000000000000
           Width = 249.448980000000000000
           Height = 18.897650000000000000
-          DataField = 'cMembershipType'
+          DataField = 'cHRType'
           DataSet = frxDSReport
           DataSetName = 'frxDS'
           Frame.Typ = []
           Memo.UTF8W = (
-            '[frxDS."cMembershipType"]')
-        end
-        object frxDSMembershipDue: TfrxMemoView
-          AllowVectorExport = True
-          Left = 903.307670000000000000
-          Width = 124.724490000000000000
-          Height = 18.897650000000000000
-          DataField = 'MembershipDue'
-          DataSet = frxDSReport
-          DataSetName = 'frxDS'
-          Frame.Typ = []
-          Memo.UTF8W = (
-            '[frxDS."MembershipDue"]')
+            '[frxDS."cHRType"]')
         end
         object frxDSMemberID: TfrxMemoView
           AllowVectorExport = True
           Width = 60.472480000000000000
           Height = 18.897650000000000000
+          DataField = 'HRID'
           DataSet = frxDSReport
           DataSetName = 'frxDS'
           DisplayFormat.FormatStr = '%4.4d'
           DisplayFormat.Kind = fkNumeric
           Frame.Typ = []
           Memo.UTF8W = (
-            '[frxDS."MemberID"]')
+            '[frxDS."HRID"]')
         end
       end
     end
@@ -431,22 +368,19 @@ object FullHRDetailRPT: TFullHRDetailRPT
     UserName = 'frxDS'
     CloseDataSource = False
     FieldAliases.Strings = (
-      'MemberID=MemberID'
+      'HRID=HRID'
       'FirstName=FirstName'
+      'MiddleInitial=MiddleInitial'
       'LastName=LastName'
-      'MembershipNum=MembershipNum'
       'ucFName=ucFName'
       'DOB=DOB'
       'IsActive=IsActive'
-      'MembershipDue=MembershipDue'
+      'RegisterNum=RegisterNum'
       'Email=Email'
       'cGender=cGender'
       'GenderID=GenderID'
-      'SwimClubID=SwimClubID'
-      'MembershipTypeID=MembershipTypeID'
-      'cMembershipType=cMembershipType'
-      'cSwimClub=cSwimClub'
-      'NickName=NickName'
+      'HRTypeID=HRTypeID'
+      'cHRType=cHRType'
       'Age=Age')
     DataSet = qryReport
     BCDToCurrency = False
@@ -528,49 +462,50 @@ object FullHRDetailRPT: TFullHRDetailRPT
   end
   object qryReport: TFDQuery
     ActiveStoredUsage = [auDesignTime]
+    Active = True
+    IndexFieldNames = 'HRID'
+    ConnectionName = 'MSSQL_SCM_Coach'
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
+    UpdateOptions.EnableDelete = False
+    UpdateOptions.EnableInsert = False
+    UpdateOptions.EnableUpdate = False
+    UpdateOptions.KeyFields = 'HRID'
     SQL.Strings = (
-      'USE SwimClubMeet'
+      'USE SCM_Coach;'
       ''
-      'DECLARE @SwimClubID as INT'
-      'SET @SwimClubID = :SWIMCLUBID'
+      'DECLARE @HRTypeID as INT;'
+      'SET @HRTypeID = :HRTYPEID;'
       ''
-      'SELECT        Member.MemberID'
-      ', Member.FirstName'
-      ', Member.LastName'
-      ', Member.MembershipNum'
-      ', UPPER(Member.LastName) + '#39', '#39' + Member.FirstName  AS ucFName'
-      ', Member.DOB'
-      ', Member.IsActive'
-      ', Member.MembershipDue'
-      ', Member.Email'
-      '-- , Member.DoEmailSessionReport'
+      'SELECT        HR.HRID'
+      ', HR.FirstName'
+      ', HR.MiddleInitial'
+      ', HR.LastName'
+      
+        ', CONCAT( UPPER(TRIM(HR.LastName)), '#39', '#39', TRIM(HR.FirstName), '#39'.' +
+        #39', TRIM(HR.MiddleInitial) )  AS ucFName'
+      ', HR.DOB'
+      ', HR.IsActive'
+      ', HR.RegisterNum'
+      ', HR.Email'
       ', Gender.Caption AS cGender'
-      ', Member.GenderID'
-      ', Member.SwimClubID'
-      ', Member.MembershipTypeID'
-      ', MembershipType.Caption AS cMembershipType'
-      ', SwimClub.Caption AS cSwimClub'
-      ', SwimClub.NickName'
-      ', dbo.SwimmerAge(GETDATE(), Member.DOB) AS Age'
+      ', HR.GenderID'
+      ', HR.HRTypeID'
+      ', HRType.Caption AS cHRType'
+      ', dbo.SwimmerAge(GETDATE(), HR.DOB) AS Age'
       ''
-      'FROM            Member '
-      
-        'LEFT OUTER JOIN SwimClub ON Member.SwimClubID = SwimClub.SwimClu' +
-        'bID '
-      'LEFT OUTER JOIN Gender ON Member.GenderID = Gender.GenderID '
-      
-        'LEFT OUTER JOIN MembershipType ON Member.MembershipTypeID = Memb' +
-        'ershipType.MembershipTypeID'
-      'WHERE        (Member.SwimClubID = @SwimClubID )'
-      'ORDER BY Member.LastName')
+      'FROM            HR '
+      'LEFT OUTER JOIN HRType ON HR.HRTypeID = HRType.HRTypeID '
+      'LEFT OUTER JOIN Gender ON HR.GenderID = Gender.GenderID '
+      'WHERE        (HR.HRTypeID = @HRTypeID )'
+      'ORDER BY HR.LastName')
     Left = 64
     Top = 296
     ParamData = <
       item
-        Name = 'SWIMCLUBID'
+        Name = 'HRTYPEID'
         DataType = ftInteger
         ParamType = ptInput
-        Value = 1
+        Value = 3
       end>
   end
 end

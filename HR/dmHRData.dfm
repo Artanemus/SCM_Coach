@@ -4,9 +4,8 @@ object HRData: THRData
   Width = 1306
   object tblContactNumType: TFDTable
     ActiveStoredUsage = [auDesignTime]
-    Active = True
     IndexFieldNames = 'ContactNumTypeID'
-    Connection = FDTempDesignConnection
+    Connection = COACH.coachConnection
     UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
     UpdateOptions.EnableDelete = False
     UpdateOptions.EnableInsert = False
@@ -29,9 +28,8 @@ object HRData: THRData
   end
   object tblStroke: TFDTable
     ActiveStoredUsage = [auDesignTime]
-    Active = True
     IndexFieldNames = 'StrokeID'
-    Connection = FDTempDesignConnection
+    Connection = COACH.coachConnection
     UpdateOptions.UpdateTableName = 'SwimClubMeet..Stroke'
     TableName = 'SwimClubMeet..Stroke'
     Left = 64
@@ -39,9 +37,8 @@ object HRData: THRData
   end
   object tblDistance: TFDTable
     ActiveStoredUsage = [auDesignTime]
-    Active = True
     IndexFieldNames = 'DistanceID'
-    Connection = FDTempDesignConnection
+    Connection = COACH.coachConnection
     UpdateOptions.UpdateTableName = 'SwimClubMeet..Distance'
     TableName = 'SwimClubMeet..Distance'
     Left = 64
@@ -49,9 +46,8 @@ object HRData: THRData
   end
   object tblHRType: TFDTable
     ActiveStoredUsage = [auDesignTime]
-    Active = True
     IndexFieldNames = 'HRTypeID'
-    Connection = FDTempDesignConnection
+    Connection = COACH.coachConnection
     UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
     UpdateOptions.EnableDelete = False
     UpdateOptions.EnableInsert = False
@@ -68,9 +64,8 @@ object HRData: THRData
   end
   object tblGender: TFDTable
     ActiveStoredUsage = [auDesignTime]
-    Active = True
     IndexFieldNames = 'GenderID'
-    Connection = FDTempDesignConnection
+    Connection = COACH.coachConnection
     UpdateOptions.UpdateTableName = 'SwimClubMeet..Gender'
     TableName = 'SwimClubMeet..Gender'
     Left = 64
@@ -88,7 +83,6 @@ object HRData: THRData
   end
   object qryContactNum: TFDQuery
     ActiveStoredUsage = [auDesignTime]
-    Active = True
     Indexes = <
       item
         Active = True
@@ -98,8 +92,9 @@ object HRData: THRData
         DescFields = 'ContactNumID'
       end>
     IndexName = 'indx_ContactNum'
+    MasterSource = dsHR
     MasterFields = 'HRID'
-    Connection = FDTempDesignConnection
+    Connection = COACH.coachConnection
     UpdateOptions.UpdateTableName = 'SCM_Coach.dbo.ContactNum'
     UpdateOptions.KeyFields = 'ContactNumID'
     SQL.Strings = (
@@ -148,6 +143,7 @@ object HRData: THRData
     FilterOptions = [foCaseInsensitive]
     Filter = '(GenderID = 1 OR GenderID = 2) AND (IsActive = TRUE)'
     IndexFieldNames = 'MemberID'
+    Connection = COACH.coachConnection
     UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
     UpdateOptions.EnableDelete = False
     UpdateOptions.EnableInsert = False
@@ -281,47 +277,12 @@ object HRData: THRData
     Left = 718
     Top = 56
   end
-  object qAssertMemberID: TFDQuery
-    ActiveStoredUsage = [auDesignTime]
-    IndexFieldNames = 'MemberID'
-    SQL.Strings = (
-      'USE SwimClubMeet;'
-      ''
-      'SELECT MemberID, MembershipNum FROM Member WHERE SwimClubID = 1')
-    Left = 696
-    Top = 184
-  end
-  object qryEntrantDataCount: TFDQuery
-    ActiveStoredUsage = [auDesignTime]
-    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
-    UpdateOptions.EnableDelete = False
-    UpdateOptions.EnableInsert = False
-    UpdateOptions.EnableUpdate = False
-    SQL.Strings = (
-      'USE SwimClubMeet;'
-      ''
-      'DECLARE @MemberID as INTEGER;'
-      'SET @MemberID = :MEMBERID; -- 57;'
-      ''
-      'SELECT Count(EntrantID) as TOT FROM Entrant WHERE'
-      
-        'MemberID = @MemberID AND (RaceTime IS NOT NULL OR (dbo.SwimTimeT' +
-        'oMilliseconds(RaceTime) > 0));')
-    Left = 696
-    Top = 248
-    ParamData = <
-      item
-        Name = 'MEMBERID'
-        DataType = ftInteger
-        ParamType = ptInput
-        Value = 57
-      end>
-  end
   object cmdFixNullBooleans: TFDCommand
+    Connection = COACH.coachConnection
     CommandText.Strings = (
-      'USE SwimClubMeet;'
+      'USE SCM_Coach;'
       ''
-      'UPDATE [SwimClubMeet].[dbo].[Member]'
+      'UPDATE [SCM_Coach].[dbo].[HR]'
       'SET IsActive = CASE'
       '                   WHEN IsActive IS NULL THEN'
       '                       1'
@@ -334,17 +295,11 @@ object HRData: THRData
       '                       ELSE'
       '                           IsArchived'
       '                   END'
-      '  , [IsSwimmer] = CASE'
-      '                      WHEN IsSwimmer IS NULL THEN'
-      '                          1'
-      '                      ELSE'
-      '                          IsSwimmer'
-      '                  END'
       'WHERE IsArchived IS NULL'
       '      OR IsActive IS NULL'
-      '      OR IsSwimmer IS NULL'
       ''
       ';')
+    ActiveStoredUsage = [auDesignTime]
     Left = 696
     Top = 336
   end
@@ -356,7 +311,9 @@ object HRData: THRData
   object qryHRPB: TFDQuery
     ActiveStoredUsage = [auDesignTime]
     IndexFieldNames = 'HRID'
-    Connection = FDTempDesignConnection
+    MasterSource = dsHR
+    MasterFields = 'HRID'
+    Connection = COACH.coachConnection
     FormatOptions.AssignedValues = [fvFmtDisplayTime]
     FormatOptions.FmtDisplayTime = 'nn:ss.zzz'
     UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
@@ -364,7 +321,7 @@ object HRData: THRData
     UpdateOptions.EnableInsert = False
     UpdateOptions.EnableUpdate = False
     UpdateOptions.UpdateTableName = 'SwimClubMeet..Member'
-    UpdateOptions.KeyFields = 'HRID'
+    UpdateOptions.KeyFields = 'RaceHistoryID'
     SQL.Strings = (
       'USE SCM_Coach'
       ';'
@@ -374,6 +331,7 @@ object HRData: THRData
       ''
       'SELECT '
       '       RaceHistory.HRID'
+      ',RaceHistoryID'
       '     , RaceHistory.DistanceID'
       '     , RaceHistory.StrokeID'
       '     , RaceTime'
@@ -403,7 +361,13 @@ object HRData: THRData
     object qryHRPBHRID: TIntegerField
       FieldName = 'HRID'
       Origin = 'HRID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
       Required = True
+    end
+    object qryHRPBRaceHistoryID: TFDAutoIncField
+      FieldName = 'RaceHistoryID'
+      Origin = 'RaceHistoryID'
+      ReadOnly = True
     end
     object qryHRPBDistanceID: TIntegerField
       FieldName = 'DistanceID'
@@ -428,15 +392,6 @@ object HRData: THRData
       Size = 257
     end
   end
-  object FDTempDesignConnection: TFDConnection
-    Params.Strings = (
-      'ConnectionDef=MSSQL_SCM_Coach')
-    ConnectedStoredUsage = [auDesignTime]
-    Connected = True
-    LoginPrompt = False
-    Left = 112
-    Top = 32
-  end
   object dsHR: TDataSource
     DataSet = qryHR
     Left = 168
@@ -444,14 +399,13 @@ object HRData: THRData
   end
   object qryHR: TFDQuery
     ActiveStoredUsage = [auDesignTime]
-    Active = True
     AfterInsert = qryHRAfterInsert
     BeforeDelete = qryHRBeforeDelete
     AfterDelete = qryHRAfterDelete
     AfterScroll = qryHRAfterScroll
     IndexFieldNames = 'HRID'
     DetailFields = 'SwimClubID'
-    Connection = FDTempDesignConnection
+    Connection = COACH.coachConnection
     UpdateOptions.UpdateTableName = 'SCM_Coach..Member'
     UpdateOptions.KeyFields = 'HRID'
     SQL.Strings = (
@@ -476,13 +430,15 @@ object HRData: THRData
       '     , [Email]'
       '     , [GenderID]'
       '     , [HRTypeID]'
-      '     , CONCAT(HR.FirstName, '#39' '#39', UPPER(HR.LastName)) AS FName'
+      
+        '     , CONCAT(TRIM(HR.FirstName), '#39' '#39', TRIM(HR.MiddleInitial), '#39 +
+        ' '#39',UPPER(TRIM(HR.LastName))) AS FName'
       '     , gradeID'
       '     , CreatedOn'
       '     , ArchivedOn'
       '     , SCMMemberID'
       'FROM [dbo].[HR]'
-      'WHERE HRTypeID = 1'
+      'WHERE HRTypeID = 3'
       '      AND'
       '      ('
       '          (IsActive >= CASE'

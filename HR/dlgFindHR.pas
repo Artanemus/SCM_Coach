@@ -11,7 +11,8 @@ uses
   FireDAC.Comp.Client, FireDAC.Comp.DataSet, Vcl.Grids, Vcl.DBGrids,
   Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.VirtualImage, Vcl.BaseImageCollection,
   Vcl.ImageCollection, FireDAC.UI.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool,
-  FireDAC.Phys, FireDAC.Phys.MSSQL, FireDAC.Phys.MSSQLDef, FireDAC.VCLUI.Wait;
+  FireDAC.Phys, FireDAC.Phys.MSSQL, FireDAC.Phys.MSSQLDef, FireDAC.VCLUI.Wait,
+  dmCoach;
 
 type
   TFindHR = class(TForm)
@@ -25,7 +26,6 @@ type
     lblFound: TLabel;
     qryFindHR: TFDQuery;
     dsFindHR: TDataSource;
-    FDTestConnection: TFDConnection;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnGotoHRClick(Sender: TObject);
@@ -35,7 +35,6 @@ type
   private
     { Private declarations }
     fHRID: integer;
-    fConnection: TFDConnection;
   public
     { Public declarations }
     procedure Prepare(AConnection: TFDConnection; AHRTypeID: integer);
@@ -132,7 +131,6 @@ end;
 procedure TFindHR.FormCreate(Sender: TObject);
 begin
   fHRID := 0;
-  fConnection := nil;
 end;
 
 procedure TFindHR.FormKeyDown(Sender: TObject; var Key: Word;
@@ -146,17 +144,19 @@ procedure TFindHR.Prepare(AConnection: TFDConnection; AHRTypeID: integer);
 var
   s, SQL: string;
 begin
-  if Assigned(AConnection) then
+  if Assigned(AConnection) and AConnection.Connected then
   begin
-    fConnection := AConnection;
     qryFindHR.Connection := AConnection;
     qryFindHR.ParamByName('HRTypeID').AsInteger := AHRTypeID;
     qryFindHR.Open;
     // Modify caption on button
     SQL := 'SELECT Caption FROM [SCM_Coach].[dbo].[HRType] WHERE HRTypeID = :id';
-    s := fConnection.ExecSQLScalar(SQL, [AHRTypeID]); // returns variant
+    s := AConnection.ExecSQLScalar(SQL, [AHRTypeID]); // returns variant
     if (Length(s) > 0) then
+    begin
       btnGotoHR.Caption := 'Goto ' + s;
+      Self.Caption := 'Find ' + s;
+    end;
   end;
   if qryFindHR.Active then
   begin

@@ -27,7 +27,7 @@ object HR: THR
     TabOrder = 0
     ExplicitWidth = 1326
     object lblMemberCount: TLabel
-      Left = 1159
+      Left = 1087
       Top = 6
       Width = 164
       Height = 23
@@ -40,8 +40,8 @@ object HR: THR
       ParentFont = False
     end
     object lblCount: TLabel
-      Left = 1320
-      Top = 7
+      Left = 1257
+      Top = 8
       Width = 10
       Height = 23
       Caption = '0'
@@ -69,6 +69,7 @@ object HR: THR
       Top = 6
       Width = 648
       Height = 47
+      DataSource = HRData.dsHR
       VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbInsert, nbDelete, nbPost, nbCancel, nbRefresh]
       ParentShowHint = False
       ConfirmDelete = False
@@ -83,7 +84,7 @@ object HR: THR
     Top = 79
     Width = 1330
     Height = 694
-    ActivePage = TabSheet2
+    ActivePage = TabSheet3
     Align = alClient
     MultiLine = True
     TabHeight = 40
@@ -190,7 +191,8 @@ object HR: THR
           Top = 23
           Width = 108
           Height = 30
-          DataField = 'MemberID'
+          DataField = 'HRID'
+          DataSource = HRData.dsHR
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -19
@@ -266,6 +268,7 @@ object HR: THR
           Width = 148
           Height = 27
           DataField = 'GenderID'
+          DataSource = HRData.dsHR
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -16
@@ -326,7 +329,7 @@ object HR: THR
         end
         object DBchkIsArchived: TDBCheckBox
           Left = 192
-          Top = 275
+          Top = 273
           Width = 255
           Height = 17
           Caption = 'Is Archived - Retired from squad.'
@@ -501,29 +504,52 @@ object HR: THR
         Columns = <
           item
             Expanded = False
-            FieldName = 'ID'
+            FieldName = 'HRID'
+            Width = 50
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'MemberNUM'
-            Title.Caption = 'HR#'
+            FieldName = 'RegisterNum'
+            Title.Caption = 'Register#'
+            Width = 90
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'FirstName'
-            Width = 100
+            FieldName = 'RegisterStr'
+            Title.Caption = 'FNA REG'
+            Width = 90
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'LastName'
-            Width = 120
+            FieldName = 'FName'
+            Title.Caption = 'Full Name'
+            Width = 200
             Visible = True
           end
           item
-            ButtonStyle = cbsEllipsis
+            Expanded = False
+            FieldName = 'IsActive'
+            Title.Caption = 'Active'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'IsArchived'
+            Title.Caption = 'Archived'
+            Width = 64
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'luGender'
+            Title.Caption = 'Gender'
+            Width = 70
+            Visible = True
+          end
+          item
             Expanded = False
             FieldName = 'DOB'
             Width = 100
@@ -531,30 +557,36 @@ object HR: THR
           end
           item
             Expanded = False
-            FieldName = 'luGender'
-            Title.Caption = 'Gender'
-            Width = 90
-            Visible = True
-          end
-          item
-            Alignment = taCenter
-            Expanded = False
-            FieldName = 'IsArchived'
-            Title.Caption = 'Is-Archive'
-            Width = 90
+            FieldName = 'SwimmerAge'
+            Title.Caption = 'Age'
+            Width = 40
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'IsActive'
-            Title.Caption = 'Is-Active'
-            Width = 90
+            FieldName = 'gradeID'
+            Title.Caption = 'Grading'
+            Width = 64
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'Email'
-            Width = 400
+            Width = 250
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CreatedOn'
+            Title.Caption = 'Created On'
+            Width = 90
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ArchivedOn'
+            Title.Caption = 'Archived On'
+            Width = 90
             Visible = True
           end>
       end
@@ -691,7 +723,7 @@ object HR: THR
     Font.Style = []
     ParentFont = False
     Spacing = 0
-    ExplicitWidth = 1334
+    ExplicitWidth = 1326
   end
   object ImageList1: TImageList
     Height = 24
@@ -1036,7 +1068,7 @@ object HR: THR
                 ShortCut = 16454
               end
               item
-                Action = Search_GotoHRNUM
+                Action = Search_GotoRegNum
                 Caption = '&Goto HR Number...'
                 ImageIndex = 3
                 ImageName = 'Goto'
@@ -1066,7 +1098,7 @@ object HR: THR
             ImageName = 'Goto'
           end
           item
-            Action = Search_GotoHRNUM
+            Action = Search_GotoRegNum
             Caption = 'G&oto HR Number...'
             ImageIndex = 3
             ImageName = 'Goto'
@@ -1128,14 +1160,14 @@ object HR: THR
       Caption = 'Goto Swimmer ID...'
       ImageIndex = 3
       ImageName = 'Goto'
-      OnExecute = btnGotoMemberIDClick
+      OnExecute = Search_GotoIDExecute
     end
-    object Search_GotoHRNUM: TAction
+    object Search_GotoRegNum: TAction
       Category = 'Search'
       Caption = 'Goto HR Number...'
       ImageIndex = 3
       ImageName = 'Goto'
-      OnExecute = btnGotoMembershipClick
+      OnExecute = Search_GotoRegNumExecute
     end
     object Hide_Archived: TAction
       Category = 'Hide'
