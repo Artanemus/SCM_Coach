@@ -84,7 +84,7 @@ begin
       lblErrMsg.Caption := 'HR''s ID invalid.';
     exit;
   end;
-  // Assert state of local-fMemberID
+  // Assert state of local-fHRID
   if AssertHRID(fHRID) then
     ModalResult := mrOk;
 end;

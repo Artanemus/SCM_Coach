@@ -28,21 +28,6 @@ type
     qryContactNumNumber: TWideStringField;
     qryContactNumContactNumTypeID: TIntegerField;
     qryContactNumlu: TStringField;
-    qryFindHR: TFDQuery;
-    qryFindHRMemberID: TFDAutoIncField;
-    qryFindHRMembershipNum: TIntegerField;
-    qryFindHRFName: TWideStringField;
-    qryFindHRdtDOB: TWideStringField;
-    qryFindHRAge: TIntegerField;
-    qryFindHRIsActive: TBooleanField;
-    qryFindHRcGender: TWideStringField;
-    qryFindHRcMembershipType: TWideStringField;
-    qryFindHRFirstName: TWideStringField;
-    qryFindHRLastName: TWideStringField;
-    qryFindHRGenderID: TIntegerField;
-    qryFindHRMemberShipTypeID: TIntegerField;
-    qryFindHRIsSwimmer: TBooleanField;
-    dsFindMember: TDataSource;
     cmdFixNullBooleans: TFDCommand;
     dsHRPB: TDataSource;
     qryHRPB: TFDQuery;
@@ -83,7 +68,7 @@ type
     fCoreTablesActivated: boolean;
     fRecordCount: Integer;
     FcoachConnection: TFDConnection;
-    procedure UpdateMembersPersonalBest;
+    procedure UpdateHRPersonalBest;
 
   public
     { Public declarations }
@@ -102,7 +87,7 @@ type
   end;
 
 const
-  COACHMEMBERPREF = 'COACH_MemberPref.ini';
+  COACHPREF = 'COACH_Pref.ini';
 
 var
   HRData: THRData;
@@ -138,11 +123,8 @@ begin
 
     // support queries
     qryContactNum.Connection := FcoachConnection;
-    qryFindHr.Connection := FcoachConnection;
     qryHRPB.Connection := FcoachConnection;
 
-    // Lookup tables used by member
-    // tblMemberType.Open;
     qryHR.Open;
     if qryHR.Active then
     begin
@@ -215,7 +197,7 @@ begin
   begin
     fld.AsBoolean := True;
   end;
-  fld := DataSet.FieldByName('MemberTypeID');
+  fld := DataSet.FieldByName('HRTypeID');
   if (fld.IsNull) then
   begin
     fld.AsInteger := 3;
@@ -230,8 +212,8 @@ end;
 
 procedure THRData.qryHRAfterScroll(DataSet: TDataSet);
 begin
-  // Members Personal Best - requery
-  UpdateMembersPersonalBest();
+  // HR Personal Best - requery
+  UpdateHRPersonalBest();
   // Post directly to parent form : TForm(Self.GetOwner).Handle;
   // Uses : Vcl.Forms
   if Owner is TForm then
@@ -305,14 +287,14 @@ begin
 
 end;
 
-procedure THRData.UpdateMembersPersonalBest;
+procedure THRData.UpdateHRPersonalBest;
 begin
   if not Assigned(FcoachConnection) then
     exit;
   if not dsHR.DataSet.Active then
     exit;
-  // to improve loading performance of the Member's Dialogue
-  // the 'personal bests' for a member are loaded on demand.
+  // to improve loading performance
+  // the 'personal bests' for swimmers are loaded on demand.
   {
   qryHRPB.DisableControls;
   qryHRPB.Close();

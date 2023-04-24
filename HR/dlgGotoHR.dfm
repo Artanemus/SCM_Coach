@@ -3,8 +3,8 @@ object GotoHR: TGotoHR
   Top = 0
   BorderStyle = bsDialog
   Caption = 'Goto HR'#39's ID'
-  ClientHeight = 200
-  ClientWidth = 432
+  ClientHeight = 199
+  ClientWidth = 428
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,14 +19,12 @@ object GotoHR: TGotoHR
   TextHeight = 19
   object Panel1: TPanel
     Left = 0
-    Top = 144
-    Width = 432
+    Top = 143
+    Width = 428
     Height = 56
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = 143
-    ExplicitWidth = 428
     object btnGoto: TButton
       Left = 124
       Top = 13
@@ -40,13 +38,11 @@ object GotoHR: TGotoHR
   object Panel2: TPanel
     Left = 0
     Top = 0
-    Width = 432
-    Height = 144
+    Width = 428
+    Height = 143
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 428
-    ExplicitHeight = 143
     object Label1: TLabel
       Left = 186
       Top = 40

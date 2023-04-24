@@ -22690,7 +22690,7 @@ object GotoHRRegNum: TGotoHRRegNum
     Left = 352
     Top = 112
   end
-  object qAssertMemberID: TFDQuery
+  object qryAssertHRID: TFDQuery
     ActiveStoredUsage = [auDesignTime]
     IndexFieldNames = 'HRID'
     Connection = FDTestConnection

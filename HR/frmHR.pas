@@ -20,7 +20,7 @@ uses
 type
   THR = class(TForm)
     Panel1: TPanel;
-    lblMemberCount: TLabel;
+    lblHRCount: TLabel;
     Panel3: TPanel;
     DBNavigator1: TDBNavigator;
     PageControl1: TPageControl;
@@ -34,13 +34,13 @@ type
     DBText3: TDBText;
     Label7: TLabel;
     Label12: TLabel;
-    dblblMemberID: TDBText;
+    DBlblHRID: TDBText;
     Label22: TLabel;
     Label24: TLabel;
     DBlucboGender: TDBLookupComboBox;
     DBedtFirstName: TDBEdit;
     DBedtLastName: TDBEdit;
-    DBedtMembershipNum: TDBEdit;
+    DBedtRegisterNum: TDBEdit;
     DBchkIsActive: TDBCheckBox;
     DBEdtEmail: TDBEdit;
     DBchkIsArchived: TDBCheckBox;
@@ -66,19 +66,19 @@ type
     Label9: TLabel;
     Label19: TLabel;
     Label20: TLabel;
-    btnMemberDetail: TButton;
-    btnClubMembersSummary: TButton;
-    btnMemberHistory: TButton;
-    btnClubMembersDetailed: TButton;
-    btnClubMembersList: TButton;
-    ActnManagerMember: TActionManager;
+    btnHRDetailRpt: TButton;
+    btnClubHRSummaryRpt: TButton;
+    btnHRHistoryRpt: TButton;
+    btnClubHRDetailedRpt: TButton;
+    btnClubHRListRpt: TButton;
+    ActnManagerHR: TActionManager;
     MemFile_AutoEdit: TAction;
     MemFile_Exit: TAction;
     Search_GotoRegNum: TAction;
     Search_GotoSwimmerID: TAction;
     Search_FindSwimmer: TAction;
-    ImageCollectMember: TImageCollection;
-    VirtlImageListMember: TVirtualImageList;
+    ImageCollectHR: TImageCollection;
+    VirtlImageListHR: TVirtualImageList;
     ActionToolBar1: TActionToolBar;
     Hide_Archived: TAction;
     Hide_InActive: TAction;
@@ -108,11 +108,11 @@ type
     procedure DBNavigator1BeforeAction(Sender: TObject; Button: TNavigateBtn);
     procedure DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
     procedure FormShow(Sender: TObject);
-    procedure btnMemberDetailClick(Sender: TObject);
-    procedure btnMemberHistoryClick(Sender: TObject);
-    procedure btnClubMembersSummaryClick(Sender: TObject);
-    procedure btnClubMembersDetailedClick(Sender: TObject);
-    procedure btnClubMembersListClick(Sender: TObject);
+    procedure btnHRDetailRptClick(Sender: TObject);
+    procedure btnHRHistoryRptClick(Sender: TObject);
+    procedure btnClubHRSummaryRptClick(Sender: TObject);
+    procedure btnClubHRDetailedRptClick(Sender: TObject);
+    procedure btnClubHRListRptClick(Sender: TObject);
     procedure MemFile_ExitExecute(Sender: TObject);
     procedure Search_FindSwimmerExecute(Sender: TObject);
 
@@ -137,7 +137,7 @@ type
 
   public
     { Public declarations }
-    procedure Prepare(AHRTypeID, AMemberID: Integer);
+    procedure Prepare(AHRTypeID, AHRID: Integer);
     procedure ClearAllFilters();
 
   end;
@@ -188,15 +188,15 @@ begin
     case TButton(Sender).Tag of
       1:
         HRData.qryHR.FieldByName('GenderID').Clear();
-      2:
-        HRData.qryHR.FieldByName('MembershipTypeID').Clear();
-      3:
-        HRData.qryHR.FieldByName('HouseID').Clear();
+//      2:
+//        HRData.qryHR.FieldByName('HRTypeID').Clear();
+//      3:
+//        HRData.qryHR.FieldByName('HouseID').Clear();
     end;
   end;
 end;
 
-procedure THR.btnClubMembersDetailedClick(Sender: TObject);
+procedure THR.btnClubHRDetailedRptClick(Sender: TObject);
 var
   rpt: TFullHRDetailRPT;
 begin
@@ -207,7 +207,7 @@ begin
   rpt.Free;
 end;
 
-procedure THR.btnClubMembersListClick(Sender: TObject);
+procedure THR.btnClubHRListRptClick(Sender: TObject);
 var
   rpt: TFullHRListRPT;
 begin
@@ -218,7 +218,7 @@ begin
   rpt.Free;
 end;
 
-procedure THR.btnClubMembersSummaryClick(Sender: TObject);
+procedure THR.btnClubHRSummaryRptClick(Sender: TObject);
 var
   rpt: TFullHRSummaryRPT;
 begin
@@ -229,50 +229,50 @@ begin
   rpt.Free;
 end;
 
-procedure THR.btnMemberDetailClick(Sender: TObject);
+procedure THR.btnHRDetailRptClick(Sender: TObject);
 var
   rpt: THRDetailRPT;
-  MemberID: Integer;
+  HRID: Integer;
 begin
   if not Assigned(HRData) then
     exit;
-  MemberID := HRData.dsHR.DataSet.FieldByName('MemberID').AsInteger;
+  HRID := HRData.dsHR.DataSet.FieldByName('HRID').AsInteger;
   rpt := THRDetailRPT.Create(Self);
-  rpt.RunReport(MyConnection, Integer(hrSwimmer), MemberID);
+  rpt.RunReport(MyConnection, Integer(hrSwimmer), HRID);
   rpt.Free;
 end;
 
-procedure THR.btnMemberHistoryClick(Sender: TObject);
+procedure THR.btnHRHistoryRptClick(Sender: TObject);
 var
   rpt: THRHistoryRPT;
-  MemberID: Integer;
+  HRID: Integer;
 begin
   if not Assigned(HRData) then
     exit;
-  MemberID := HRData.dsHR.DataSet.FieldByName('MemberID').AsInteger;
+  HRID := HRData.dsHR.DataSet.FieldByName('HRID').AsInteger;
   rpt := THRHistoryRPT.Create(Self);
-  rpt.RunReport(MyConnection, Integer(hrSwimmer), MemberID);
+  rpt.RunReport(MyConnection, Integer(hrSwimmer), HRID);
   rpt.Free;
 end;
 
 procedure THR.chkbHideArchivedClick(Sender: TObject);
 begin
-  if Assigned(HRData) then
-    // HRData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
+//  if Assigned(HRData) then
+    // HRData.UpdateHR(hrSwimmer, chkbHideArchived.Checked,
     // chkbHideInActive.Checked, true);
 end;
 
 procedure THR.chkbHideInActiveClick(Sender: TObject);
 begin
-  if Assigned(HRData) then
-    // HRData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
+//  if Assigned(HRData) then
+    // HRData.UpdateHR(hrSwimmer, chkbHideArchived.Checked,
     // chkbHideInActive.Checked, true);
 end;
 
 procedure THR.chkbHideNonSwimmersClick(Sender: TObject);
 begin
-  if Assigned(HRData) then
-    // HRData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
+//  if Assigned(HRData) then
+    // HRData.UpdateHR(hrSwimmer, chkbHideArchived.Checked,
     // chkbHideInActive.Checked, true);
 end;
 
@@ -282,7 +282,7 @@ begin
   begin
     Hide_Archived.Checked := false;
     Hide_InActive.Checked := false;
-    // HRData.UpdateMember(fSwimClubID, chkbHideArchived.Checked,
+    // HRData.UpdateHR(hrSwimmer, chkbHideArchived.Checked,
     // chkbHideInActive.Checked, true);
   end;
 end;
@@ -294,6 +294,7 @@ begin
     Column.Grid.DataSource.DataSet.CheckBrowseMode;
     Column.Grid.DataSource.DataSet.Edit;
     Column.Field.AsBoolean := not Column.Field.AsBoolean;
+//    Column.Grid.DataSource.DataSet.Post;
   end;
   if Assigned(Column.Field) and (Column.Field.FieldKind = fkLookup) then
   begin
@@ -359,7 +360,7 @@ var
 begin
   // handle the ellipse button for the DOB - show DatePicker
   fld := TDBGrid(Sender).SelectedField;
-  if fld.Name = 'qryMemberDOB' then
+  if fld.Name = 'DOB' then
   begin
     cal := TDOBPicker.Create(Self);
     Rect := TButton(Sender).ClientToScreen(TButton(Sender).ClientRect);
@@ -439,20 +440,20 @@ begin
         if (Key = vkBack) and (ssAlt in Shift) then
         begin
           fld := SelectedField;
-          if (fld.FieldName = 'luHouse') then
-          begin
-            DataSource.DataSet.Edit();
-            DataSource.DataSet.FieldByName('HouseID').Clear();
-            DataSource.DataSet.Post();
-            Key := NULL;
-          end;
-          if (fld.FieldName = 'luMembershipType') then
-          begin
-            DataSource.DataSet.Edit();
-            DataSource.DataSet.FieldByName('MembershipTypeID').Clear();
-            DataSource.DataSet.Post();
-            Key := NULL;
-          end;
+//          if (fld.FieldName = 'luGradeID') then
+//          begin
+//            DataSource.DataSet.Edit();
+//            DataSource.DataSet.FieldByName('GradeID').Clear();
+//            DataSource.DataSet.Post();
+//            Key := NULL;
+//          end;
+//          if (fld.FieldName = 'luHRType') then
+//          begin
+//            DataSource.DataSet.Edit();
+//            DataSource.DataSet.FieldByName('HRTypeID').Clear();
+//            DataSource.DataSet.Post();
+//            Key := NULL;
+//          end;
           if (fld.FieldName = 'luGender') then
           begin
             DataSource.DataSet.Edit();
@@ -477,12 +478,12 @@ begin
   begin
     fDoDelete := false;
     dlg := TDeleteHR.Create(Self);
-    // get the fullname of the member to delete
+    // get the fullname of the HR to delete
     FName := HRData.dsHR.DataSet.FieldByName('FName').AsString;
-    ID := HRData.dsHR.DataSet.FieldByName('MemberID').AsInteger;
+    ID := HRData.dsHR.DataSet.FieldByName('HRID').AsInteger;
     s := IntToStr(ID);
     dlg.lblTitle.Caption := 'Delete (ID: ' + s + ') ' + FName +
-      ' from the SwimClubMeet database ?';
+      ' from the SCM_Coach database ?';
     // display the confirm delete dlg
     if IsPositiveResult(dlg.ShowModal) then
     begin
@@ -604,8 +605,7 @@ begin
     if (HRData.qryHR.State <> dsEdit) then
       HRData.qryHR.Edit();
     HRData.qryHR.FieldByName('DOB').AsDateTime := dtpickDOB.Date;
-    // let user perform manual post
-    // HRData.qryMember.Post();
+    // User manual post - HRData.qryHR.Post();
   end;
 end;
 
@@ -621,7 +621,7 @@ begin
     result := true
   else
   begin
-    s := 'Filters must to be cleared to display this member.' + sLineBreak +
+    s := 'Filters must to be cleared to display this swimmer.' + sLineBreak +
       'Clear the filters?';
     rtn := MessageDlg(s, TMsgDlgType.mtConfirmation, mbYesNo, 0);
     if IsPositiveResult(rtn) then
@@ -667,7 +667,7 @@ begin
     // with HRData created and the essential tables are open then
     // asserting the connection should be true
     if not Assigned(HRData) then
-      raise Exception.Create('Manage Member''s Data Module creation error.');
+      raise Exception.Create('Manage HR''s Data Module creation error.');
   end;
 
   // Used to call HR dialogues...
@@ -681,7 +681,7 @@ begin
     MessageDlg('An error occurred during MSSQL table activation.' + sLineBreak +
       'The database''s schema may need updating.' + sLineBreak +
       'The application will terminate!', mtError, [mbOk], 0);
-    raise Exception.Create('HRData Member not active.');
+    raise Exception.Create('HRData - HR not active.');
   end;
 
   // ----------------------------------------------------
@@ -733,7 +733,7 @@ begin
   // R E A D   P R E F E R E N C E S .
   // ----------------------------------------------------
   // Note: Don't read preferences OnCreate.
-  // Forces requery of qryMember as checkbox states are changed.
+  // Forces requery of qryHR as checkbox states are changed.
   ReadPreferences;
 
   // ----------------------------------------------------
@@ -775,7 +775,7 @@ begin
 
 end;
 
-procedure THR.Prepare(AHRTypeID, AMemberID: Integer);
+procedure THR.Prepare(AHRTypeID, AHRID: Integer);
 begin
   // execute SQL. Make all null IsArchived, IsActive, IsSwimmer = 0;
   // HRData.FixNullBooleans;
@@ -784,16 +784,15 @@ begin
   // ----------------------------------------------------
   if Assigned(HRData) then
     HRData.UpdateHR(Hide_Archived.Checked, Hide_InActive.Checked, true);
-  // Cue-to-member
-  if AMemberID > 0 then
-    LocateHR(AMemberID);
+  if AHRID > 0 then
+    LocateHR(AHRID); // Cue-to-HR
 end;
 
 procedure THR.ReadPreferences;
 var
   ini: TIniFile;
 begin
-  // C:\Users\<#USERNAME#>\AppData\Roaming\Artanemus\HRData\ + SCMMEMBERPREF
+  // C:\Users\<#USERNAME#>\AppData\Roaming\Artanemus\HRData\
   ini := TIniFile.Create(GetSCMAppDataDir + INIFILE_SCM_COACHPREF);
   try
     Hide_Archived.Checked := ini.ReadBool(INIFILE_SECTION,
@@ -827,7 +826,6 @@ begin
     dlg.Prepare(MyConnection, Integer(hrSwimmer));
     if IsPositiveResult(dlg.ShowModal()) then
     begin
-      // LOCATE MEMBER IN qryMember
       LocateHR(dlg.HRID)
     end;
     dlg.Free;
@@ -846,7 +844,6 @@ begin
     rtn := dlg.ShowModal;
     if IsPositiveResult(rtn) then
     begin
-      // LOCATE MEMBER IN qryMember
       LocateHR(dlg.HRID)
     end;
     dlg.Free;
@@ -865,8 +862,7 @@ begin
     rtn := dlg.ShowModal;
     if IsPositiveResult(rtn) then
     begin
-      // NOTE: returns both MembershipNum and MemberID
-      // LOCATE MEMBER IN qryMember
+      // NOTE: returns both RegisterNum and HRID
       LocateHR(dlg.HRID)
     end;
     dlg.Free;
@@ -877,7 +873,7 @@ procedure THR.WritePreferences;
 var
   ini: TIniFile;
 begin
-  // C:\Users\<#USERNAME#>\AppData\Roaming\Artanemus\ManageMember\ + SCMMEMBERPREF
+  // C:\Users\<#USERNAME#>\AppData\Roaming\Artanemus\
   ini := TIniFile.Create(GetSCMAppDataDir + INIFILE_SCM_COACHPREF);
   try
     ini.WriteBool(INIFILE_SECTION, 'HideArchived', Hide_Archived.Checked);

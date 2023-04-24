@@ -23,7 +23,7 @@ type
     Edit1: TEdit;
     VirtualImage1: TVirtualImage;
     ImageCollection1: TImageCollection;
-    qAssertMemberID: TFDQuery;
+    qryAssertHRID: TFDQuery;
     FDTestConnection: TFDConnection;
     procedure FormCreate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -83,7 +83,7 @@ begin
     lblErrMsg.Caption := 'Registration number is invalid.';
     exit;
   end;
-  // check if valid membership number
+  // check if valid registration number
   if AssertRegisterNum(fRegisterNum) then
     ModalResult := mrOk;
 end;

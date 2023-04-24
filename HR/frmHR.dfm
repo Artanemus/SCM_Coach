@@ -26,7 +26,7 @@ object HR: THR
     BevelOuter = bvNone
     TabOrder = 0
     ExplicitWidth = 1326
-    object lblMemberCount: TLabel
+    object lblHRCount: TLabel
       Left = 1087
       Top = 6
       Width = 164
@@ -84,7 +84,7 @@ object HR: THR
     Top = 79
     Width = 1330
     Height = 694
-    ActivePage = TabSheet3
+    ActivePage = TabSheet2
     Align = alClient
     MultiLine = True
     TabHeight = 40
@@ -102,8 +102,6 @@ object HR: THR
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 1318
-        ExplicitHeight = 643
         object Label3: TLabel
           Left = 153
           Top = 139
@@ -186,7 +184,7 @@ object HR: THR
           Font.Style = [fsBold]
           ParentFont = False
         end
-        object dblblMemberID: TDBText
+        object DBlblHRID: TDBText
           Left = 192
           Top = 23
           Width = 108
@@ -299,7 +297,7 @@ object HR: THR
           DataSource = HRData.dsHR
           TabOrder = 1
         end
-        object DBedtMembershipNum: TDBEdit
+        object DBedtRegisterNum: TDBEdit
           Left = 191
           Top = 473
           Width = 124
@@ -539,7 +537,6 @@ object HR: THR
             Expanded = False
             FieldName = 'IsArchived'
             Title.Caption = 'Archived'
-            Width = 64
             Visible = True
           end
           item
@@ -566,7 +563,6 @@ object HR: THR
             Expanded = False
             FieldName = 'gradeID'
             Title.Caption = 'Grading'
-            Width = 64
             Visible = True
           end
           item
@@ -613,23 +609,25 @@ object HR: THR
       object Label16: TLabel
         Left = 242
         Top = 236
-        Width = 485
+        Width = 491
         Height = 19
-        Caption = 'Prepare a summary of all the squad members (3 columns per page).'
+        Caption = 
+          'Prepare a summary of all the squad swimmers (3 columns per page)' +
+          '.'
       end
       object Label17: TLabel
         Left = 241
         Top = 282
-        Width = 365
+        Width = 371
         Height = 19
-        Caption = 'Prepare a detailed report of all the squad members.'
+        Caption = 'Prepare a detailed report of all the squad swimmers.'
       end
       object Label9: TLabel
         Left = 241
         Top = 328
-        Width = 303
+        Width = 309
         Height = 19
-        Caption = 'Prepare a compact list of squad members. '
+        Caption = 'Prepare a compact list of squad swimmers. '
       end
       object Label19: TLabel
         Left = 242
@@ -647,9 +645,9 @@ object HR: THR
       object Label20: TLabel
         Left = 241
         Top = 205
-        Width = 193
+        Width = 201
         Height = 25
-        Caption = 'All Squad Members ...'
+        Caption = 'All Squad Swimmers ...'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -19
@@ -657,50 +655,50 @@ object HR: THR
         Font.Style = [fsBold, fsUnderline]
         ParentFont = False
       end
-      object btnMemberDetail: TButton
+      object btnHRDetailRpt: TButton
         Left = 3
         Top = 43
         Width = 218
         Height = 38
         Caption = 'Swimmer'#39's Details'
         TabOrder = 0
-        OnClick = btnMemberDetailClick
+        OnClick = btnHRDetailRptClick
       end
-      object btnClubMembersSummary: TButton
+      object btnClubHRSummaryRpt: TButton
         Left = 3
         Top = 228
         Width = 218
         Height = 38
         Caption = 'Squad in Summary'
         TabOrder = 1
-        OnClick = btnClubMembersSummaryClick
+        OnClick = btnClubHRSummaryRptClick
       end
-      object btnMemberHistory: TButton
+      object btnHRHistoryRpt: TButton
         Left = 3
         Top = 89
         Width = 218
         Height = 38
         Caption = 'Swimmer'#39's History'
         TabOrder = 2
-        OnClick = btnMemberHistoryClick
+        OnClick = btnHRHistoryRptClick
       end
-      object btnClubMembersDetailed: TButton
+      object btnClubHRDetailedRpt: TButton
         Left = 3
         Top = 274
         Width = 218
         Height = 38
         Caption = 'Squad in Detailed'
         TabOrder = 3
-        OnClick = btnClubMembersDetailedClick
+        OnClick = btnClubHRDetailedRptClick
       end
-      object btnClubMembersList: TButton
+      object btnClubHRListRpt: TButton
         Left = 3
         Top = 320
         Width = 218
         Height = 38
         Caption = 'List of Squad Swimmers'
         TabOrder = 4
-        OnClick = btnClubMembersListClick
+        OnClick = btnClubHRListRptClick
       end
     end
   end
@@ -709,7 +707,7 @@ object HR: THR
     Top = 0
     Width = 1330
     Height = 42
-    ActionManager = ActnManagerMember
+    ActionManager = ActnManagerHR
     Caption = 'ActionToolBar1'
     Color = clMenuBar
     ColorMap.DisabledFontColor = 7171437
@@ -1035,7 +1033,7 @@ object HR: THR
       00000000FFFFFF00000000000000000000000000000000000000000000000000
       000000000000}
   end
-  object ActnManagerMember: TActionManager
+  object ActnManagerHR: TActionManager
     ActionBars = <
       item
         Items = <
@@ -1129,7 +1127,7 @@ object HR: THR
           end>
         ActionBar = ActionToolBar1
       end>
-    Images = VirtlImageListMember
+    Images = VirtlImageListHR
     Left = 1072
     Top = 400
     StyleName = 'Platform Default'
@@ -1184,7 +1182,7 @@ object HR: THR
       ImageName = 'VisibilityOn'
     end
   end
-  object ImageCollectMember: TImageCollection
+  object ImageCollectHR: TImageCollection
     Images = <
       item
         Name = 'Exit'
@@ -1416,7 +1414,7 @@ object HR: THR
     Left = 1072
     Top = 472
   end
-  object VirtlImageListMember: TVirtualImageList
+  object VirtlImageListHR: TVirtualImageList
     Images = <
       item
         CollectionIndex = 0
@@ -1448,7 +1446,7 @@ object HR: THR
         CollectionName = 'VisibilityOff'
         Name = 'VisibilityOff'
       end>
-    ImageCollection = ImageCollectMember
+    ImageCollection = ImageCollectHR
     Width = 32
     Height = 32
     Left = 1072

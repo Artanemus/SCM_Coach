@@ -1,7 +1,7 @@
 object HRData: THRData
   OnCreate = DataModuleCreate
-  Height = 800
-  Width = 1306
+  Height = 718
+  Width = 603
   object tblContactNumType: TFDTable
     ActiveStoredUsage = [auDesignTime]
     IndexFieldNames = 'ContactNumTypeID'
@@ -10,8 +10,8 @@ object HRData: THRData
     UpdateOptions.EnableDelete = False
     UpdateOptions.EnableInsert = False
     UpdateOptions.EnableUpdate = False
-    UpdateOptions.UpdateTableName = 'SwimClubMeet..ContactNumType'
-    TableName = 'SwimClubMeet..ContactNumType'
+    UpdateOptions.UpdateTableName = 'SCM_Coach..ContactNumType'
+    TableName = 'SCM_Coach..ContactNumType'
     Left = 64
     Top = 616
     object tblContactNumTypeContactNumTypeID: TFDAutoIncField
@@ -30,8 +30,8 @@ object HRData: THRData
     ActiveStoredUsage = [auDesignTime]
     IndexFieldNames = 'StrokeID'
     Connection = COACH.coachConnection
-    UpdateOptions.UpdateTableName = 'SwimClubMeet..Stroke'
-    TableName = 'SwimClubMeet..Stroke'
+    UpdateOptions.UpdateTableName = 'SCM_Coach..Stroke'
+    TableName = 'SCM_Coach..Stroke'
     Left = 64
     Top = 464
   end
@@ -39,8 +39,8 @@ object HRData: THRData
     ActiveStoredUsage = [auDesignTime]
     IndexFieldNames = 'DistanceID'
     Connection = COACH.coachConnection
-    UpdateOptions.UpdateTableName = 'SwimClubMeet..Distance'
-    TableName = 'SwimClubMeet..Distance'
+    UpdateOptions.UpdateTableName = 'SCM_Coach..Distance'
+    TableName = 'SCM_Coach..Distance'
     Left = 64
     Top = 536
   end
@@ -66,8 +66,8 @@ object HRData: THRData
     ActiveStoredUsage = [auDesignTime]
     IndexFieldNames = 'GenderID'
     Connection = COACH.coachConnection
-    UpdateOptions.UpdateTableName = 'SwimClubMeet..Gender'
-    TableName = 'SwimClubMeet..Gender'
+    UpdateOptions.UpdateTableName = 'SCM_Coach..Gender'
+    TableName = 'SCM_Coach..Gender'
     Left = 64
     Top = 384
   end
@@ -137,146 +137,6 @@ object HRData: THRData
       Required = True
     end
   end
-  object qryFindHR: TFDQuery
-    ActiveStoredUsage = [auDesignTime]
-    Filtered = True
-    FilterOptions = [foCaseInsensitive]
-    Filter = '(GenderID = 1 OR GenderID = 2) AND (IsActive = TRUE)'
-    IndexFieldNames = 'MemberID'
-    Connection = COACH.coachConnection
-    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
-    UpdateOptions.EnableDelete = False
-    UpdateOptions.EnableInsert = False
-    UpdateOptions.EnableUpdate = False
-    SQL.Strings = (
-      'SELECT        '
-      'Member.FirstName'
-      ', Member.LastName'
-      ', Member.MemberID'
-      ', Member.GenderID'
-      ', Member.MemberShipTypeID'
-      ', Member.MembershipNum'
-      ', FORMAT(Member.DOB, '#39'dd/MM/yyyy'#39') AS dtDOB'
-      ', Member.IsActive'
-      ', Member.MembershipDue'
-      ', Gender.Caption AS cGender'
-      '--, SwimClub.Caption AS cSwimClub'
-      '--, SwimClub.NickName'
-      ', MembershipType.Caption AS cMembershipType'
-      ', MembershipType.IsSwimmer'
-      ', CONCAT(UPPER([LastName]), '#39', '#39', Member.FirstName ) AS FName'
-      ', DATEDIFF ( year , [DOB], GETDATE() ) AS Age'
-      'FROM            Member '
-      'LEFT OUTER JOIN'
-      
-        '                         MembershipType ON Member.MembershipType' +
-        'ID = MembershipType.MembershipTypeID '
-      'LEFT OUTER JOIN'
-      
-        '                         SwimClub ON Member.SwimClubID = SwimClu' +
-        'b.SwimClubID '
-      'LEFT OUTER JOIN'
-      
-        '                         Gender ON Member.GenderID = Gender.Gend' +
-        'erID'
-      #9#9#9#9#9'ORDER BY Member.LastName')
-    Left = 616
-    Top = 56
-    object qryFindHRMemberID: TFDAutoIncField
-      Alignment = taCenter
-      DisplayLabel = '  ID'
-      DisplayWidth = 5
-      FieldName = 'MemberID'
-      Origin = 'MemberID'
-      ProviderFlags = [pfInWhere, pfInKey]
-      ReadOnly = True
-      DisplayFormat = '0000'
-    end
-    object qryFindHRMembershipNum: TIntegerField
-      DisplayLabel = 'Num#'
-      DisplayWidth = 6
-      FieldName = 'MembershipNum'
-      Origin = 'MembershipNum'
-      DisplayFormat = '##00'
-    end
-    object qryFindHRFName: TWideStringField
-      DisplayLabel = 'Member'#39's Name'
-      DisplayWidth = 160
-      FieldName = 'FName'
-      Origin = 'FName'
-      ReadOnly = True
-      Required = True
-      Size = 258
-    end
-    object qryFindHRdtDOB: TWideStringField
-      Alignment = taCenter
-      DisplayLabel = '  DOB'
-      DisplayWidth = 11
-      FieldName = 'dtDOB'
-      Origin = 'dtDOB'
-      ReadOnly = True
-      Size = 4000
-    end
-    object qryFindHRAge: TIntegerField
-      Alignment = taCenter
-      DisplayWidth = 3
-      FieldName = 'Age'
-      Origin = 'Age'
-      ReadOnly = True
-      DisplayFormat = '#0'
-    end
-    object qryFindHRIsActive: TBooleanField
-      DisplayLabel = 'Active'
-      DisplayWidth = 6
-      FieldName = 'IsActive'
-      Origin = 'IsActive'
-    end
-    object qryFindHRcGender: TWideStringField
-      DisplayLabel = 'Gender'
-      DisplayWidth = 7
-      FieldName = 'cGender'
-      Origin = 'cGender'
-    end
-    object qryFindHRcMembershipType: TWideStringField
-      DisplayLabel = 'Membership Type'
-      DisplayWidth = 30
-      FieldName = 'cMembershipType'
-      Origin = 'cMembershipType'
-      Size = 64
-    end
-    object qryFindHRFirstName: TWideStringField
-      FieldName = 'FirstName'
-      Origin = 'FirstName'
-      Visible = False
-      Size = 128
-    end
-    object qryFindHRLastName: TWideStringField
-      FieldName = 'LastName'
-      Origin = 'LastName'
-      Visible = False
-      Size = 128
-    end
-    object qryFindHRGenderID: TIntegerField
-      FieldName = 'GenderID'
-      Origin = 'GenderID'
-      Visible = False
-    end
-    object qryFindHRMemberShipTypeID: TIntegerField
-      FieldName = 'MemberShipTypeID'
-      Origin = 'MemberShipTypeID'
-      Visible = False
-    end
-    object qryFindHRIsSwimmer: TBooleanField
-      FieldName = 'IsSwimmer'
-      Origin = 'IsSwimmer'
-      Visible = False
-    end
-  end
-  object dsFindMember: TDataSource
-    DataSet = qryFindHR
-    Left = 718
-    Top = 56
-  end
   object cmdFixNullBooleans: TFDCommand
     Connection = COACH.coachConnection
     CommandText.Strings = (
@@ -300,13 +160,13 @@ object HRData: THRData
       ''
       ';')
     ActiveStoredUsage = [auDesignTime]
-    Left = 696
-    Top = 336
+    Left = 432
+    Top = 112
   end
   object dsHRPB: TDataSource
     DataSet = qryHRPB
-    Left = 737
-    Top = 448
+    Left = 473
+    Top = 224
   end
   object qryHRPB: TFDQuery
     ActiveStoredUsage = [auDesignTime]
@@ -320,7 +180,7 @@ object HRData: THRData
     UpdateOptions.EnableDelete = False
     UpdateOptions.EnableInsert = False
     UpdateOptions.EnableUpdate = False
-    UpdateOptions.UpdateTableName = 'SwimClubMeet..Member'
+    UpdateOptions.UpdateTableName = 'SCM_Coach..HR'
     UpdateOptions.KeyFields = 'RaceHistoryID'
     SQL.Strings = (
       'USE SCM_Coach'
@@ -349,8 +209,8 @@ object HRData: THRData
       '       , DistanceID'
       '       , StrokeID'
       '       , RaceTime ASC;')
-    Left = 649
-    Top = 448
+    Left = 385
+    Top = 224
     ParamData = <
       item
         Name = 'HRID'
@@ -404,9 +264,9 @@ object HRData: THRData
     AfterDelete = qryHRAfterDelete
     AfterScroll = qryHRAfterScroll
     IndexFieldNames = 'HRID'
-    DetailFields = 'SwimClubID'
+    DetailFields = 'HRID'
     Connection = COACH.coachConnection
-    UpdateOptions.UpdateTableName = 'SCM_Coach..Member'
+    UpdateOptions.UpdateTableName = 'SCM_Coach..HR'
     UpdateOptions.KeyFields = 'HRID'
     SQL.Strings = (
       'USE SCM_Coach;'
