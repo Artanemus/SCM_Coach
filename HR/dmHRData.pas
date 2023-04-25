@@ -52,12 +52,11 @@ type
     qryHRSCMMemberID: TIntegerField;
     qryHRluGender: TStringField;
     qryContactNumHRID: TIntegerField;
-    qryHRPBHRID: TIntegerField;
-    qryHRPBDistanceID: TIntegerField;
-    qryHRPBStrokeID: TIntegerField;
-    qryHRPBRaceTime: TTimeField;
+    qryHRPBHRID: TFDAutoIncField;
+    qryHRPBDistanceID: TFDAutoIncField;
+    qryHRPBStrokeID: TFDAutoIncField;
+    qryHRPBPB: TTimeField;
     qryHRPBEventStr: TWideStringField;
-    qryHRPBRaceHistoryID: TFDAutoIncField;
     procedure DataModuleCreate(Sender: TObject);
     procedure qryHRAfterScroll(DataSet: TDataSet);
     procedure qryHRAfterInsert(DataSet: TDataSet);
@@ -75,8 +74,12 @@ type
     constructor CreateWithConnection(AOwner: TComponent;
       AscmConnection: TFDConnection);
     procedure ActivateTable();
+
+    procedure UpdateHR(hideArchived, hideInActive: boolean);
     procedure UpdateDOB(DOB: TDateTime);
-    procedure UpdateHR(hideArchived, hideInactive, hideNonSwimmer: boolean);
+    procedure UpdateHideAchived(DoFilter: boolean);
+    procedure UpdateHideInActive(DoFilter: boolean);
+
     procedure FixNullBooleans();
     function LocateHR(HRID: Integer): boolean;
 
@@ -124,7 +127,10 @@ begin
     // support queries
     qryContactNum.Connection := FcoachConnection;
     qryHRPB.Connection := FcoachConnection;
-
+    // default - display all records
+    qryHR.ParamByName('HIDE_ARCHIVED').AsBoolean := false;
+    qryHR.ParamByName('HIDE_INACTIVE').AsBoolean := false;
+    qryHR.Prepare;
     qryHR.Open;
     if qryHR.Active then
     begin
@@ -232,12 +238,12 @@ begin
   if HRID <> 0 then
   begin
     qryHR.DisableControls;
-    {TODO -oBSA -cGeneral : remove all the relationships in associated tables for this HR }
-    {TODO -oBSA -cGeneral : remove HR }
+    { TODO -oBSA -cGeneral : remove all the relationships in associated tables for this HR }
+    { TODO -oBSA -cGeneral : remove HR }
     {
-    SQL := 'DELETE FROM [SCM_Coach].[dbo].[ContactNum] WHERE HRID = ' +
+      SQL := 'DELETE FROM [SCM_Coach].[dbo].[ContactNum] WHERE HRID = ' +
       IntToStr(HRID) + ';';
-    FcoachConnection.ExecSQL(SQL);
+      FcoachConnection.ExecSQL(SQL);
     }
     qryHR.EnableControls;
   end;
@@ -256,7 +262,29 @@ begin
 
 end;
 
-procedure THRData.UpdateHR(hideArchived, hideInactive, hideNonSwimmer: boolean);
+procedure THRData.UpdateHideAchived(DoFilter: boolean);
+var
+  LastInActiveState: boolean;
+begin
+  if not qryHR.Active then
+    LastInActiveState := false
+  else
+    LastInActiveState := qryHR.ParamByName('HIDE_INACTIVE').AsBoolean;
+  UpdateHR(DoFilter, LastInActiveState);
+end;
+
+procedure THRData.UpdateHideInActive(DoFilter: boolean);
+var
+  LastArchivedState: boolean;
+begin
+  if not qryHR.Active then
+    LastArchivedState := false
+  else
+    LastArchivedState := qryHR.ParamByName('HIDE_ARCHIVED').AsBoolean;
+  UpdateHR(LastArchivedState, DoFilter);
+end;
+
+procedure THRData.UpdateHR(hideArchived, hideInActive: boolean);
 begin
   if not Assigned(FcoachConnection) then
     exit;
@@ -266,7 +294,7 @@ begin
   qryHR.DisableControls;
   qryHR.Close;
   qryHR.ParamByName('HIDE_ARCHIVED').AsBoolean := hideArchived;
-  qryHR.ParamByName('HIDE_INACTIVE').AsBoolean := hideInactive;
+  qryHR.ParamByName('HIDE_INACTIVE').AsBoolean := hideInActive;
   qryHR.Prepare;
   qryHR.Open;
   if qryHR.Active then
@@ -280,8 +308,7 @@ begin
   else
     fRecordCount := 0;
   qryHR.EnableControls;
-  // Post directly to parent form : TForm(Self.GetOwner).Handle;
-  // Uses : Vcl.Forms
+  // Post directly to parent form : TForm(Self.GetOwner).Handle; - Vcl.Forms
   if Owner is TForm then
     PostMessage(TForm(Owner).Handle, SCM_UPDATE, 0, 0);
 
@@ -295,16 +322,16 @@ begin
     exit;
   // to improve loading performance
   // the 'personal bests' for swimmers are loaded on demand.
-  {
-  qryHRPB.DisableControls;
-  qryHRPB.Close();
-  qryHRPB.ParamByName('HRID').AsInteger :=
+
+    qryHRPB.DisableControls;
+    qryHRPB.Close();
+    qryHRPB.ParamByName('HRID').AsInteger :=
     dsHR.DataSet.FieldByName('HRID').AsInteger;
-  // ensures params changes are used
-  qryHRPB.Prepare();
-  qryHRPB.Open();
-  qryHRPB.EnableControls;
-  }
+    // ensures params changes are used
+    qryHRPB.Prepare();
+    qryHRPB.Open();
+    qryHRPB.EnableControls;
+
 end;
 
 end.

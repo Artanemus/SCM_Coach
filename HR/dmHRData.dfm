@@ -174,41 +174,42 @@ object HRData: THRData
     MasterSource = dsHR
     MasterFields = 'HRID'
     Connection = COACH.coachConnection
-    FormatOptions.AssignedValues = [fvFmtDisplayTime]
+    FormatOptions.AssignedValues = [fvFmtDisplayDateTime, fvFmtDisplayTime]
+    FormatOptions.FmtDisplayDateTime = 'nn:ss.zzz'
     FormatOptions.FmtDisplayTime = 'nn:ss.zzz'
     UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
     UpdateOptions.EnableDelete = False
     UpdateOptions.EnableInsert = False
     UpdateOptions.EnableUpdate = False
     UpdateOptions.UpdateTableName = 'SCM_Coach..HR'
-    UpdateOptions.KeyFields = 'RaceHistoryID'
+    UpdateOptions.KeyFields = 'HRID'
     SQL.Strings = (
-      'USE SCM_Coach'
-      ';'
+      'USE SCM_Coach;'
       ''
-      'DECLARE @HRID AS INT'
-      'SET @HRID = :HRID'
+      'DECLARE @hrid AS INT;'
+      'SET @hrid = :HRID'
       ''
-      'SELECT '
-      '       RaceHistory.HRID'
-      ',RaceHistoryID'
-      '     , RaceHistory.DistanceID'
-      '     , RaceHistory.StrokeID'
-      '     , RaceTime'
+      'SELECT DISTINCT'
+      '       HR.HRID'
+      '     , Distance.DistanceID'
+      '     , Stroke.StrokeID'
+      
+        '     , dbo.PersonalBest(HRID, DistanceID, StrokeID, GETDATE()) A' +
+        'S PB'
       
         '     , (CONCAT(distance.caption, '#39' '#39', stroke.caption)) AS EventS' +
         'tr'
-      'FROM RaceHistory'
-      '    INNER JOIN stroke'
-      '        ON RaceHistory.strokeID = stroke.strokeID'
-      '    INNER JOIN distance'
-      '        ON RaceHistory.distanceID = distance.distanceID'
-      'WHERE RaceHistory.HRID = @HRID'
-      '      AND RaceTime IS NOT NULL'
+      'FROM Distance'
+      '    CROSS JOIN Stroke'
+      '    CROSS JOIN HR'
+      'WHERE HR.HRID = @hrid'
+      
+        '      AND dbo.PersonalBest(HRID, DistanceID, StrokeID, GETDATE()' +
+        ') <> '#39'00:00:00'#39
       'ORDER BY HRID'
       '       , DistanceID'
       '       , StrokeID'
-      '       , RaceTime ASC;')
+      '       , PB ASC;')
     Left = 385
     Top = 224
     ParamData = <
@@ -216,37 +217,28 @@ object HRData: THRData
         Name = 'HRID'
         DataType = ftInteger
         ParamType = ptInput
-        Value = Null
+        Value = 230
       end>
-    object qryHRPBHRID: TIntegerField
+    object qryHRPBHRID: TFDAutoIncField
       FieldName = 'HRID'
-      Origin = 'HRID'
-      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
-      Required = True
-    end
-    object qryHRPBRaceHistoryID: TFDAutoIncField
-      FieldName = 'RaceHistoryID'
-      Origin = 'RaceHistoryID'
+      ProviderFlags = [pfInWhere, pfInKey]
       ReadOnly = True
     end
-    object qryHRPBDistanceID: TIntegerField
+    object qryHRPBDistanceID: TFDAutoIncField
       FieldName = 'DistanceID'
-      Origin = 'DistanceID'
-      Required = True
+      ReadOnly = True
     end
-    object qryHRPBStrokeID: TIntegerField
+    object qryHRPBStrokeID: TFDAutoIncField
       FieldName = 'StrokeID'
-      Origin = 'StrokeID'
-      Required = True
+      ReadOnly = True
     end
-    object qryHRPBRaceTime: TTimeField
-      FieldName = 'RaceTime'
-      Origin = 'RaceTime'
+    object qryHRPBPB: TTimeField
+      FieldName = 'PB'
+      ReadOnly = True
       DisplayFormat = 'nn:ss.zzz'
     end
     object qryHRPBEventStr: TWideStringField
       FieldName = 'EventStr'
-      Origin = 'EventStr'
       ReadOnly = True
       Required = True
       Size = 257

@@ -82,6 +82,8 @@ type
     ActionToolBar1: TActionToolBar;
     Hide_Archived: TAction;
     Hide_InActive: TAction;
+    Label6: TLabel;
+    DBGrid1: TDBGrid;
     procedure FormCreate(Sender: TObject);
     procedure About2Click(Sender: TObject);
     procedure DBGrid3CellClick(Column: TColumn);
@@ -94,7 +96,6 @@ type
     procedure DrawCheckBoxes(oGrid: TObject; Rect: TRect; Column: TColumn;
       fontColor, bgColor: TColor);
     procedure dtpickDOBChange(Sender: TObject);
-    procedure chkbHideArchivedClick(Sender: TObject);
     procedure chkbHideInActiveClick(Sender: TObject);
     procedure chkbHideNonSwimmersClick(Sender: TObject);
     procedure DBGrid3EditButtonClick(Sender: TObject);
@@ -115,6 +116,10 @@ type
     procedure btnClubHRListRptClick(Sender: TObject);
     procedure MemFile_ExitExecute(Sender: TObject);
     procedure Search_FindSwimmerExecute(Sender: TObject);
+    procedure Hide_ArchivedExecute(Sender: TObject);
+    procedure Hide_ArchivedUpdate(Sender: TObject);
+    procedure Hide_InActiveUpdate(Sender: TObject);
+    procedure Hide_InActiveExecute(Sender: TObject);
 
   private
     { Private declarations }
@@ -188,10 +193,10 @@ begin
     case TButton(Sender).Tag of
       1:
         HRData.qryHR.FieldByName('GenderID').Clear();
-//      2:
-//        HRData.qryHR.FieldByName('HRTypeID').Clear();
-//      3:
-//        HRData.qryHR.FieldByName('HouseID').Clear();
+      // 2:
+      // HRData.qryHR.FieldByName('HRTypeID').Clear();
+      // 3:
+      // HRData.qryHR.FieldByName('HouseID').Clear();
     end;
   end;
 end;
@@ -255,25 +260,18 @@ begin
   rpt.Free;
 end;
 
-procedure THR.chkbHideArchivedClick(Sender: TObject);
-begin
-//  if Assigned(HRData) then
-    // HRData.UpdateHR(hrSwimmer, chkbHideArchived.Checked,
-    // chkbHideInActive.Checked, true);
-end;
-
 procedure THR.chkbHideInActiveClick(Sender: TObject);
 begin
-//  if Assigned(HRData) then
-    // HRData.UpdateHR(hrSwimmer, chkbHideArchived.Checked,
-    // chkbHideInActive.Checked, true);
+  // if Assigned(HRData) then
+  // HRData.UpdateHR(hrSwimmer, chkbHideArchived.Checked,
+  // chkbHideInActive.Checked, true);
 end;
 
 procedure THR.chkbHideNonSwimmersClick(Sender: TObject);
 begin
-//  if Assigned(HRData) then
-    // HRData.UpdateHR(hrSwimmer, chkbHideArchived.Checked,
-    // chkbHideInActive.Checked, true);
+  // if Assigned(HRData) then
+  // HRData.UpdateHR(hrSwimmer, chkbHideArchived.Checked,
+  // chkbHideInActive.Checked, true);
 end;
 
 procedure THR.ClearAllFilters;
@@ -294,7 +292,7 @@ begin
     Column.Grid.DataSource.DataSet.CheckBrowseMode;
     Column.Grid.DataSource.DataSet.Edit;
     Column.Field.AsBoolean := not Column.Field.AsBoolean;
-//    Column.Grid.DataSource.DataSet.Post;
+    // Column.Grid.DataSource.DataSet.Post;
   end;
   if Assigned(Column.Field) and (Column.Field.FieldKind = fkLookup) then
   begin
@@ -440,20 +438,20 @@ begin
         if (Key = vkBack) and (ssAlt in Shift) then
         begin
           fld := SelectedField;
-//          if (fld.FieldName = 'luGradeID') then
-//          begin
-//            DataSource.DataSet.Edit();
-//            DataSource.DataSet.FieldByName('GradeID').Clear();
-//            DataSource.DataSet.Post();
-//            Key := NULL;
-//          end;
-//          if (fld.FieldName = 'luHRType') then
-//          begin
-//            DataSource.DataSet.Edit();
-//            DataSource.DataSet.FieldByName('HRTypeID').Clear();
-//            DataSource.DataSet.Post();
-//            Key := NULL;
-//          end;
+          // if (fld.FieldName = 'luGradeID') then
+          // begin
+          // DataSource.DataSet.Edit();
+          // DataSource.DataSet.FieldByName('GradeID').Clear();
+          // DataSource.DataSet.Post();
+          // Key := NULL;
+          // end;
+          // if (fld.FieldName = 'luHRType') then
+          // begin
+          // DataSource.DataSet.Edit();
+          // DataSource.DataSet.FieldByName('HRTypeID').Clear();
+          // DataSource.DataSet.Post();
+          // Key := NULL;
+          // end;
           if (fld.FieldName = 'luGender') then
           begin
             DataSource.DataSet.Edit();
@@ -650,6 +648,8 @@ var
 begin
 
   MyConnection := nil;
+  Hide_Archived.Checked := false;
+  Hide_Inactive.Checked := false;
 
   // For peace of mind : nothing should pass here
   // {TODO -oBSA -cGeneral : Make these exceptions}
@@ -744,6 +744,42 @@ begin
 
 end;
 
+procedure THR.Hide_ArchivedExecute(Sender: TObject);
+begin
+  HRData.UpdateHideAchived(TAction(Sender).Checked);
+  // Modify icon in Action Bar
+  if TAction(Sender).Checked then
+    Hide_Archived.ImageName := 'VisibilityOff'
+  else
+    Hide_Archived.ImageName := 'VisibilityOn';
+end;
+
+procedure THR.Hide_ArchivedUpdate(Sender: TObject);
+begin
+  if Assigned(HRData) and HRData.CoreTablesActivated then
+    TAction(Sender).Enabled := true
+  else
+    TAction(Sender).Enabled := false;
+end;
+
+procedure THR.Hide_InActiveExecute(Sender: TObject);
+begin
+  HRData.UpdateHideInActive(TAction(Sender).Checked);
+  // Modify icon in Action Bar
+  if TAction(Sender).Checked then
+    Hide_InActive.ImageName := 'VisibilityOff'
+  else
+    Hide_InActive.ImageName := 'VisibilityOn';
+end;
+
+procedure THR.Hide_InActiveUpdate(Sender: TObject);
+begin
+  if Assigned(HRData) and HRData.CoreTablesActivated then
+    TAction(Sender).Enabled := true
+  else
+    TAction(Sender).Enabled := false;
+end;
+
 procedure THR.HRAfterScroll(var Msg: TMessage);
 begin
   if not AssertSCMConnection then
@@ -777,13 +813,20 @@ end;
 
 procedure THR.Prepare(AHRTypeID, AHRID: Integer);
 begin
-  // execute SQL. Make all null IsArchived, IsActive, IsSwimmer = 0;
-  // HRData.FixNullBooleans;
-  // ----------------------------------------------------
-  // Prepares all core queries  (Master+Child)
-  // ----------------------------------------------------
+  // load user preferences
+  // -----------------------------------
+
+  // INIT
+  Hide_Archived.Checked := false;
+  Hide_Archived.ImageName := 'VisibilityOn';
+  Hide_InActive.Checked := false;
+  Hide_InActive.ImageName := 'VisibilityOn';
+
   if Assigned(HRData) then
-    HRData.UpdateHR(Hide_Archived.Checked, Hide_InActive.Checked, true);
+  begin
+    HRData.UpdateHR(Hide_Archived.Checked, Hide_InActive.Checked);
+  end;
+
   if AHRID > 0 then
     LocateHR(AHRID); // Cue-to-HR
 end;
@@ -820,7 +863,7 @@ procedure THR.Search_FindSwimmerExecute(Sender: TObject);
 var
   dlg: TFindHR;
 begin
-  if Assigned(MyCOnnection) then
+  if Assigned(MyConnection) then
   begin
     dlg := TFindHR.Create(Self);
     dlg.Prepare(MyConnection, Integer(hrSwimmer));

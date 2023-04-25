@@ -84,7 +84,7 @@ object HR: THR
     Top = 79
     Width = 1330
     Height = 694
-    ActivePage = TabSheet2
+    ActivePage = TabSheet1
     Align = alClient
     MultiLine = True
     TabHeight = 40
@@ -102,25 +102,27 @@ object HR: THR
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitWidth = 1318
+        ExplicitHeight = 643
         object Label3: TLabel
-          Left = 153
-          Top = 139
+          Left = 97
+          Top = 142
           Width = 32
           Height = 19
           Alignment = taRightJustify
           Caption = 'DOB'
         end
         object Label4: TLabel
-          Left = 133
-          Top = 208
+          Left = 77
+          Top = 211
           Width = 51
           Height = 19
           Alignment = taRightJustify
           Caption = 'Gender'
         end
         object Label2: TLabel
-          Left = 100
-          Top = 95
+          Left = 44
+          Top = 98
           Width = 86
           Height = 19
           Alignment = taRightJustify
@@ -133,8 +135,8 @@ object HR: THR
           ParentFont = False
         end
         object Label1: TLabel
-          Left = 98
-          Top = 59
+          Left = 42
+          Top = 62
           Width = 88
           Height = 19
           Alignment = taRightJustify
@@ -147,16 +149,16 @@ object HR: THR
           ParentFont = False
         end
         object Label10: TLabel
-          Left = 147
-          Top = 344
+          Left = 91
+          Top = 347
           Width = 39
           Height = 19
           Alignment = taRightJustify
           Caption = 'Email'
         end
         object DBText3: TDBText
-          Left = 389
-          Top = 172
+          Left = 333
+          Top = 175
           Width = 65
           Height = 17
           DataField = 'SwimmerAge'
@@ -199,16 +201,16 @@ object HR: THR
           ParentFont = False
         end
         object Label22: TLabel
-          Left = 182
-          Top = 172
+          Left = 126
+          Top = 175
           Width = 201
           Height = 19
           Alignment = taRightJustify
           Caption = 'Swimmer'#39's age as of today :'
         end
         object Label24: TLabel
-          Left = 192
-          Top = 248
+          Left = 136
+          Top = 251
           Width = 204
           Height = 19
           Caption = '(Checkboxes use Specificity.)'
@@ -230,12 +232,12 @@ object HR: THR
           Caption = '(Minimum of 4 digits)'
         end
         object Label23: TLabel
-          Left = 859
-          Top = 247
+          Left = 499
+          Top = 250
           Width = 21
-          Height = 118
+          Height = 127
           Alignment = taCenter
-          Caption = 'PERSONAL BEST'
+          Caption = 'PERSONAL BESTS'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -16
@@ -245,7 +247,7 @@ object HR: THR
           ParentFont = False
         end
         object Label13: TLabel
-          Left = 859
+          Left = 499
           Top = 23
           Width = 21
           Height = 137
@@ -260,9 +262,24 @@ object HR: THR
           ParentFont = False
           Layout = tlCenter
         end
+        object Label6: TLabel
+          Left = 931
+          Top = 23
+          Width = 21
+          Height = 128
+          Alignment = taCenter
+          Caption = 'RACING HISTORY'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Tahoma'
+          Font.Orientation = 900
+          Font.Style = []
+          ParentFont = False
+        end
         object DBlucboGender: TDBLookupComboBox
-          Left = 191
-          Top = 204
+          Left = 135
+          Top = 207
           Width = 148
           Height = 27
           DataField = 'GenderID'
@@ -280,8 +297,8 @@ object HR: THR
           TabOrder = 3
         end
         object DBedtFirstName: TDBEdit
-          Left = 192
-          Top = 56
+          Left = 136
+          Top = 59
           Width = 292
           Height = 27
           DataField = 'FirstName'
@@ -289,8 +306,8 @@ object HR: THR
           TabOrder = 0
         end
         object DBedtLastName: TDBEdit
-          Left = 192
-          Top = 92
+          Left = 136
+          Top = 95
           Width = 292
           Height = 27
           DataField = 'LastName'
@@ -307,8 +324,8 @@ object HR: THR
           TabOrder = 8
         end
         object DBchkIsActive: TDBCheckBox
-          Left = 192
-          Top = 302
+          Left = 136
+          Top = 305
           Width = 292
           Height = 17
           Caption = 'Is Active. '
@@ -317,17 +334,17 @@ object HR: THR
           TabOrder = 6
         end
         object DBEdtEmail: TDBEdit
-          Left = 192
-          Top = 341
-          Width = 421
+          Left = 136
+          Top = 344
+          Width = 339
           Height = 27
           DataField = 'Email'
           DataSource = HRData.dsHR
           TabOrder = 9
         end
         object DBchkIsArchived: TDBCheckBox
-          Left = 192
-          Top = 273
+          Left = 136
+          Top = 276
           Width = 255
           Height = 17
           Caption = 'Is Archived - Retired from squad.'
@@ -337,8 +354,8 @@ object HR: THR
         end
         object btnClearGender: TButton
           Tag = 1
-          Left = 345
-          Top = 204
+          Left = 289
+          Top = 207
           Width = 75
           Height = 32
           Hint = 'Clear the house name.'
@@ -358,8 +375,8 @@ object HR: THR
           TabOrder = 7
         end
         object dtpickDOB: TCalendarPicker
-          Left = 191
-          Top = 128
+          Left = 135
+          Top = 131
           Height = 32
           CalendarHeaderInfo.DaysOfWeekFont.Charset = DEFAULT_CHARSET
           CalendarHeaderInfo.DaysOfWeekFont.Color = clWindowText
@@ -383,7 +400,7 @@ object HR: THR
           TextHint = 'select a date'
         end
         object DBgridHistoryPB: TDBGrid
-          Left = 886
+          Left = 526
           Top = 247
           Width = 321
           Height = 382
@@ -404,17 +421,20 @@ object HR: THR
             item
               Expanded = False
               FieldName = 'EventStr'
-              Width = 180
+              Title.Caption = 'Event'
+              Width = 160
               Visible = True
             end
             item
               Expanded = False
-              FieldName = 'RaceTime'
+              FieldName = 'PB'
+              Title.Caption = 'RaceTime'
+              Width = 120
               Visible = True
             end>
         end
         object DBgridContactInfo: TDBGrid
-          Left = 886
+          Left = 526
           Top = 23
           Width = 321
           Height = 204
@@ -443,7 +463,7 @@ object HR: THR
             end>
         end
         object DBContactNumNavigator: TDBNavigator
-          Left = 1213
+          Left = 853
           Top = 23
           Width = 60
           Height = 204
@@ -466,6 +486,18 @@ object HR: THR
           ParentShowHint = False
           ShowHint = True
           TabOrder = 12
+        end
+        object DBGrid1: TDBGrid
+          Left = 958
+          Top = 23
+          Width = 339
+          Height = 606
+          TabOrder = 13
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -16
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
         end
       end
     end
@@ -537,6 +569,7 @@ object HR: THR
             Expanded = False
             FieldName = 'IsArchived'
             Title.Caption = 'Archived'
+            Width = 64
             Visible = True
           end
           item
@@ -563,6 +596,7 @@ object HR: THR
             Expanded = False
             FieldName = 'gradeID'
             Title.Caption = 'Grading'
+            Width = 64
             Visible = True
           end
           item
@@ -726,7 +760,7 @@ object HR: THR
   object ImageList1: TImageList
     Height = 24
     Width = 24
-    Left = 1072
+    Left = 888
     Top = 640
     Bitmap = {
       494C010101000800040018001800FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
@@ -1060,20 +1094,17 @@ object HR: THR
             Items = <
               item
                 Action = Search_FindSwimmer
-                Caption = '&Find Swimmer...'
                 ImageIndex = 2
                 ImageName = 'Search'
                 ShortCut = 16454
               end
               item
                 Action = Search_GotoRegNum
-                Caption = '&Goto HR Number...'
                 ImageIndex = 3
                 ImageName = 'Goto'
               end
               item
                 Action = Search_GotoSwimmerID
-                Caption = 'G&oto Swimmer ID...'
                 ImageIndex = 3
                 ImageName = 'Goto'
               end>
@@ -1084,20 +1115,17 @@ object HR: THR
         Items = <
           item
             Action = Search_FindSwimmer
-            Caption = '&Find Swimmer...'
             ImageIndex = 2
             ImageName = 'Search'
             ShortCut = 16454
           end
           item
             Action = Search_GotoSwimmerID
-            Caption = '&Goto Swimmer ID...'
             ImageIndex = 3
             ImageName = 'Goto'
           end
           item
             Action = Search_GotoRegNum
-            Caption = 'G&oto HR Number...'
             ImageIndex = 3
             ImageName = 'Goto'
           end
@@ -1128,7 +1156,7 @@ object HR: THR
         ActionBar = ActionToolBar1
       end>
     Images = VirtlImageListHR
-    Left = 1072
+    Left = 888
     Top = 400
     StyleName = 'Platform Default'
     object MemFile_AutoEdit: TAction
@@ -1147,7 +1175,7 @@ object HR: THR
     end
     object Search_FindSwimmer: TAction
       Category = 'Search'
-      Caption = 'Find Swimmer...'
+      Caption = 'Find Swimmer'
       ImageIndex = 2
       ImageName = 'Search'
       ShortCut = 16454
@@ -1155,14 +1183,14 @@ object HR: THR
     end
     object Search_GotoSwimmerID: TAction
       Category = 'Search'
-      Caption = 'Goto Swimmer ID...'
+      Caption = 'Goto Swimmer ID'
       ImageIndex = 3
       ImageName = 'Goto'
       OnExecute = Search_GotoIDExecute
     end
     object Search_GotoRegNum: TAction
       Category = 'Search'
-      Caption = 'Goto HR Number...'
+      Caption = 'Goto Registration#'
       ImageIndex = 3
       ImageName = 'Goto'
       OnExecute = Search_GotoRegNumExecute
@@ -1173,6 +1201,8 @@ object HR: THR
       Caption = 'Hide Archived'
       ImageIndex = 4
       ImageName = 'VisibilityOn'
+      OnExecute = Hide_ArchivedExecute
+      OnUpdate = Hide_ArchivedUpdate
     end
     object Hide_InActive: TAction
       Category = 'Hide'
@@ -1180,6 +1210,8 @@ object HR: THR
       Caption = 'Hide In-Active'
       ImageIndex = 4
       ImageName = 'VisibilityOn'
+      OnExecute = Hide_InActiveExecute
+      OnUpdate = Hide_InActiveUpdate
     end
   end
   object ImageCollectHR: TImageCollection
@@ -1411,7 +1443,7 @@ object HR: THR
               6082}
           end>
       end>
-    Left = 1072
+    Left = 888
     Top = 472
   end
   object VirtlImageListHR: TVirtualImageList
@@ -1449,7 +1481,7 @@ object HR: THR
     ImageCollection = ImageCollectHR
     Width = 32
     Height = 32
-    Left = 1072
+    Left = 888
     Top = 560
   end
 end
