@@ -209,6 +209,10 @@
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="unitUtility.pas"/>
+        <DCCReference Include="SQUAD\frmSquadT.pas">
+            <Form>SquadT</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

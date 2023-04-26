@@ -53,6 +53,8 @@ object ImportSCMWizard: TImportSCMWizard
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 671
+    ExplicitWidth = 665
     DesignSize = (
       669
       96)
@@ -181,6 +183,7 @@ object ImportSCMWizard: TImportSCMWizard
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitWidth = 665
     DesignSize = (
       669
       81)
@@ -372,7 +375,7 @@ object ImportSCMWizard: TImportSCMWizard
     Top = 81
     Width = 669
     Height = 591
-    ActivePage = tabSuccess
+    ActivePage = tabSelect
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -385,6 +388,8 @@ object ImportSCMWizard: TImportSCMWizard
     TabOrder = 2
     TabWidth = 90
     OnChange = pageCNTRLChange
+    ExplicitWidth = 665
+    ExplicitHeight = 590
     object tabStart: TTabSheet
       Caption = 'Start'
       object lblMsgStartInfo: TLabel
@@ -571,8 +576,6 @@ object ImportSCMWizard: TImportSCMWizard
         ImageAlignment = iaTop
         Images = UIImageList
         TabOrder = 4
-        ExplicitLeft = 341
-        ExplicitTop = 358
       end
       object btnLogin: TButton
         AlignWithMargins = True
@@ -586,8 +589,6 @@ object ImportSCMWizard: TImportSCMWizard
         ImageAlignment = iaTop
         Images = UIImageList
         TabOrder = 5
-        ExplicitLeft = 241
-        ExplicitTop = 358
       end
       object btnConnect: TButton
         Left = 163
@@ -847,8 +848,8 @@ object ImportSCMWizard: TImportSCMWizard
       object pnlFinalStep: TRelativePanel
         Left = 0
         Top = 0
-        Width = 665
-        Height = 542
+        Width = 661
+        Height = 541
         ControlCollection = <
           item
             Control = btnGo

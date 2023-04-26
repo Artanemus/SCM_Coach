@@ -83,6 +83,7 @@ type
     Tools_Inventory: TAction;
     Help_WebHelp: TAction;
     Tools_DisqualificationCodes: TAction;
+    Squads_Templates: TAction;
     procedure FormCreate(Sender: TObject);
     procedure btnNewSessionClick(Sender: TObject);
     procedure Edit_SwimmersUpdate(Sender: TObject);
@@ -91,6 +92,8 @@ type
     procedure Edit_SwimmersExecute(Sender: TObject);
     procedure File_ImportUpdate(Sender: TObject);
     procedure File_ImportExecute(Sender: TObject);
+    procedure Squads_TemplatesExecute(Sender: TObject);
+    procedure Squads_TemplatesUpdate(Sender: TObject);
 
   private
     { Private declarations }
@@ -120,7 +123,7 @@ implementation
 {$R *.dfm}
 
 uses frmSessionNew, dlgBasicLogin, SCMUtility, IniFiles
-, System.UITypes, dlgImportSelect, dlgImportSCMWizard, frmHR;
+, System.UITypes, dlgImportSelect, dlgImportSCMWizard, frmHR, frmSquadT;
 
 
 function TMain.AssertConnection: boolean;
@@ -427,6 +430,26 @@ begin
 
   iFile.Free;
 
+end;
+
+procedure TMain.Squads_TemplatesExecute(Sender: TObject);
+var
+dlg: TSquadT;
+begin
+  dlg := TSquadT.Create(Self);
+  dlg.Prepare;
+  dlg.ShowModal;
+  dlg.Free;
+end;
+
+procedure TMain.Squads_TemplatesUpdate(Sender: TObject);
+var
+  DoEnable: boolean;
+begin
+  DoEnable := false;
+  if AssertConnection then
+      DoEnable := true;
+  TAction(Sender).Enabled := DoEnable;
 end;
 
 end.

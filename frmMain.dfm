@@ -35,7 +35,7 @@ object Main: TMain
     Font.Name = 'Segoe UI'
     Font.Style = []
     Spacing = 10
-    ExplicitWidth = 1351
+    ExplicitTop = -6
   end
   object PageControl1: TPageControl
     Left = 0
@@ -451,6 +451,13 @@ object Main: TMain
           item
             Items = <
               item
+                Action = Squads_Templates
+                Caption = '&Squad Templates...'
+              end
+              item
+                Caption = '-'
+              end
+              item
                 Action = Squad_New
                 Caption = '&New Squad...'
               end
@@ -639,6 +646,12 @@ object Main: TMain
     object File_Exit: TAction
       Category = 'File'
       Caption = 'Exit'
+    end
+    object Squads_Templates: TAction
+      Category = 'Squads'
+      Caption = 'Squad Templates...'
+      OnExecute = Squads_TemplatesExecute
+      OnUpdate = Squads_TemplatesUpdate
     end
     object Squad_New: TAction
       Category = 'Squads'
@@ -1055,7 +1068,7 @@ object Main: TMain
   end
   object virtImageListPrgBuilder: TVirtualImageList
     Images = <>
-    Left = 840
-    Top = 536
+    Left = 664
+    Top = 608
   end
 end
