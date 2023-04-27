@@ -213,6 +213,11 @@
             <Form>SquadT</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="SQUAD\dmSquadData.pas">
+            <Form>SquadData</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -4,8 +4,6 @@ DELETE FROM [dbo].[intensity]
 GO
 SET IDENTITY_INSERT [dbo].[intensity] ON;
 
--- SUFFIXED EXTENSIONS TO intensityS
--- (+ user custom - prefix with #)
 INSERT INTO   [dbo].[intensity]
       (
       intensityID,
@@ -22,19 +20,6 @@ VALUES
       (5, 'Fast', 'BUILDUP', 'BUILD', 75),
       (6, 'Sprint', 'BUILDUP', 'BUILD', 90),
       (7, 'As Fast As Possible', 'AFAP', 'AFAP', 100)
-
-
 GO
 
 SET IDENTITY_INSERT [dbo].[intensity] OFF;
-
-/*
-INTENSITY/PACE
-(standard)
-Easy EZ Ez
-Moderate MOD Mod
-Build BUILD Bld
-Fast FAST Fst
-Sprint SPRINT Spr
-#AsFastAsPossible AFAP AFAP
-*/

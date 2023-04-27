@@ -82,8 +82,11 @@ type
     ActionToolBar1: TActionToolBar;
     Hide_Archived: TAction;
     Hide_InActive: TAction;
-    Label6: TLabel;
+    PageControl2: TPageControl;
+    TabSheet4: TTabSheet;
+    TabSheet5: TTabSheet;
     DBGrid1: TDBGrid;
+    TabSheet6: TTabSheet;
     procedure FormCreate(Sender: TObject);
     procedure About2Click(Sender: TObject);
     procedure DBGrid3CellClick(Column: TColumn);

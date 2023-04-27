@@ -1,15 +1,12 @@
 USE [SCM_Coach]
 GO
 
-DELETE FROM [dbo].[equipment]	
+DELETE FROM [dbo].[Equipment]	
 GO
 
-SET IDENTITY_INSERT [dbo].[equipment] ON;
+SET IDENTITY_INSERT [dbo].[Equipment] ON;
 
--- POOL EQUIPMENT
--- (+ user custom - prefix with #)
-
-INSERT INTO [dbo].[equipment]
+INSERT INTO [dbo].[Equipment]
 			(equipmentID
            ,[Caption]
            ,[ShortCaption]
@@ -23,7 +20,7 @@ INSERT INTO [dbo].[equipment]
            ,(6,'FINS','Fins','FINS')
 GO
 
-SET IDENTITY_INSERT [dbo].[equipment] OFF;
+SET IDENTITY_INSERT [dbo].[Equipment] OFF;
 
 
 

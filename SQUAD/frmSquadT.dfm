@@ -59,16 +59,16 @@ object SquadT: TSquadT
   object Label1: TLabel
     Left = 82
     Top = 8
-    Width = 138
+    Width = 125
     Height = 21
-    Caption = 'SQUAD TEMPLATES'
+    Caption = 'TEAM TEMPLATES'
   end
   object Label2: TLabel
     Left = 538
     Top = 8
-    Width = 140
+    Width = 127
     Height = 21
-    Caption = 'SQUAD SWIMMERS'
+    Caption = 'TEAM SWIMMERS'
   end
   object Label3: TLabel
     Left = 863

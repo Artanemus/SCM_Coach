@@ -6,9 +6,6 @@ GO
 
 SET IDENTITY_INSERT [dbo].[HRType] ON;
 
--- POOL HRType 
--- (+ user custom - prefix with #)
-
 INSERT INTO [dbo].[HRType]
 (
     HRTypeID

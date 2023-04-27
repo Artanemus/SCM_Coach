@@ -1,26 +1,20 @@
 USE [SCM_Coach]
 GO
-DELETE FROM
-      [dbo].[drill]
+DELETE FROM [dbo].[drill]
 GO
-SET
-      IDENTITY_INSERT [dbo].[drill] ON;
+SET IDENTITY_INSERT [dbo].[drill] ON;
 
--- SUFFIXED EXTENSIONS TO DRILLS
--- (+ user custom - prefix with #)
-INSERT INTO
-      [dbo].[drill]
-      (
-      drillID,
-      [Caption],
-      [ShortCaption],
-      [ABREV]
-      )
+INSERT INTO [dbo].[drill]
+(
+    drillID
+  , [Caption]
+  , [ShortCaption]
+  , [ABREV]
+)
 VALUES
-      (1, 'KICK', 'Kick', 'KICK'),
-      (2, 'PULL', 'Pull', 'PULL'),
-      (3, 'SWIM', 'Swim', 'SWIM')
+(1, 'KICK', 'Kick', 'KICK')
+, (2, 'PULL', 'Pull', 'PULL')
+, (3, 'SWIM', 'Swim', 'SWIM')
 GO
 
-SET
-      IDENTITY_INSERT [dbo].[drill] OFF;
+SET IDENTITY_INSERT [dbo].[drill] OFF;

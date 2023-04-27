@@ -36,7 +36,8 @@ uses
   rptHRDetail in 'HR\rptHRDetail.pas' {HRDetailRPT: TDataModule},
   rptHRHistory in 'HR\rptHRHistory.pas' {HRHistoryRPT: TDataModule},
   unitUtility in 'unitUtility.pas',
-  frmSquadT in 'SQUAD\frmSquadT.pas' {SquadT};
+  frmSquadT in 'SQUAD\frmSquadT.pas' {SquadT},
+  dmSquadData in 'SQUAD\dmSquadData.pas' {SquadData: TDataModule};
 
 {$R *.res}
 

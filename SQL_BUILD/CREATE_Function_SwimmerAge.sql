@@ -8,17 +8,17 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
 -- =============================================
 -- Author:		Ben Ambrpse
 -- Create date: 
--- Description:	Swimmer's age at swim club night.
+-- Description:	Swimmer's age at specific seed date.
 -- =============================================
-CREATE   FUNCTION [dbo].[SwimmerAge] (
+CREATE FUNCTION [dbo].[SwimmerAge]
+(
     -- Add the parameters for the function here
-    @SessionStart DATETIME
-    , @DOB DATETIME
-    )
+    @SeedStart DATETIME
+  , @DOB DATETIME
+)
 RETURNS INT
 AS
 BEGIN
@@ -26,7 +26,7 @@ BEGIN
     DECLARE @Result INT
 
     -- Add the T-SQL statements to compute the return value here
-    SET @Result = FLOOR(DATEDIFF(day, @DOB, @SessionStart) / 365.0)
+    SET @Result = FLOOR(DATEDIFF(day, @DOB, @SeedStart) / 365.0)
 
     -- Return the result of the function
     RETURN @Result

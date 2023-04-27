@@ -1,7 +1,6 @@
 USE SCM_Coach
 GO
 
-
 DELETE FROM [dbo].[ContactNumType]	
 GO
 

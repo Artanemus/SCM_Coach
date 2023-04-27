@@ -6,8 +6,6 @@ GO
 SET
       IDENTITY_INSERT [dbo].[grade] ON;
 
--- SUFFIXED EXTENSIONS TO DRILLS
--- (+ user custom - prefix with #)
 INSERT INTO
       [dbo].[grade]
       (
@@ -23,16 +21,3 @@ VALUES
 GO
 SET
       IDENTITY_INSERT [dbo].[grade] OFF;
-
-/*
-
-GRADE OR 
-PERFORMANCE LEVEL
-
-eg. 
-"A"  "Gold"  "Master Team"
-"B" "Silver" "Pro Team"
-"C" "Bronze" "StartUps"
-
-sorted on Alpha
-*/

@@ -1,16 +1,13 @@
 USE [SCM_Coach]
 GO
 
-DELETE FROM [dbo].[stroke]	
+DELETE FROM [dbo].[Stroke]	
 GO
 
-SET IDENTITY_INSERT [dbo].[stroke] ON;
+SET IDENTITY_INSERT [dbo].[Stroke] ON;
 
--- POOL EQUIPMENT
--- (+ user custom - prefix with #)
-
-INSERT INTO [dbo].[stroke]
-			(strokeID
+INSERT INTO [dbo].[Stroke]
+			(StrokeID
            ,[Caption]
            ,[ShortCaption]
            ,[ABREV]
@@ -29,26 +26,4 @@ INSERT INTO [dbo].[stroke]
            ,(11,'Custom-Stroke','CustS','CUST',0)
 GO
 
-SET IDENTITY_INSERT [dbo].[stroke] OFF;
-
-
-
-/*
-STROKE
-(standard stroke)
-FreeStyle Free Fr
-BackStroke Back Bk
-BreastStroke Breast Br
-ButterFly Fly Fl
-Individual-Medly IM IM
-
-(system not standard)
-Any-Stroke Mix Mx
-Swimmer-Choices-Stroke YChoice YCS
-Swimmer-worst-stroke YourWorst YWS
-Swimmer-best-stroke YourBest YBS
-FreeStyle-or-Indivual Medly FreeOrIM FRIM
-
-(+ user custom - prefix with #)
-#Custom-Stroke #CustS #CStr
-*/
+SET IDENTITY_INSERT [dbo].[Stroke] OFF;

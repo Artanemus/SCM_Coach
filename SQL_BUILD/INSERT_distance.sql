@@ -6,9 +6,6 @@ GO
 
 SET IDENTITY_INSERT [dbo].[Distance] ON;
 
--- POOL EQUIPMENT
--- (+ user custom - prefix with #)
-
 INSERT INTO [dbo].[Distance]
 			(DistanceID
            ,[Caption]

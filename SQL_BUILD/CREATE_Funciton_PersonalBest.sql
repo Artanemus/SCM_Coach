@@ -7,21 +7,19 @@ GO
 
 -- =============================================
 -- Author:		Ben Ambrose
--- Create date: 3/8/2019
+-- Create date: 27/4/2023
 -- Updated 16/5/2020
 -- Description:	Find the 'Personal Best' 
---				race time for a given Member
+--				race time for a given swimmer
 -- =============================================
-CREATE  
-    
-
-   FUNCTION [dbo].[PersonalBest] (
+CREATE FUNCTION [dbo].[PersonalBest]
+(
     -- Add the parameters for the function here
     @HRID INT
-    , @DistanceID INT
-    , @StrokeID INT
-    , @SeedDate DATETIME = NULL
-    )
+  , @DistanceID INT
+  , @StrokeID INT
+  , @SeedDate DATETIME = NULL
+)
 RETURNS TIME
 AS
 BEGIN
@@ -36,18 +34,12 @@ BEGIN
     SELECT @Result = MIN(RaceHistory.RaceTime)
     -- CAST(CAST(MIN(Entrant.RaceTime) AS DATETIME) AS FLOAT) AS PersonalBest
     FROM RaceHistory
-    -- INNER JOIN HeatIndividual
-        -- ON Entrant.HeatID = HeatIndividual.HeatID
-    -- INNER JOIN Event
-        -- ON HeatIndividual.EventID = Event.EventID
-    -- INNER JOIN Session
-        -- ON Event.SessionID = Session.SessionID
     WHERE (RaceHistory.StrokeID = @StrokeID)
-        AND (RaceHistory.DistanceID = @DistanceID)
-        AND (RaceHistory.RaceTime IS NOT NULL)
-        AND (RaceHistory.IsDisqualified <> 1) -- added 16/5/2020
-        AND (RaceHistory.IsScratched <> 1) -- added 16/5/2020
-        AND (RaceHistory.CreatedOn < @SeedDate)
+          AND (RaceHistory.DistanceID = @DistanceID)
+          AND (RaceHistory.RaceTime IS NOT NULL)
+          AND (RaceHistory.IsDisqualified <> 1) -- added 16/5/2020
+          AND (RaceHistory.IsScratched <> 1) -- added 16/5/2020
+          AND (RaceHistory.CreatedOn < @SeedDate)
     GROUP BY RaceHistory.HRID
     HAVING (RaceHistory.HRID = @HRID)
 

@@ -27,20 +27,3 @@ VALUES
 GO
 
 SET IDENTITY_INSERT [dbo].[miscTerm] OFF;
-/*
-MISCELLANEOUS
-USER CUSTOM
-misc requires prefix # (no spaces)
-This allows the user to create abreviations.
-MISC TERMS can also be entered as comment (not reserved words)
-
-#BlockStart #BlockS #BlockS
-#WallStart #WallS #WallS
-#underwaters #UnderW #UnderW
-#flipturns #FlipT #Flip
-#streamlines #StreamL #StreamL
-#pulldowns #PullDown #PullDown
-#dives #Dives #Dives
-#reduceStrokeCount, 
-#countYourBreath:7:5:3
-*/

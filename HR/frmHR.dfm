@@ -262,21 +262,6 @@ object HR: THR
           ParentFont = False
           Layout = tlCenter
         end
-        object Label6: TLabel
-          Left = 931
-          Top = 23
-          Width = 21
-          Height = 128
-          Alignment = taCenter
-          Caption = 'RACING HISTORY'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -16
-          Font.Name = 'Tahoma'
-          Font.Orientation = 900
-          Font.Style = []
-          ParentFont = False
-        end
         object DBlucboGender: TDBLookupComboBox
           Left = 135
           Top = 207
@@ -487,17 +472,39 @@ object HR: THR
           ShowHint = True
           TabOrder = 12
         end
-        object DBGrid1: TDBGrid
+        object PageControl2: TPageControl
           Left = 958
           Top = 23
-          Width = 339
-          Height = 606
+          Width = 347
+          Height = 610
+          ActivePage = TabSheet4
+          MultiLine = True
           TabOrder = 13
-          TitleFont.Charset = DEFAULT_CHARSET
-          TitleFont.Color = clWindowText
-          TitleFont.Height = -16
-          TitleFont.Name = 'Tahoma'
-          TitleFont.Style = []
+          TabPosition = tpLeft
+          object TabSheet4: TTabSheet
+            Caption = 'Race Hisroty'
+            object DBGrid1: TDBGrid
+              Left = 0
+              Top = 0
+              Width = 313
+              Height = 602
+              Align = alClient
+              TabOrder = 0
+              TitleFont.Charset = DEFAULT_CHARSET
+              TitleFont.Color = clWindowText
+              TitleFont.Height = -16
+              TitleFont.Name = 'Tahoma'
+              TitleFont.Style = []
+            end
+          end
+          object TabSheet5: TTabSheet
+            Caption = 'Squad Sessions'
+            ImageIndex = 1
+          end
+          object TabSheet6: TTabSheet
+            Caption = 'Accumlative Stats'
+            ImageIndex = 2
+          end
         end
       end
     end
@@ -1094,17 +1101,20 @@ object HR: THR
             Items = <
               item
                 Action = Search_FindSwimmer
+                Caption = '&Find Swimmer'
                 ImageIndex = 2
                 ImageName = 'Search'
                 ShortCut = 16454
               end
               item
                 Action = Search_GotoRegNum
+                Caption = '&Goto Registration#'
                 ImageIndex = 3
                 ImageName = 'Goto'
               end
               item
                 Action = Search_GotoSwimmerID
+                Caption = 'G&oto Swimmer ID'
                 ImageIndex = 3
                 ImageName = 'Goto'
               end>
@@ -1115,17 +1125,20 @@ object HR: THR
         Items = <
           item
             Action = Search_FindSwimmer
+            Caption = '&Find Swimmer'
             ImageIndex = 2
             ImageName = 'Search'
             ShortCut = 16454
           end
           item
             Action = Search_GotoSwimmerID
+            Caption = '&Goto Swimmer ID'
             ImageIndex = 3
             ImageName = 'Goto'
           end
           item
             Action = Search_GotoRegNum
+            Caption = 'G&oto Registration#'
             ImageIndex = 3
             ImageName = 'Goto'
           end

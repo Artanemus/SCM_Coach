@@ -10,8 +10,10 @@ $server = 'localHost\SQLEXPRESS'
 $rootdb = 'master'
 $db = 'SCM_Coach'
 
-$fn = $SRCPath + 'SCM_Coach_v0.0.0.11.sql'
-Invoke-Sqlcmd -ServerInstance $server -E  -Database $rootdb -InputFile $fn
+<# 
+$fn = $SRCPath + 'SCM_Coach_BUILD??????'
+Invoke-Sqlcmd -ServerInstance $server -E  -Database $rootdb -InputFile $fn 
+#>
 
 $fn = $SRCPath + 'CREATE_Function_SwimmerAge.sql'
 Invoke-Sqlcmd -ServerInstance $server -E -Database $db -InputFile $fn
@@ -53,9 +55,6 @@ $fn = $SRCPath + 'INSERT_RaceHistoryType.sql'
 Invoke-Sqlcmd -ServerInstance $server -E -Database $db -InputFile $fn
 
 $fn = $SRCPath + 'INSERT_stroke.sql'
-Invoke-Sqlcmd -ServerInstance $server -E -Database $db -InputFile $fn
-
-$fn = $SRCPath + 'INSERT_swimmer.sql'
 Invoke-Sqlcmd -ServerInstance $server -E -Database $db -InputFile $fn
 
 

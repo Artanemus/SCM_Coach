@@ -6,9 +6,6 @@ GO
 
 SET IDENTITY_INSERT [dbo].[RaceHistoryType] ON;
 
--- POOL EventTimeType 
--- (+ user custom - prefix with #)
-
 INSERT INTO [dbo].[RaceHistoryType]
 (
     [RaceHistoryTypeID]
