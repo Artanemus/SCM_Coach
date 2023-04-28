@@ -182,7 +182,7 @@ begin
   if Assigned(HRData) then
   begin
     // IsActive if TFDConnection::scmConnection && FireDAC tables are active
-    if HRData.CoreTablesActivated then
+    if HRData.IsActivated then
       result := true;
   end;
 end;
@@ -679,7 +679,7 @@ begin
   // ----------------------------------------------------
   // CHECK ACTIVATE TABLES.
   // ----------------------------------------------------
-  if not HRData.CoreTablesActivated then
+  if not HRData.IsActivated then
   begin
     MessageDlg('An error occurred during MSSQL table activation.' + sLineBreak +
       'The database''s schema may need updating.' + sLineBreak +
@@ -759,7 +759,7 @@ end;
 
 procedure THR.Hide_ArchivedUpdate(Sender: TObject);
 begin
-  if Assigned(HRData) and HRData.CoreTablesActivated then
+  if Assigned(HRData) and HRData.IsActivated then
     TAction(Sender).Enabled := true
   else
     TAction(Sender).Enabled := false;
@@ -777,7 +777,7 @@ end;
 
 procedure THR.Hide_InActiveUpdate(Sender: TObject);
 begin
-  if Assigned(HRData) and HRData.CoreTablesActivated then
+  if Assigned(HRData) and HRData.IsActivated then
     TAction(Sender).Enabled := true
   else
     TAction(Sender).Enabled := false;

@@ -27,9 +27,9 @@ type
     qrySplit: TFDQuery;
   private
     { Private declarations }
-    scmConnection: TFDConnection;
-    coachConnection: TFDConnection;
-    fCoreTablesActivated: boolean;
+    fscmConnection: TFDConnection;
+    fcoachConnection: TFDConnection;
+    fIsActivated: boolean;
 
     function InsertSplits(RaceHistoryID, EntrantID: integer): boolean;
     function HasFieldMiddleInitial: boolean;
@@ -52,12 +52,12 @@ type
     function IsDupSCMMember(scmMemberID: integer): boolean;
     function IsDupRaceHistory(EntrantID: integer): boolean;
 
-    function ActivateTables: boolean;
-    function DeActivateTables: boolean;
-    function AssertConnections(): boolean;
+    function MakeActive: boolean;
+    function DeActivate: boolean;
+    function AssertConnection(): boolean;
 
     // FLAG - true if all core FireDAC tables, queries are active.
-    property CoreTablesActivated: boolean read fCoreTablesActivated;
+    property IsActivated: boolean read fIsActivated;
 
   end;
 
@@ -77,46 +77,46 @@ constructor TImportData.CreateWithConnection(AOwner: TComponent;
   AscmConnection, AcoachConnection: TFDConnection);
 begin
   inherited Create(AOwner);
-  scmConnection := AscmConnection;
-  coachConnection := AcoachConnection;
+  fscmConnection := AscmConnection;
+  fcoachConnection := AcoachConnection;
 end;
 
-function TImportData.ActivateTables: boolean;
+function TImportData.MakeActive: boolean;
 begin
   // TFDTable are the only DB components to be activated for the life
   // of this class.
-  fCoreTablesActivated := false;
-  if Assigned(coachConnection) AND coachConnection.Connected then
+  fIsActivated := false;
+  if Assigned(fcoachConnection) AND fcoachConnection.Connected then
   begin
-    tblHR.Connection := coachConnection;
+    tblHR.Connection := fcoachConnection;
     tblHR.Open;
     if tblHR.Active then
     begin
-      tblContactNum.Connection := coachConnection;
+      tblContactNum.Connection := fcoachConnection;
       tblContactNum.Open;
       if tblContactNum.Active then
       begin
-        tblRaceHistory.Connection := coachConnection;
+        tblRaceHistory.Connection := fcoachConnection;
         tblRaceHistory.Open;
         if tblRaceHistory.Active then
         begin
-          tblRaceHistorySplit.Connection := coachConnection;
+          tblRaceHistorySplit.Connection := fcoachConnection;
           tblRaceHistorySplit.Open;
           if tblRaceHistory.Active then
-            fCoreTablesActivated := true;
+            fIsActivated := true;
         end;
       end;
     end;
   end;
-  result := fCoreTablesActivated;
+  result := fIsActivated;
 
 end;
 
-function TImportData.AssertConnections: boolean;
+function TImportData.AssertConnection: boolean;
 begin
   result := false;
-  if Assigned(scmConnection) AND scmConnection.Connected AND
-    Assigned(coachConnection) AND coachConnection.Connected then
+  if Assigned(fscmConnection) AND fscmConnection.Connected AND
+    Assigned(fcoachConnection) AND fcoachConnection.Connected then
     result := true;
 end;
 
@@ -126,7 +126,7 @@ begin
   result := true;
 end;
 
-function TImportData.DeActivateTables: boolean;
+function TImportData.DeActivate: boolean;
 begin
   tblHR.Close;
   tblContactNum.Close;
@@ -138,10 +138,10 @@ end;
 function TImportData.HasFieldMiddleInitial: boolean;
 begin
   result := false;
-  if Assigned(scmConnection) AND scmConnection.Connected then
+  if Assigned(fscmConnection) AND fscmConnection.Connected then
   begin
     // extract firstname, middle initial and lastname (FNAME)
-    qryCheckMiddleInitial.Connection := scmConnection;
+    qryCheckMiddleInitial.Connection := fscmConnection;
     qryCheckMiddleInitial.Open;
     if qryCheckMiddleInitial.Active then
       result := qryCheckMiddleInitial.FieldByName('rtnValue').AsBoolean;
@@ -154,9 +154,9 @@ var
   fld: TField;
 begin
   result := 0;
-  if AssertConnections then
+  if AssertConnection then
   begin
-    qryContactNum.Connection := scmConnection;
+    qryContactNum.Connection := fscmConnection;
     qryContactNum.ParamByName('MEMBERID').AsInteger := scmMemberID;
     qryContactNum.Prepare;
     qryContactNum.Open;
@@ -203,9 +203,9 @@ var
   v: variant;
 begin
   result := 0;
-  if AssertConnections then
+  if AssertConnection then
   begin
-    qryMember.Connection := scmConnection;
+    qryMember.Connection := fscmConnection;
     qryMember.ParamByName('MEMBERID').AsInteger := scmMemberID;
     qryMember.Prepare;
     qryMember.Open;
@@ -267,7 +267,7 @@ begin
         // -------------------------------------------------------
         { TODO -oBSA -cGeneral : modify SQL to always return INT }
         SQL := 'USE SCM_Coach; SELECT IDENT_CURRENT(''[SCM_Coach].[dbo].[HR]'');';
-        v := coachConnection.ExecSQLScalar(SQL);
+        v := fcoachConnection.ExecSQLScalar(SQL);
         result := CnvVarToInt(v);
       end;
     end;
@@ -286,7 +286,7 @@ begin
     the SCM_coach RaceHistory table. }
   result := 0; // records inserted
   // Pull race history from SwimClubMeet
-  qryRaceHistory.Connection := scmConnection;
+  qryRaceHistory.Connection := fscmConnection;
   qryRaceHistory.ParamByName('MEMBERID').AsInteger := scmMemberID;
   qryRaceHistory.Prepare;
   qryRaceHistory.Open;
@@ -355,7 +355,7 @@ begin
         // -------------------------------------------------------
         { TODO -oBSA -cGeneral : modify SQL to always return INT }
         SQL := 'USE SCM_Coach; SELECT IDENT_CURRENT(''[SCM_Coach].[dbo].[RaceHistory]'');';
-        v := coachConnection.ExecSQLScalar(SQL);
+        v := fcoachConnection.ExecSQLScalar(SQL);
         IDENT := CnvVarToInt(v);
         if DoSplit and (IDENT <> 0) then
         begin
@@ -375,9 +375,9 @@ end;
 function TImportData.InsertSplits(RaceHistoryID, EntrantID: integer): boolean;
 begin
   result := false;
-  if AssertConnections then
+  if AssertConnection then
   begin
-    qrySplit.Connection := scmConnection;
+    qrySplit.Connection := fscmConnection;
     qrySplit.ParamByName('ENTRANTID').AsInteger := EntrantID;
     qrySplit.Prepare;
     qrySplit.Open;
@@ -412,9 +412,9 @@ function TImportData.IsDupSCMMember(scmMemberID: integer): boolean;
 begin
   // IDENTITY LOOKUP
   result := true;
-  if Assigned(coachConnection) AND coachConnection.Connected then
+  if Assigned(fcoachConnection) AND fcoachConnection.Connected then
   begin
-    qryIsDupSCMMember.Connection := coachConnection;
+    qryIsDupSCMMember.Connection := fcoachConnection;
     qryIsDupSCMMember.ParamByName('MEMBERID').AsInteger := scmMemberID;
     qryIsDupSCMMember.Prepare;
     qryIsDupSCMMember.Open;
@@ -430,9 +430,9 @@ end;
 function TImportData.IsDupRaceHistory(EntrantID: integer): boolean;
 begin
   result := true;
-  if Assigned(coachConnection) AND coachConnection.Connected then
+  if Assigned(fcoachConnection) AND fcoachConnection.Connected then
   begin
-    qryIsDupRaceHistory.Connection := coachConnection;
+    qryIsDupRaceHistory.Connection := fcoachConnection;
     qryIsDupRaceHistory.ParamByName('ENTRANTID').AsInteger := EntrantID;
     qryIsDupRaceHistory.Prepare;
     qryIsDupRaceHistory.Open;

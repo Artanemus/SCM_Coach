@@ -1,5 +1,4 @@
 object HRData: THRData
-  OnCreate = DataModuleCreate
   Height = 718
   Width = 603
   object tblContactNumType: TFDTable

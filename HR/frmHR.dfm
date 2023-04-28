@@ -576,7 +576,6 @@ object HR: THR
             Expanded = False
             FieldName = 'IsArchived'
             Title.Caption = 'Archived'
-            Width = 64
             Visible = True
           end
           item
@@ -603,7 +602,6 @@ object HR: THR
             Expanded = False
             FieldName = 'gradeID'
             Title.Caption = 'Grading'
-            Width = 64
             Visible = True
           end
           item
@@ -762,7 +760,7 @@ object HR: THR
     Font.Style = []
     ParentFont = False
     Spacing = 0
-    ExplicitWidth = 1326
+    ExplicitWidth = 1334
   end
   object ImageList1: TImageList
     Height = 24

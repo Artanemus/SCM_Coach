@@ -120,12 +120,12 @@ begin
   // construct database module.
   ImportData := TImportData.CreateWithConnection(Self, scmConnection,
     coachConnection);
-  ImportData.ActivateTables();
+  ImportData.MakeActive();
 end;
 
 destructor TImportMember.Destroy;
 begin
-  ImportData.DeActivateTables(); // - auto-close on destroy
+  ImportData.DeActivate(); // - auto-close on destroy
   FreeAndNil(ImportData); // - auto-free on destory
   inherited;
 end;

@@ -57,34 +57,34 @@ type
     qryHRPBStrokeID: TFDAutoIncField;
     qryHRPBPB: TTimeField;
     qryHRPBEventStr: TWideStringField;
-    procedure DataModuleCreate(Sender: TObject);
     procedure qryHRAfterScroll(DataSet: TDataSet);
     procedure qryHRAfterInsert(DataSet: TDataSet);
     procedure qryHRBeforeDelete(DataSet: TDataSet);
     procedure qryHRAfterDelete(DataSet: TDataSet);
   private
     { Private declarations }
-    fCoreTablesActivated: boolean;
+    fIsActivated: boolean;
     fRecordCount: Integer;
-    FcoachConnection: TFDConnection;
+    fConnection: TFDConnection;
     procedure UpdateHRPersonalBest;
+    function AssertConnection: boolean;
 
   public
     { Public declarations }
     constructor CreateWithConnection(AOwner: TComponent;
-      AscmConnection: TFDConnection);
-    procedure ActivateTable();
+      AConnection: TFDConnection);
+    procedure MakeActive();
 
     procedure UpdateHR(hideArchived, hideInActive: boolean);
     procedure UpdateDOB(DOB: TDateTime);
     procedure UpdateHideAchived(DoFilter: boolean);
     procedure UpdateHideInActive(DoFilter: boolean);
+    procedure FixNullBooleans;
 
-    procedure FixNullBooleans();
     function LocateHR(HRID: Integer): boolean;
 
     // FLAG - true if all core FireDAC tables, queries are active.
-    property CoreTablesActivated: boolean read fCoreTablesActivated;
+    property IsActivated: boolean read fIsActivated;
     property RecordCount: Integer read fRecordCount;
 
   end;
@@ -104,29 +104,29 @@ uses
   System.IOUtils, IniFiles, SCMUtility, SCMDefines, Winapi.Windows,
   Winapi.Messages, vcl.Dialogs, System.UITypes, vcl.Forms;
 
-procedure THRData.ActivateTable;
+procedure THRData.MakeActive;
 begin
-  fCoreTablesActivated := false;
-  if Assigned(FcoachConnection) and FcoachConnection.Connected then
+  fIsActivated := false;
+  if AssertConnection then
   begin
     // main
-    qryHR.Connection := FcoachConnection;
+    qryHR.Connection := fConnection;
 
     // prepare lookup tables.
-    tblContactNumType.Connection := FcoachConnection;
+    tblContactNumType.Connection := fConnection;
     tblContactNumType.Open;
-    tblStroke.Connection := FcoachConnection;
+    tblStroke.Connection := fConnection;
     tblStroke.Open;
-    tblDistance.Connection := FcoachConnection;
+    tblDistance.Connection := fConnection;
     tblDistance.Open;
-    tblHRType.Connection := FcoachConnection;
+    tblHRType.Connection := fConnection;
     tblHRType.Open;
-    tblGender.Connection := FcoachConnection;
+    tblGender.Connection := fConnection;
     tblGender.Open;
 
     // support queries
-    qryContactNum.Connection := FcoachConnection;
-    qryHRPB.Connection := FcoachConnection;
+    qryContactNum.Connection := fConnection;
+    qryHRPB.Connection := fConnection;
     // default - display all records
     qryHR.ParamByName('HIDE_ARCHIVED').AsBoolean := false;
     qryHR.ParamByName('HIDE_INACTIVE').AsBoolean := false;
@@ -138,32 +138,33 @@ begin
       qryContactNum.Open;
       if qryContactNum.Active then
       begin
-        fCoreTablesActivated := True;
+        fIsActivated := True;
       end;
     end;
   end;
 end;
 
-constructor THRData.CreateWithConnection(AOwner: TComponent;
-  AscmConnection: TFDConnection);
+function THRData.AssertConnection: boolean;
 begin
-  inherited Create(AOwner);
-  FcoachConnection := AscmConnection;
-  ActivateTable;
+  result := false;
+  if Assigned(fConnection) and fConnection.Connected then
+    result := true;
 end;
 
-procedure THRData.DataModuleCreate(Sender: TObject);
+constructor THRData.CreateWithConnection(AOwner: TComponent;
+      AConnection: TFDConnection);
 begin
-  // NOTE: Tables are activated by owner (grmHR) after creation.
-  // See routine : frmHR.Prepare
+  inherited Create(AOwner);
+  fConnection := AConnection;
+  MakeActive;
 end;
 
 procedure THRData.FixNullBooleans;
 begin
-  if Assigned(FcoachConnection) and FcoachConnection.Connected then
+  if AssertConnection then
   begin
-    cmdFixNullBooleans.Connection := FcoachConnection;
-    if FcoachConnection.Connected then
+    cmdFixNullBooleans.Connection := fConnection;
+    if fConnection.Connected then
       cmdFixNullBooleans.Execute();
   end;
 end;
@@ -251,7 +252,7 @@ end;
 
 procedure THRData.UpdateDOB(DOB: TDateTime);
 begin
-  if Assigned(qryHR.Connection) and (qryHR.Active) then
+  if AssertConnection then
   begin
     qryHR.DisableControls;
     qryHR.Edit;
@@ -286,7 +287,7 @@ end;
 
 procedure THRData.UpdateHR(hideArchived, hideInActive: boolean);
 begin
-  if not Assigned(FcoachConnection) then
+  if not Assigned(fConnection) then
     exit;
   if not qryHR.Active then
     exit;
@@ -301,7 +302,7 @@ begin
   begin
     fRecordCount := qryHR.RecordCount;
     if not Assigned(qryContactNum.Connection) then
-      qryContactNum.Connection := FcoachConnection;
+      qryContactNum.Connection := fConnection;
     if not qryContactNum.Active then
       qryContactNum.Open;
   end
@@ -316,7 +317,7 @@ end;
 
 procedure THRData.UpdateHRPersonalBest;
 begin
-  if not Assigned(FcoachConnection) then
+  if not Assigned(fConnection) then
     exit;
   if not dsHR.DataSet.Active then
     exit;

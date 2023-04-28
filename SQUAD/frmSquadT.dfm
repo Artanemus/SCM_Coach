@@ -11,6 +11,8 @@ object SquadT: TSquadT
   Font.Height = -16
   Font.Name = 'Segoe UI'
   Font.Style = []
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
   TextHeight = 21
   object imgArrowRight: TVirtualImage
     Left = 809
@@ -22,6 +24,7 @@ object SquadT: TSquadT
     ImageHeight = 0
     ImageIndex = 3
     ImageName = 'arrow_right'
+    OnClick = imgArrowRightClick
   end
   object imgArrowRightDbl: TVirtualImage
     Left = 809
@@ -33,6 +36,7 @@ object SquadT: TSquadT
     ImageHeight = 0
     ImageIndex = 4
     ImageName = 'arrow_double_right'
+    OnClick = imgArrowRightDblClick
   end
   object imgArrowLeft: TVirtualImage
     Left = 809
@@ -44,6 +48,7 @@ object SquadT: TSquadT
     ImageHeight = 0
     ImageIndex = 2
     ImageName = 'arrow_left'
+    OnClick = imgArrowLeftClick
   end
   object imgArrowLeftDbl: TVirtualImage
     Left = 809
@@ -55,6 +60,7 @@ object SquadT: TSquadT
     ImageHeight = 0
     ImageIndex = 1
     ImageName = 'arrow_double_left'
+    OnClick = imgArrowLeftDblClick
   end
   object Label1: TLabel
     Left = 82
@@ -64,21 +70,21 @@ object SquadT: TSquadT
     Caption = 'TEAM TEMPLATES'
   end
   object Label2: TLabel
-    Left = 538
+    Left = 863
     Top = 8
-    Width = 127
+    Width = 146
     Height = 21
-    Caption = 'TEAM SWIMMERS'
+    Caption = 'TEAM #TEAMNAME#'
   end
   object Label3: TLabel
-    Left = 863
+    Left = 538
     Top = 8
     Width = 124
     Height = 21
     Caption = 'SELECTION POOL'
   end
   object Label13: TLabel
-    Left = 1147
+    Left = 457
     Top = 35
     Width = 21
     Height = 190
@@ -138,7 +144,7 @@ object SquadT: TSquadT
     ImageName = 'New'
   end
   object VirtualImage5: TVirtualImage
-    Left = 1174
+    Left = 484
     Top = 35
     Width = 48
     Height = 48
@@ -160,7 +166,7 @@ object SquadT: TSquadT
     ImageName = 'Print'
   end
   object VirtualImage7: TVirtualImage
-    Left = 484
+    Left = 1134
     Top = 143
     Width = 48
     Height = 48
@@ -171,7 +177,7 @@ object SquadT: TSquadT
     ImageName = 'Print'
   end
   object VirtualImage8: TVirtualImage
-    Left = 1174
+    Left = 484
     Top = 89
     Width = 48
     Height = 48
@@ -182,7 +188,7 @@ object SquadT: TSquadT
     ImageName = 'VisibilityOn'
   end
   object VirtualImage9: TVirtualImage
-    Left = 484
+    Left = 1134
     Top = 35
     Width = 48
     Height = 48
@@ -193,7 +199,7 @@ object SquadT: TSquadT
     ImageName = 'Up'
   end
   object VirtualImage10: TVirtualImage
-    Left = 484
+    Left = 1134
     Top = 89
     Width = 48
     Height = 48
@@ -240,15 +246,28 @@ object SquadT: TSquadT
     ParentFont = False
     Layout = tlCenter
   end
+  object imgSearch: TVirtualImage
+    Left = 538
+    Top = 32
+    Width = 32
+    Height = 32
+    ImageCollection = UICollection
+    ImageWidth = 0
+    ImageHeight = 0
+    ImageIndex = 0
+    ImageName = 'Search'
+  end
   object lbSrc: TListBox
     Left = 538
-    Top = 35
+    Top = 70
     Width = 265
-    Height = 430
+    Height = 395
     DragMode = dmAutomatic
     ItemHeight = 21
     MultiSelect = True
     TabOrder = 0
+    OnDragDrop = lbSrcDragDrop
+    OnDragOver = lbSrcDragOver
   end
   object lbDest: TListBox
     Left = 863
@@ -259,6 +278,8 @@ object SquadT: TSquadT
     ItemHeight = 21
     MultiSelect = True
     TabOrder = 1
+    OnDragDrop = lbDestDragDrop
+    OnDragOver = lbDestDragOver
   end
   object ListBox1: TListBox
     Left = 82
@@ -269,6 +290,17 @@ object SquadT: TSquadT
     ItemHeight = 21
     MultiSelect = True
     TabOrder = 2
+  end
+  object edtSearch: TEdit
+    Left = 576
+    Top = 35
+    Width = 227
+    Height = 29
+    Hint = 'Search'
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 3
+    OnChange = edtSearchChange
   end
   object UICollection: TImageCollection
     Images = <
