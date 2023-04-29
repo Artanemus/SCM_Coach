@@ -7,7 +7,10 @@ uses
   System.Classes, System.StrUtils, System.Contnrs, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.VirtualImage, Vcl.StdCtrls,
   Vcl.BaseImageCollection, Vcl.ImageCollection, FireDAC.Comp.Client,
-  dmSquadData,  SCMMemberObj, dmCoach;
+  dmSquadData,  SCMMemberObj, dmCoach, Data.DB, Vcl.Grids, Vcl.DBGrids,
+  Data.Bind.EngExt, Vcl.Bind.DBEngExt, Vcl.Bind.ControlList, System.Rtti,
+  System.Bindings.Outputs, Vcl.Bind.Editors, Data.Bind.Components,
+  Data.Bind.Grid, Data.Bind.DBScope, Vcl.ControlList;
 
 type
   TSquadT = class(TForm)
@@ -18,7 +21,6 @@ type
     imgArrowRightDbl: TVirtualImage;
     imgArrowLeft: TVirtualImage;
     imgArrowLeftDbl: TVirtualImage;
-    ListBox1: TListBox;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -39,6 +41,16 @@ type
     Label4: TLabel;
     imgSearch: TVirtualImage;
     edtSearch: TEdit;
+    DBGrid1: TDBGrid;
+    ControlList1: TControlList;
+    Label5: TLabel;
+    VirtualImage13: TVirtualImage;
+    Label6: TLabel;
+    ControlListButton1: TControlListButton;
+    ControlListButton2: TControlListButton;
+    BindSourceDB1: TBindSourceDB;
+    BindingsList1: TBindingsList;
+    LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource;
     procedure edtSearchChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);

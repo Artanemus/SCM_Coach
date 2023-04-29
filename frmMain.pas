@@ -437,7 +437,6 @@ var
 dlg: TSquadT;
 begin
   dlg := TSquadT.Create(Self);
-  dlg.Prepare;
   dlg.ShowModal;
   dlg.Free;
 end;

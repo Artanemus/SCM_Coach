@@ -12,6 +12,8 @@ type
   TSquadData = class(TDataModule)
     qrySelectPool: TFDQuery;
     dsSelectPool: TDataSource;
+    qryTeamTemp: TFDQuery;
+    dsTeamTemp: TDataSource;
   private
     { Private declarations }
     fIsActivated: boolean;

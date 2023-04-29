@@ -4,7 +4,7 @@ object SquadT: TSquadT
   BorderStyle = bsDialog
   Caption = 'Squad Template Constructor.'
   ClientHeight = 486
-  ClientWidth = 1246
+  ClientWidth = 1290
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,7 +15,7 @@ object SquadT: TSquadT
   OnDestroy = FormDestroy
   TextHeight = 21
   object imgArrowRight: TVirtualImage
-    Left = 809
+    Left = 905
     Top = 35
     Width = 48
     Height = 48
@@ -27,7 +27,7 @@ object SquadT: TSquadT
     OnClick = imgArrowRightClick
   end
   object imgArrowRightDbl: TVirtualImage
-    Left = 809
+    Left = 905
     Top = 89
     Width = 48
     Height = 48
@@ -39,7 +39,7 @@ object SquadT: TSquadT
     OnClick = imgArrowRightDblClick
   end
   object imgArrowLeft: TVirtualImage
-    Left = 809
+    Left = 905
     Top = 143
     Width = 48
     Height = 48
@@ -51,7 +51,7 @@ object SquadT: TSquadT
     OnClick = imgArrowLeftClick
   end
   object imgArrowLeftDbl: TVirtualImage
-    Left = 809
+    Left = 905
     Top = 197
     Width = 48
     Height = 48
@@ -63,28 +63,28 @@ object SquadT: TSquadT
     OnClick = imgArrowLeftDblClick
   end
   object Label1: TLabel
-    Left = 82
+    Left = 62
     Top = 8
     Width = 125
     Height = 21
     Caption = 'TEAM TEMPLATES'
   end
   object Label2: TLabel
-    Left = 863
+    Left = 959
     Top = 8
-    Width = 146
+    Width = 246
     Height = 21
-    Caption = 'TEAM #TEAMNAME#'
+    Caption = 'SWIMMERS ASSIGNED TO #TEAM#'
   end
   object Label3: TLabel
-    Left = 538
+    Left = 634
     Top = 8
     Width = 124
     Height = 21
     Caption = 'SELECTION POOL'
   end
   object Label13: TLabel
-    Left = 457
+    Left = 553
     Top = 35
     Width = 21
     Height = 190
@@ -100,7 +100,7 @@ object SquadT: TSquadT
     Layout = tlCenter
   end
   object VirtualImage1: TVirtualImage
-    Left = 28
+    Left = 8
     Top = 89
     Width = 48
     Height = 48
@@ -111,7 +111,7 @@ object SquadT: TSquadT
     ImageName = 'Edit'
   end
   object VirtualImage2: TVirtualImage
-    Left = 28
+    Left = 8
     Top = 143
     Width = 48
     Height = 48
@@ -122,7 +122,7 @@ object SquadT: TSquadT
     ImageName = 'clone'
   end
   object VirtualImage3: TVirtualImage
-    Left = 28
+    Left = 8
     Top = 197
     Width = 48
     Height = 48
@@ -133,7 +133,7 @@ object SquadT: TSquadT
     ImageName = 'Delete'
   end
   object VirtualImage4: TVirtualImage
-    Left = 28
+    Left = 8
     Top = 35
     Width = 48
     Height = 48
@@ -144,7 +144,7 @@ object SquadT: TSquadT
     ImageName = 'New'
   end
   object VirtualImage5: TVirtualImage
-    Left = 484
+    Left = 580
     Top = 35
     Width = 48
     Height = 48
@@ -155,7 +155,7 @@ object SquadT: TSquadT
     ImageName = 'Sort'
   end
   object VirtualImage6: TVirtualImage
-    Left = 28
+    Left = 8
     Top = 251
     Width = 48
     Height = 48
@@ -166,7 +166,7 @@ object SquadT: TSquadT
     ImageName = 'Print'
   end
   object VirtualImage7: TVirtualImage
-    Left = 1134
+    Left = 1230
     Top = 143
     Width = 48
     Height = 48
@@ -177,7 +177,7 @@ object SquadT: TSquadT
     ImageName = 'Print'
   end
   object VirtualImage8: TVirtualImage
-    Left = 484
+    Left = 580
     Top = 89
     Width = 48
     Height = 48
@@ -188,7 +188,7 @@ object SquadT: TSquadT
     ImageName = 'VisibilityOn'
   end
   object VirtualImage9: TVirtualImage
-    Left = 1134
+    Left = 1230
     Top = 35
     Width = 48
     Height = 48
@@ -199,7 +199,7 @@ object SquadT: TSquadT
     ImageName = 'Up'
   end
   object VirtualImage10: TVirtualImage
-    Left = 1134
+    Left = 1230
     Top = 89
     Width = 48
     Height = 48
@@ -210,7 +210,7 @@ object SquadT: TSquadT
     ImageName = 'Down'
   end
   object VirtualImage11: TVirtualImage
-    Left = 28
+    Left = 8
     Top = 305
     Width = 48
     Height = 48
@@ -221,7 +221,7 @@ object SquadT: TSquadT
     ImageName = 'AutoBuild'
   end
   object VirtualImage12: TVirtualImage
-    Left = 1174
+    Left = 1230
     Top = 417
     Width = 48
     Height = 48
@@ -232,8 +232,8 @@ object SquadT: TSquadT
     ImageName = 'Exit'
   end
   object Label4: TLabel
-    Left = 1147
-    Top = 432
+    Left = 1243
+    Top = 378
     Width = 21
     Height = 33
     Caption = 'EXIT'
@@ -247,7 +247,7 @@ object SquadT: TSquadT
     Layout = tlCenter
   end
   object imgSearch: TVirtualImage
-    Left = 538
+    Left = 634
     Top = 32
     Width = 32
     Height = 32
@@ -258,7 +258,7 @@ object SquadT: TSquadT
     ImageName = 'Search'
   end
   object lbSrc: TListBox
-    Left = 538
+    Left = 634
     Top = 70
     Width = 265
     Height = 395
@@ -270,7 +270,7 @@ object SquadT: TSquadT
     OnDragOver = lbSrcDragOver
   end
   object lbDest: TListBox
-    Left = 863
+    Left = 959
     Top = 35
     Width = 265
     Height = 430
@@ -281,26 +281,152 @@ object SquadT: TSquadT
     OnDragDrop = lbDestDragDrop
     OnDragOver = lbDestDragOver
   end
-  object ListBox1: TListBox
-    Left = 82
-    Top = 35
-    Width = 327
-    Height = 430
-    DragMode = dmAutomatic
-    ItemHeight = 21
-    MultiSelect = True
-    TabOrder = 2
-  end
   object edtSearch: TEdit
-    Left = 576
+    Left = 672
     Top = 35
     Width = 227
     Height = 29
     Hint = 'Search'
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 3
+    TabOrder = 2
     OnChange = edtSearchChange
+  end
+  object DBGrid1: TDBGrid
+    Left = 62
+    Top = 35
+    Width = 485
+    Height = 156
+    DataSource = SquadData.dsTeamTemp
+    TabOrder = 3
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -16
+    TitleFont.Name = 'Segoe UI'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'TeamTmpID'
+        Visible = False
+      end
+      item
+        Expanded = False
+        FieldName = 'Caption'
+        Title.Caption = 'Team Name'
+        Width = 178
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'NickName'
+        Title.Caption = 'Nick Name'
+        Width = 160
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'Color'
+        Width = 55
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'SCMCoachID'
+        Visible = False
+      end>
+  end
+  object ControlList1: TControlList
+    Left = 62
+    Top = 224
+    Width = 485
+    Height = 254
+    ItemMargins.Left = 0
+    ItemMargins.Top = 0
+    ItemMargins.Right = 0
+    ItemMargins.Bottom = 0
+    ItemSelectionOptions.HotColorAlpha = 50
+    ItemSelectionOptions.SelectedColorAlpha = 70
+    ItemSelectionOptions.FocusedColorAlpha = 80
+    ParentColor = False
+    TabOrder = 4
+    object Label5: TLabel
+      AlignWithMargins = True
+      Left = 75
+      Top = 25
+      Width = 338
+      Height = 38
+      Margins.Left = 10
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      AutoSize = False
+      Caption = 
+        'This is example of item with multi-line text. You can put any TG' +
+        'raphicControl on it and adjust properties.'
+      EllipsisPosition = epEndEllipsis
+      ShowAccelChar = False
+      Transparent = True
+      WordWrap = True
+    end
+    object VirtualImage13: TVirtualImage
+      AlignWithMargins = True
+      Left = 4
+      Top = 4
+      Width = 62
+      Height = 62
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Align = alLeft
+      ImageWidth = 0
+      ImageHeight = 0
+      ImageIndex = -1
+    end
+    object Label6: TLabel
+      Left = 75
+      Top = 6
+      Width = 25
+      Height = 13
+      Caption = 'Title'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      Transparent = True
+    end
+    object ControlListButton1: TControlListButton
+      AlignWithMargins = True
+      Left = 449
+      Top = 20
+      Width = 30
+      Height = 30
+      Margins.Left = 2
+      Margins.Top = 20
+      Margins.Right = 2
+      Margins.Bottom = 20
+      Align = alRight
+      LinkHotColor = clHighlight
+      Style = clbkToolButton
+    end
+    object ControlListButton2: TControlListButton
+      AlignWithMargins = True
+      Left = 415
+      Top = 20
+      Width = 30
+      Height = 30
+      Margins.Left = 2
+      Margins.Top = 20
+      Margins.Right = 2
+      Margins.Bottom = 20
+      Align = alRight
+      LinkHotColor = clHighlight
+      Style = clbkToolButton
+    end
   end
   object UICollection: TImageCollection
     Images = <
@@ -536,7 +662,7 @@ object SquadT: TSquadT
               5B48308D0000000049454E44AE426082}
           end>
       end>
-    Left = 816
+    Left = 912
     Top = 269
   end
   object UICollectionEx: TImageCollection
@@ -1647,7 +1773,25 @@ object SquadT: TSquadT
               000049454E44AE426082}
           end>
       end>
-    Left = 816
+    Left = 912
     Top = 336
+  end
+  object BindSourceDB1: TBindSourceDB
+    DataSet = SquadData.qryTeamTemp
+    ScopeMappings = <>
+    Left = 576
+    Top = 328
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 580
+    Top = 261
+    object LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      GridControl = ControlList1
+      Columns = <>
+    end
   end
 end
