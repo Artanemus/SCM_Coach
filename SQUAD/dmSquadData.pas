@@ -12,8 +12,8 @@ type
   TSquadData = class(TDataModule)
     qrySelectPool: TFDQuery;
     dsSelectPool: TDataSource;
-    qryTeamTemp: TFDQuery;
-    dsTeamTemp: TDataSource;
+    qryTeam: TFDQuery;
+    dsTeam: TDataSource;
   private
     { Private declarations }
     fIsActivated: boolean;
@@ -25,7 +25,7 @@ type
     constructor CreateWithConnection(AOwner: TComponent;
       AConnection: TFDConnection);
 
-    procedure MakeActive;
+    procedure MakeActive(ATeamTemplateID: integer = 0);
 
     property IsActivated: boolean read fIsActivated;
   end;
@@ -54,19 +54,28 @@ begin
   MakeActive;
 end;
 
-procedure TSquadData.MakeActive;
+procedure TSquadData.MakeActive(ATeamTemplateID: integer);
 begin
   fIsActivated := false;
   if AssertConnection then
   begin
     qrySelectPool.Connection := fConnection;
-    // assign PARAM (filters: isswimmer,isactive,isnotarchived,etc)
+    // list only active (and not archived) swimmers
+    qrySelectPool.ParamByName('HRTYPEID').AsInteger := 3;
     qrySelectPool.Prepare;
     qrySelectPool.Open;
     if qrySelectPool.Active then
     begin
       // open other tables ...
-      fIsActivated := true;
+      qryTeam.Connection := fConnection;
+      // list only templates
+      qryTeam.ParamByName('TEAMTYPEID').AsInteger := 2;
+      // syc to selected template
+      qryTeam.ParamByName('TEAMID').AsInteger := ATeamTemplateID;
+      qryTeam.Prepare;
+      qryTeam.Open;
+      if qryTeam.Active then
+        fIsActivated := true;
     end;
   end;
 end;

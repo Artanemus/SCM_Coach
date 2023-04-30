@@ -72,9 +72,9 @@ object SquadT: TSquadT
   object Label2: TLabel
     Left = 959
     Top = 8
-    Width = 246
+    Width = 260
     Height = 21
-    Caption = 'SWIMMERS ASSIGNED TO #TEAM#'
+    Caption = 'SWIMMERS ASSIGNED TO TEMPLATE'
   end
   object Label3: TLabel
     Left = 634
@@ -292,55 +292,11 @@ object SquadT: TSquadT
     TabOrder = 2
     OnChange = edtSearchChange
   end
-  object DBGrid1: TDBGrid
+  object listTeam: TControlList
     Left = 62
     Top = 35
     Width = 485
-    Height = 156
-    DataSource = SquadData.dsTeamTemp
-    TabOrder = 3
-    TitleFont.Charset = DEFAULT_CHARSET
-    TitleFont.Color = clWindowText
-    TitleFont.Height = -16
-    TitleFont.Name = 'Segoe UI'
-    TitleFont.Style = []
-    Columns = <
-      item
-        Expanded = False
-        FieldName = 'TeamTmpID'
-        Visible = False
-      end
-      item
-        Expanded = False
-        FieldName = 'Caption'
-        Title.Caption = 'Team Name'
-        Width = 178
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'NickName'
-        Title.Caption = 'Nick Name'
-        Width = 160
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'Color'
-        Width = 55
-        Visible = True
-      end
-      item
-        Expanded = False
-        FieldName = 'SCMCoachID'
-        Visible = False
-      end>
-  end
-  object ControlList1: TControlList
-    Left = 62
-    Top = 224
-    Width = 485
-    Height = 254
+    Height = 443
     ItemMargins.Left = 0
     ItemMargins.Top = 0
     ItemMargins.Right = 0
@@ -349,8 +305,8 @@ object SquadT: TSquadT
     ItemSelectionOptions.SelectedColorAlpha = 70
     ItemSelectionOptions.FocusedColorAlpha = 80
     ParentColor = False
-    TabOrder = 4
-    object Label5: TLabel
+    TabOrder = 3
+    object lblTeamName: TLabel
       AlignWithMargins = True
       Left = 75
       Top = 25
@@ -362,9 +318,6 @@ object SquadT: TSquadT
       Margins.Bottom = 2
       Anchors = [akLeft, akTop, akRight, akBottom]
       AutoSize = False
-      Caption = 
-        'This is example of item with multi-line text. You can put any TG' +
-        'raphicControl on it and adjust properties.'
       EllipsisPosition = epEndEllipsis
       ShowAccelChar = False
       Transparent = True
@@ -385,12 +338,11 @@ object SquadT: TSquadT
       ImageHeight = 0
       ImageIndex = -1
     end
-    object Label6: TLabel
+    object lblNickName: TLabel
       Left = 75
       Top = 6
-      Width = 25
+      Width = 3
       Height = 13
-      Caption = 'Title'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -1777,7 +1729,7 @@ object SquadT: TSquadT
     Top = 336
   end
   object BindSourceDB1: TBindSourceDB
-    DataSet = SquadData.qryTeamTemp
+    DataSet = SquadData.qryTeam
     ScopeMappings = <>
     Left = 576
     Top = 328
@@ -1790,8 +1742,22 @@ object SquadT: TSquadT
     object LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource
       Category = 'Quick Bindings'
       DataSource = BindSourceDB1
-      GridControl = ControlList1
+      GridControl = listTeam
       Columns = <>
+    end
+    object LinkPropertyToFieldCaption: TLinkPropertyToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      FieldName = 'NickName'
+      Component = lblNickName
+      ComponentProperty = 'Caption'
+    end
+    object LinkPropertyToFieldCaption2: TLinkPropertyToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      FieldName = 'Caption'
+      Component = lblTeamName
+      ComponentProperty = 'Caption'
     end
   end
 end

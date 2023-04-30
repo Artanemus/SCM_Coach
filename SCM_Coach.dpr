@@ -37,7 +37,9 @@ uses
   rptHRHistory in 'HR\rptHRHistory.pas' {HRHistoryRPT: TDataModule},
   unitUtility in 'unitUtility.pas',
   frmSquadT in 'SQUAD\frmSquadT.pas' {SquadT},
-  dmSquadData in 'SQUAD\dmSquadData.pas' {SquadData: TDataModule};
+  dmSquadData in 'SQUAD\dmSquadData.pas' {SquadData: TDataModule},
+  dlgSquadNewTemplate in 'SQUAD\dlgSquadNewTemplate.pas' {SquadNewTemplate},
+  dlgSquadEditTemplate in 'SQUAD\dlgSquadEditTemplate.pas' {SquadEditTemplate};
 
 {$R *.res}
 

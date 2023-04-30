@@ -41,16 +41,17 @@ type
     Label4: TLabel;
     imgSearch: TVirtualImage;
     edtSearch: TEdit;
-    DBGrid1: TDBGrid;
-    ControlList1: TControlList;
-    Label5: TLabel;
+    listTeam: TControlList;
+    lblTeamName: TLabel;
     VirtualImage13: TVirtualImage;
-    Label6: TLabel;
+    lblNickName: TLabel;
     ControlListButton1: TControlListButton;
     ControlListButton2: TControlListButton;
     BindSourceDB1: TBindSourceDB;
     BindingsList1: TBindingsList;
     LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource;
+    LinkPropertyToFieldCaption: TLinkPropertyToField;
+    LinkPropertyToFieldCaption2: TLinkPropertyToField;
     procedure edtSearchChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -159,8 +160,17 @@ procedure TSquadT.FormCreate(Sender: TObject);
 begin
   // CREATE Obj list
   scmMemberList := TObjectList.Create(true);
-  // CREATE using dmCoach.pas - COACH
+  // CREATE using dmCoach.pas - COACH + Activate core tables
   SquadData := TSquadData.CreateWithCOnnection(Self, COACH.coachConnection);
+  // After assignment - Assert binding
+  BindSourceDB1.DataSet := SquadData.qryTeam;
+  if not BindSourceDB1.DataSet.Active then
+    BindSourceDB1.DataSet.Active := true;
+
+  // Misc display INIT
+  // ----------------------------------
+  // select current team template?
+
 end;
 
 procedure TSquadT.FormDestroy(Sender: TObject);

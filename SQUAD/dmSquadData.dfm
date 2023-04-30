@@ -7,26 +7,27 @@ object SquadData: TSquadData
     SQL.Strings = (
       'USE SCM_Coach;'
       ''
-      'DECLARE @SCMCoachID AS INTEGER;'
-      'SET @SCMCoachID = :SCMCOACHID;'
+      'DECLARE @HRTypeID AS INTEGER;'
+      'SET @HRTypeID = :HRYPEID;'
       ''
       'SELECT '
-      #9#9' [TeamTmpID]'
-      #9#9',[Caption]'
-      #9#9',[NickName]'
-      #9#9',[Color]'
-      #9#9',[SCMCoachID]'
-      'FROM [SCM_Coach].[dbo].[TeamTmp] '
-      'WHERE [SCMCoachID] = @SCMCoachID'
-      ';')
+      #9#9' [HRID]'
+      
+        #9#9',CONCAT(TRIM([FirstName]), '#39' '#39', TRIM([MiddleInitial]), '#39' '#39' ,TR' +
+        'IM([LastName])) AS FName'
+      'FROM [SCM_Coach].[dbo].[HR] '
+      
+        'WHERE  [HRTypeID] = @HRTypeID AND IsActive = 1 AND IsArchived <>' +
+        ' 1;'
+      '')
     Left = 104
     Top = 48
     ParamData = <
       item
-        Name = 'SCMCOACHID'
+        Name = 'HRYPEID'
         DataType = ftInteger
         ParamType = ptInput
-        Value = Null
+        Value = 3
       end>
   end
   object dsSelectPool: TDataSource
@@ -34,9 +35,8 @@ object SquadData: TSquadData
     Left = 200
     Top = 48
   end
-  object qryTeamTemp: TFDQuery
+  object qryTeam: TFDQuery
     ActiveStoredUsage = [auDesignTime]
-    Active = True
     IndexFieldNames = 'TeamTmpID'
     Connection = COACH.coachConnection
     UpdateOptions.UpdateTableName = 'SCM_Coach.dbo.TeamTmp'
@@ -44,24 +44,37 @@ object SquadData: TSquadData
     SQL.Strings = (
       'USE SCM_Coach;'
       ''
-      'DECLARE @SCMCoachID AS INTEGER;'
-      'SET @SCMCoachID = 1; -- :SCMCOACHID;'
+      'DECLARE @TeamTypeID AS INTEGER;'
+      'SET @TeamTypeID = :TEAMTYPEID;'
+      'DECLARE @TeamID AS INTEGER;'
+      'SET @TeamID = :TEAMID;'
       ''
       'SELECT '
-      #9#9' [TeamTmpID]'
+      #9#9' [TeamID]'
       #9#9',[Caption]'
       #9#9',[NickName]'
       #9#9',[Color]'
-      #9#9',[SCMCoachID]'
-      'FROM [SCM_Coach].[dbo].[TeamTmp] '
-      'WHERE [SCMCoachID] = @SCMCoachID'
-      ';'
+      'FROM [SCM_Coach].[dbo].[Team] '
+      'WHERE [TeamTypeID] = @TeamTypeID  AND TeamID = @TeamID;'
       '')
     Left = 96
     Top = 128
+    ParamData = <
+      item
+        Name = 'TEAMTYPEID'
+        DataType = ftInteger
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'TEAMID'
+        DataType = ftInteger
+        ParamType = ptInput
+        Value = Null
+      end>
   end
-  object dsTeamTemp: TDataSource
-    DataSet = qryTeamTemp
+  object dsTeam: TDataSource
+    DataSet = qryTeam
     Left = 200
     Top = 128
   end

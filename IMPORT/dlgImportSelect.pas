@@ -68,7 +68,7 @@ procedure TImportSelect.FormCreate(Sender: TObject);
 begin
   // INIT
   fRtnValue := -1;
-  rbtnSCMServer.Checked := false;
+  rbtnSCMServer.Checked := true;
   rbtnSCMFile.Checked := false;
   rbtnHyTek.Checked := false;
 end;
