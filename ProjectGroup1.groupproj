@@ -1,9 +1,12 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{47B217F2-5944-4051-9585-499F889976EA}</ProjectGuid>
+        <ProjectGuid>{3B37768D-CA70-4B43-8D2D-D0C5F649E05B}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
         <Projects Include="SCM_Coach.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\SCM_SwimClubMeet-R\SwimClubMeet.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -23,14 +26,23 @@
     <Target Name="SCM_Coach:Make">
         <MSBuild Projects="SCM_Coach.dproj" Targets="Make"/>
     </Target>
+    <Target Name="SwimClubMeet">
+        <MSBuild Projects="..\SCM_SwimClubMeet-R\SwimClubMeet.dproj"/>
+    </Target>
+    <Target Name="SwimClubMeet:Clean">
+        <MSBuild Projects="..\SCM_SwimClubMeet-R\SwimClubMeet.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SwimClubMeet:Make">
+        <MSBuild Projects="..\SCM_SwimClubMeet-R\SwimClubMeet.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="SCM_Coach"/>
+        <CallTarget Targets="SCM_Coach;SwimClubMeet"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="SCM_Coach:Clean"/>
+        <CallTarget Targets="SCM_Coach:Clean;SwimClubMeet:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="SCM_Coach:Make"/>
+        <CallTarget Targets="SCM_Coach:Make;SwimClubMeet:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

@@ -7,10 +7,12 @@ uses
   System.Classes, System.StrUtils, System.Contnrs, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.VirtualImage, Vcl.StdCtrls,
   Vcl.BaseImageCollection, Vcl.ImageCollection, FireDAC.Comp.Client,
-  dmSquadData,  SCMMemberObj, dmCoach, Data.DB, Vcl.Grids, Vcl.DBGrids,
+  dmSquadData, SCMMemberObj, dmCoach, Data.DB, Vcl.Grids, Vcl.DBGrids,
   Data.Bind.EngExt, Vcl.Bind.DBEngExt, Vcl.Bind.ControlList, System.Rtti,
   System.Bindings.Outputs, Vcl.Bind.Editors, Data.Bind.Components,
-  Data.Bind.Grid, Data.Bind.DBScope, Vcl.ControlList;
+  Data.Bind.Grid, Data.Bind.DBScope, Vcl.ControlList, Vcl.Buttons, Vcl.ExtCtrls,
+  Vcl.WinXCtrls, System.ImageList, Vcl.ImgList, Vcl.VirtualImageList,
+  System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan;
 
 type
   TSquadT = class(TForm)
@@ -26,17 +28,10 @@ type
     Label3: TLabel;
     Label13: TLabel;
     UICollectionEx: TImageCollection;
-    VirtualImage1: TVirtualImage;
-    VirtualImage2: TVirtualImage;
-    VirtualImage3: TVirtualImage;
-    VirtualImage4: TVirtualImage;
     VirtualImage5: TVirtualImage;
-    VirtualImage6: TVirtualImage;
-    VirtualImage7: TVirtualImage;
     VirtualImage8: TVirtualImage;
     VirtualImage9: TVirtualImage;
     VirtualImage10: TVirtualImage;
-    VirtualImage11: TVirtualImage;
     VirtualImage12: TVirtualImage;
     Label4: TLabel;
     imgSearch: TVirtualImage;
@@ -52,6 +47,18 @@ type
     LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource;
     LinkPropertyToFieldCaption: TLinkPropertyToField;
     LinkPropertyToFieldCaption2: TLinkPropertyToField;
+    RelativePanel1: TRelativePanel;
+    spbtnSessionToggleVisible: TSpeedButton;
+    vimgSquadTList: TVirtualImageList;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    SpeedButton5: TSpeedButton;
+    actnmSquadT: TActionManager;
+    actnCreateTeamTemplate: TAction;
+    actnEditTeamTemplate: TAction;
+    actnDeleteTeamTemplate: TAction;
     procedure edtSearchChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -65,13 +72,18 @@ type
     procedure lbSrcDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure lbSrcDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
+    procedure actnCreateTeamTemplateExecute(Sender: TObject);
+    procedure actnDeleteTeamTemplateExecute(Sender: TObject);
+    procedure actnCreateTeamTemplateUpdate(Sender: TObject);
+    procedure actnDeleteTeamTemplateUpdate(Sender: TObject);
   private
     { Private declarations }
     scmMemberList: TObjectList;
-    function AssertDataModule: boolean;
-    function MemberIsAssigned(obj: TObject; lbox: TListBox): boolean;
+    function AssertDataModule: Boolean;
+    function MemberIsAssigned(obj: TObject; lbox: TListBox): Boolean;
     procedure BuildListBoxSource;
-  procedure TransferItems(SrcListBox, DestListBox: TObject);
+
+    procedure TransferItems(SrcListBox, DestListBox: TObject);
 
   public
     { Public declarations }
@@ -85,7 +97,55 @@ implementation
 {$R *.dfm}
 
 { TSquadT }
-function TSquadT.AssertDataModule: boolean;
+procedure TSquadT.actnCreateTeamTemplateExecute(Sender: TObject);
+var
+  IDENT: Integer;
+begin
+  // QUICK CREATE Template record.
+  if not AssertDataModule then
+    exit;
+  IDENT := SquadData.NewTeamTemplate;
+  // cue-to-IDENT? - refresh?
+end;
+
+procedure TSquadT.actnCreateTeamTemplateUpdate(Sender: TObject);
+var
+  enableState: Boolean;
+begin
+  enableState := false;
+  if AssertDataModule then
+  begin
+    if BindSourceDB1.DataSet.Active then
+      enableState := true;
+  end;
+  TAction(Sender).Enabled := enableState;
+end;
+
+procedure TSquadT.actnDeleteTeamTemplateExecute(Sender: TObject);
+var
+  TeamID: Integer;
+begin
+  if not AssertDataModule then
+    exit;
+  TeamID := BindSourceDB1.DataSet.FieldByName('TeamID').AsInteger;
+  SquadData.DeleteTeamTemplate(TeamID);
+  // cue-to-IDENT? - refresh?
+end;
+
+procedure TSquadT.actnDeleteTeamTemplateUpdate(Sender: TObject);
+var
+  enableState: Boolean;
+begin
+  enableState := false;
+  if AssertDataModule then
+  begin
+    if BindSourceDB1.DataSet.Active and not BindSourceDB1.DataSet.IsEmpty then
+      enableState := true;
+  end;
+  TAction(Sender).Enabled := enableState;
+end;
+
+function TSquadT.AssertDataModule: Boolean;
 begin
   result := false;
   if Assigned(SquadData) and SquadData.IsActivated then
@@ -94,10 +154,10 @@ end;
 
 procedure TSquadT.BuildListBoxSource;
 var
-  Count: integer;
+  Count: Integer;
   s: string;
   obj: TscmMemberObj;
-  j: integer;
+  j: Integer;
 
 begin
   lbSrc.Clear;
@@ -131,7 +191,7 @@ end;
 
 procedure TSquadT.edtSearchChange(Sender: TObject);
 var
-  i: integer;
+  i: Integer;
   obj: TscmMemberObj;
   s: string;
 begin
@@ -161,7 +221,7 @@ begin
   // CREATE Obj list
   scmMemberList := TObjectList.Create(true);
   // CREATE using dmCoach.pas - COACH + Activate core tables
-  SquadData := TSquadData.CreateWithCOnnection(Self, COACH.coachConnection);
+  SquadData := TSquadData.CreateWithConnection(Self, COACH.coachConnection);
   // After assignment - Assert binding
   BindSourceDB1.DataSet := SquadData.qryTeam;
   if not BindSourceDB1.DataSet.Active then
@@ -223,9 +283,9 @@ begin
   Accept := Source is TListBox;
 end;
 
-function TSquadT.MemberIsAssigned(obj: TObject; lbox: TListBox): boolean;
+function TSquadT.MemberIsAssigned(obj: TObject; lbox: TListBox): Boolean;
 var
-  i: integer;
+  i: Integer;
 begin
   // check if obj is used by to lboxView
   result := false;
@@ -241,7 +301,7 @@ end;
 
 procedure TSquadT.TransferItems(SrcListBox, DestListBox: TObject);
 var
-  i: integer;
+  i: Integer;
 begin
   with (SrcListBox AS TListBox) do
   begin

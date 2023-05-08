@@ -73,7 +73,7 @@ type
     { Public declarations }
     constructor CreateWithConnection(AOwner: TComponent;
       AConnection: TFDConnection);
-    procedure MakeActive();
+    procedure ActivateDM();
 
     procedure UpdateHR(hideArchived, hideInActive: boolean);
     procedure UpdateDOB(DOB: TDateTime);
@@ -104,7 +104,7 @@ uses
   System.IOUtils, IniFiles, SCMUtility, SCMDefines, Winapi.Windows,
   Winapi.Messages, vcl.Dialogs, System.UITypes, vcl.Forms;
 
-procedure THRData.MakeActive;
+procedure THRData.ActivateDM;
 begin
   fIsActivated := false;
   if AssertConnection then
@@ -156,7 +156,7 @@ constructor THRData.CreateWithConnection(AOwner: TComponent;
 begin
   inherited Create(AOwner);
   fConnection := AConnection;
-  MakeActive;
+  ActivateDM;
 end;
 
 procedure THRData.FixNullBooleans;

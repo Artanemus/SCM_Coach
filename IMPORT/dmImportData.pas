@@ -52,7 +52,7 @@ type
     function IsDupSCMMember(scmMemberID: integer): boolean;
     function IsDupRaceHistory(EntrantID: integer): boolean;
 
-    function MakeActive: boolean;
+    function ActivateDM: boolean;
     function DeActivate: boolean;
     function AssertConnection(): boolean;
 
@@ -81,7 +81,7 @@ begin
   fcoachConnection := AcoachConnection;
 end;
 
-function TImportData.MakeActive: boolean;
+function TImportData.ActivateDM: boolean;
 begin
   // TFDTable are the only DB components to be activated for the life
   // of this class.

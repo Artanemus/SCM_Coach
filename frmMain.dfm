@@ -45,8 +45,6 @@ object Main: TMain
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 1351
-    ExplicitHeight = 953
     object TabSheet1: TTabSheet
       Caption = 'Sessions'
       object Label1: TLabel
@@ -65,7 +63,7 @@ object Main: TMain
         ParentFont = False
       end
       object Label2: TLabel
-        Left = 261
+        Left = 453
         Top = 15
         Width = 45
         Height = 152
@@ -79,18 +77,33 @@ object Main: TMain
         Font.Style = []
         ParentFont = False
       end
+      object Label3: TLabel
+        Left = 5
+        Top = 495
+        Width = 45
+        Height = 84
+        Alignment = taRightJustify
+        Caption = 'STATS'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -32
+        Font.Name = 'Segoe UI'
+        Font.Orientation = 900
+        Font.Style = []
+        ParentFont = False
+      end
       object ListView1: TListView
-        Left = 56
+        Left = 122
         Top = 15
-        Width = 185
-        Height = 890
+        Width = 325
+        Height = 878
         Columns = <>
         TabOrder = 0
       end
       object FlowPanel1: TFlowPanel
-        Left = 336
+        Left = 504
         Top = 15
-        Width = 993
+        Width = 825
         Height = 882
         BorderStyle = bsSingle
         Caption = 'FlowPanel1'
@@ -136,13 +149,385 @@ object Main: TMain
           TabOrder = 4
         end
       end
+      object SessionWidgets: TRelativePanel
+        Left = 56
+        Top = 15
+        Width = 60
+        Height = 738
+        ControlCollection = <
+          item
+            Control = spbtnSessionToggleVisible
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = True
+            AlignVerticalCenterWithPanel = False
+          end
+          item
+            Control = ShapeSessBar1
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+            Below = spbtnSessionToggleVisible
+          end
+          item
+            Control = spbtnSessionToggleLock
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+            Below = ShapeSessBar1
+          end
+          item
+            Control = spbtnSessionNew
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+            Below = spbtnSessionToggleLock
+          end
+          item
+            Control = spbtnSessionDelete
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+            Below = sbtnSessionEdit
+          end
+          item
+            Control = ShapeSessBar2
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+            Below = spbtnSessionDelete
+          end
+          item
+            Control = spbtnSessionReport
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+            Below = ShapeSessBar2
+          end
+          item
+            Control = ShapeSessDot1
+            AlignBottomWith = spbtnSessionReport
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = False
+            AlignLeftWithPanel = True
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+          end
+          item
+            Control = sbtnSessionEdit
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+            Below = spbtnSessionNew
+          end
+          item
+            Control = Label4
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+          end
+          item
+            Control = Label5
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+          end
+          item
+            Control = Edit1
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+          end
+          item
+            Control = Edit2
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+          end
+          item
+            Control = Label6
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+          end
+          item
+            Control = Edit3
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+          end
+          item
+            Control = Label7
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+          end
+          item
+            Control = Edit4
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+          end>
+        BevelOuter = bvNone
+        TabOrder = 2
+        DesignSize = (
+          60
+          738)
+        object spbtnSessionToggleVisible: TSpeedButton
+          Left = 6
+          Top = 0
+          Width = 48
+          Height = 48
+          AllowAllUp = True
+          Anchors = []
+          GroupIndex = 1
+          ImageIndex = 0
+          ImageName = 'VisibilityOn'
+          Images = vimglistSession
+          Flat = True
+          Layout = blGlyphTop
+          Margin = 0
+        end
+        object ShapeSessBar1: TShape
+          AlignWithMargins = True
+          Left = 6
+          Top = 58
+          Width = 48
+          Height = 4
+          Margins.Left = 0
+          Margins.Top = 10
+          Margins.Right = 0
+          Margins.Bottom = 10
+          Anchors = []
+          Brush.Color = 8421631
+        end
+        object spbtnSessionToggleLock: TSpeedButton
+          Left = 6
+          Top = 72
+          Width = 48
+          Height = 48
+          Hint = 'Lock-Unlock the session.'
+          Anchors = []
+          ImageIndex = 4
+          ImageName = 'Lock'
+          Images = vimglistSession
+          Flat = True
+          Layout = blGlyphTop
+          Margin = 0
+        end
+        object spbtnSessionNew: TSpeedButton
+          Left = 6
+          Top = 120
+          Width = 48
+          Height = 48
+          Action = Session_New
+          Anchors = []
+          ImageIndex = 2
+          ImageName = 'New'
+          Images = vimglistSession
+          Flat = True
+          Layout = blGlyphTop
+          Margin = 0
+          NumGlyphs = 2
+        end
+        object spbtnSessionDelete: TSpeedButton
+          Left = 6
+          Top = 216
+          Width = 48
+          Height = 48
+          Action = Session_Delete
+          Anchors = []
+          ImageIndex = 3
+          ImageName = 'Delete'
+          Images = vimglistSession
+          Flat = True
+          Layout = blGlyphTop
+          Margin = 0
+          NumGlyphs = 2
+        end
+        object ShapeSessBar2: TShape
+          AlignWithMargins = True
+          Left = 6
+          Top = 274
+          Width = 48
+          Height = 4
+          Margins.Left = 0
+          Margins.Top = 10
+          Margins.Right = 0
+          Margins.Bottom = 10
+          Anchors = []
+          Brush.Color = 8421631
+        end
+        object spbtnSessionReport: TSpeedButton
+          Left = 6
+          Top = 288
+          Width = 48
+          Height = 48
+          Anchors = []
+          ImageIndex = 5
+          ImageName = 'Report'
+          Images = vimglistSession
+          Flat = True
+          Layout = blGlyphTop
+          Margin = 0
+          NumGlyphs = 2
+        end
+        object ShapeSessDot1: TShape
+          Left = 0
+          Top = 326
+          Width = 20
+          Height = 10
+          Anchors = []
+          Brush.Color = 8421631
+          Shape = stCircle
+        end
+        object sbtnSessionEdit: TSpeedButton
+          Left = 6
+          Top = 168
+          Width = 48
+          Height = 48
+          Action = Session_Delete
+          Anchors = []
+          ImageIndex = 6
+          ImageName = 'Edit'
+          Images = vimglistSession
+          Flat = True
+          Layout = blGlyphTop
+          Margin = 0
+          NumGlyphs = 2
+        end
+        object Label4: TLabel
+          Left = 14
+          Top = 480
+          Width = 32
+          Height = 21
+          Anchors = []
+          Caption = 'DUR'
+        end
+        object Label5: TLabel
+          Left = 14
+          Top = 542
+          Width = 32
+          Height = 21
+          Anchors = []
+          Caption = 'KMS'
+        end
+        object Edit1: TEdit
+          Left = 6
+          Top = 507
+          Width = 48
+          Height = 29
+          Alignment = taCenter
+          Anchors = []
+          ReadOnly = True
+          TabOrder = 0
+          Text = 'Mins'
+        end
+        object Edit2: TEdit
+          Left = 6
+          Top = 569
+          Width = 48
+          Height = 29
+          Alignment = taCenter
+          Anchors = []
+          ReadOnly = True
+          TabOrder = 1
+          Text = 'kms'
+        end
+        object Label6: TLabel
+          Left = 23
+          Top = 604
+          Width = 14
+          Height = 21
+          Anchors = []
+          Caption = '??'
+        end
+        object Edit3: TEdit
+          Left = 6
+          Top = 631
+          Width = 48
+          Height = 29
+          Alignment = taCenter
+          Anchors = []
+          ReadOnly = True
+          TabOrder = 2
+          Text = '#'
+        end
+        object Label7: TLabel
+          Left = 23
+          Top = 666
+          Width = 14
+          Height = 21
+          Anchors = []
+          Caption = '??'
+        end
+        object Edit4: TEdit
+          Left = 6
+          Top = 693
+          Width = 48
+          Height = 29
+          Alignment = taCenter
+          Anchors = []
+          ReadOnly = True
+          TabOrder = 3
+          Text = '#'
+        end
+      end
     end
     object TabSheet2: TTabSheet
       Caption = 'Program Builder'
       ImageIndex = 1
       object Splitter1: TSplitter
         Left = 0
-        Top = 716
+        Top = 705
         Width = 1347
         Height = 20
         Cursor = crVSplit
@@ -152,13 +537,12 @@ object Main: TMain
       end
       object PageControl2: TPageControl
         Left = 0
-        Top = 736
+        Top = 725
         Width = 1347
         Height = 193
         ActivePage = TabSheet3
         Align = alBottom
         TabOrder = 0
-        ExplicitTop = 725
         object TabSheet3: TTabSheet
           Caption = 'Output'
         end
@@ -171,17 +555,16 @@ object Main: TMain
         Left = 0
         Top = 0
         Width = 1347
-        Height = 716
+        Height = 705
         Align = alClient
         BevelOuter = bvNone
         Caption = 'Panel1'
         TabOrder = 1
-        ExplicitHeight = 705
         object relpnlPrgBuilderToolBar: TRelativePanel
           Left = 0
           Top = 0
           Width = 97
-          Height = 716
+          Height = 705
           ControlCollection = <
             item
               Control = VirtualImage1
@@ -240,7 +623,6 @@ object Main: TMain
           Align = alLeft
           BevelOuter = bvNone
           TabOrder = 0
-          ExplicitHeight = 705
           DesignSize = (
             97
             705)
@@ -1037,6 +1419,220 @@ object Main: TMain
               CDEE998E40F6C033B1FE5F549BBD025D01ECD5BD1DCAD708743869AF4BD608EC
               D5BD1DCA7F01FCEEA831B2921B460000000049454E44AE426082}
           end>
+      end
+      item
+        Name = 'New'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
+              87000000017352474200AECE1CE9000001FC494441546843ED986151C4301085
+              DF29001480034001380007E0001C000E90000A1814000E90C0290014C07C37C9
+              CD12D2F47A6D4A7A2433FDD1C936D9F7DE66779B99263E6613F75F15C05F2B58
+              15A80AF46460E342E84AD2A5A4ED9EC4E4FAFC43D2ADA41BBF8155E05A1200A6
+              300080BF3FEAC07BC1CC87A4A2C44E08E0CB58957A367EF9681DAD0046383C55
+              8111484E6EF1BF14D893B42BE953D26B8497D8FC51823FBB0E8572DFD9BE24BE
+              3990B425692EE94D5227056C613B8C80F0F33870EC9CB01B847E593BEC9F9C41
+              2A653F4B82145FB8D606800280B0635200707C59BE1D8A14807B49770160AAA7
+              0FC59802B1F5065180D8250E193694520042B061388D0A80D885BD13C7A00FA5
+              490138755900253CBB439F816C21E4B307201E4C28F14EFB3D5416CA0E00DF39
+              98674E8D4749170D008A3AC496610A10998402C7B9E03DA6407187D8172A54B0
+              1984F7BE00FCDAE792782088DF5A06BF8F54E35E85CC3AE8D3210B133E4D0062
+              DD4153254E7412CBA9C101D8505AE710F33D45CAF7432910D4215442994EAD04
+              CD1A8FADA076A3D8BC0DB5D0A9D83A8447DB0D0840FDE804601569C7B6A900C6
+              663CDCAF2A5015E8C94032844873BEEFEFB94FF6CFA90D8BF4BB5197BB00A2A5
+              A51FA1592B71C03C6DCCE2663A54A044875B7D2AF516BAD5F1AAC0CA146536AC
+              219499E0D6E5AB02AD146536F806EE4BDA31C8F8688A0000000049454E44AE42
+              6082}
+          end>
+      end
+      item
+        Name = 'Lock'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
+              87000000017352474200AECE1CE90000023B494441546843ED99F135043110C6
+              BFAB0015A00254800A50012A4005A800157015A00254800A50012AE0FDC83EB1
+              EF6E77B2898D23F3CFBD7B3B9BCCF7CDB7934932D084DB60C2E3D74F005893B4
+              2869C5FDC2D19DA46BF77B9992B49400E6249DBAC09B6204C8B6A4C714405201
+              D892742469DA18D48BA43D496746FFB16E29002095ABDA0C27922E9C647884A4
+              D625EDD4FC569DB43AE3880500E3B792900F762F896CA0F9510610585F700F91
+              D1922432D2C962011C7BACBE3A206DC1009AC0A75CC4646BB753F45274157AF6
+              74BFE164638905399D3B4700CF585E1AE513930164F3E0067DF264648D852CCC
+              3AE7F9AE55290680CF22B59DFF21C647CE9A818564EFDB1C31000E24EDBBD10E
+              25F13FC462DFFF98AB002819F864A08B04FF97846817366BA592325AADC094C4
+              D0E6ACE97DC61A5ADA0CCB47EC97CB902A93C2B7B5BC5A00B058554CA7082A64
+              0C7A2A7AA5B16601F0E6BD4DF7D887F9DD6D638CA1002CFE2900FAA415006636
+              5250EFC630CF69918479B002E08B01336925030DB26101ACFA7DF60BF4FF56CB
+              9E01CE87D8DCFBC6669EF3208B6505D0D47AB4B606BFA10A71F2B63C8666EBD6
+              336B069A00DC188E1EC19E15005AA7F51E65D633A0AC00EA07571510EBC157F6
+              0C1000ED37A7766C84304A28A710D64D4FD60C58CA649B4F01E0336466A38DD6
+              80E7E6394B2F14C06A886BC9C09FFA06B880A86E53426490C297C5AFF1E2D0F2
+              11FBD74829820A19A3B5F5B00080015651FAFBBE3201F3F454AD77671600218C
+              F5EE5B00F44E796DC289CFC03BC1238A31E3477E040000000049454E44AE4260
+              82}
+          end>
+      end
+      item
+        Name = 'VisibilityOff'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
+              87000000017352474200AECE1CE9000003BC494441546843ED9881B14D410C86
+              F32AA00354800A50012A4005A80015A00254800A50012A400754C07C6673262F
+              7693ECB967E69E3B6367EEBC7BDFDD93CD9FFCF993BD6772E2EBECC4FD97FF00
+              8E9DC15E062E8AC8CF633B563DDF03C0F90F22F245441E548D1C739F05A0CE5F
+              6B0EBD3E05103E03387DCF4474F7207A35B00604D9BB2122648F179F6F3A6A7D
+              6C9FA127EFBF8AC8F743E93792D10A089CBC2D22F73BCE56FD02CC0B1179BF56
+              38A23E908120D244F242D5DB601FAAC779CF6681648D6C06C4A7A65E80C221A2
+              AB727C594478597AF1DE8367FF531179590D4A06003B19081C63CDF2190A42BF
+              472272C9390CF85B956C540010A9CFEE80ADD5092044DE02211B8000CC706500
+              709EC646B4FC8A4090155489BF4A2728962D80BC729B68A89CD55D11006410E7
+              75217B4423EB13EF9A3AF50EA43E7028A29B1787301323003EF2C81CD151B588
+              4064EA5429546C1008A5D410C4689823F23A52907ADF94B2C2E6598A93487338
+              9FEF38D579DC7AC0881DD0968C5D352271DD17760F008DE5617B08DAE07C6F3A
+              CD4078C7A8076CD3FC58D8C4A1884E80E07B955BE495C02CCB03B0BCFFD59C8F
+              5460160407DB6788304A132D32F7D66C60BF8E25FFDCC8904BA54E96626C12D5
+              6FEEF48AC41255E577A68498C761544DDF2FA0EDC316E98FE65C129CBF85ED65
+              4FA31CDD272C4DCF457470208182094AA5E5190B80C2D5620DB5D71C42F37932
+              3834CA043C7EDE9EAB649AADF6AC857A16804D53D5A875A4876304C23EC70087
+              73D9B2D95E94D102B0055C51080EF4CDAE0AC236BBBB4DF33300D49ACE5D5D0A
+              F962E1108C67EB77B6A1298FAD09DBECAE1406419BB1737D299251FCAA44C752
+              2FC2E2E90408A8837844CB0F93A18C62C82A04542242D1CF2C5E21664064C9F3
+              3F34A48D4C0D2259DAC22BB3F9484EAB35D1DBE79DEF4E05D13067AF8B95D91C
+              9E4289CA15336B76384F7F517A0DA782A80BF6C65AE475389B3795E07BED9A6B
+              E8E4231F8E34591BEF8DC644BA72674562F50ECCE84046C950769FB06306CE93
+              8565F6F111C900B0DFCFE6FC8F4390C5A1E120F4D900A841D33E73D09552FD20
+              ADF4054F0D8CE3D09BCA05DC80AA80D0BB44A854950C5803BDCBB77E4F3600C4
+              8BC31908EDAC4F10503664177A61CBAEACB0BB406601600447A8035E15C5C9B4
+              FE20106B00585A516044B2A23A3D209A25FBFC54260E01601DD21F7329401DC9
+              FD2F6FEAAC2A92D20D3B594D0CB3B81580199A8CF6AE02B12700AB32B13700D3
+              20F608600AC45E01F44074AF9E7B0660410C7F60DB3B004070C142A1BA33D129
+              00D87416DA42EF37B571F219F8031D3DFD310C1B9D900000000049454E44AE42
+              6082}
+          end>
+      end
+      item
+        Name = 'VisibilityOn'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
+              87000000017352474200AECE1CE90000039B494441546843ED9981910D411086
+              FB2220034480081001224004880011200264702240048800191001F555F5FFAA
+              5FBF99E9D9B77775AE6AA74ADDDA9BEEE9BFFF7F7A7AE74EEC928F934B1EBF6D
+              002E9AC18D818D819519D824E409BC6A6677CCEC9699DDF5773CF39EF1DBCCBE
+              F9F3677FFEE2EF5771B096814766F63804BD3418C0BC37B30F4B0D35FF58002F
+              CCEC59C8F0B1EBCB0E86DE98D9ABA58E9602401EEFCCEC7A63212421794832FC
+              642025494A32437279FC34B327EE670ACB1200048E5CE2F8E59943060A766A61
+              4FC20367F25A32C21F40CA310380EC7DF20CCA2181BF74FD968B4C4C2031F88B
+              40D8F4F7AAC45400A09BE0554D88850D87FEAB8CAB2A614330486C3458837D40
+              61D0600D40A8821DD88F00A0F3AF29786885DEDEC006A9A994E679EC117CA0F5
+              DE2039AF13881BBD84F50064D9FC71FD9F0E167EEA32886CB5A69355E4F276E0
+              0B49C1C6159FD395530F00B25116099EE72E8D2EA998356C54918841954701F1
+              EEB907D9C3810D3E64C33372DA1B2D00914202C1D188F22CB58FCE56DE233083
+              FCEE7B04FCFE76E19BB591B1C601E80CA03468A42BB245F094C6D1408602D1CC
+              6A32466E1C9C1A80DEA9210388C150357A9B31AEF1D7FF035BB0515527988051
+              49A3AA84B827E09BBECE1EE8684CB00060CC488779D16626FB021E5940D70435
+              1A59193B9B082066BFDA605A2CEE17FA18E89E195116B36B459B1D0B11002FD5
+              9FCC3ABD28003B79F724345321FE3B0911506461A64260A34D0CE8EE891974C5
+              26FE114EF8994D4C29651F30F68ACB5994D1089ACDF9B0D8044B2BDDA232CADA
+              51D73352A27452E654160141BFD33AC8E893744ECC54BAF25CEAD117B35A7684
+              8D56029B562B11FBA4AA31CC9D70F35C1A357304A0C383805870D4CCC11C74C7
+              7EA7A52632CFDC51574B33476F25C0DFFDCC393824AB763A4A43F21A7591C889
+              C05A9F8BDA800437EAADE86AE9443586277C55017247885302E49CA85A064E69
+              550E12519DB6649BACC7CFD6B213AE0010308EA39C78470691CBD1D721495B7C
+              85E12F5E167465136D6700683E998F9F7B0202DDF4412359B4F602C1D295B21F
+              F22D0789C91708CDEABC04804E5E80E45B041D82F15A850CC66B150A82AE5790
+              57ABD3E5B280C02BB9EDC02C052043E8267355C59969EC9883D66172B6195C0D
+              400EC816FF7A55A702406D87D151491DFA389681EC1469A8EAC4CB5D314486F3
+              E52E32A92A599580ED6F646586CE7BC25949E8BCE3ECFADF005C58EA7DE18D81
+              8D819519D824B43281ABCDFF018921E03192487AFD0000000049454E44AE4260
+              82}
+          end>
+      end
+      item
+        Name = 'Delete'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
+              87000000017352474200AECE1CE900000164494441546843ED99E14D03310C85
+              BF4E40376004D8A06513468009A01B74846ED2B2016C001BB413802CE5A4A84D
+              9338BD501D3C4BF7E32E4EECE7E738C965C6C4653671FF11806B332806FE0A03
+              AFC08B13CC0AB07E17494D0AD538B604ECF1C80EB0A72406F4ACD400F82E59E8
+              DC9EF5F15F0018F2344EA52CAD173092B2919D27350C0CFEC4A9E4E9E7C1E3B6
+              E171C43DB8C7F3A0EBB621005194EF819BF0FE01EC8F18980377E1DB01784F30
+              745506ACA62F82530F891A6FEBC436B4BF9D5937042037EF4AD1110340294827
+              011EB30A8901315058394BF9A914520A2985B495D042969D052AA3DA4E271244
+              9BB9282893DF4AAC013B179B3C25CEBCD6663A26761E369D6329158AAEE78186
+              BF2802E0BA6272D3DB4089DBC69855A8C1DFDF4DA14FE0760C2F2BC6B01F6343
+              41C8AA7B1868B985A9F035A9F21C55ACD100D84006E2B123135FC0C673F5E461
+              A0359A5DFB0940D7F0560C2E062A82D45565F20CFC0062799D311B6C0DDD0000
+              000049454E44AE426082}
+          end>
+      end
+      item
+        Name = 'Report'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
+              87000000017352474200AECE1CE9000001C3494441546843ED59DB4D0331109C
+              54001D0015043A800A1015403AA003A002A00228012A800E4809500174001AC9
+              46D6C9771EDFC38EA5F54F92D3DA9ED9D9C769B342E36BD5387E1881DA0AAA0A
+              DC00B806B05F08F00F80070077A9FB1402B70048A0C62201DEDFBB1402DF053D
+              DF05FA09E0682A81DFE00085F01C4AC9772A80E4C3E640EECE90EF3402337A3D
+              3CCA14C8F1C6D4121BABF54515082F1B1351B13C3402392134D829054962FB8B
+              2A2060CC363102392194ED5E61832990A380F5814848150DA1E61B99F581DA21
+              2454C56C93A239908D4ED86004FAFAC0D484E5B9AF00B60915165340505F3221
+              81CD00919D2740969CBE9DF590588C4072D497F03F47935700F69C1D497070C5
+              CF9CD7977FDB1A631592E0C4CD9378774A344380404F01BC05881FDDF0D83F5A
+              2C8414C5A42C7680EF03E30B002FEE771304889580CF837C3871E1D50C01E603
+              4BEA8123C1EFAC4C9C88FB35A8BA1212B237D4D8E9D81D03F8089E3DBB4AD50C
+              010265697DEA71C0CE2BE071D3F3971112CD10603EB027AC3B2426136097F44D
+              6764988FDEF605E07068B792C4CDFFC94707900413CD97BBD12E1537D2F3CC89
+              E4EBBBA28078671D332350C7EF629BAE0D4EB9FF0FE02E6F31FE03BFB8000000
+              0049454E44AE426082}
+          end>
+      end
+      item
+        Name = 'Edit'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
+              87000000017352474200AECE1CE90000033F494441546843ED9879C80D511887
+              9F2F9148241259229125916489105992C8CE67DFF77DDF65DFF77DDF77591289
+              1059924824125922914824129D7AA7DEE6BBF7CE9D7B67FBEACE7FBF3BB799E7
+              79CF7B66CE992C72F99195CBF9C908843D829911F061049A00738079C035A7EB
+              4769040A01BB818E0AFA38D02591445404CA024780FA3160134A444560AEB44D
+              BC62C795888A8001779268079CB51B862960EEDD0930D5B58E44126642378D8A
+              401EE979236026693212063EC753298C11C82BF01D54359D244ECA68E5982341
+              0BE4038E02ED63CCD67812B78196C0F758333C4881FC52793319ADE30950CD61
+              2476016FE23D9E82122820F06D158879DB9E008E3948247C1907215050DAA68D
+              2299052C905C351D09BF05CCF2C0F47C6B053F0358A4F26C59F7583F995131F3
+              E19FD33AC89CF753A0B0B44D2B05320D58A2F24C60BECAA704FE6F32F07E0A14
+              91CAB750205381A52A4F0716AA7C5AE0FF240BEF974051816FAE402603CB6D32
+              8B553E23F0BFDDC0FB21504CDAA699029908AC54798AAD8DCE09FC2FB7F05E0B
+              1497CAEBF5CA7860B5029B042C53F9BCC0FF4C05DE4B811202DF58818C05D6AA
+              3C0158A1F205A033F0235578AF044A0A7C2305321A58AFF2386095CA17A5F231
+              97076E84D27D8C9612F886EAA623818D2A8F01D6A87C49E0BFB9018DF7DF7404
+              4A0B7C0375F1E1C066954701EB54BE2C6DF3D50BF8745AA88CBCFEEB2990A1C0
+              569547001B54BE2295FFE2157CAA02E5A4F27515C86060BBCAC3804D2A5F15F8
+              CF5EC2A722505EE0EB289081C04E9587005B54BE2E6DF3C96B78B70215A46D6A
+              2B90FEF22DC7FA6910B04D9DBF21F01FFD8077235051E06B29907EC01E950700
+              3B54BE296DF3C12FF864052A49DBD454207D807D3619B373B28E5B52F9F77EC2
+              272350592A5F4381F4020EA8DCD7D6467704FE9DDFF04E025504BEBA02C9060E
+              A9DC1BD8ABF25D817F1B04BC93C063DB5EB5BBAC342DB69EC07E057A4FE05F07
+              05EF24A0B7745D65342CB61EC041057A5FE05F0509EF46402F39BA018715E803
+              F9E8F43268F85404CC66DB6CD2ADE3A154FE4518F06E0462F13D12F8E761C1A7
+              236026B8F930FB2C4CF85405CCE740B3937A1A36BC934014F81C19D2D9D0385E
+              3C883F640482A872A27B644620EC11F80FD4919C3180B038370000000049454E
+              44AE426082}
+          end>
       end>
     Left = 664
     Top = 448
@@ -1069,9 +1665,47 @@ object Main: TMain
     Left = 664
     Top = 528
   end
-  object virtImageListPrgBuilder: TVirtualImageList
-    Images = <>
-    Left = 664
-    Top = 608
+  object vimglistSession: TVirtualImageList
+    Images = <
+      item
+        CollectionIndex = 13
+        CollectionName = 'VisibilityOn'
+        Name = 'VisibilityOn'
+      end
+      item
+        CollectionIndex = 12
+        CollectionName = 'VisibilityOff'
+        Name = 'VisibilityOff'
+      end
+      item
+        CollectionIndex = 10
+        CollectionName = 'New'
+        Name = 'New'
+      end
+      item
+        CollectionIndex = 14
+        CollectionName = 'Delete'
+        Name = 'Delete'
+      end
+      item
+        CollectionIndex = 11
+        CollectionName = 'Lock'
+        Name = 'Lock'
+      end
+      item
+        CollectionIndex = 15
+        CollectionName = 'Report'
+        Name = 'Report'
+      end
+      item
+        CollectionIndex = 16
+        CollectionName = 'Edit'
+        Name = 'Edit'
+      end>
+    ImageCollection = ImageCollectionCoach
+    Width = 48
+    Height = 48
+    Left = 156
+    Top = 106
   end
 end

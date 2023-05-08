@@ -38,8 +38,8 @@ uses
   unitUtility in 'unitUtility.pas',
   frmSquadT in 'SQUAD\frmSquadT.pas' {SquadT},
   dmSquadData in 'SQUAD\dmSquadData.pas' {SquadData: TDataModule},
-  dlgSquadNewTemplate in 'SQUAD\dlgSquadNewTemplate.pas' {SquadNewTemplate},
-  dlgSquadEditTemplate in 'SQUAD\dlgSquadEditTemplate.pas' {SquadEditTemplate};
+  dlgSquadEditTemplate in 'SQUAD\dlgSquadEditTemplate.pas' {SquadEditTemplate},
+  dlgNewSession in 'SESSION\dlgNewSession.pas' {NewSession};
 
 {$R *.res}
 

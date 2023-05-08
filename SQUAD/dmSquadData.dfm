@@ -3,6 +3,7 @@ object SquadData: TSquadData
   Width = 640
   object qrySelectPool: TFDQuery
     ActiveStoredUsage = [auDesignTime]
+    IndexFieldNames = 'HRID'
     Connection = COACH.coachConnection
     SQL.Strings = (
       'USE SCM_Coach;'
@@ -37,10 +38,10 @@ object SquadData: TSquadData
   end
   object qryTeam: TFDQuery
     ActiveStoredUsage = [auDesignTime]
-    IndexFieldNames = 'TeamTmpID'
+    IndexFieldNames = 'TeamID'
     Connection = COACH.coachConnection
     UpdateOptions.UpdateTableName = 'SCM_Coach.dbo.TeamTmp'
-    UpdateOptions.KeyFields = 'TeamTmpID'
+    UpdateOptions.KeyFields = 'TeamID'
     SQL.Strings = (
       'USE SCM_Coach;'
       ''
@@ -77,5 +78,14 @@ object SquadData: TSquadData
     DataSet = qryTeam
     Left = 200
     Top = 128
+  end
+  object tblTeam: TFDTable
+    ActiveStoredUsage = [auDesignTime]
+    Active = True
+    IndexFieldNames = 'TeamID'
+    Connection = COACH.coachConnection
+    TableName = 'SCM_Coach.dbo.Team'
+    Left = 96
+    Top = 248
   end
 end

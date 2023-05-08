@@ -3,7 +3,7 @@ object SquadT: TSquadT
   Top = 0
   BorderStyle = bsDialog
   Caption = 'Squad Template Constructor.'
-  ClientHeight = 486
+  ClientHeight = 482
   ClientWidth = 1290
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -15,7 +15,7 @@ object SquadT: TSquadT
   OnDestroy = FormDestroy
   TextHeight = 21
   object imgArrowRight: TVirtualImage
-    Left = 905
+    Left = 913
     Top = 35
     Width = 48
     Height = 48
@@ -27,7 +27,7 @@ object SquadT: TSquadT
     OnClick = imgArrowRightClick
   end
   object imgArrowRightDbl: TVirtualImage
-    Left = 905
+    Left = 913
     Top = 89
     Width = 48
     Height = 48
@@ -39,7 +39,7 @@ object SquadT: TSquadT
     OnClick = imgArrowRightDblClick
   end
   object imgArrowLeft: TVirtualImage
-    Left = 905
+    Left = 913
     Top = 143
     Width = 48
     Height = 48
@@ -51,7 +51,7 @@ object SquadT: TSquadT
     OnClick = imgArrowLeftClick
   end
   object imgArrowLeftDbl: TVirtualImage
-    Left = 905
+    Left = 913
     Top = 197
     Width = 48
     Height = 48
@@ -63,29 +63,29 @@ object SquadT: TSquadT
     OnClick = imgArrowLeftDblClick
   end
   object Label1: TLabel
-    Left = 62
+    Left = 70
     Top = 8
     Width = 125
     Height = 21
     Caption = 'TEAM TEMPLATES'
   end
   object Label2: TLabel
-    Left = 959
+    Left = 967
     Top = 8
     Width = 260
     Height = 21
     Caption = 'SWIMMERS ASSIGNED TO TEMPLATE'
   end
   object Label3: TLabel
-    Left = 634
+    Left = 642
     Top = 8
     Width = 124
     Height = 21
     Caption = 'SELECTION POOL'
   end
   object Label13: TLabel
-    Left = 553
-    Top = 35
+    Left = 561
+    Top = 70
     Width = 21
     Height = 190
     Alignment = taRightJustify
@@ -99,53 +99,9 @@ object SquadT: TSquadT
     ParentFont = False
     Layout = tlCenter
   end
-  object VirtualImage1: TVirtualImage
-    Left = 8
-    Top = 89
-    Width = 48
-    Height = 48
-    ImageCollection = UICollectionEx
-    ImageWidth = 0
-    ImageHeight = 0
-    ImageIndex = 36
-    ImageName = 'Edit'
-  end
-  object VirtualImage2: TVirtualImage
-    Left = 8
-    Top = 143
-    Width = 48
-    Height = 48
-    ImageCollection = UICollectionEx
-    ImageWidth = 0
-    ImageHeight = 0
-    ImageIndex = 35
-    ImageName = 'clone'
-  end
-  object VirtualImage3: TVirtualImage
-    Left = 8
-    Top = 197
-    Width = 48
-    Height = 48
-    ImageCollection = UICollectionEx
-    ImageWidth = 0
-    ImageHeight = 0
-    ImageIndex = 19
-    ImageName = 'Delete'
-  end
-  object VirtualImage4: TVirtualImage
-    Left = 8
-    Top = 35
-    Width = 48
-    Height = 48
-    ImageCollection = UICollectionEx
-    ImageWidth = 0
-    ImageHeight = 0
-    ImageIndex = 20
-    ImageName = 'New'
-  end
   object VirtualImage5: TVirtualImage
-    Left = 580
-    Top = 35
+    Left = 588
+    Top = 70
     Width = 48
     Height = 48
     ImageCollection = UICollectionEx
@@ -154,31 +110,9 @@ object SquadT: TSquadT
     ImageIndex = 28
     ImageName = 'Sort'
   end
-  object VirtualImage6: TVirtualImage
-    Left = 8
-    Top = 251
-    Width = 48
-    Height = 48
-    ImageCollection = UICollectionEx
-    ImageWidth = 0
-    ImageHeight = 0
-    ImageIndex = 3
-    ImageName = 'Print'
-  end
-  object VirtualImage7: TVirtualImage
-    Left = 1230
-    Top = 143
-    Width = 48
-    Height = 48
-    ImageCollection = UICollectionEx
-    ImageWidth = 0
-    ImageHeight = 0
-    ImageIndex = 3
-    ImageName = 'Print'
-  end
   object VirtualImage8: TVirtualImage
-    Left = 580
-    Top = 89
+    Left = 588
+    Top = 124
     Width = 48
     Height = 48
     ImageCollection = UICollectionEx
@@ -188,7 +122,7 @@ object SquadT: TSquadT
     ImageName = 'VisibilityOn'
   end
   object VirtualImage9: TVirtualImage
-    Left = 1230
+    Left = 1238
     Top = 35
     Width = 48
     Height = 48
@@ -199,7 +133,7 @@ object SquadT: TSquadT
     ImageName = 'Up'
   end
   object VirtualImage10: TVirtualImage
-    Left = 1230
+    Left = 1238
     Top = 89
     Width = 48
     Height = 48
@@ -209,19 +143,8 @@ object SquadT: TSquadT
     ImageIndex = 13
     ImageName = 'Down'
   end
-  object VirtualImage11: TVirtualImage
-    Left = 8
-    Top = 305
-    Width = 48
-    Height = 48
-    ImageCollection = UICollectionEx
-    ImageWidth = 0
-    ImageHeight = 0
-    ImageIndex = 6
-    ImageName = 'AutoBuild'
-  end
   object VirtualImage12: TVirtualImage
-    Left = 1230
+    Left = 1238
     Top = 417
     Width = 48
     Height = 48
@@ -232,7 +155,7 @@ object SquadT: TSquadT
     ImageName = 'Exit'
   end
   object Label4: TLabel
-    Left = 1243
+    Left = 1251
     Top = 378
     Width = 21
     Height = 33
@@ -247,7 +170,7 @@ object SquadT: TSquadT
     Layout = tlCenter
   end
   object imgSearch: TVirtualImage
-    Left = 634
+    Left = 642
     Top = 32
     Width = 32
     Height = 32
@@ -258,7 +181,7 @@ object SquadT: TSquadT
     ImageName = 'Search'
   end
   object lbSrc: TListBox
-    Left = 634
+    Left = 642
     Top = 70
     Width = 265
     Height = 395
@@ -270,7 +193,7 @@ object SquadT: TSquadT
     OnDragOver = lbSrcDragOver
   end
   object lbDest: TListBox
-    Left = 959
+    Left = 967
     Top = 35
     Width = 265
     Height = 430
@@ -282,7 +205,7 @@ object SquadT: TSquadT
     OnDragOver = lbDestDragOver
   end
   object edtSearch: TEdit
-    Left = 672
+    Left = 680
     Top = 35
     Width = 227
     Height = 29
@@ -293,7 +216,7 @@ object SquadT: TSquadT
     OnChange = edtSearchChange
   end
   object listTeam: TControlList
-    Left = 62
+    Left = 70
     Top = 35
     Width = 485
     Height = 443
@@ -378,6 +301,159 @@ object SquadT: TSquadT
       Align = alRight
       LinkHotColor = clHighlight
       Style = clbkToolButton
+    end
+  end
+  object RelativePanel1: TRelativePanel
+    Left = 4
+    Top = 35
+    Width = 60
+    Height = 443
+    ControlCollection = <
+      item
+        Control = spbtnSessionToggleVisible
+        AlignBottomWithPanel = False
+        AlignHorizontalCenterWithPanel = True
+        AlignLeftWithPanel = False
+        AlignRightWithPanel = False
+        AlignTopWithPanel = True
+        AlignVerticalCenterWithPanel = False
+      end
+      item
+        Control = SpeedButton1
+        AlignBottomWithPanel = False
+        AlignHorizontalCenterWithPanel = False
+        AlignLeftWithPanel = False
+        AlignRightWithPanel = False
+        AlignTopWithPanel = False
+        AlignVerticalCenterWithPanel = False
+      end
+      item
+        Control = SpeedButton2
+        AlignBottomWithPanel = False
+        AlignHorizontalCenterWithPanel = False
+        AlignLeftWithPanel = False
+        AlignRightWithPanel = False
+        AlignTopWithPanel = False
+        AlignVerticalCenterWithPanel = False
+      end
+      item
+        Control = SpeedButton3
+        AlignBottomWithPanel = False
+        AlignHorizontalCenterWithPanel = False
+        AlignLeftWithPanel = False
+        AlignRightWithPanel = False
+        AlignTopWithPanel = False
+        AlignVerticalCenterWithPanel = False
+      end
+      item
+        Control = SpeedButton4
+        AlignBottomWithPanel = False
+        AlignHorizontalCenterWithPanel = False
+        AlignLeftWithPanel = False
+        AlignRightWithPanel = False
+        AlignTopWithPanel = False
+        AlignVerticalCenterWithPanel = False
+      end
+      item
+        Control = SpeedButton5
+        AlignBottomWithPanel = False
+        AlignHorizontalCenterWithPanel = False
+        AlignLeftWithPanel = False
+        AlignRightWithPanel = False
+        AlignTopWithPanel = False
+        AlignVerticalCenterWithPanel = False
+      end>
+    BevelOuter = bvNone
+    TabOrder = 4
+    DesignSize = (
+      60
+      443)
+    object spbtnSessionToggleVisible: TSpeedButton
+      Left = 6
+      Top = 0
+      Width = 48
+      Height = 48
+      Action = actnCreateTeamTemplate
+      AllowAllUp = True
+      Anchors = []
+      GroupIndex = 1
+      Images = vimgSquadTList
+      Flat = True
+      Layout = blGlyphTop
+      Margin = 0
+    end
+    object SpeedButton1: TSpeedButton
+      Left = 6
+      Top = 54
+      Width = 48
+      Height = 48
+      Action = actnEditTeamTemplate
+      AllowAllUp = True
+      Anchors = []
+      GroupIndex = 1
+      Images = vimgSquadTList
+      Flat = True
+      Layout = blGlyphTop
+      Margin = 0
+    end
+    object SpeedButton2: TSpeedButton
+      Left = 6
+      Top = 108
+      Width = 48
+      Height = 48
+      AllowAllUp = True
+      Anchors = []
+      GroupIndex = 1
+      ImageIndex = 2
+      ImageName = 'clone'
+      Images = vimgSquadTList
+      Flat = True
+      Layout = blGlyphTop
+      Margin = 0
+    end
+    object SpeedButton3: TSpeedButton
+      Left = 6
+      Top = 162
+      Width = 48
+      Height = 48
+      Action = actnDeleteTeamTemplate
+      AllowAllUp = True
+      Anchors = []
+      GroupIndex = 1
+      Images = vimgSquadTList
+      Flat = True
+      Layout = blGlyphTop
+      Margin = 0
+    end
+    object SpeedButton4: TSpeedButton
+      Left = 6
+      Top = 216
+      Width = 48
+      Height = 48
+      AllowAllUp = True
+      Anchors = []
+      GroupIndex = 1
+      ImageIndex = 4
+      ImageName = 'Print'
+      Images = vimgSquadTList
+      Flat = True
+      Layout = blGlyphTop
+      Margin = 0
+    end
+    object SpeedButton5: TSpeedButton
+      Left = 6
+      Top = 270
+      Width = 48
+      Height = 48
+      AllowAllUp = True
+      Anchors = []
+      GroupIndex = 1
+      ImageIndex = 5
+      ImageName = 'Tool'
+      Images = vimgSquadTList
+      Flat = True
+      Layout = blGlyphTop
+      Margin = 0
     end
   end
   object UICollection: TImageCollection
@@ -614,7 +690,7 @@ object SquadT: TSquadT
               5B48308D0000000049454E44AE426082}
           end>
       end>
-    Left = 912
+    Left = 920
     Top = 269
   end
   object UICollectionEx: TImageCollection
@@ -811,7 +887,7 @@ object SquadT: TSquadT
           end>
       end
       item
-        Name = 'AutoBuild'
+        Name = 'Tool'
         SourceImages = <
           item
             Image.Data = {
@@ -1725,20 +1801,20 @@ object SquadT: TSquadT
               000049454E44AE426082}
           end>
       end>
-    Left = 912
+    Left = 920
     Top = 336
   end
   object BindSourceDB1: TBindSourceDB
     DataSet = SquadData.qryTeam
     ScopeMappings = <>
-    Left = 576
-    Top = 328
+    Left = 408
+    Top = 392
   end
   object BindingsList1: TBindingsList
     Methods = <>
     OutputConverters = <>
-    Left = 580
-    Top = 261
+    Left = 292
+    Top = 397
     object LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource
       Category = 'Quick Bindings'
       DataSource = BindSourceDB1
@@ -1758,6 +1834,69 @@ object SquadT: TSquadT
       FieldName = 'Caption'
       Component = lblTeamName
       ComponentProperty = 'Caption'
+    end
+  end
+  object vimgSquadTList: TVirtualImageList
+    Images = <
+      item
+        CollectionIndex = 20
+        CollectionName = 'New'
+        Name = 'New'
+      end
+      item
+        CollectionIndex = 36
+        CollectionName = 'Edit'
+        Name = 'Edit'
+      end
+      item
+        CollectionIndex = 35
+        CollectionName = 'clone'
+        Name = 'clone'
+      end
+      item
+        CollectionIndex = 19
+        CollectionName = 'Delete'
+        Name = 'Delete'
+      end
+      item
+        CollectionIndex = 3
+        CollectionName = 'Print'
+        Name = 'Print'
+      end
+      item
+        CollectionIndex = 6
+        CollectionName = 'Tool'
+        Name = 'Tool'
+      end>
+    ImageCollection = UICollectionEx
+    Width = 48
+    Height = 48
+    Left = 48
+    Top = 376
+  end
+  object actnmSquadT: TActionManager
+    Images = vimgSquadTList
+    Left = 48
+    Top = 304
+    StyleName = 'Platform Default'
+    object actnCreateTeamTemplate: TAction
+      Caption = 'New'
+      ImageIndex = 0
+      ImageName = 'New'
+      OnExecute = actnCreateTeamTemplateExecute
+      OnUpdate = actnCreateTeamTemplateUpdate
+    end
+    object actnEditTeamTemplate: TAction
+      Caption = 'Edit'
+      ImageIndex = 1
+      ImageName = 'Edit'
+    end
+    object actnDeleteTeamTemplate: TAction
+      Caption = 'Delete'
+      ImageIndex = 3
+      ImageName = 'Delete'
+      OnExecute = actnDeleteTeamTemplateExecute
+      OnUpdate = actnDeleteTeamTemplateUpdate
     end
   end
 end

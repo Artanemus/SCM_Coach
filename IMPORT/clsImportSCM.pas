@@ -120,7 +120,7 @@ begin
   // construct database module.
   ImportData := TImportData.CreateWithConnection(Self, scmConnection,
     coachConnection);
-  ImportData.MakeActive();
+  ImportData.ActivateDM();
 end;
 
 destructor TImportMember.Destroy;

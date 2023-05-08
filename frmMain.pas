@@ -10,7 +10,7 @@ uses
   Vcl.ToolWin, Vcl.ActnCtrls, Vcl.ActnMenus, System.ImageList, Vcl.ImgList,
   Vcl.VirtualImageList, Vcl.BaseImageCollection, Vcl.ImageCollection,
   Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.WinXCtrls, Vcl.VirtualImage,
-  dmCoach, dlgBootProgress, vcl.Themes, SCMDefines;
+  dmCoach, dlgBootProgress, vcl.Themes, SCMDefines, Vcl.Buttons;
 
 type
   TMain = class(TForm)
@@ -64,7 +64,6 @@ type
     VirtualImage1: TVirtualImage;
     VirtualImage2: TVirtualImage;
     Splitter1: TSplitter;
-    virtImageListPrgBuilder: TVirtualImageList;
     VirtualImage3: TVirtualImage;
     Help_About: TAction;
     FlowPanel1: TFlowPanel;
@@ -84,6 +83,26 @@ type
     Help_WebHelp: TAction;
     Tools_DisqualificationCodes: TAction;
     Squads_Templates: TAction;
+    vimglistSession: TVirtualImageList;
+    SessionWidgets: TRelativePanel;
+    spbtnSessionToggleVisible: TSpeedButton;
+    ShapeSessBar1: TShape;
+    spbtnSessionToggleLock: TSpeedButton;
+    spbtnSessionNew: TSpeedButton;
+    spbtnSessionDelete: TSpeedButton;
+    ShapeSessBar2: TShape;
+    spbtnSessionReport: TSpeedButton;
+    ShapeSessDot1: TShape;
+    sbtnSessionEdit: TSpeedButton;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Label6: TLabel;
+    Edit3: TEdit;
+    Label7: TLabel;
+    Edit4: TEdit;
     procedure FormCreate(Sender: TObject);
     procedure btnNewSessionClick(Sender: TObject);
     procedure Edit_SwimmersUpdate(Sender: TObject);
