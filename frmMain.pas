@@ -10,7 +10,7 @@ uses
   Vcl.ToolWin, Vcl.ActnCtrls, Vcl.ActnMenus, System.ImageList, Vcl.ImgList,
   Vcl.VirtualImageList, Vcl.BaseImageCollection, Vcl.ImageCollection,
   Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.WinXCtrls, Vcl.VirtualImage,
-  dmCoach, dlgBootProgress, vcl.Themes, SCMDefines, Vcl.Buttons;
+  dmCoach, dlgBootProgress, Vcl.Themes, SCMDefines, Vcl.Buttons;
 
 type
   TMain = class(TForm)
@@ -103,8 +103,14 @@ type
     Edit3: TEdit;
     Label7: TLabel;
     Edit4: TEdit;
+    RelativePanel1: TRelativePanel;
+    sbtnPrgItemNew: TSpeedButton;
+    sbtnPrgItemEdit: TSpeedButton;
+    sbtnPrgItemDelete: TSpeedButton;
+    ProgramItem_New: TAction;
+    ProgramItem_Edit: TAction;
+    ProgramItem_Delete: TAction;
     procedure FormCreate(Sender: TObject);
-    procedure btnNewSessionClick(Sender: TObject);
     procedure Edit_SwimmersUpdate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -113,6 +119,9 @@ type
     procedure File_ImportExecute(Sender: TObject);
     procedure Squads_TemplatesExecute(Sender: TObject);
     procedure Squads_TemplatesUpdate(Sender: TObject);
+    procedure Session_NewExecute(Sender: TObject);
+    procedure Session_NewUpdate(Sender: TObject);
+    procedure ProgramItem_NewUpdate(Sender: TObject);
 
   private
     { Private declarations }
@@ -129,7 +138,6 @@ type
     function AssertConnection(): boolean;
     procedure GetSCMPreferences();
 
-
   public
     { Public declarations }
   end;
@@ -141,9 +149,8 @@ implementation
 
 {$R *.dfm}
 
-uses frmSessionNew, dlgBasicLogin, SCMUtility, IniFiles
-, System.UITypes, dlgImportSelect, dlgImportSCMWizard, frmHR, frmSquadT;
-
+uses frmSessionNew, dlgBasicLogin, SCMUtility, IniFiles, System.UITypes,
+  dlgImportSelect, dlgImportSCMWizard, frmHR, frmSquadT;
 
 function TMain.AssertConnection: boolean;
 begin
@@ -153,18 +160,9 @@ begin
     result := true;
 end;
 
-procedure TMain.btnNewSessionClick(Sender: TObject);
-var
-Dlg: TSessionNew;
-begin
-  Dlg := TSessionNew.Create(Self);
-  Dlg.ShowModal;
-  Dlg.Free;
-end;
-
 procedure TMain.Edit_SwimmersExecute(Sender: TObject);
 var
-dlg: THR;
+  dlg: THR;
 begin
   dlg := THR.Create(Self);
   dlg.Prepare(integer(scmHRType.hrSwimmer), 0);
@@ -179,7 +177,7 @@ begin
   DoEnable := false;
   // MSSQL scmCoach connected and tables have been activated?
   if AssertConnection then
-      DoEnable := true;
+    DoEnable := true;
   TAction(Sender).Enabled := DoEnable;
 end;
 
@@ -199,8 +197,8 @@ begin
           dlgB.ShowModal;
           dlgB.Free;
         end;
-      1,2:
-        {TODO -oBSA -cGeneral : Procedures for import '.scm', '.hy3' to be written}
+      1, 2:
+        { TODO -oBSA -cGeneral : Procedures for import '.scm', '.hy3' to be written }
         ;
     end;
   end;
@@ -214,7 +212,7 @@ begin
   DoEnable := false;
   // MSSQL scmCoach connected and core tables activated?
   if AssertConnection then
-      DoEnable := true;
+    DoEnable := true;
   TAction(Sender).Enabled := DoEnable;
 end;
 
@@ -228,7 +226,7 @@ var
 begin
 
   try
-    COACH := TCOACH.Create(self);
+    COACH := TCOACH.Create(Self);
   finally
     // with SCM created and the essential tables are open then
     // asserting the connection should be true
@@ -247,7 +245,7 @@ begin
   // 24/04/2020 Basic login using simple INI access
   // to the FireDAC connection definition file
   // -----------------------------------------------------------
-  aBasicLogin := TBasicLogin.Create(self);
+  aBasicLogin := TBasicLogin.Create(Self);
   aBasicLogin.DBName := 'SCM_Coach';
   aBasicLogin.DBConnection := COACH.coachConnection;
   result := aBasicLogin.ShowModal;
@@ -264,7 +262,7 @@ begin
     exit;
   end;
 
-  bootprogress := TBootProgress.Create(self);
+  bootprogress := TBootProgress.Create(Self);
   bootprogress.Show;
   Application.ProcessMessages;
 
@@ -291,7 +289,7 @@ begin
   bootprogress.lblProgress.Repaint;
   Application.ProcessMessages;
 
- // ---------------------------------------------------------
+  // ---------------------------------------------------------
   // S C M   S y s t e m   I n i t i a l i z a t i o n.
   // ---------------------------------------------------------
 
@@ -301,7 +299,6 @@ begin
   // store vcl.theme
   if Assigned(TStyleManager.ActiveStyle) then
     fscmStyleName := TStyleManager.ActiveStyle.Name;
-
 
   bootprogress.lblProgress.Caption := 'Checking user preferences.';
   bootprogress.lblProgress.Repaint;
@@ -354,7 +351,7 @@ begin
     end;
   end;
 
-    bootprogress.lblProgress.Caption := 'Loading user preferences.';
+  bootprogress.lblProgress.Caption := 'Loading user preferences.';
   bootprogress.lblProgress.Repaint;
   Application.ProcessMessages;
 
@@ -387,7 +384,6 @@ begin
   ActionManager1.Style := PlatformVclStylesStyle;
 
 end;
-
 
 procedure TMain.FormDestroy(Sender: TObject);
 begin
@@ -448,12 +444,40 @@ begin
     TStyleManager.TrySetStyle(fscmStyleName);
 
   iFile.Free;
+end;
 
+procedure TMain.ProgramItem_NewUpdate(Sender: TObject);
+var
+DoEnable: boolean;
+begin
+  DoEnable := false;
+  if AssertConnection then
+  begin
+//    if COACH. then
+
+  end;
+end;
+
+procedure TMain.Session_NewExecute(Sender: TObject);
+var
+  dlg: TSessionNew;
+begin
+  dlg := TSessionNew.Create(Self);
+  dlg.ShowModal;
+  dlg.Free;
+end;
+
+procedure TMain.Session_NewUpdate(Sender: TObject);
+begin
+  if AssertConnection then
+    TAction(Sender).Enabled := true
+  else
+    TAction(Sender).Enabled := false;
 end;
 
 procedure TMain.Squads_TemplatesExecute(Sender: TObject);
 var
-dlg: TSquadT;
+  dlg: TSquadT;
 begin
   dlg := TSquadT.Create(Self);
   dlg.ShowModal;
@@ -461,13 +485,11 @@ begin
 end;
 
 procedure TMain.Squads_TemplatesUpdate(Sender: TObject);
-var
-  DoEnable: boolean;
 begin
-  DoEnable := false;
   if AssertConnection then
-      DoEnable := true;
-  TAction(Sender).Enabled := DoEnable;
+    TAction(Sender).Enabled := true
+  else
+    TAction(Sender).Enabled := false;
 end;
 
 end.

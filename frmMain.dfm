@@ -45,6 +45,8 @@ object Main: TMain
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 1351
+    ExplicitHeight = 953
     object TabSheet1: TTabSheet
       Caption = 'Sessions'
       object Label1: TLabel
@@ -101,9 +103,9 @@ object Main: TMain
         TabOrder = 0
       end
       object FlowPanel1: TFlowPanel
-        Left = 504
+        Left = 616
         Top = 15
-        Width = 825
+        Width = 713
         Height = 882
         BorderStyle = bsSingle
         Caption = 'FlowPanel1'
@@ -125,8 +127,8 @@ object Main: TMain
           TabOrder = 1
         end
         object ListView4: TListView
-          Left = 501
-          Top = 1
+          Left = 1
+          Top = 337
           Width = 250
           Height = 232
           Columns = <>
@@ -134,15 +136,15 @@ object Main: TMain
         end
         object ListView5: TListView
           Left = 1
-          Top = 337
+          Top = 569
           Width = 500
           Height = 232
           Columns = <>
           TabOrder = 3
         end
         object ListView6: TListView
-          Left = 501
-          Top = 337
+          Left = 1
+          Top = 801
           Width = 250
           Height = 408
           Columns = <>
@@ -151,9 +153,9 @@ object Main: TMain
       end
       object SessionWidgets: TRelativePanel
         Left = 56
-        Top = 15
+        Top = 19
         Width = 60
-        Height = 738
+        Height = 874
         ControlCollection = <
           item
             Control = spbtnSessionToggleVisible
@@ -320,7 +322,7 @@ object Main: TMain
         TabOrder = 2
         DesignSize = (
           60
-          738)
+          874)
         object spbtnSessionToggleVisible: TSpeedButton
           Left = 6
           Top = 0
@@ -519,6 +521,90 @@ object Main: TMain
           ReadOnly = True
           TabOrder = 3
           Text = '#'
+        end
+      end
+      object RelativePanel1: TRelativePanel
+        Left = 528
+        Top = 18
+        Width = 60
+        Height = 879
+        ControlCollection = <
+          item
+            Control = sbtnPrgItemNew
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+          end
+          item
+            Control = sbtnPrgItemEdit
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+          end
+          item
+            Control = sbtnPrgItemDelete
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
+          end>
+        BevelOuter = bvNone
+        TabOrder = 3
+        DesignSize = (
+          60
+          879)
+        object sbtnPrgItemNew: TSpeedButton
+          Left = 6
+          Top = 1
+          Width = 48
+          Height = 48
+          Action = ProgramItem_New
+          Anchors = []
+          ImageIndex = 2
+          ImageName = 'New'
+          Images = vimglistSession
+          Flat = True
+          Layout = blGlyphTop
+          Margin = 0
+          NumGlyphs = 2
+        end
+        object sbtnPrgItemEdit: TSpeedButton
+          Left = 6
+          Top = 55
+          Width = 48
+          Height = 48
+          Action = ProgramItem_Edit
+          Anchors = []
+          ImageIndex = 6
+          ImageName = 'Edit'
+          Images = vimglistSession
+          Flat = True
+          Layout = blGlyphTop
+          Margin = 0
+          NumGlyphs = 2
+        end
+        object sbtnPrgItemDelete: TSpeedButton
+          Left = 6
+          Top = 109
+          Width = 48
+          Height = 48
+          Action = ProgramItem_Delete
+          Anchors = []
+          ImageIndex = 3
+          ImageName = 'Delete'
+          Images = vimglistSession
+          Flat = True
+          Layout = blGlyphTop
+          Margin = 0
+          NumGlyphs = 2
         end
       end
     end
@@ -1001,6 +1087,8 @@ object Main: TMain
     object Session_New: TAction
       Category = 'Session'
       Caption = 'New Session...'
+      OnExecute = Session_NewExecute
+      OnUpdate = Session_NewUpdate
     end
     object Session_Edit: TAction
       Category = 'Session'
@@ -1163,6 +1251,19 @@ object Main: TMain
       Category = 'Tools'
       Caption = 'Disqualification Codes...'
       Enabled = False
+    end
+    object ProgramItem_New: TAction
+      Category = 'ProgramItem'
+      Caption = 'New Program Item'
+      OnUpdate = ProgramItem_NewUpdate
+    end
+    object ProgramItem_Edit: TAction
+      Category = 'ProgramItem'
+      Caption = 'Edit Program Item'
+    end
+    object ProgramItem_Delete: TAction
+      Category = 'ProgramItem'
+      Caption = 'Delete Program Item'
     end
   end
   object ImageCollectionCoach: TImageCollection

@@ -6,11 +6,21 @@ uses
   System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait,
-  Data.DB, FireDAC.Comp.Client, FireDAC.Phys.MSSQL, FireDAC.Phys.MSSQLDef;
+  Data.DB, FireDAC.Comp.Client, FireDAC.Phys.MSSQL, FireDAC.Phys.MSSQLDef,
+  FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
+  FireDAC.Comp.DataSet;
 
 type
   TCOACH = class(TDataModule)
     coachConnection: TFDConnection;
+    qrySession: TFDQuery;
+    qryWorkOut: TFDQuery;
+    dsSession: TDataSource;
+    dsWorkOut: TDataSource;
+    qrySwimmerLink: TFDQuery;
+    qryCoachLink: TFDQuery;
+    dsSwimmerLink: TDataSource;
+    dsCoachLink: TDataSource;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
