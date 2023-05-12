@@ -2,7 +2,7 @@
  * ER/Studio Data Architect SQL Code Generation
  * Project :      SCM_Coach_v1.1.0.0.DM1
  *
- * Date Created : Friday, May 12, 2023 12:42:46
+ * Date Created : Friday, May 12, 2023 16:14:55
  * Target DBMS : Microsoft SQL Server 2017
  */
 
@@ -265,9 +265,9 @@ VALUES
 ,(2, N'Freestyle')
 ,(3, N'Breaststroke')
 ,(4, N'Backstroke')
-,(4, N'Butterfly')
-,(5, N'IndividualMedley')
-,(6, N'Relays')
+,(5, N'Butterfly')
+,(6, N'IndividualMedley')
+,(7, N'Relays')
 
 SET IDENTITY_INSERT  [dbo].[DisqualifyType] OFF;
 
@@ -798,7 +798,7 @@ CREATE TABLE NodeType(
     NodeTypeID      int              IDENTITY(1,1),
     Caption         nvarchar(128)    NULL,
     ShortCaption    nvarchar(16)     NULL,
-    ABREV           nvarchar(5)      NULL,
+    ABREV           nvarchar(8)      NULL,
     CONSTRAINT PK_NodeType PRIMARY KEY CLUSTERED (NodeTypeID)
 )
 go
@@ -1520,7 +1520,7 @@ go
  * TABLE: evTime 
  */
 
-ALTER TABLE evTime ADD CONSTRAINT heartRangeevTi8 
+ALTER TABLE evTime ADD CONSTRAINT heartRangeevT25 
     FOREIGN KEY (heartREST)
     REFERENCES heartRange(heartRangeID)
 go
