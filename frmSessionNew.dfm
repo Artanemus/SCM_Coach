@@ -56,8 +56,8 @@ object SessionNew: TSessionNew
     ParentFont = False
   end
   object Label4: TLabel
-    Left = 20
-    Top = 122
+    Left = 308
+    Top = 130
     Width = 118
     Height = 21
     Caption = 'Session Duration'
@@ -69,8 +69,8 @@ object SessionNew: TSessionNew
     ParentFont = False
   end
   object Label5: TLabel
-    Left = 20
-    Top = 149
+    Left = 527
+    Top = 130
     Width = 119
     Height = 21
     Caption = '(Hours : Minutes)'
@@ -133,6 +133,19 @@ object SessionNew: TSessionNew
     Font.Style = []
     ParentFont = False
   end
+  object Label10: TLabel
+    Left = 601
+    Top = 76
+    Width = 83
+    Height = 21
+    Caption = 'Session End'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+  end
   object DatePicker1: TDatePicker
     Left = 144
     Top = 74
@@ -153,7 +166,7 @@ object SessionNew: TSessionNew
     TabOrder = 1
   end
   object TimePicker1: TTimePicker
-    Left = 144
+    Left = 432
     Top = 130
     Width = 89
     Font.Charset = DEFAULT_CHARSET
@@ -216,5 +229,17 @@ object SessionNew: TSessionNew
     Height = 35
     Caption = 'Cancel'
     TabOrder = 8
+  end
+  object TimePicker3: TTimePicker
+    Left = 712
+    Top = 75
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    TabOrder = 9
+    Time = 44985.560485127320000000
+    TimeFormat = 'h:nn AMPM'
   end
 end

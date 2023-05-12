@@ -1,8 +1,8 @@
 /*
  * ER/Studio Data Architect SQL Code Generation
- * Project :      SCM_Coach_v1.0.1.0.DM1
+ * Project :      SCM_Coach_v1.1.0.0.DM1
  *
- * Date Created : Saturday, April 29, 2023 15:30:58
+ * Date Created : Friday, May 12, 2023 12:42:46
  * Target DBMS : Microsoft SQL Server 2017
  */
 
@@ -17,11 +17,10 @@ go
  */
 
 CREATE TABLE CoachLink(
-    CoachLinkID    int              IDENTITY(1,1),
-    HRID           int              NOT NULL,
-    TeamID         int              NOT NULL,
-    NickName       nvarchar(128)    NULL,
-    CONSTRAINT PK_CoachLink PRIMARY KEY CLUSTERED (CoachLinkID, HRID, TeamID)
+    CoachLinkID    int    IDENTITY(1,1),
+    HRID           int    NOT NULL,
+    SessionID      int    NOT NULL,
+    CONSTRAINT PK_CoachLink PRIMARY KEY CLUSTERED (CoachLinkID, HRID, SessionID)
 )
 go
 
@@ -74,12 +73,6 @@ IF OBJECT_ID('ContactNumType') IS NOT NULL
 ELSE
     PRINT '<<< FAILED CREATING TABLE ContactNumType >>>'
 go
-USE SCM_Coach
-GO
-
-DELETE FROM [dbo].[ContactNumType]	
-GO
-
 SET IDENTITY_INSERT [dbo].[ContactNumType] ON;
 
 INSERT INTO [dbo].[ContactNumType]
@@ -100,13 +93,13 @@ SET IDENTITY_INSERT [dbo].[ContactNumType] OFF;
  */
 
 CREATE TABLE Dictionary(
-    SictionaryID      int              IDENTITY(1,1),
-    Caption           nvarchar(128)    NULL,
-    ShortCaption      nvarchar(16)     NULL,
-    ABREV             nvarchar(5)      NULL,
-    IsStandard        bit              DEFAULT 0 NOT NULL,
-    DictionaryType    int              NOT NULL,
-    SCMCoachID        int              NULL,
+    SictionaryID        int              IDENTITY(1,1),
+    Caption             nvarchar(128)    NULL,
+    ShortCaption        nvarchar(16)     NULL,
+    ABREV               nvarchar(5)      NULL,
+    IsStandard          bit              DEFAULT 0 NOT NULL,
+    DictionaryTypeID    int              NOT NULL,
+    SCMCoachID          int              NULL,
     CONSTRAINT PK_Dictionary PRIMARY KEY NONCLUSTERED (SictionaryID)
 )
 go
@@ -124,9 +117,9 @@ go
  */
 
 CREATE TABLE DictionaryType(
-    DictionaryType    int              IDENTITY(1,1),
-    Caption           nvarchar(128)    NULL,
-    CONSTRAINT PK_DictionaryType PRIMARY KEY NONCLUSTERED (DictionaryType)
+    DictionaryTypeID    int              IDENTITY(1,1),
+    Caption             nvarchar(128)    NULL,
+    CONSTRAINT PK_DictionaryType PRIMARY KEY NONCLUSTERED (DictionaryTypeID)
 )
 go
 
@@ -137,26 +130,146 @@ IF OBJECT_ID('DictionaryType') IS NOT NULL
 ELSE
     PRINT '<<< FAILED CREATING TABLE DictionaryType >>>'
 go
+SET IDENTITY_INSERT [dbo].[DictionaryType] ON;
+
+INSERT INTO [dbo].[DictionaryType]
+(
+    [DictionaryTypeID]
+  , [Caption]
+)
+VALUES
+(1, N'drill')
+, (2, N'drillex')
+, (3, N'intensity')
+, (4, N'equipment')
+, (5, N'distance')
+, (6, N'stroke')
+, (7, N'miscTerm')
+, (8, N'heartRange')
+, (9, N'root')
+, (10, N'node')
+GO
+
+SET IDENTITY_INSERT [dbo].[DictionaryType] OFF;
 
 /* 
- * TABLE: Disqualified 
+ * TABLE: DisqualifyCode 
  */
 
-CREATE TABLE Disqualified(
-    DisqualifiedID    int              NOT NULL,
-    Caption           nvarchar(128)    NULL,
-    ABREV             nvarchar(16)     NULL,
-    CONSTRAINT PK_Disqualified PRIMARY KEY CLUSTERED (DisqualifiedID)
+CREATE TABLE DisqualifyCode(
+    DisqualifyCodeID    int              IDENTITY(1,1),
+    Caption             nvarchar(128)    NULL,
+    ABREV               nvarchar(16)     NULL,
+    DisqualifyTypeID    int              NULL,
+    CONSTRAINT PK_DisqualifyCode PRIMARY KEY CLUSTERED (DisqualifyCodeID)
 )
 go
 
 
 
-IF OBJECT_ID('Disqualified') IS NOT NULL
-    PRINT '<<< CREATED TABLE Disqualified >>>'
+IF OBJECT_ID('DisqualifyCode') IS NOT NULL
+    PRINT '<<< CREATED TABLE DisqualifyCode >>>'
 ELSE
-    PRINT '<<< FAILED CREATING TABLE Disqualified >>>'
+    PRINT '<<< FAILED CREATING TABLE DisqualifyCode >>>'
 go
+SET IDENTITY_INSERT  [dbo].[DisqualifyCode] ON;
+
+-- Insert rows into tableN'DisqualifyCodeCodes'
+INSERT INTO DisqualifyCode
+( -- columns to insert data into
+ [DisqualifyCodeID], [Caption], [ABREV], [DisqualifyTypeID]
+)
+VALUES
+(1,N'False start', N'GA', 1),
+(2,N'Delay of meet', N'GB', 1),
+(3,N'Unsportsmanlike manner', N'GC', 1),
+(4,N'Interference with another swimmer', N'GD', 1),
+(5,N'Did not swim stroke specified', N'GE', 1),
+(6,N'Did not swim distance specified', N'GF', 1),
+(7,N'Did not finish in same lane', N'GG', 1),
+(8,N'Standing on bottom during any stroke but freestyle', N'GH', 1),
+(9,N'Swimmer swam in wrong lane', N'GI', 1),
+(10,N'Swimmer made use of aids', N'GJ', 1),
+(11,N'Swimmer did not finish', N'GK', 1),
+(12,N'Pulled on lane ropes', N'GL', 1),
+(13,N'Use of not FINA approved swim suit', N'GM', 1),
+(14,N'Use of more than one swim suit', N'GN', 1),
+(15,N'Use of tape on the body', N'GO', 1),
+
+-- Freestyle
+(16, N'No touch at turn or finish', N'FrA' ,2),
+(17, N'Swam under water more than 15 meters after start or turn', N'FrB' ,2),
+(18, N'Walked on pool bottom and/or pushed off bottom', N'FrC' ,2),
+
+-- Backstroke
+(19, N'Toes over the gutter', N'BaA' ,3),
+(20, N'Head did not break surface by 15 meters after start or turn', N'BaB' ,3),
+(21, N'Shoulders past vertical', N'BaC' ,3),
+(22, N'No touch at turn and/or finish', N'BaD' ,3),
+(23, N'Not on back off wall', N'BaE' ,3),
+(24, N'Did not finish on back', N'BaF' ,3),
+(25, N'Past vertical at turn: non continuous turning action', N'BaG' ,3),
+(26, N'Past vertical at turn: independent kicks', N'BaH' ,3),
+(27, N'Past vertical at turn: independent strokes', N'BaI' ,3),
+(28, N'Sub-merged at the finish', N'BaJ' ,3),
+
+-- Breaststroke
+(29, N'Head did not break surface before hands turned inside at widest part of second stroke', N'BrA' ,4),
+(30, N'Head did not break surface of water during each complete stroke cycle', N'BrB' ,4),
+(31, N'Arm movements not always simultaneous and in horizontal plane', N'BrC' ,4),
+(32, N'Leg Movements not always simultaneous and in horizontal plane', N'BrD' ,4),
+(33, N'Hands not pushed forward on, under or over water', N'BrE' ,4),
+
+-- Individual Medley
+(34, N'Freestyle swum as backstroke, breaststroke or butterfly', N'IMA' ,5),
+(35, N'Not swum in right order', N'IMB' ,5),
+(36, N'Stroke infraction - use stroke codes', N'IMC' ,5),
+
+-- Relay
+(37, N'Early swimmer take-off # (RA#)', N'RA#' ,6),
+(38, N'Medley not swum in right order', N'RB' ,6),
+(39, N'Changed order of swimmers',N'RC',6),
+(40, N'Non listed swimmer swam',N'RD',6),
+(41, N'Stroke infraction - use stroke codes and swimmer',N'RE',6),
+(42, N'Swimmer other than the swimmer designated to swim entered race area before finished',N'Rf',6)
+
+GO
+
+SET IDENTITY_INSERT [dbo].[DisqualifyCode]  OFF;
+
+/* 
+ * TABLE: DisqualifyType 
+ */
+
+CREATE TABLE DisqualifyType(
+    DisqualifyTypeID    int              IDENTITY(1,1),
+    Caption             nvarchar(128)    NULL,
+    CONSTRAINT PK_DisqualifyType PRIMARY KEY CLUSTERED (DisqualifyTypeID)
+)
+go
+
+
+
+IF OBJECT_ID('DisqualifyType') IS NOT NULL
+    PRINT '<<< CREATED TABLE DisqualifyType >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE DisqualifyType >>>'
+go
+SET IDENTITY_INSERT  [dbo].[DisqualifyType] ON;
+INSERT INTO DisqualifyType
+(
+[DisqualifyTypeID], [Caption]
+)
+VALUES
+(1, N'General')
+,(2, N'Freestyle')
+,(3, N'Breaststroke')
+,(4, N'Backstroke')
+,(4, N'Butterfly')
+,(5, N'IndividualMedley')
+,(6, N'Relays')
+
+SET IDENTITY_INSERT  [dbo].[DisqualifyType] OFF;
 
 /* 
  * TABLE: Distance 
@@ -182,31 +295,29 @@ IF OBJECT_ID('Distance') IS NOT NULL
 ELSE
     PRINT '<<< FAILED CREATING TABLE Distance >>>'
 go
-USE [SCM_Coach]
+SET IDENTITY_INSERT [dbo].[Distance] ON
 GO
-
-DELETE FROM [dbo].[Distance]	
+INSERT [dbo].[Distance]
+(
+    [DistanceID]
+  , [Caption]
+  , [ShortCaption]
+  , [ABREV]
+  , [IsArchived]
+  , [IsStandard]
+  , [IsVisible]
+  , [Meters]
+)
+VALUES
+(1, N'25M', N'25M', N'25', 0, 1, 1, 25),
+(2, N'50M', N'50M', N'50', 0, 1, 1, 50),
+(3, N'100M', N'100M', N'100', 0, 1, 1, 100),
+(4, N'200M', N'200M', N'200', 0, 1, 1, 200),
+(5, N'400M', N'400M', N'400', 0, 1, 1, 400),
+(6, N'1000M', N'1000M', N'1000', 0, 1, 1, 1000)
 GO
-
-SET IDENTITY_INSERT [dbo].[Distance] ON;
-
-INSERT INTO [dbo].[Distance]
-			(DistanceID
-           ,[Caption]
-           ,[ShortCaption]
-           ,[ABREV]
-           ,[IsStandard]
-           ,[Meters])
-     VALUES
-           (1,'25M','25M','25',1,25.0)
-           ,(2,'50M','50M','50',1,50.0)
-           ,(3,'100M','100M','100',1,100.0)
-           ,(4,'200M','200M','200',1,200.0)
-           ,(5,'400M','400M','400',1,400.0)
-           ,(6,'1000M','1000M','1000',1,1000.0)
+SET IDENTITY_INSERT [dbo].[Distance] OFF
 GO
-
-SET IDENTITY_INSERT [dbo].[Distance] OFF;
 
 /* 
  * TABLE: Drill 
@@ -231,10 +342,6 @@ IF OBJECT_ID('Drill') IS NOT NULL
 ELSE
     PRINT '<<< FAILED CREATING TABLE Drill >>>'
 go
-USE [SCM_Coach]
-GO
-DELETE FROM [dbo].[drill]
-GO
 SET IDENTITY_INSERT [dbo].[drill] ON;
 
 INSERT INTO [dbo].[drill]
@@ -516,6 +623,7 @@ CREATE TABLE HR(
     FirstName        char(64)         NULL,
     MiddleInitial    char(4)          NULL,
     LastName         char(64)         NULL,
+    NickName         nvarchar(128)    NULL,
     DOB              datetime         NULL,
     RegisterNum      int              NULL,
     RegisterStr      nvarchar(24)     NULL,
@@ -702,6 +810,98 @@ IF OBJECT_ID('NodeType') IS NOT NULL
 ELSE
     PRINT '<<< FAILED CREATING TABLE NodeType >>>'
 go
+/*
+warmup
+main set
+cool-down
+distance
+mid-distance
+sprint
+*/
+
+SET IDENTITY_INSERT [dbo].[NodeType] ON;
+
+INSERT INTO [dbo].[NodeType]
+(
+    NodeTypeID
+  , [Caption]
+  , [ShortCaption]
+  , [ABREV]
+)
+VALUES
+(1, 'Warm-up', 'WarmUp', 'WU')
+, (2, 'Main Set', 'MainSet', 'MAIN')
+, (3, 'Cool-down', 'CoolDown', 'CD')
+, (4, 'Distance Workout', 'Distance', 'DIST')
+, (5, 'Mid-Distance', 'MDistance', 'MDIST')
+, (6, 'Sprint', 'Sprint', 'SPRINT')
+GO
+
+SET IDENTITY_INSERT [dbo].[NodeType] OFF;
+
+/* 
+ * TABLE: PlayBook 
+ */
+
+CREATE TABLE PlayBook(
+    PlayBookID      int         NOT NULL,
+    Caption         int         NULL,
+    CreatedOn       datetime    NULL,
+    PlayScriptID    int         NULL,
+    CONSTRAINT PK_PlayBook PRIMARY KEY CLUSTERED (PlayBookID)
+)
+go
+
+
+
+IF OBJECT_ID('PlayBook') IS NOT NULL
+    PRINT '<<< CREATED TABLE PlayBook >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE PlayBook >>>'
+go
+
+/* 
+ * TABLE: PlayScript 
+ */
+
+CREATE TABLE PlayScript(
+    PlayScriptID        int              IDENTITY(1,1),
+    Caption             nvarchar(128)    NULL,
+    CreatedOn           datetime         NULL,
+    ModifiedOn          datetime         NULL,
+    FileName            nvarchar(max)    NULL,
+    SessionID           int              NULL,
+    PlayScriptTypeID    int              NULL,
+    CONSTRAINT PK_PlayScript PRIMARY KEY CLUSTERED (PlayScriptID)
+)
+go
+
+
+
+IF OBJECT_ID('PlayScript') IS NOT NULL
+    PRINT '<<< CREATED TABLE PlayScript >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE PlayScript >>>'
+go
+
+/* 
+ * TABLE: PlayScriptType 
+ */
+
+CREATE TABLE PlayScriptType(
+    PlayScriptTypeID    int              IDENTITY(1,1),
+    Caption             nvarchar(128)    NULL,
+    CONSTRAINT PK_PlayScriptType PRIMARY KEY CLUSTERED (PlayScriptTypeID)
+)
+go
+
+
+
+IF OBJECT_ID('PlayScriptType') IS NOT NULL
+    PRINT '<<< CREATED TABLE PlayScriptType >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE PlayScriptType >>>'
+go
 
 /* 
  * TABLE: Pool 
@@ -733,7 +933,7 @@ CREATE TABLE PoolType(
     Caption         nvarchar(128)    NULL,
     ShortCaption    nvarchar(16)     NULL,
     ABREV           nvarchar(5)      NULL,
-    CONSTRAINT PK_Course PRIMARY KEY CLUSTERED (PoolTypeID)
+    CONSTRAINT PK_PoolType PRIMARY KEY CLUSTERED (PoolTypeID)
 )
 go
 
@@ -744,6 +944,27 @@ IF OBJECT_ID('PoolType') IS NOT NULL
 ELSE
     PRINT '<<< FAILED CREATING TABLE PoolType >>>'
 go
+/*
+Short Course Yards SCY
+Short Course Meters SCM
+Long Course LCM
+*/
+SET IDENTITY_INSERT [dbo].[PoolType] ON;
+
+INSERT INTO [dbo].[PoolType]
+(
+    [PoolTypeID]
+  , [Caption]
+  , [ShortCaption]
+  , [ABREV]
+)
+VALUES
+(1, N'Short Course Yards', 'ShortCourseY', N'SCY')
+, (2, N'Short Course Meters', 'ShortCourse', N'SCM')
+, (3, N'Long Course', 'LongCourse', N'LCM')
+GO
+
+SET IDENTITY_INSERT [dbo].[PoolType] OFF;
 
 /* 
  * TABLE: RaceHistory 
@@ -766,7 +987,7 @@ CREATE TABLE RaceHistory(
     StrokeID             int               NOT NULL,
     HRID                 int               NOT NULL,
     RaceHistoryTypeID    int               NULL,
-    DisqualifiedID       int               NULL,
+    DisqualifyCodeID     int               NULL,
     PoolTypeID           int               NULL,
     CONSTRAINT PK_RaceHistory PRIMARY KEY CLUSTERED (RaceHistoryID)
 )
@@ -819,12 +1040,6 @@ IF OBJECT_ID('RaceHistoryType') IS NOT NULL
 ELSE
     PRINT '<<< FAILED CREATING TABLE RaceHistoryType >>>'
 go
-USE [SCM_Coach]
-GO
-
-DELETE FROM [dbo].[RaceHistoryType]
-GO
-
 SET IDENTITY_INSERT [dbo].[RaceHistoryType] ON;
 
 INSERT INTO [dbo].[RaceHistoryType]
@@ -848,6 +1063,7 @@ SET IDENTITY_INSERT [dbo].[RaceHistoryType] OFF;
 
 CREATE TABLE SCMCoach(
     SCMCoachID         int              IDENTITY(1,1),
+    BusinessName       nvarchar(128)    NULL,
     NickName           nvarchar(128)    NULL,
     Caption            nvarchar(128)    NULL,
     Email              nvarchar(128)    NULL,
@@ -859,6 +1075,10 @@ CREATE TABLE SCMCoach(
     LogoImg            image            NULL,
     LogoType           nvarchar(5)      NULL,
     DictionaryState    int              NULL,
+    defSessionDir      nvarchar(max)    NULL,
+    defProgramDir      nvarchar(max)    NULL,
+    defExportDir       nvarchar(max)    NULL,
+    defImportDir       nvarchar(max)    NULL,
     CONSTRAINT PK_SCMCoach PRIMARY KEY CLUSTERED (SCMCoachID)
 )
 go
@@ -870,29 +1090,27 @@ IF OBJECT_ID('SCMCoach') IS NOT NULL
 ELSE
     PRINT '<<< FAILED CREATING TABLE SCMCoach >>>'
 go
-USE [SCM_Coach]
+SET IDENTITY_INSERT [dbo].[SCMCoach] ON
 GO
-
-DELETE FROM [dbo].[SCMCoach]
-GO
-
-SET IDENTITY_INSERT [dbo].[SCMCoach] ON;
-
 INSERT [dbo].[SCMCoach]
 (
     [SCMCoachID]
-		, [NickName]
-		,[Caption]
-		,[Email]
-		,[ContactNum]
-		,[WebSite]
-		,[CreatedOn]
+  , [NickName]
+  , [Caption]
+  , [Email]
+  , [ContactNum]
+  , [WebSite]
+  , [CreatedOn]
+  , [ArchivedOn]
+  , [LogoDir]
+  , [LogoImg]
+  , [LogoType]
+  , [DictionaryState]
 )
 VALUES
-(1, N'Riptide', N'Utopia Coaching', N'iapetus@sbcglobal.net', N'(284) 899-6811', N'https://www.google.com/', GETDATE())
+(1, N'Riptide', N'Utopia Coaching', N'iapetus@sbcglobal.net', N'(284) 899-6811', N'https://www.google.com/'
+, CAST(N'2023-04-30T12:51:11.990' AS DATETIME), NULL, NULL, NULL, NULL, NULL)
 GO
-
-
 SET IDENTITY_INSERT [dbo].[SCMCoach] OFF
 GO
 
@@ -922,16 +1140,19 @@ go
  */
 
 CREATE TABLE Session(
-    SessionID      int              IDENTITY(1,1),
-    Caption        nvarchar(128)    NULL,
-    CreatedOn      datetime         NULL,
-    ModifiedOn     datetime         NULL,
-    lanesBooked    int              NULL,
-    timeBooked     time(7)          NULL,
-    totTime        time(7)          NULL,
-    totKM          char(10)         NULL,
-    PoolID         int              NOT NULL,
-    SCMCoachID     int              NULL,
+    SessionID        int              IDENTITY(1,1),
+    Caption          nvarchar(128)    NULL,
+    FileName         nvarchar(max)    NULL,
+    CreatedOn        datetime         NULL,
+    ModifiedOn       datetime         NULL,
+    lanesBooked      int              NULL,
+    timeBooked       time(7)          NULL,
+    startDateTime    datetime         NULL,
+    endDateTime      datetime         NULL,
+    KMswum           float            NULL,
+    PoolID           int              NOT NULL,
+    SCMCoachID       int              NULL,
+    SessionTypeID    int              NULL,
     CONSTRAINT PK_Session PRIMARY KEY NONCLUSTERED (SessionID)
 )
 go
@@ -942,6 +1163,25 @@ IF OBJECT_ID('Session') IS NOT NULL
     PRINT '<<< CREATED TABLE Session >>>'
 ELSE
     PRINT '<<< FAILED CREATING TABLE Session >>>'
+go
+
+/* 
+ * TABLE: SessionType 
+ */
+
+CREATE TABLE SessionType(
+    SessionTypeID    int              IDENTITY(1,1),
+    Caption          nvarchar(128)    NULL,
+    CONSTRAINT PK_SessionType PRIMARY KEY CLUSTERED (SessionTypeID)
+)
+go
+
+
+
+IF OBJECT_ID('SessionType') IS NOT NULL
+    PRINT '<<< CREATED TABLE SessionType >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE SessionType >>>'
 go
 
 /* 
@@ -1066,6 +1306,7 @@ CREATE TABLE Team(
     CreatedOn     datetime         NULL,
     ModifiedOn    datetime         NULL,
     TeamIconID    int              NULL,
+    TeamTypeID    int              NULL,
     CONSTRAINT PK_Team PRIMARY KEY NONCLUSTERED (TeamID)
 )
 go
@@ -1100,47 +1341,63 @@ ELSE
 go
 
 /* 
- * TABLE: TeamTmp 
+ * TABLE: TeamLink 
  */
 
-CREATE TABLE TeamTmp(
-    TeamTmpID     int              IDENTITY(1,1),
-    Caption       nvarchar(128)    NULL,
-    NickName      nvarchar(128)    NULL,
-    Color         int              NULL,
-    SCMCoachID    int              NULL,
-    TeamIconID    int              NULL,
-    CONSTRAINT PK_TeamTmp PRIMARY KEY CLUSTERED (TeamTmpID)
+CREATE TABLE TeamLink(
+    TeamLinkID    int    IDENTITY(1,1),
+    TeamID        int    NOT NULL,
+    SessionID     int    NOT NULL,
+    CONSTRAINT PK_TeamLink PRIMARY KEY CLUSTERED (TeamLinkID, TeamID, SessionID)
 )
 go
 
 
 
-IF OBJECT_ID('TeamTmp') IS NOT NULL
-    PRINT '<<< CREATED TABLE TeamTmp >>>'
+IF OBJECT_ID('TeamLink') IS NOT NULL
+    PRINT '<<< CREATED TABLE TeamLink >>>'
 ELSE
-    PRINT '<<< FAILED CREATING TABLE TeamTmp >>>'
+    PRINT '<<< FAILED CREATING TABLE TeamLink >>>'
 go
 
 /* 
- * TABLE: TeamTmpLink 
+ * TABLE: TeamType 
  */
 
-CREATE TABLE TeamTmpLink(
-    TeamTmpLinkID    int    IDENTITY(1,1),
-    TeamTmpID        int    NOT NULL,
-    HRID             int    NOT NULL,
-    CONSTRAINT PK_TeamTmpLink PRIMARY KEY CLUSTERED (TeamTmpLinkID, TeamTmpID, HRID)
+CREATE TABLE TeamType(
+    TeamTypeID    int             IDENTITY(1,1),
+    Caption       nvarchar(16)    NULL,
+    CONSTRAINT PK_TeamType PRIMARY KEY CLUSTERED (TeamTypeID)
 )
 go
 
 
 
-IF OBJECT_ID('TeamTmpLink') IS NOT NULL
-    PRINT '<<< CREATED TABLE TeamTmpLink >>>'
+IF OBJECT_ID('TeamType') IS NOT NULL
+    PRINT '<<< CREATED TABLE TeamType >>>'
 ELSE
-    PRINT '<<< FAILED CREATING TABLE TeamTmpLink >>>'
+    PRINT '<<< FAILED CREATING TABLE TeamType >>>'
 go
+SET IDENTITY_INSERT [dbo].[TeamType] ON
+GO
+INSERT [dbo].[TeamType]
+(
+    [TeamTypeID]
+  , [Caption]
+)
+VALUES
+(1, N'Default')
+GO
+INSERT [dbo].[TeamType]
+(
+    [TeamTypeID]
+  , [Caption]
+)
+VALUES
+(2, N'Template')
+GO
+SET IDENTITY_INSERT [dbo].[TeamType] OFF
+GO
 
 /* 
  * TABLE: TreeNode 
@@ -1174,9 +1431,9 @@ go
  */
 
 CREATE TABLE TreeRoot(
-    TreeRootID    int              IDENTITY(1,1),
-    Caption       nvarchar(128)    NULL,
-    WorkOutID     int              NULL,
+    TreeRootID      int              IDENTITY(1,1),
+    Caption         nvarchar(128)    NULL,
+    PlayScriptID    int              NULL,
     CONSTRAINT PK_TreeRoot PRIMARY KEY CLUSTERED (TreeRootID)
 )
 go
@@ -1190,29 +1447,6 @@ ELSE
 go
 
 /* 
- * TABLE: WorkOut 
- */
-
-CREATE TABLE WorkOut(
-    WorkOutID     int              IDENTITY(1,1),
-    Caption       nvarchar(128)    NULL,
-    CreatedOn     datetime         NULL,
-    ModifiedOn    datetime         NULL,
-    TeamID        int              NOT NULL,
-    SessionID     int              NOT NULL,
-    CONSTRAINT PK_WorkOut PRIMARY KEY CLUSTERED (WorkOutID)
-)
-go
-
-
-
-IF OBJECT_ID('WorkOut') IS NOT NULL
-    PRINT '<<< CREATED TABLE WorkOut >>>'
-ELSE
-    PRINT '<<< FAILED CREATING TABLE WorkOut >>>'
-go
-
-/* 
  * TABLE: CoachLink 
  */
 
@@ -1221,9 +1455,9 @@ ALTER TABLE CoachLink ADD CONSTRAINT HRCoachLink
     REFERENCES HR(HRID)
 go
 
-ALTER TABLE CoachLink ADD CONSTRAINT TeamCoachLink 
-    FOREIGN KEY (TeamID)
-    REFERENCES Team(TeamID)
+ALTER TABLE CoachLink ADD CONSTRAINT SessionCoachLink 
+    FOREIGN KEY (SessionID)
+    REFERENCES Session(SessionID)
 go
 
 
@@ -1247,13 +1481,23 @@ go
  */
 
 ALTER TABLE Dictionary ADD CONSTRAINT DictionaryTypeDictionary 
-    FOREIGN KEY (DictionaryType)
-    REFERENCES DictionaryType(DictionaryType)
+    FOREIGN KEY (DictionaryTypeID)
+    REFERENCES DictionaryType(DictionaryTypeID)
 go
 
 ALTER TABLE Dictionary ADD CONSTRAINT SCMCoachDictionary 
     FOREIGN KEY (SCMCoachID)
     REFERENCES SCMCoach(SCMCoachID)
+go
+
+
+/* 
+ * TABLE: DisqualifyCode 
+ */
+
+ALTER TABLE DisqualifyCode ADD CONSTRAINT DisqualifyTypeDisqualifyCode 
+    FOREIGN KEY (DisqualifyTypeID)
+    REFERENCES DisqualifyType(DisqualifyTypeID)
 go
 
 
@@ -1276,7 +1520,7 @@ go
  * TABLE: evTime 
  */
 
-ALTER TABLE evTime ADD CONSTRAINT heartRangeevTi6 
+ALTER TABLE evTime ADD CONSTRAINT heartRangeevTi8 
     FOREIGN KEY (heartREST)
     REFERENCES heartRange(heartRangeID)
 go
@@ -1313,6 +1557,31 @@ go
 
 
 /* 
+ * TABLE: PlayBook 
+ */
+
+ALTER TABLE PlayBook ADD CONSTRAINT PlayScriptPlayBook 
+    FOREIGN KEY (PlayScriptID)
+    REFERENCES PlayScript(PlayScriptID)
+go
+
+
+/* 
+ * TABLE: PlayScript 
+ */
+
+ALTER TABLE PlayScript ADD CONSTRAINT PlayScriptTypePlayScript 
+    FOREIGN KEY (PlayScriptTypeID)
+    REFERENCES PlayScriptType(PlayScriptTypeID)
+go
+
+ALTER TABLE PlayScript ADD CONSTRAINT SessionPlayScript 
+    FOREIGN KEY (SessionID)
+    REFERENCES Session(SessionID)
+go
+
+
+/* 
  * TABLE: Pool 
  */
 
@@ -1326,9 +1595,9 @@ go
  * TABLE: RaceHistory 
  */
 
-ALTER TABLE RaceHistory ADD CONSTRAINT DisqualifiedRaceHistory 
-    FOREIGN KEY (DisqualifiedID)
-    REFERENCES Disqualified(DisqualifiedID)
+ALTER TABLE RaceHistory ADD CONSTRAINT DisqualifyCodeRaceHistory 
+    FOREIGN KEY (DisqualifyCodeID)
+    REFERENCES DisqualifyCode(DisqualifyCodeID)
 go
 
 ALTER TABLE RaceHistory ADD CONSTRAINT DistanceRaceHistory 
@@ -1379,6 +1648,11 @@ go
 ALTER TABLE Session ADD CONSTRAINT SCMCoachSession 
     FOREIGN KEY (SCMCoachID)
     REFERENCES SCMCoach(SCMCoachID)
+go
+
+ALTER TABLE Session ADD CONSTRAINT SessionTypeSession 
+    FOREIGN KEY (SessionTypeID)
+    REFERENCES SessionType(SessionTypeID)
 go
 
 
@@ -1451,34 +1725,24 @@ ALTER TABLE Team ADD CONSTRAINT TeamIconTeam
     REFERENCES TeamIcon(TeamIconID)
 go
 
-
-/* 
- * TABLE: TeamTmp 
- */
-
-ALTER TABLE TeamTmp ADD CONSTRAINT SCMCoachTeamTmp 
-    FOREIGN KEY (SCMCoachID)
-    REFERENCES SCMCoach(SCMCoachID)
-go
-
-ALTER TABLE TeamTmp ADD CONSTRAINT TeamIconTeamTmp 
-    FOREIGN KEY (TeamIconID)
-    REFERENCES TeamIcon(TeamIconID)
+ALTER TABLE Team ADD CONSTRAINT TeamTypeTeam 
+    FOREIGN KEY (TeamTypeID)
+    REFERENCES TeamType(TeamTypeID)
 go
 
 
 /* 
- * TABLE: TeamTmpLink 
+ * TABLE: TeamLink 
  */
 
-ALTER TABLE TeamTmpLink ADD CONSTRAINT HRTeamTmpLink 
-    FOREIGN KEY (HRID)
-    REFERENCES HR(HRID)
+ALTER TABLE TeamLink ADD CONSTRAINT SessionTeamLink 
+    FOREIGN KEY (SessionID)
+    REFERENCES Session(SessionID)
 go
 
-ALTER TABLE TeamTmpLink ADD CONSTRAINT TeamTmpTeamTmpLink 
-    FOREIGN KEY (TeamTmpID)
-    REFERENCES TeamTmp(TeamTmpID)
+ALTER TABLE TeamLink ADD CONSTRAINT TeamTeamLink 
+    FOREIGN KEY (TeamID)
+    REFERENCES Team(TeamID)
 go
 
 
@@ -1506,24 +1770,9 @@ go
  * TABLE: TreeRoot 
  */
 
-ALTER TABLE TreeRoot ADD CONSTRAINT WorkOutTreeRoot 
-    FOREIGN KEY (WorkOutID)
-    REFERENCES WorkOut(WorkOutID)
-go
-
-
-/* 
- * TABLE: WorkOut 
- */
-
-ALTER TABLE WorkOut ADD CONSTRAINT SessionWorkOut 
-    FOREIGN KEY (SessionID)
-    REFERENCES Session(SessionID)
-go
-
-ALTER TABLE WorkOut ADD CONSTRAINT TeamWorkOut 
-    FOREIGN KEY (TeamID)
-    REFERENCES Team(TeamID)
+ALTER TABLE TreeRoot ADD CONSTRAINT PlayScriptTreeRoot 
+    FOREIGN KEY (PlayScriptID)
+    REFERENCES PlayScript(PlayScriptID)
 go
 
 

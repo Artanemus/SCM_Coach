@@ -27,6 +27,8 @@ type
     ListView3: TListView;
     Button1: TButton;
     Button2: TButton;
+    Label10: TLabel;
+    TimePicker3: TTimePicker;
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
