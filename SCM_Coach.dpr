@@ -39,7 +39,8 @@ uses
   frmSquadT in 'SQUAD\frmSquadT.pas' {SquadT},
   dmSquadData in 'SQUAD\dmSquadData.pas' {SquadData: TDataModule},
   dlgSquadEditTemplate in 'SQUAD\dlgSquadEditTemplate.pas' {SquadEditTemplate},
-  dlgNewSession in 'SESSION\dlgNewSession.pas' {NewSession};
+  dlgNewSession in 'SESSION\dlgNewSession.pas' {NewSession},
+  frmDisqualificationCodes in 'REPORTS\frmDisqualificationCodes.pas' {Form1};
 
 {$R *.res}
 

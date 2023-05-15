@@ -375,7 +375,7 @@ object ImportSCMWizard: TImportSCMWizard
     Top = 81
     Width = 669
     Height = 591
-    ActivePage = tabSelect
+    ActivePage = tabFinalStep
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -388,8 +388,6 @@ object ImportSCMWizard: TImportSCMWizard
     TabOrder = 2
     TabWidth = 90
     OnChange = pageCNTRLChange
-    ExplicitWidth = 665
-    ExplicitHeight = 590
     object tabStart: TTabSheet
       Caption = 'Start'
       object lblMsgStartInfo: TLabel
@@ -566,7 +564,7 @@ object ImportSCMWizard: TImportSCMWizard
       end
       object btnDisconnect: TButton
         AlignWithMargins = True
-        Left = 337
+        Left = 335
         Top = 357
         Width = 85
         Height = 83
@@ -579,7 +577,7 @@ object ImportSCMWizard: TImportSCMWizard
       end
       object btnLogin: TButton
         AlignWithMargins = True
-        Left = 238
+        Left = 236
         Top = 357
         Width = 85
         Height = 83
@@ -869,6 +867,15 @@ object ImportSCMWizard: TImportSCMWizard
             AlignTopWithPanel = False
             AlignVerticalCenterWithPanel = False
             Below = btnGo
+          end
+          item
+            Control = ProgressBar1
+            AlignBottomWithPanel = False
+            AlignHorizontalCenterWithPanel = True
+            AlignLeftWithPanel = False
+            AlignRightWithPanel = False
+            AlignTopWithPanel = False
+            AlignVerticalCenterWithPanel = False
           end>
         Align = alClient
         BevelOuter = bvNone
@@ -904,6 +911,15 @@ object ImportSCMWizard: TImportSCMWizard
           Alignment = taCenter
           Anchors = []
           Caption = 'Click to import.'
+        end
+        object ProgressBar1: TProgressBar
+          Left = 22
+          Top = 344
+          Width = 617
+          Height = 17
+          Anchors = []
+          TabOrder = 1
+          Visible = False
         end
       end
     end

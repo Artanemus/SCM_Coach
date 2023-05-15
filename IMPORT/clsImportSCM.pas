@@ -11,7 +11,8 @@ interface
 
 uses
 {$IFDEF VCL}
-  Classes, FireDAC.Comp.Client, dmImportData, SCMMemberObj;
+  Classes, FireDAC.Comp.Client, dmImportData, SCMMemberObj,
+  Winapi.Windows, Winapi.Messages, vcl.Forms, SCMDefines;
 {$IFEND}
 
 type
@@ -39,9 +40,9 @@ type
 
     // 0 Unknown; 1 complete no errors; 2 err#
     property State: integer read fState;
-    property DoContactNum: boolean read FDoContactNum write FDoContactNum;
-    property DoSplit: boolean read FDoSplit write FDoSplit;
-    property DoRaceHistory: boolean read FDoRaceHistory write FDoRaceHistory;
+    property DoContactNum: boolean read fDoContactNum write fDoContactNum;
+    property DoSplit: boolean read fDoSplit write fDoSplit;
+    property DoRaceHistory: boolean read fDoRaceHistory write fDoRaceHistory;
 
   published
     { published declarations }
@@ -88,6 +89,12 @@ begin
       // C R E A T E   N E W   S Q U A D   M E M B E R .
       // insert this SCM member into the squad ....
       HRID := ImportData.InsertMember(MemberID);
+      // PROGRESS BAR
+      PostMessage(TForm(Owner).Handle, SCM_PROGRESSBARUPDATE, i,
+        (list.count - 1));
+      // Application.ProcessMessages;
+
+      // EXTENDED MEMBER DATA
       if (HRID <> 0) then
       begin
         countHRs := countHRs + 1;

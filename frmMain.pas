@@ -35,7 +35,7 @@ type
     Stats_Swimmer: TAction;
     Stats_Session: TAction;
     Stats_Performance: TAction;
-    Programs_New: TAction;
+    Playbook_New: TAction;
     Tools_Pools: TAction;
     Tools_Dictionary: TAction;
     Tools_Drills: TAction;
@@ -43,9 +43,9 @@ type
     Tools_PoolEquipment: TAction;
     Tools_Distance: TAction;
     Tools_Strokes: TAction;
-    Programs_Edit: TAction;
-    Programs_Delete: TAction;
-    Programs_Clone: TAction;
+    Playbook_Edit: TAction;
+    Playbook_Delete: TAction;
+    Playbook_Clone: TAction;
     Tools_StopWatches: TAction;
     Tools_Timed: TAction;
     Reports_Session: TAction;
@@ -67,17 +67,12 @@ type
     VirtualImage3: TVirtualImage;
     Help_About: TAction;
     FlowPanel1: TFlowPanel;
-    ListView2: TListView;
-    ListView3: TListView;
-    ListView4: TListView;
-    ListView5: TListView;
-    ListView6: TListView;
     VirtualImage4: TVirtualImage;
     VirtualImage5: TVirtualImage;
     VirtualImage6: TVirtualImage;
-    Programs_Open: TAction;
-    Programs_Save: TAction;
-    Programs_SaveAs: TAction;
+    Playbook_Open: TAction;
+    Playbook_Save: TAction;
+    Playbook_SaveAs: TAction;
     Edit_Contacts: TAction;
     Tools_Inventory: TAction;
     Help_WebHelp: TAction;
@@ -94,22 +89,23 @@ type
     spbtnSessionReport: TSpeedButton;
     ShapeSessDot1: TShape;
     sbtnSessionEdit: TSpeedButton;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Edit1: TEdit;
-    Edit2: TEdit;
-    Label6: TLabel;
-    Edit3: TEdit;
-    Label7: TLabel;
-    Edit4: TEdit;
     RelativePanel1: TRelativePanel;
     sbtnPrgItemNew: TSpeedButton;
     sbtnPrgItemEdit: TSpeedButton;
     sbtnPrgItemDelete: TSpeedButton;
-    ProgramItem_New: TAction;
-    ProgramItem_Edit: TAction;
-    ProgramItem_Delete: TAction;
+    Playscript_New: TAction;
+    Playscript_Delete: TAction;
+    ScrollBox1: TScrollBox;
+    Panel2: TPanel;
+    Label4: TLabel;
+    Edit1: TEdit;
+    Label5: TLabel;
+    Edit2: TEdit;
+    Label3: TLabel;
+    Playbook_ImportPlayScript: TAction;
+    Playbook_ExportPlayScript: TAction;
+    Playscript_Save: TAction;
+    Playscript_Load: TAction;
     procedure FormCreate(Sender: TObject);
     procedure Edit_SwimmersUpdate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -121,7 +117,7 @@ type
     procedure Squads_TemplatesUpdate(Sender: TObject);
     procedure Session_NewExecute(Sender: TObject);
     procedure Session_NewUpdate(Sender: TObject);
-    procedure ProgramItem_NewUpdate(Sender: TObject);
+    procedure Playscript_NewUpdate(Sender: TObject);
 
   private
     { Private declarations }
@@ -446,7 +442,7 @@ begin
   iFile.Free;
 end;
 
-procedure TMain.ProgramItem_NewUpdate(Sender: TObject);
+procedure TMain.Playscript_NewUpdate(Sender: TObject);
 var
 DoEnable: boolean;
 begin

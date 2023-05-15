@@ -79,21 +79,6 @@ object Main: TMain
         Font.Style = []
         ParentFont = False
       end
-      object Label3: TLabel
-        Left = 5
-        Top = 495
-        Width = 45
-        Height = 84
-        Alignment = taRightJustify
-        Caption = 'STATS'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -32
-        Font.Name = 'Segoe UI'
-        Font.Orientation = 900
-        Font.Style = []
-        ParentFont = False
-      end
       object ListView1: TListView
         Left = 122
         Top = 15
@@ -101,55 +86,6 @@ object Main: TMain
         Height = 878
         Columns = <>
         TabOrder = 0
-      end
-      object FlowPanel1: TFlowPanel
-        Left = 616
-        Top = 15
-        Width = 713
-        Height = 882
-        BorderStyle = bsSingle
-        Caption = 'FlowPanel1'
-        TabOrder = 1
-        object ListView2: TListView
-          Left = 1
-          Top = 1
-          Width = 250
-          Height = 336
-          Columns = <>
-          TabOrder = 0
-        end
-        object ListView3: TListView
-          Left = 251
-          Top = 1
-          Width = 250
-          Height = 232
-          Columns = <>
-          TabOrder = 1
-        end
-        object ListView4: TListView
-          Left = 1
-          Top = 337
-          Width = 250
-          Height = 232
-          Columns = <>
-          TabOrder = 2
-        end
-        object ListView5: TListView
-          Left = 1
-          Top = 569
-          Width = 500
-          Height = 232
-          Columns = <>
-          TabOrder = 3
-        end
-        object ListView6: TListView
-          Left = 1
-          Top = 801
-          Width = 250
-          Height = 408
-          Columns = <>
-          TabOrder = 4
-        end
       end
       object SessionWidgets: TRelativePanel
         Left = 56
@@ -245,81 +181,9 @@ object Main: TMain
             AlignTopWithPanel = False
             AlignVerticalCenterWithPanel = False
             Below = spbtnSessionNew
-          end
-          item
-            Control = Label4
-            AlignBottomWithPanel = False
-            AlignHorizontalCenterWithPanel = True
-            AlignLeftWithPanel = False
-            AlignRightWithPanel = False
-            AlignTopWithPanel = False
-            AlignVerticalCenterWithPanel = False
-          end
-          item
-            Control = Label5
-            AlignBottomWithPanel = False
-            AlignHorizontalCenterWithPanel = True
-            AlignLeftWithPanel = False
-            AlignRightWithPanel = False
-            AlignTopWithPanel = False
-            AlignVerticalCenterWithPanel = False
-          end
-          item
-            Control = Edit1
-            AlignBottomWithPanel = False
-            AlignHorizontalCenterWithPanel = True
-            AlignLeftWithPanel = False
-            AlignRightWithPanel = False
-            AlignTopWithPanel = False
-            AlignVerticalCenterWithPanel = False
-          end
-          item
-            Control = Edit2
-            AlignBottomWithPanel = False
-            AlignHorizontalCenterWithPanel = True
-            AlignLeftWithPanel = False
-            AlignRightWithPanel = False
-            AlignTopWithPanel = False
-            AlignVerticalCenterWithPanel = False
-          end
-          item
-            Control = Label6
-            AlignBottomWithPanel = False
-            AlignHorizontalCenterWithPanel = True
-            AlignLeftWithPanel = False
-            AlignRightWithPanel = False
-            AlignTopWithPanel = False
-            AlignVerticalCenterWithPanel = False
-          end
-          item
-            Control = Edit3
-            AlignBottomWithPanel = False
-            AlignHorizontalCenterWithPanel = True
-            AlignLeftWithPanel = False
-            AlignRightWithPanel = False
-            AlignTopWithPanel = False
-            AlignVerticalCenterWithPanel = False
-          end
-          item
-            Control = Label7
-            AlignBottomWithPanel = False
-            AlignHorizontalCenterWithPanel = True
-            AlignLeftWithPanel = False
-            AlignRightWithPanel = False
-            AlignTopWithPanel = False
-            AlignVerticalCenterWithPanel = False
-          end
-          item
-            Control = Edit4
-            AlignBottomWithPanel = False
-            AlignHorizontalCenterWithPanel = True
-            AlignLeftWithPanel = False
-            AlignRightWithPanel = False
-            AlignTopWithPanel = False
-            AlignVerticalCenterWithPanel = False
           end>
         BevelOuter = bvNone
-        TabOrder = 2
+        TabOrder = 1
         DesignSize = (
           60
           874)
@@ -372,8 +236,7 @@ object Main: TMain
           Height = 48
           Action = Session_New
           Anchors = []
-          ImageIndex = 2
-          ImageName = 'New'
+          ImageName = 'Lock'
           Images = vimglistSession
           Flat = True
           Layout = blGlyphTop
@@ -387,8 +250,7 @@ object Main: TMain
           Height = 48
           Action = Session_Delete
           Anchors = []
-          ImageIndex = 3
-          ImageName = 'Delete'
+          ImageName = 'Edit'
           Images = vimglistSession
           Flat = True
           Layout = blGlyphTop
@@ -438,89 +300,12 @@ object Main: TMain
           Height = 48
           Action = Session_Delete
           Anchors = []
-          ImageIndex = 6
           ImageName = 'Edit'
           Images = vimglistSession
           Flat = True
           Layout = blGlyphTop
           Margin = 0
           NumGlyphs = 2
-        end
-        object Label4: TLabel
-          Left = 14
-          Top = 480
-          Width = 32
-          Height = 21
-          Anchors = []
-          Caption = 'DUR'
-        end
-        object Label5: TLabel
-          Left = 14
-          Top = 542
-          Width = 32
-          Height = 21
-          Anchors = []
-          Caption = 'KMS'
-        end
-        object Edit1: TEdit
-          Left = 6
-          Top = 507
-          Width = 48
-          Height = 29
-          Alignment = taCenter
-          Anchors = []
-          ReadOnly = True
-          TabOrder = 0
-          Text = 'Mins'
-        end
-        object Edit2: TEdit
-          Left = 6
-          Top = 569
-          Width = 48
-          Height = 29
-          Alignment = taCenter
-          Anchors = []
-          ReadOnly = True
-          TabOrder = 1
-          Text = 'kms'
-        end
-        object Label6: TLabel
-          Left = 23
-          Top = 604
-          Width = 14
-          Height = 21
-          Anchors = []
-          Caption = '??'
-        end
-        object Edit3: TEdit
-          Left = 6
-          Top = 631
-          Width = 48
-          Height = 29
-          Alignment = taCenter
-          Anchors = []
-          ReadOnly = True
-          TabOrder = 2
-          Text = '#'
-        end
-        object Label7: TLabel
-          Left = 23
-          Top = 666
-          Width = 14
-          Height = 21
-          Anchors = []
-          Caption = '??'
-        end
-        object Edit4: TEdit
-          Left = 6
-          Top = 693
-          Width = 48
-          Height = 29
-          Alignment = taCenter
-          Anchors = []
-          ReadOnly = True
-          TabOrder = 3
-          Text = '#'
         end
       end
       object RelativePanel1: TRelativePanel
@@ -557,7 +342,7 @@ object Main: TMain
             AlignVerticalCenterWithPanel = False
           end>
         BevelOuter = bvNone
-        TabOrder = 3
+        TabOrder = 2
         DesignSize = (
           60
           879)
@@ -566,10 +351,9 @@ object Main: TMain
           Top = 1
           Width = 48
           Height = 48
-          Action = ProgramItem_New
+          Action = Playscript_New
           Anchors = []
-          ImageIndex = 2
-          ImageName = 'New'
+          ImageName = 'Lock'
           Images = vimglistSession
           Flat = True
           Layout = blGlyphTop
@@ -581,8 +365,8 @@ object Main: TMain
           Top = 55
           Width = 48
           Height = 48
-          Action = ProgramItem_Edit
           Anchors = []
+          Caption = 'Edit Playscript'
           ImageIndex = 6
           ImageName = 'Edit'
           Images = vimglistSession
@@ -596,10 +380,9 @@ object Main: TMain
           Top = 109
           Width = 48
           Height = 48
-          Action = ProgramItem_Delete
+          Action = Playscript_Delete
           Anchors = []
-          ImageIndex = 3
-          ImageName = 'Delete'
+          ImageName = 'Edit'
           Images = vimglistSession
           Flat = True
           Layout = blGlyphTop
@@ -607,9 +390,84 @@ object Main: TMain
           NumGlyphs = 2
         end
       end
+      object ScrollBox1: TScrollBox
+        Left = 594
+        Top = 19
+        Width = 735
+        Height = 870
+        TabOrder = 3
+        object FlowPanel1: TFlowPanel
+          Left = 0
+          Top = 0
+          Width = 731
+          Height = 230
+          Align = alTop
+          AutoSize = True
+          BorderStyle = bsSingle
+          Caption = 'FlowPanel1'
+          TabOrder = 0
+          object Panel2: TPanel
+            Left = 1
+            Top = 1
+            Width = 128
+            Height = 224
+            Caption = 'Panel2'
+            TabOrder = 0
+            object Label4: TLabel
+              Left = 58
+              Top = 84
+              Width = 32
+              Height = 21
+              Caption = 'DUR'
+            end
+            object Label5: TLabel
+              Left = 56
+              Top = 22
+              Width = 32
+              Height = 21
+              Caption = 'KMS'
+            end
+            object Label3: TLabel
+              Left = 5
+              Top = 13
+              Width = 45
+              Height = 84
+              Alignment = taRightJustify
+              Caption = 'STATS'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -32
+              Font.Name = 'Segoe UI'
+              Font.Orientation = 900
+              Font.Style = []
+              ParentFont = False
+            end
+            object Edit1: TEdit
+              Left = 58
+              Top = 111
+              Width = 48
+              Height = 29
+              Alignment = taCenter
+              ReadOnly = True
+              TabOrder = 0
+              Text = 'Mins'
+            end
+            object Edit2: TEdit
+              Left = 56
+              Top = 49
+              Width = 48
+              Height = 29
+              Alignment = taCenter
+              ReadOnly = True
+              TabOrder = 1
+              Text = 'kms'
+            end
+          end
+        end
+      end
     end
     object TabSheet2: TTabSheet
-      Caption = 'Program Builder'
+      Caption = 'PlayScript 001'
       ImageIndex = 1
       object Splitter1: TSplitter
         Left = 0
@@ -721,8 +579,8 @@ object Main: TMain
             ImageCollection = ImageCollectionCoach
             ImageWidth = 0
             ImageHeight = 0
-            ImageIndex = 3
-            ImageName = 'LoadCoachPrg'
+            ImageIndex = 0
+            ImageName = 'MenuDots'
           end
           object VirtualImage2: TVirtualImage
             Left = 24
@@ -733,8 +591,8 @@ object Main: TMain
             ImageCollection = ImageCollectionCoach
             ImageWidth = 0
             ImageHeight = 0
-            ImageIndex = 5
-            ImageName = 'SaveCoachPrg'
+            ImageIndex = 0
+            ImageName = 'MenuDots'
           end
           object VirtualImage3: TVirtualImage
             Left = 24
@@ -745,8 +603,8 @@ object Main: TMain
             ImageCollection = ImageCollectionCoach
             ImageWidth = 0
             ImageHeight = 0
-            ImageIndex = 4
-            ImageName = 'SaveAsCoachPrg'
+            ImageIndex = 0
+            ImageName = 'MenuDots'
           end
           object VirtualImage4: TVirtualImage
             Left = 24
@@ -902,20 +760,100 @@ object Main: TMain
               item
                 Action = Session_New
                 Caption = '&New Session...'
+                ImageIndex = 4
+                ImageName = 'New'
               end
               item
                 Action = Session_Edit
                 Caption = '&Edit Session...'
+                ImageIndex = 5
+                ImageName = 'Edit'
               end
               item
                 Action = Session_Delete
                 Caption = '&Delete Session...'
+                ImageIndex = 6
+                ImageName = 'Delete'
               end
               item
                 Action = Session_Clone
                 Caption = '&Clone Session...'
+                ImageIndex = 7
+                ImageName = 'Clone'
               end>
             Caption = '&Session'
+            ImageIndex = 0
+            ImageName = 'MenuDots'
+          end
+          item
+            Items = <
+              item
+                Action = Playbook_New
+                Caption = '&New Playbook...'
+                ImageIndex = 4
+                ImageName = 'New'
+              end
+              item
+                Action = Playbook_Open
+                Caption = '&Open Playbook...'
+              end
+              item
+                Action = Playbook_Save
+                Caption = '&Save Playbook...'
+              end
+              item
+                Action = Playbook_SaveAs
+                Caption = 'S&ave As Playbook...'
+              end
+              item
+                Caption = '-'
+              end
+              item
+                Action = Playbook_ImportPlayScript
+                Caption = '&Import Play Scripts'
+                ImageIndex = 1
+                ImageName = 'Import'
+              end
+              item
+                Action = Playbook_ExportPlayScript
+                Caption = '&Export Play Scripts'
+                ImageIndex = 2
+                ImageName = 'Export'
+              end>
+            Caption = '&Playbook'
+            ImageIndex = 0
+            ImageName = 'MenuDots'
+          end
+          item
+            Items = <
+              item
+                Action = Playscript_New
+                Caption = '&New Playscript'
+                ImageIndex = 4
+                ImageName = 'New'
+              end
+              item
+                Action = Playscript_Delete
+                Caption = '&Delete Playscript'
+                ImageIndex = 6
+                ImageName = 'Delete'
+              end
+              item
+                Caption = '-'
+              end
+              item
+                Action = Playscript_Load
+                Caption = '&Load from file...'
+                ImageIndex = 10
+                ImageName = 'FileRead'
+              end
+              item
+                Action = Playscript_Save
+                Caption = '&Save to file...'
+                ImageIndex = 9
+                ImageName = 'FileWrite'
+              end>
+            Caption = 'P&layscript'
             ImageIndex = 0
             ImageName = 'MenuDots'
           end
@@ -941,28 +879,6 @@ object Main: TMain
                 Caption = '&Delete Squad...'
               end>
             Caption = 'S&quads'
-            ImageIndex = 0
-            ImageName = 'MenuDots'
-          end
-          item
-            Items = <
-              item
-                Action = Programs_New
-                Caption = '&New Program...'
-              end
-              item
-                Action = Programs_Open
-                Caption = '&Open Program...'
-              end
-              item
-                Action = Programs_Save
-                Caption = '&Save Program...'
-              end
-              item
-                Action = Programs_SaveAs
-                Caption = 'S&ave As Programs...'
-              end>
-            Caption = '&Programs'
             ImageIndex = 0
             ImageName = 'MenuDots'
           end
@@ -1068,7 +984,7 @@ object Main: TMain
       end>
     Images = virtImageListMenu
     Left = 664
-    Top = 368
+    Top = 608
     StyleName = 'Platform Default'
     object Edit_Coaches: TAction
       Category = 'Edit'
@@ -1087,16 +1003,22 @@ object Main: TMain
     object Session_New: TAction
       Category = 'Session'
       Caption = 'New Session...'
+      ImageIndex = 4
+      ImageName = 'New'
       OnExecute = Session_NewExecute
       OnUpdate = Session_NewUpdate
     end
     object Session_Edit: TAction
       Category = 'Session'
       Caption = 'Edit Session...'
+      ImageIndex = 5
+      ImageName = 'Edit'
     end
     object Session_Delete: TAction
       Category = 'Session'
       Caption = 'Delete Session...'
+      ImageIndex = 6
+      ImageName = 'Delete'
     end
     object File_Connect: TAction
       Category = 'File'
@@ -1133,6 +1055,8 @@ object Main: TMain
     object Session_Clone: TAction
       Category = 'Session'
       Caption = 'Clone Session...'
+      ImageIndex = 7
+      ImageName = 'Clone'
     end
     object Squad_Edit: TAction
       Category = 'Squads'
@@ -1164,13 +1088,15 @@ object Main: TMain
       Category = 'Analytics'
       Caption = 'Performance charts...'
     end
-    object Programs_New: TAction
-      Category = 'Programs'
-      Caption = 'New Program...'
+    object Playbook_New: TAction
+      Category = 'Playbook'
+      Caption = 'New Playbook...'
+      ImageIndex = 4
+      ImageName = 'New'
     end
-    object Programs_Open: TAction
-      Category = 'Programs'
-      Caption = 'Open Program...'
+    object Playbook_Open: TAction
+      Category = 'Playbook'
+      Caption = 'Open Playbook...'
     end
     object Tools_Pools: TAction
       Category = 'Tools'
@@ -1200,27 +1126,33 @@ object Main: TMain
       Category = 'Terms'
       Caption = 'Strokes...'
     end
-    object Programs_Save: TAction
-      Category = 'Programs'
-      Caption = 'Save Program...'
+    object Playbook_Save: TAction
+      Category = 'Playbook'
+      Caption = 'Save Playbook...'
     end
-    object Programs_SaveAs: TAction
-      Category = 'Programs'
-      Caption = 'Save As Programs...'
+    object Playbook_SaveAs: TAction
+      Category = 'Playbook'
+      Caption = 'Save As Playbook...'
     end
-    object Programs_Edit: TAction
-      Category = 'Programs'
-      Caption = 'Edit Program...'
+    object Playbook_Edit: TAction
+      Category = 'Playbook'
+      Caption = 'Edit Playbook...'
+      ImageIndex = 5
+      ImageName = 'Edit'
       Visible = False
     end
-    object Programs_Delete: TAction
-      Category = 'Programs'
-      Caption = 'Delete Program...'
+    object Playbook_Delete: TAction
+      Category = 'Playbook'
+      Caption = 'Delete Playbook...'
+      ImageIndex = 6
+      ImageName = 'Delete'
       Visible = False
     end
-    object Programs_Clone: TAction
-      Category = 'Programs'
-      Caption = 'Clone Program...'
+    object Playbook_Clone: TAction
+      Category = 'Playbook'
+      Caption = 'Clone Playbook...'
+      ImageIndex = 7
+      ImageName = 'Clone'
       Visible = False
     end
     object Tools_StopWatches: TAction
@@ -1252,18 +1184,42 @@ object Main: TMain
       Caption = 'Disqualification Codes...'
       Enabled = False
     end
-    object ProgramItem_New: TAction
-      Category = 'ProgramItem'
-      Caption = 'New Program Item'
-      OnUpdate = ProgramItem_NewUpdate
+    object Playscript_New: TAction
+      Category = 'Playscript'
+      Caption = 'New Playscript'
+      ImageIndex = 4
+      ImageName = 'New'
+      OnUpdate = Playscript_NewUpdate
     end
-    object ProgramItem_Edit: TAction
-      Category = 'ProgramItem'
-      Caption = 'Edit Program Item'
+    object Playscript_Delete: TAction
+      Category = 'Playscript'
+      Caption = 'Delete Playscript'
+      ImageIndex = 6
+      ImageName = 'Delete'
     end
-    object ProgramItem_Delete: TAction
-      Category = 'ProgramItem'
-      Caption = 'Delete Program Item'
+    object Playbook_ImportPlayScript: TAction
+      Category = 'Playbook'
+      Caption = 'Import Play Scripts'
+      ImageIndex = 1
+      ImageName = 'Import'
+    end
+    object Playbook_ExportPlayScript: TAction
+      Category = 'Playbook'
+      Caption = 'Export Play Scripts'
+      ImageIndex = 2
+      ImageName = 'Export'
+    end
+    object Playscript_Save: TAction
+      Category = 'Playscript'
+      Caption = 'Save to file...'
+      ImageIndex = 9
+      ImageName = 'FileWrite'
+    end
+    object Playscript_Load: TAction
+      Category = 'Playscript'
+      Caption = 'Load from file...'
+      ImageIndex = 10
+      ImageName = 'FileRead'
     end
   end
   object ImageCollectionCoach: TImageCollection
@@ -1341,7 +1297,7 @@ object Main: TMain
           end>
       end
       item
-        Name = 'LoadCoachPrg'
+        Name = 'File'
         SourceImages = <
           item
             Image.Data = {
@@ -1360,7 +1316,7 @@ object Main: TMain
           end>
       end
       item
-        Name = 'SaveAsCoachPrg'
+        Name = 'FileWrite'
         SourceImages = <
           item
             Image.Data = {
@@ -1387,7 +1343,7 @@ object Main: TMain
           end>
       end
       item
-        Name = 'SaveCoachPrg'
+        Name = 'FileRead'
         SourceImages = <
           item
             Image.Data = {
@@ -1734,6 +1690,26 @@ object Main: TMain
               3C883F640482A872A27B644620EC11F80FD4919C3180B038370000000049454E
               44AE426082}
           end>
+      end
+      item
+        Name = 'Clone'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
+              87000000017352474200AECE1CE90000014A494441546843ED993D6E02311085
+              BFBD4E2E00220D54D4A4E50C697290349C216D52A7A301910B701DA2510A5628
+              B647B36BAF40CFD54AF6BE99F7DEF867BD1D77DEBA3BCF1F1198DAC1A803AFC0
+              16985522F0037C00BB127E84C006F82C018FD4FF027CE5B022040EC062A4044B
+              3047E0796C02971E60448052D2D6EF8E1149C00DEEC93431C61DE3A1092C7BEA
+              EC7BCF6E75A6762095A808389C718B949B0372C0A1746A881CC86D266E75E4C0
+              9F02D9BD4A93784099E45E7597A91C9003FF2BA012D23E30706EA88454422AA1
+              AB023A0BDD9E08DD2BC4803272C7D0596880CA3A8D96BE76527578AA78AD7EEB
+              8A5DB3CFA397BB2902F64FC048B46896BC9148B6C82436B027E01D585762F10D
+              BC01E7127E944009B759BF0834933A1128E740ABD5C6AEEE57512172045AAD36
+              D508B4586D2C46550251679BBD17F947D62C394F2011F0A85473CC2F06826B31
+              8E670DDF0000000049454E44AE426082}
+          end>
       end>
     Left = 664
     Top = 448
@@ -1759,6 +1735,41 @@ object Main: TMain
         CollectionIndex = 9
         CollectionName = 'Members'
         Name = 'Members'
+      end
+      item
+        CollectionIndex = 10
+        CollectionName = 'New'
+        Name = 'New'
+      end
+      item
+        CollectionIndex = 16
+        CollectionName = 'Edit'
+        Name = 'Edit'
+      end
+      item
+        CollectionIndex = 14
+        CollectionName = 'Delete'
+        Name = 'Delete'
+      end
+      item
+        CollectionIndex = 17
+        CollectionName = 'Clone'
+        Name = 'Clone'
+      end
+      item
+        CollectionIndex = 3
+        CollectionName = 'File'
+        Name = 'File'
+      end
+      item
+        CollectionIndex = 4
+        CollectionName = 'FileWrite'
+        Name = 'FileWrite'
+      end
+      item
+        CollectionIndex = 5
+        CollectionName = 'FileRead'
+        Name = 'FileRead'
       end>
     ImageCollection = ImageCollectionCoach
     Width = 32

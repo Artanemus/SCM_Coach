@@ -15,7 +15,7 @@ uses
   Vcl.VirtualImageList, Vcl.WinXCtrls, Vcl.ExtCtrls, System.Actions,
   Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnMan,
   System.Contnrs, Vcl.Buttons, clsImportSCM, SCMMemberObj, Vcl.Grids,
-  Vcl.DBGrids;
+  Vcl.DBGrids, SCMDefines;
 
 type
 
@@ -107,6 +107,7 @@ type
     Label1: TLabel;
     chkbDoContactNum: TCheckBox;
     chkbDoSplit: TCheckBox;
+    ProgressBar1: TProgressBar;
     procedure FormCreate(Sender: TObject);
     procedure ListBoxSrcDragOver(Sender, Source: TObject; X, Y: integer;
       State: TDragState; var Accept: Boolean);
@@ -147,7 +148,6 @@ type
     function MemberIsAssigned(obj: TObject; lbox: TListBox): Boolean;
     procedure BuildListBoxSource();
     procedure TransferItems(SrcListBox, DestListBox: TObject);
-
     procedure NavButtonState; // improves UI ? NOT USED.
 
     // WIZARD TRACK BAR
@@ -162,6 +162,15 @@ type
 
   public
     { Public declarations }
+
+    // ProgressBar CallBack
+    // SCM_PROGRESSBARBEGIN = WM_USER + 9;
+    procedure ProgressBarBegin(var Msg: TMessage); message SCM_PROGRESSBARBEGIN;
+    // SCM_PROGRESSBARUPDATE = WM_USER + 10;
+    procedure ProgressBarUpdate(var Msg: TMessage);
+      message SCM_PROGRESSBARUPDATE;
+    // SCM_PROGRESSBAREND = WM_USER + 11;
+    procedure ProgressBarEnd(var Msg: TMessage); message SCM_PROGRESSBAREND;
 
   end;
 
@@ -224,15 +233,20 @@ begin
   cls.DoRaceHistory := chkbDoRaceHistory.Checked;
   cls.DoSplit := true;
 
+  // INIT progress bar
+  SendMessage(Self.Handle, SCM_PROGRESSBARBEGIN, 0, 0);
+
   // I N T R O D U C E  N E W   M E M B E R (S)  T O   S QU A D .
   if (rgrpMethod.ItemIndex = 1) then
     cls.InsertMember(lbDest.Items)
-  // U P D A T E   P R O F I L E A N D   R A C E   H I S T O R Y .
-  { TODO -oBSA -cGeneral : Complete Action GO }
+
+    // U P D A T E   P R O F I L E  A N D   R A C E   H I S T O R Y .
+    { TODO -oBSA -cGeneral : Complete Action GO }
   else if (rgrpMethod.ItemIndex = 0) then
     cls.UpdateMembers(lbDest.Items);
 
-  {TODO -oBSA -cGeneral : Progress bar}
+  { TODO -oBSA -cGeneral : Progress bar }
+  SendMessage(Self.Handle, SCM_PROGRESSBAREND, 0, 0);
 
   if (cls.State = 1) then // success - no errors.
   begin
@@ -689,6 +703,35 @@ begin
   // NavButtonState;
 end;
 
+procedure TImportSCMWizard.ProgressBarBegin(var Msg: TMessage);
+begin
+  if (pageCNTRL.TabIndex = 5) then
+  begin
+    ProgressBar1.Position := 0;
+    ProgressBar1.Visible := true;
+  end;
+end;
+
+procedure TImportSCMWizard.ProgressBarEnd(var Msg: TMessage);
+begin
+  ProgressBar1.Visible := false;
+  ProgressBar1.Position := 0;
+end;
+
+procedure TImportSCMWizard.ProgressBarUpdate(var Msg: TMessage);
+begin
+  if (pageCNTRL.TabIndex = 5) then
+  begin
+    // position / max as a percentage
+    if Msg.WParam > 0 then // trap division by zero
+    begin
+      ProgressBar1.Position := Floor(Msg.LParam / Msg.WParam * 100);
+      ProgressBar1.Update;
+      Application.ProcessMessages;
+    end;
+  end;
+end;
+
 procedure TImportSCMWizard.rgrpMethodClick(Sender: TObject);
 begin
   // User picks data method
@@ -853,8 +896,7 @@ begin
   end;
 
   // SUCCESS
-  if (fTrackState >= 4) and (tabSuccess.Visible)
-  then
+  if (fTrackState >= 4) and (tabSuccess.Visible) then
   begin
     sbtnFinalStep.ImageName := 'wizImageTick';
     sbtnFinalStep.SelectedImageName := 'wizImageSelectedTick';
@@ -864,7 +906,6 @@ begin
     sbtnFinalStep.ImageName := 'wizImage';
     sbtnFinalStep.SelectedImageName := 'wizImageSelected';
   end;
-
 
 end;
 
