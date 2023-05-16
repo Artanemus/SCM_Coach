@@ -1183,6 +1183,8 @@ object Main: TMain
       Category = 'Tools'
       Caption = 'Disqualification Codes...'
       Enabled = False
+      OnExecute = Tools_DisqualificationCodesExecute
+      OnUpdate = Tools_DisqualificationCodesUpdate
     end
     object Playscript_New: TAction
       Category = 'Playscript'

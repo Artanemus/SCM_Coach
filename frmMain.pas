@@ -118,6 +118,8 @@ type
     procedure Session_NewExecute(Sender: TObject);
     procedure Session_NewUpdate(Sender: TObject);
     procedure Playscript_NewUpdate(Sender: TObject);
+    procedure Tools_DisqualificationCodesExecute(Sender: TObject);
+    procedure Tools_DisqualificationCodesUpdate(Sender: TObject);
 
   private
     { Private declarations }
@@ -146,7 +148,8 @@ implementation
 {$R *.dfm}
 
 uses frmSessionNew, dlgBasicLogin, SCMUtility, IniFiles, System.UITypes,
-  dlgImportSelect, dlgImportSCMWizard, frmHR, frmSquadT;
+  dlgImportSelect, dlgImportSCMWizard, frmHR, frmSquadT,
+  frmDisqualificationCodes;
 
 function TMain.AssertConnection: boolean;
 begin
@@ -481,6 +484,23 @@ begin
 end;
 
 procedure TMain.Squads_TemplatesUpdate(Sender: TObject);
+begin
+  if AssertConnection then
+    TAction(Sender).Enabled := true
+  else
+    TAction(Sender).Enabled := false;
+end;
+
+procedure TMain.Tools_DisqualificationCodesExecute(Sender: TObject);
+var
+dlg: TDisqualificationCodes;
+begin
+  dlg := TDisqualificationCodes.CreateWithConnection(Self, COACH.coachConnection);
+  dlg.ShowModal;
+  dlg.Free;
+end;
+
+procedure TMain.Tools_DisqualificationCodesUpdate(Sender: TObject);
 begin
   if AssertConnection then
     TAction(Sender).Enabled := true
