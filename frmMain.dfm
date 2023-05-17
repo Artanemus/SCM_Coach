@@ -1101,6 +1101,8 @@ object Main: TMain
     object Tools_Pools: TAction
       Category = 'Tools'
       Caption = 'Pools...'
+      OnExecute = Tools_PoolsExecute
+      OnUpdate = Tools_PoolsUpdate
     end
     object Tools_Dictionary: TAction
       Category = 'Tools'

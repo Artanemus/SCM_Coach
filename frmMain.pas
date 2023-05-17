@@ -120,6 +120,8 @@ type
     procedure Playscript_NewUpdate(Sender: TObject);
     procedure Tools_DisqualificationCodesExecute(Sender: TObject);
     procedure Tools_DisqualificationCodesUpdate(Sender: TObject);
+    procedure Tools_PoolsExecute(Sender: TObject);
+    procedure Tools_PoolsUpdate(Sender: TObject);
 
   private
     { Private declarations }
@@ -147,9 +149,9 @@ implementation
 
 {$R *.dfm}
 
-uses frmSessionNew, dlgBasicLogin, SCMUtility, IniFiles, System.UITypes,
+uses dlgBasicLogin, SCMUtility, IniFiles, System.UITypes,
   dlgImportSelect, dlgImportSCMWizard, frmHR, frmSquadT,
-  frmDisqualificationCodes;
+  frmDisqualificationCodes, dlgSwimmingPools, dlgNewSession;
 
 function TMain.AssertConnection: boolean;
 begin
@@ -459,11 +461,11 @@ end;
 
 procedure TMain.Session_NewExecute(Sender: TObject);
 var
-  dlg: TSessionNew;
+  dlg: TNewSession;
 begin
-  dlg := TSessionNew.Create(Self);
-  dlg.ShowModal;
-  dlg.Free;
+//  dlg := TNewSession.CreateWithConnection(Self, COACH.coachConnection);
+//  dlg.ShowModal;
+//  dlg.Free;
 end;
 
 procedure TMain.Session_NewUpdate(Sender: TObject);
@@ -501,6 +503,23 @@ begin
 end;
 
 procedure TMain.Tools_DisqualificationCodesUpdate(Sender: TObject);
+begin
+  if AssertConnection then
+    TAction(Sender).Enabled := true
+  else
+    TAction(Sender).Enabled := false;
+end;
+
+procedure TMain.Tools_PoolsExecute(Sender: TObject);
+var
+dlg: TSwimmingPools;
+begin
+  dlg := TSwimmingPools.CreateWithConnection(Self, COACH.coachConnection);
+  dlg.ShowModal;
+  dlg.Free;
+end;
+
+procedure TMain.Tools_PoolsUpdate(Sender: TObject);
 begin
   if AssertConnection then
     TAction(Sender).Enabled := true

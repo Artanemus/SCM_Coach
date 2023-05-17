@@ -107,10 +107,6 @@
             <Form>Main</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="frmSessionNew.pas">
-            <Form>SessionNew</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="dlgSquadNew.pas">
             <Form>SquadNew</Form>
             <FormType>dfm</FormType>
@@ -228,6 +224,10 @@
         </DCCReference>
         <DCCReference Include="REPORTS\frmDisqualificationCodes.pas">
             <Form>Form1</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="dlgSwimmingPools.pas">
+            <Form>SwimmingPools</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">

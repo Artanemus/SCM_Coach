@@ -5,7 +5,6 @@ uses
   frmMain in 'frmMain.pas' {Main},
   Vcl.Themes,
   Vcl.Styles,
-  frmSessionNew in 'frmSessionNew.pas' {SessionNew},
   dlgSquadNew in 'dlgSquadNew.pas' {SquadNew},
   Lexer in 'LINTER\Lexer.pas',
   SimpleLexer in 'LINTER\SimpleLexer.pas',
@@ -40,7 +39,8 @@ uses
   dmSquadData in 'SQUAD\dmSquadData.pas' {SquadData: TDataModule},
   dlgSquadEditTemplate in 'SQUAD\dlgSquadEditTemplate.pas' {SquadEditTemplate},
   dlgNewSession in 'SESSION\dlgNewSession.pas' {NewSession},
-  frmDisqualificationCodes in 'REPORTS\frmDisqualificationCodes.pas' {Form1};
+  frmDisqualificationCodes in 'REPORTS\frmDisqualificationCodes.pas' {Form1},
+  dlgSwimmingPools in 'dlgSwimmingPools.pas' {SwimmingPools};
 
 {$R *.res}
 
