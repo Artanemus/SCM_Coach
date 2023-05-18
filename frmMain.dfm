@@ -236,7 +236,7 @@ object Main: TMain
           Height = 48
           Action = Session_New
           Anchors = []
-          ImageName = 'Lock'
+          ImageIndex = 2
           Images = vimglistSession
           Flat = True
           Layout = blGlyphTop
@@ -250,7 +250,7 @@ object Main: TMain
           Height = 48
           Action = Session_Delete
           Anchors = []
-          ImageName = 'Edit'
+          ImageIndex = 3
           Images = vimglistSession
           Flat = True
           Layout = blGlyphTop
@@ -309,8 +309,8 @@ object Main: TMain
         end
       end
       object RelativePanel1: TRelativePanel
-        Left = 528
-        Top = 18
+        Left = 530
+        Top = 16
         Width = 60
         Height = 879
         ControlCollection = <
@@ -382,7 +382,7 @@ object Main: TMain
           Height = 48
           Action = Playscript_Delete
           Anchors = []
-          ImageName = 'Edit'
+          ImageIndex = 3
           Images = vimglistSession
           Flat = True
           Layout = blGlyphTop
@@ -780,6 +780,15 @@ object Main: TMain
                 Caption = '&Clone Session...'
                 ImageIndex = 7
                 ImageName = 'Clone'
+              end
+              item
+                Caption = '-'
+              end
+              item
+                Action = Session_Find
+                Caption = 'Find Session (by Keyword)...'
+                ImageIndex = 11
+                ImageName = 'Search'
               end>
             Caption = '&Session'
             ImageIndex = 0
@@ -1224,6 +1233,12 @@ object Main: TMain
       Caption = 'Load from file...'
       ImageIndex = 10
       ImageName = 'FileRead'
+    end
+    object Session_Find: TAction
+      Category = 'Session'
+      Caption = 'Find...'
+      ImageIndex = 11
+      ImageName = 'Search'
     end
   end
   object ImageCollectionCoach: TImageCollection
@@ -1714,6 +1729,37 @@ object Main: TMain
               D508B4586D2C46550251679BBD17F947D62C394F2011F0A85473CC2F06826B31
               8E670DDF0000000049454E44AE426082}
           end>
+      end
+      item
+        Name = 'Search'
+        SourceImages = <
+          item
+            Image.Data = {
+              89504E470D0A1A0A0000000D49484452000000300000003008060000005702F9
+              87000000017352474200AECE1CE9000002A1494441546843ED99E151D6401086
+              5F2AD00EC00A900A900A1C2B502B102A502A102A502B502B502AD00EB403A002
+              9867E696593249EE2E7BE14B66727FC27CDC77B7CFBDEFEE6D604F2B1F7B2B8F
+              5F1BC0AE15DC1458B302AF25BD92F4323D8DE546D25F49BF25FD4C3FCFC639C5
+              426F257D927450181520EF25FD2F9C5F35AD06E0B9A4EF9DD3AED9EC54D265CD
+              174AE6960260932FC92EB6EEADA4AFC9229C2E270DA4598A2736F383F9A8D16C
+              940010D4AF4EF05792DE15D8821CF921E9998B181550A3C928012078026170EA
+              F8FFA262770E8093F76ABC496015CBF44FCD0170CA58C7C65965F07E572AD361
+              FA804AF54212CFD0C801FC73D506DB981253362527C813B3D3795273CA5A0FDF
+              19032058EC63D621806829C4FB9FD39AAC850AA1310680CF3FA4D5BFA5A40D6D
+              96BE7CE716012074286300C87D9C368B78BF0BED7321BCEE18C075AAEB047092
+              FCDB42012A12B739239C0763005EEA5CB2D78051863F3E3540D8AB8EF0C900BC
+              579B5D3CC98A965BB35A8816C06ECFF0464E81A6B935E66D7F0BA3C6518DD107
+              E6D2827339DA08E7D6D802DDCDC2252F5D8C769B37B95B7227E04B1E7D0B2A4C
+              BD787CF2A24093C290034005EC63FD0B971B095DDB84D186FC71D669D652E700
+              D8B3DB91A2002F25C0940C6A3EA76FA35927CA822500CCEBCACF67F44A54A721
+              35FADEE20CA2D99B5929409F12160C8AF4BD5276D5E165C8BF993581A8012020
+              2A081BEF9778C7CDA1E2D04AA39AF541FC3A0C510B6031911704646F58433C04
+              4ED014026F9F661053012C18FF57080F41828F25B92FCF2125A200954E7A34BD
+              09C42E01ECE44376DA3540186209002188A5004C865812C02488A50154432C11
+              A00F62B07B5D2A8087A087A285F1B7F9C385B26400EB78ED7F10BD97E6D201B2
+              37FD06903DA299276C0ACC7CC0D9E557AFC03D711588316245F5CB0000000049
+              454E44AE426082}
+          end>
       end>
     Left = 664
     Top = 448
@@ -1774,6 +1820,11 @@ object Main: TMain
         CollectionIndex = 5
         CollectionName = 'FileRead'
         Name = 'FileRead'
+      end
+      item
+        CollectionIndex = 18
+        CollectionName = 'Search'
+        Name = 'Search'
       end>
     ImageCollection = ImageCollectionCoach
     Width = 32

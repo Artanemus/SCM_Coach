@@ -106,6 +106,7 @@ type
     Playbook_ExportPlayScript: TAction;
     Playscript_Save: TAction;
     Playscript_Load: TAction;
+    Session_Find: TAction;
     procedure FormCreate(Sender: TObject);
     procedure Edit_SwimmersUpdate(Sender: TObject);
     procedure FormShow(Sender: TObject);

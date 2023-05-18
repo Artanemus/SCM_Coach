@@ -230,6 +230,10 @@
             <Form>SwimmingPools</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="SESSION\dlgFindSessionKeyword.pas">
+            <Form>FindSessionKeyword</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
