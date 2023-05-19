@@ -41,7 +41,8 @@ uses
   dlgNewSession in 'SESSION\dlgNewSession.pas' {NewSession},
   frmDisqualificationCodes in 'REPORTS\frmDisqualificationCodes.pas' {Form1},
   dlgSwimmingPools in 'dlgSwimmingPools.pas' {SwimmingPools},
-  dlgFindSessionKeyword in 'SESSION\dlgFindSessionKeyword.pas' {FindSessionKeyword};
+  dlgFindSessionKeyword in 'SESSION\dlgFindSessionKeyword.pas' {FindSessionKeyword},
+  dlgFindPlayscript in 'PLAYSCRIPT\dlgFindPlayscript.pas' {FindPlayscript};
 
 {$R *.res}
 

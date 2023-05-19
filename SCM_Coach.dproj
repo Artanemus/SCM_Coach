@@ -234,6 +234,10 @@
             <Form>FindSessionKeyword</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="PLAYSCRIPT\dlgFindPlayscript.pas">
+            <Form>FindPlayscript</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

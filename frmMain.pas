@@ -107,6 +107,7 @@ type
     Playscript_Save: TAction;
     Playscript_Load: TAction;
     Session_Find: TAction;
+    Playscript_Find: TAction;
     procedure FormCreate(Sender: TObject);
     procedure Edit_SwimmersUpdate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -123,6 +124,7 @@ type
     procedure Tools_DisqualificationCodesUpdate(Sender: TObject);
     procedure Tools_PoolsExecute(Sender: TObject);
     procedure Tools_PoolsUpdate(Sender: TObject);
+    procedure Playscript_FindExecute(Sender: TObject);
 
   private
     { Private declarations }
@@ -152,7 +154,7 @@ implementation
 
 uses dlgBasicLogin, SCMUtility, IniFiles, System.UITypes,
   dlgImportSelect, dlgImportSCMWizard, frmHR, frmSquadT,
-  frmDisqualificationCodes, dlgSwimmingPools, dlgNewSession;
+  frmDisqualificationCodes, dlgSwimmingPools, dlgNewSession, dlgFindPlayscript;
 
 function TMain.AssertConnection: boolean;
 begin
@@ -446,6 +448,15 @@ begin
     TStyleManager.TrySetStyle(fscmStyleName);
 
   iFile.Free;
+end;
+
+procedure TMain.Playscript_FindExecute(Sender: TObject);
+var
+  dlg: TFindPlayscript;
+begin
+  dlg := TFindPlayscript.CreateWithConnection(Self, COACH.coachConnection);
+  dlg.ShowModal;
+  dlg.Free;
 end;
 
 procedure TMain.Playscript_NewUpdate(Sender: TObject);

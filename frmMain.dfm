@@ -786,7 +786,7 @@ object Main: TMain
               end
               item
                 Action = Session_Find
-                Caption = 'Find Session (by Keyword)...'
+                Caption = '&Find Session (by Keyword)...'
                 ImageIndex = 11
                 ImageName = 'Search'
               end>
@@ -861,6 +861,15 @@ object Main: TMain
                 Caption = '&Save to file...'
                 ImageIndex = 9
                 ImageName = 'FileWrite'
+              end
+              item
+                Caption = '-'
+              end
+              item
+                Action = Playscript_Find
+                Caption = '&Find...'
+                ImageIndex = 11
+                ImageName = 'Search'
               end>
             Caption = 'P&layscript'
             ImageIndex = 0
@@ -1239,6 +1248,13 @@ object Main: TMain
       Caption = 'Find...'
       ImageIndex = 11
       ImageName = 'Search'
+    end
+    object Playscript_Find: TAction
+      Category = 'Playscript'
+      Caption = 'Find...'
+      ImageIndex = 11
+      ImageName = 'Search'
+      OnExecute = Playscript_FindExecute
     end
   end
   object ImageCollectionCoach: TImageCollection

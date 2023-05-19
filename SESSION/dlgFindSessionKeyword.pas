@@ -46,10 +46,9 @@ constructor TFindSessionKeyword.CreateWithConnection(AOwner: TComponent;
 begin
   inherited Create(AOwner);
   qryFindSession.Connection := AConnection;
-  qryFindSession.Connection := AConnection;
   qryFindSession.Open;
-  if qryFindSession.Active then
-    ; // ...
+  if not qryFindSession.Active then
+    abort;
 end;
 
 end.

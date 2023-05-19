@@ -19,30 +19,30 @@ object FindSessionKeyword: TFindSessionKeyword
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = 394
-    ExplicitWidth = 624
+    ExplicitTop = 590
+    ExplicitWidth = 826
     DesignSize = (
       830
       48)
     object btnOk: TButton
-      Left = 751
+      Left = 743
       Top = 9
       Width = 75
       Height = 29
       Anchors = [akTop, akRight]
       Caption = 'btnOk'
       TabOrder = 0
-      ExplicitLeft = 681
+      ExplicitLeft = 739
     end
     object btnCancel: TButton
-      Left = 655
+      Left = 647
       Top = 9
       Width = 75
       Height = 29
       Anchors = [akTop, akRight]
       Caption = 'btnCancel'
       TabOrder = 1
-      ExplicitLeft = 585
+      ExplicitLeft = 643
     end
   end
   object Panel2: TPanel
@@ -53,9 +53,7 @@ object FindSessionKeyword: TFindSessionKeyword
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitLeft = 16
-    ExplicitTop = 8
-    ExplicitWidth = 185
+    ExplicitWidth = 826
     DesignSize = (
       830
       41)
@@ -69,12 +67,12 @@ object FindSessionKeyword: TFindSessionKeyword
     object Edit1: TEdit
       Left = 90
       Top = 7
-      Width = 736
+      Width = 728
       Height = 29
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 0
       Text = 'Edit1'
-      ExplicitWidth = 666
+      ExplicitWidth = 724
     end
   end
   object Panel3: TPanel
@@ -85,10 +83,8 @@ object FindSessionKeyword: TFindSessionKeyword
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitLeft = 224
-    ExplicitTop = 216
-    ExplicitWidth = 185
-    ExplicitHeight = 41
+    ExplicitWidth = 826
+    ExplicitHeight = 549
     object DBListBox1: TDBListBox
       Left = 0
       Top = 0
@@ -99,7 +95,7 @@ object FindSessionKeyword: TFindSessionKeyword
       DataSource = dsFindSession
       ItemHeight = 21
       TabOrder = 0
-      ExplicitHeight = 493
+      ExplicitHeight = 549
     end
     object PageControl1: TPageControl
       Left = 209
@@ -109,9 +105,8 @@ object FindSessionKeyword: TFindSessionKeyword
       ActivePage = TabSheet1
       Align = alClient
       TabOrder = 1
-      ExplicitLeft = 193
-      ExplicitWidth = 431
-      ExplicitHeight = 352
+      ExplicitWidth = 617
+      ExplicitHeight = 549
       object TabSheet1: TTabSheet
         Caption = 'PlayScript'
       end
