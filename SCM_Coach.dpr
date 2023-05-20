@@ -5,12 +5,10 @@ uses
   frmMain in 'frmMain.pas' {Main},
   Vcl.Themes,
   Vcl.Styles,
-  dlgSquadNew in 'dlgSquadNew.pas' {SquadNew},
   Lexer in 'LINTER\Lexer.pas',
   SimpleLexer in 'LINTER\SimpleLexer.pas',
   dmCoach in 'dmCoach.pas' {COACH: TDataModule},
   dlgBootProgress in 'dlgBootProgress.pas' {BootProgress},
-  dlgDOBPicker in 'dlgDOBPicker.pas' {DOBPicker},
   exeinfo in '..\SCM_SHARED\exeinfo.pas',
   SCMSimpleConnect in '..\SCM_SHARED\SCMSimpleConnect.pas',
   dlgBasicLogin in '..\SCM_SHARED\dlgBasicLogin.pas' {BasicLogin},
@@ -40,9 +38,12 @@ uses
   dlgSquadEditTemplate in 'SQUAD\dlgSquadEditTemplate.pas' {SquadEditTemplate},
   dlgNewSession in 'SESSION\dlgNewSession.pas' {NewSession},
   frmDisqualificationCodes in 'REPORTS\frmDisqualificationCodes.pas' {Form1},
-  dlgSwimmingPools in 'dlgSwimmingPools.pas' {SwimmingPools},
   dlgFindSessionKeyword in 'SESSION\dlgFindSessionKeyword.pas' {FindSessionKeyword},
-  dlgFindPlayscript in 'PLAYSCRIPT\dlgFindPlayscript.pas' {FindPlayscript};
+  dlgFindPlayscript in 'PLAYSCRIPT\dlgFindPlayscript.pas' {FindPlayscript},
+  dlgSquadNew in 'SQUAD\dlgSquadNew.pas' {SquadNew},
+  dlgSwimmingPools in 'TOOLS\dlgSwimmingPools.pas' {SwimmingPools},
+  dlgDOBPicker in 'TOOLS\dlgDOBPicker.pas' {DOBPicker},
+  dlgPreferences in 'dlgPreferences.pas' {Preferences};
 
 {$R *.res}
 

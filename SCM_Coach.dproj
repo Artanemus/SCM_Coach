@@ -107,10 +107,6 @@
             <Form>Main</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="dlgSquadNew.pas">
-            <Form>SquadNew</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="LINTER\Lexer.pas"/>
         <DCCReference Include="LINTER\SimpleLexer.pas"/>
         <DCCReference Include="dmCoach.pas">
@@ -120,10 +116,6 @@
         </DCCReference>
         <DCCReference Include="dlgBootProgress.pas">
             <Form>BootProgress</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="dlgDOBPicker.pas">
-            <Form>DOBPicker</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\SCM_SHARED\exeinfo.pas"/>
@@ -226,16 +218,28 @@
             <Form>Form1</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="dlgSwimmingPools.pas">
-            <Form>SwimmingPools</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="SESSION\dlgFindSessionKeyword.pas">
             <Form>FindSessionKeyword</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="PLAYSCRIPT\dlgFindPlayscript.pas">
             <Form>FindPlayscript</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="SQUAD\dlgSquadNew.pas">
+            <Form>SquadNew</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="TOOLS\dlgSwimmingPools.pas">
+            <Form>SwimmingPools</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="TOOLS\dlgDOBPicker.pas">
+            <Form>DOBPicker</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="dlgPreferences.pas">
+            <Form>Preferences</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">

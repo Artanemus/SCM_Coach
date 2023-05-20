@@ -411,7 +411,6 @@ object Main: TMain
             Top = 1
             Width = 128
             Height = 224
-            Caption = 'Panel2'
             TabOrder = 0
             object Label4: TLabel
               Left = 58
@@ -717,6 +716,13 @@ object Main: TMain
                 Caption = '-'
               end
               item
+                Action = File_Preferences
+                Caption = '&Preferences...'
+              end
+              item
+                Caption = '-'
+              end
+              item
                 Action = File_Exit
                 Caption = 'E&xit'
               end>
@@ -958,7 +964,7 @@ object Main: TMain
             Items = <
               item
                 Action = Tools_Pools
-                Caption = '&Pools...'
+                Caption = 'S&wimming Pools...'
               end
               item
                 Action = Tools_Dictionary
@@ -1118,7 +1124,7 @@ object Main: TMain
     end
     object Tools_Pools: TAction
       Category = 'Tools'
-      Caption = 'Pools...'
+      Caption = 'Swimming Pools...'
       OnExecute = Tools_PoolsExecute
       OnUpdate = Tools_PoolsUpdate
     end
@@ -1255,6 +1261,12 @@ object Main: TMain
       ImageIndex = 11
       ImageName = 'Search'
       OnExecute = Playscript_FindExecute
+    end
+    object File_Preferences: TAction
+      Category = 'File'
+      Caption = 'Preferences...'
+      OnExecute = File_PreferencesExecute
+      OnUpdate = File_PreferencesUpdate
     end
   end
   object ImageCollectionCoach: TImageCollection

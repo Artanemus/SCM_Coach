@@ -108,6 +108,7 @@ type
     Playscript_Load: TAction;
     Session_Find: TAction;
     Playscript_Find: TAction;
+    File_Preferences: TAction;
     procedure FormCreate(Sender: TObject);
     procedure Edit_SwimmersUpdate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -125,6 +126,8 @@ type
     procedure Tools_PoolsExecute(Sender: TObject);
     procedure Tools_PoolsUpdate(Sender: TObject);
     procedure Playscript_FindExecute(Sender: TObject);
+    procedure File_PreferencesExecute(Sender: TObject);
+    procedure File_PreferencesUpdate(Sender: TObject);
 
   private
     { Private declarations }
@@ -154,7 +157,8 @@ implementation
 
 uses dlgBasicLogin, SCMUtility, IniFiles, System.UITypes,
   dlgImportSelect, dlgImportSCMWizard, frmHR, frmSquadT,
-  frmDisqualificationCodes, dlgSwimmingPools, dlgNewSession, dlgFindPlayscript;
+  frmDisqualificationCodes, dlgSwimmingPools, dlgNewSession, dlgFindPlayscript,
+  dlgPreferences;
 
 function TMain.AssertConnection: boolean;
 begin
@@ -210,6 +214,26 @@ begin
 end;
 
 procedure TMain.File_ImportUpdate(Sender: TObject);
+var
+  DoEnable: boolean;
+begin
+  DoEnable := false;
+  // MSSQL scmCoach connected and core tables activated?
+  if AssertConnection then
+    DoEnable := true;
+  TAction(Sender).Enabled := DoEnable;
+end;
+
+procedure TMain.File_PreferencesExecute(Sender: TObject);
+var
+dlg: TPreferences;
+begin
+  dlg := TPreferences.CreateWithConnection(Self, COACH.coachConnection);
+  dlg.ShowModal;
+  dlg.Free;
+end;
+
+procedure TMain.File_PreferencesUpdate(Sender: TObject);
 var
   DoEnable: boolean;
 begin
