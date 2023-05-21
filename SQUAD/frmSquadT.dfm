@@ -376,7 +376,6 @@ object SquadT: TSquadT
       Action = actnCreateTeamTemplate
       AllowAllUp = True
       Anchors = []
-      GroupIndex = 1
       Images = vimgSquadTList
       Flat = True
       Layout = blGlyphTop
@@ -390,7 +389,6 @@ object SquadT: TSquadT
       Action = actnEditTeamTemplate
       AllowAllUp = True
       Anchors = []
-      GroupIndex = 1
       Images = vimgSquadTList
       Flat = True
       Layout = blGlyphTop
@@ -419,7 +417,6 @@ object SquadT: TSquadT
       Action = actnDeleteTeamTemplate
       AllowAllUp = True
       Anchors = []
-      GroupIndex = 1
       Images = vimgSquadTList
       Flat = True
       Layout = blGlyphTop

@@ -108,6 +108,7 @@ type
     chkbDoContactNum: TCheckBox;
     chkbDoSplit: TCheckBox;
     ProgressBar1: TProgressBar;
+    qryHR: TFDQuery;
     procedure FormCreate(Sender: TObject);
     procedure ListBoxSrcDragOver(Sender, Source: TObject; X, Y: integer;
       State: TDragState; var Accept: Boolean);
@@ -417,12 +418,11 @@ begin
           Count := COACH.coachConnection.ExecSQLScalar
             ('SELECT COUNT(SCMMemberID) FROM HR WHERE HR.SCMMemberID = :ID',
             [qrySCMSwimmer.FieldByName('MemberID').AsInteger]);
-
-          if ((Count = 0) and (rgrpMethod.ItemIndex = 1)) OR
-            ((Count > 0) and (rgrpMethod.ItemIndex = 0)) then
+          // ZERO - SwimClubMeet NOT FOUND in dbo.HR
+          if (Count = 0) then
           begin
             obj := TscmMemberObj.Create;
-            obj.ID := qrySCMSwimmer.FieldByName('MemberID').AsInteger;
+            obj.SCMMemberID := qrySCMSwimmer.FieldByName('MemberID').AsInteger;
             obj.Name := qrySCMSwimmer.FieldByName('FName').AsString;
             j := scmMemberList.Add(obj);
             s := qrySCMSwimmer.FieldByName('FName').AsString;
@@ -438,10 +438,25 @@ begin
     // Update the profiles and stats of your swimmers in your squad.
     // INCLUDE only SCM Members who are in the squad.
     // -------------------------------------------------------------------
-    else
+    else if (rgrpMethod.ItemIndex = 0) then
     begin
-      { TODO -oBSA -cGeneral : build queries for update profiles }
+      qryHR.Connection := wizSCMConnection;
+      qryHR.Open;
+      if qryHR.Active then
+      Begin
+        while not qryHR.eof do
+        begin
+          obj := TscmMemberObj.Create;
+          obj.SCMMemberID := qryHR.FieldByName('SCMMemberID').AsInteger;
+          obj.HRID := qryHR.FieldByName('HRID').AsInteger;
+          obj.Name := qryHR.FieldByName('FName').AsString;
+          j := scmMemberList.Add(obj);
+          s := qryHR.FieldByName('FName').AsString;
+          lbSrc.Items.AddObject(s, scmMemberList.Items[j]);
+        end;
+      End;
     end;
+    qryHR.Close;
   end;
 end;
 

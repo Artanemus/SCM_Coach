@@ -261,4 +261,16 @@ object ImportData: TImportData
         Value = Null
       end>
   end
+  object tblSCMMember: TFDTable
+    ActiveStoredUsage = [auDesignTime]
+    IndexFieldNames = 'MemberID'
+    Connection = TestSCMConnection
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
+    UpdateOptions.EnableDelete = False
+    UpdateOptions.EnableInsert = False
+    UpdateOptions.EnableUpdate = False
+    TableName = 'SwimClubMeet.dbo.Member'
+    Left = 376
+    Top = 520
+  end
 end

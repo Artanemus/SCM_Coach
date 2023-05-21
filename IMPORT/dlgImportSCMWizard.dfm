@@ -375,7 +375,7 @@ object ImportSCMWizard: TImportSCMWizard
     Top = 81
     Width = 669
     Height = 591
-    ActivePage = tabFinalStep
+    ActivePage = tabMethod
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -388,6 +388,8 @@ object ImportSCMWizard: TImportSCMWizard
     TabOrder = 2
     TabWidth = 90
     OnChange = pageCNTRLChange
+    ExplicitWidth = 665
+    ExplicitHeight = 590
     object tabStart: TTabSheet
       Caption = 'Start'
       object lblMsgStartInfo: TLabel
@@ -564,7 +566,7 @@ object ImportSCMWizard: TImportSCMWizard
       end
       object btnDisconnect: TButton
         AlignWithMargins = True
-        Left = 335
+        Left = 333
         Top = 357
         Width = 85
         Height = 83
@@ -577,7 +579,7 @@ object ImportSCMWizard: TImportSCMWizard
       end
       object btnLogin: TButton
         AlignWithMargins = True
-        Left = 236
+        Left = 234
         Top = 357
         Width = 85
         Height = 83
@@ -880,6 +882,8 @@ object ImportSCMWizard: TImportSCMWizard
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitWidth = 657
+        ExplicitHeight = 540
         DesignSize = (
           661
           541)
@@ -2705,5 +2709,34 @@ object ImportSCMWizard: TImportSCMWizard
     DataSet = FDMemTable1
     Left = 160
     Top = 352
+  end
+  object qryHR: TFDQuery
+    ActiveStoredUsage = [auDesignTime]
+    Connection = COACH.coachConnection
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
+    UpdateOptions.EnableDelete = False
+    UpdateOptions.EnableInsert = False
+    UpdateOptions.EnableUpdate = False
+    SQL.Strings = (
+      'USE SCM_COACH;'
+      ''
+      'SELECT '
+      'HRID'
+      '--,FirstName'
+      '--,MiddleInitial'
+      '--,LastName'
+      
+        ',SUBSTRING(CONCAT(FirstName, '#39'.'#39', MiddleInitial, '#39'.'#39', UPPER(Last' +
+        'Name) ),0,80) AS FName'
+      ',SCMMemberID'
+      'FROM  dbo.HR'
+      ''
+      
+        'WHERE SCMMemberID IS NOT NULL AND (IsActive = 1) AND (IsArchived' +
+        ' <> 0)'
+      'ORDER BY LastName'
+      '')
+    Left = 528
+    Top = 384
   end
 end

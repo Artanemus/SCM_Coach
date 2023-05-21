@@ -176,7 +176,7 @@ begin
         while not eof do
         begin
           obj := TscmMemberObj.Create;
-          obj.ID := FieldByName('MemberID').AsInteger;
+          obj.SCMMemberID := FieldByName('MemberID').AsInteger;
           obj.Name := FieldByName('FName').AsString;
           j := scmMemberList.Add(obj);
           s := FieldByName('FName').AsString;

@@ -82,7 +82,7 @@ begin
   for i := 0 to list.count - 1 do
   begin
     obj := list.Objects[i];
-    MemberID := TSCMMemberObj(obj).ID;
+    MemberID := TSCMMemberObj(obj).SCMMemberID;
     // Test for duplicity. LookUp - SCM_coach.dbo.HR Field 'scmMemberID';
     if not ImportData.IsDupSCMMember(MemberID) then
     begin
@@ -94,7 +94,7 @@ begin
         (list.count - 1));
       // Application.ProcessMessages;
 
-      // EXTENDED MEMBER DATA
+      // COLLECT STATE DATA
       if (HRID <> 0) then
       begin
         countHRs := countHRs + 1;
@@ -138,9 +138,58 @@ begin
 end;
 
 procedure TImportMember.UpdateMembers(list: TStrings);
+// Update the profile and race history of the squad member.
+{ TODO -oBSA -cGeneral : UpdateMember }
+var
+  i, SCMMemberID, HRID, count: integer;
+  obj: TObject;
+  success: boolean;
 begin
-  // Update the profile and race history of the squad member.
-  { TODO -oBSA -cGeneral : UpdateMember }
+  // INIT
+  countHRs := 0;
+  countContacts := 0;
+  countRaces := 0;
+  fState := 0;
+
+  // Loop across select IDs. (wit: SwimClubMeet member ID's)
+  for i := 0 to list.count - 1 do
+  begin
+    obj := list.Objects[i];
+    SCMMemberID := TSCMMemberObj(obj).SCMMemberID;
+    HRID := TSCMMemberObj(obj).HRID;
+    // Test for SwimClubMeet member.
+    if not ImportData.SCMMemberExists(SCMMemberID) then
+    begin
+      // U P D A T E   S Q U A D   H R .
+      success := ImportData.UpdateHR(HRID, SCMMemberID);
+      // PROGRESS BAR
+      PostMessage(TForm(Owner).Handle, SCM_PROGRESSBARUPDATE, i,
+        (list.count - 1));
+      // Application.ProcessMessages;
+
+      if not success then
+        Continue;
+
+      // COLLECT STATE DATA
+      countHRs := countHRs + 1;
+
+      // C O N T A C T   N U M B E R S .
+      if fDoContactNum then
+      begin
+        count := ImportData.UpdateContacts(HRID, SCMMemberID);
+        countContacts := countContacts + count;
+      end;
+      // R A C E   H I S T O R Y .
+      // insert swimmer's SCM race-history (exclude duplications)
+      if fDoRaceHistory then
+      begin
+        count := ImportData.UpdateRaceHistory(HRID, SCMMemberID, fDoSplit);
+        countRaces := countRaces + count;
+      end;
+    end;
+  end;
+  if (countHRs > 0) then
+    fState := 1;
 end;
 
 end.

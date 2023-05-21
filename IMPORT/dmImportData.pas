@@ -25,6 +25,7 @@ type
     qryRaceHistory: TFDQuery;
     tblRaceHistorySplit: TFDTable;
     qrySplit: TFDQuery;
+    tblSCMMember: TFDTable;
   private
     { Private declarations }
     fscmConnection: TFDConnection;
@@ -38,6 +39,8 @@ type
     { Public declarations }
     constructor CreateWithConnection(AOwner: TComponent;
       AscmConnection, AcoachConnection: TFDConnection);
+
+    // I N S E R T   S C M   M E M B E R .
     // rtns SCM_Coach HRID
     function InsertMember(scmMemberID: integer): integer;
     // rtns count of races added
@@ -46,11 +49,21 @@ type
     // rtns count of contacts added
     function InsertContacts(HRID, scmMemberID: integer): integer;
 
+    // U P D A T E   C O A C H   H R   S W I M M E R .
+    // rtns SCM_Coach success
+    function UpdateHR(HRID, scmMemberID: integer): boolean;
+    // rtns count of races updated
+    function UpdateRaceHistory(HRID, scmMemberID: integer;
+      DoSplit: boolean): integer;
+    // rtns count of contacts updated
+    function UpdateContacts(HRID, scmMemberID: integer): integer;
+
     // STRING LOOKUP AND COMPARE (for use with .HY3 file type)
     function AssertUnique(scmMemberID: integer): boolean;
     // IDENTITY LOOKUP
     function IsDupSCMMember(scmMemberID: integer): boolean;
     function IsDupRaceHistory(EntrantID: integer): boolean;
+    function SCMMemberExists(scmMemberID: integer): boolean;
 
     function ActivateDM: boolean;
     function DeActivate: boolean;
@@ -425,6 +438,58 @@ begin
     end;
     qryIsDupSCMMember.Close;
   end;
+end;
+
+function TImportData.SCMMemberExists(scmMemberID: integer): boolean;
+var
+  LocateSuccess: boolean;
+  SearchOptions: TLocateOptions;
+begin
+  result := false;
+  if Assigned(fscmConnection) AND fscmConnection.Connected then
+  begin
+    tblSCMMember.Connection := fscmConnection;
+    tblSCMMember.Open;
+    if tblSCMMember.Active then
+    begin
+      SearchOptions := [];
+      try
+        begin
+          LocateSuccess := tblSCMMember.Locate('MemberID', scmMemberID,
+            SearchOptions);
+          result := LocateSuccess;
+        end;
+      except
+        on E: Exception do
+          LocateSuccess := false;
+      end;
+    end;
+    tblSCMMember.Close;
+  end;
+end;
+
+function TImportData.UpdateContacts(HRID, scmMemberID: integer): integer;
+begin
+  { TODO -oBSA -cGeneral : Update contact }
+  result := 0;
+end;
+
+function TImportData.UpdateHR(HRID, scmMemberID: integer): boolean;
+begin
+  { TODO -oBSA -cGeneral : Update HR }
+  result := false;
+  if Assigned(fcoachConnection) AND Assigned(fscmConnection) AND
+    fcoachConnection.Connected AND fscmConnection.Connected then
+  begin
+
+  end;
+end;
+
+function TImportData.UpdateRaceHistory(HRID, scmMemberID: integer;
+  DoSplit: boolean): integer;
+begin
+  { TODO -oBSA -cGeneral : Update race history }
+  result := 0;
 end;
 
 function TImportData.IsDupRaceHistory(EntrantID: integer): boolean;
