@@ -13,7 +13,6 @@ uses
 type
   TImportData = class(TDataModule)
     TestSCMConnection: TFDConnection;
-    qryIsDupSCMMember: TFDQuery;
     qryIsDupRaceHistory: TFDQuery;
     qryCheckMiddleInitial: TFDQuery;
     tblHR: TFDTable;
@@ -25,7 +24,6 @@ type
     qryRaceHistory: TFDQuery;
     tblRaceHistorySplit: TFDTable;
     qrySplit: TFDQuery;
-    tblSCMMember: TFDTable;
   private
     { Private declarations }
     fscmConnection: TFDConnection;
@@ -61,9 +59,10 @@ type
     // STRING LOOKUP AND COMPARE (for use with .HY3 file type)
     function AssertUnique(scmMemberID: integer): boolean;
     // IDENTITY LOOKUP
-    function IsDupSCMMember(scmMemberID: integer): boolean;
+    function MemberExistsSCM_Coach(scmMemberID: integer): boolean;
     function IsDupRaceHistory(EntrantID: integer): boolean;
-    function SCMMemberExists(scmMemberID: integer): boolean;
+
+    function MemberExistsSwimClubMeet(scmMemberID: integer): boolean;
 
     function ActivateDM: boolean;
     function DeActivate: boolean;
@@ -421,51 +420,32 @@ begin
   end;
 end;
 
-function TImportData.IsDupSCMMember(scmMemberID: integer): boolean;
-begin
-  // IDENTITY LOOKUP
-  result := true;
-  if Assigned(fcoachConnection) AND fcoachConnection.Connected then
-  begin
-    qryIsDupSCMMember.Connection := fcoachConnection;
-    qryIsDupSCMMember.ParamByName('MEMBERID').AsInteger := scmMemberID;
-    qryIsDupSCMMember.Prepare;
-    qryIsDupSCMMember.Open;
-    if qryIsDupSCMMember.Active then
-    begin
-      if (qryIsDupSCMMember.FieldByName('rtnValue').AsInteger = 0) then
-        result := false;
-    end;
-    qryIsDupSCMMember.Close;
-  end;
-end;
-
-function TImportData.SCMMemberExists(scmMemberID: integer): boolean;
+function TImportData.MemberExistsSCM_Coach(scmMemberID: integer): boolean;
 var
-  LocateSuccess: boolean;
-  SearchOptions: TLocateOptions;
+  Count: integer;
 begin
   result := false;
-  if Assigned(fscmConnection) AND fscmConnection.Connected then
-  begin
-    tblSCMMember.Connection := fscmConnection;
-    tblSCMMember.Open;
-    if tblSCMMember.Active then
-    begin
-      SearchOptions := [];
-      try
-        begin
-          LocateSuccess := tblSCMMember.Locate('MemberID', scmMemberID,
-            SearchOptions);
-          result := LocateSuccess;
-        end;
-      except
-        on E: Exception do
-          LocateSuccess := false;
-      end;
-    end;
-    tblSCMMember.Close;
-  end;
+  // Check for member in SwimClubMeet member's table.
+  // Archived, isSwimmer, isActive is ignored...
+  Count := fcoachConnection.ExecSQLScalar
+    ('SELECT COUNT(SCMMemberID) FROM SCM_Coach.dbo.HR WHERE scmMemberID = :ID',
+    [scmMemberID]);
+  if (Count > 0) then
+    result := true;
+end;
+
+function TImportData.MemberExistsSwimClubMeet(scmMemberID: integer): boolean;
+var
+  Count: integer;
+begin
+  result := false;
+  // Check for member in SwimClubMeet member's table.
+  // Archived, isSwimmer, isActive is ignored...
+  Count := fscmConnection.ExecSQLScalar
+    ('SELECT COUNT(MemberID) FROM SwimClubMeet.dbo.Member WHERE MemberID = :ID',
+    [scmMemberID]);
+  if (Count > 0) then
+    result := true;
 end;
 
 function TImportData.UpdateContacts(HRID, scmMemberID: integer): integer;
@@ -475,13 +455,46 @@ begin
 end;
 
 function TImportData.UpdateHR(HRID, scmMemberID: integer): boolean;
+var
+  LocateSuccess: boolean;
+  SearchOptions: TLocateOptions;
 begin
+  LocateSuccess := false;
+  SearchOptions := [];
+
   { TODO -oBSA -cGeneral : Update HR }
   result := false;
-  if Assigned(fcoachConnection) AND Assigned(fscmConnection) AND
-    fcoachConnection.Connected AND fscmConnection.Connected then
-  begin
+  if not AssertConnection then
+    exit;
+  qryMember.Connection := fscmConnection;
+  qryMember.ParamByName('MEMBERID').AsInteger := scmMemberID;
+  qryMember.Prepare;
+  qryMember.Open;
 
+  if qryMember.Active and tblHR.Active and (qryMember.RecordCount > 0) then
+  begin
+    try
+      begin
+        LocateSuccess := tblHR.Locate('scmMemberID', scmMemberID,
+          SearchOptions);
+      end;
+    except
+      on E: Exception do
+        LocateSuccess := false;
+    end;
+    if LocateSuccess then
+    begin
+      tblHR.Edit;
+      // Limited fields to update
+      { TODO -oBSA -cGeneral : Complete all registration fields }
+      // tblHR.FieldByName('RegisterNum').AsInteger :=
+      tblHR.FieldByName('ModifiedOn').AsDateTime := Now;
+      tblHR.FieldByName('RegisterStr').AsString :=
+        qryMember.FieldByName('MembershipStr').AsString;
+      tblHR.FieldByName('Email').AsString :=
+        qryMember.FieldByName('Email').AsString;
+      tblHR.Post;
+    end;
   end;
 end;
 

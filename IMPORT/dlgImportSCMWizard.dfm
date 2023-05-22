@@ -375,7 +375,7 @@ object ImportSCMWizard: TImportSCMWizard
     Top = 81
     Width = 669
     Height = 591
-    ActivePage = tabMethod
+    ActivePage = tabFinalStep
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -566,7 +566,7 @@ object ImportSCMWizard: TImportSCMWizard
       end
       object btnDisconnect: TButton
         AlignWithMargins = True
-        Left = 333
+        Left = 331
         Top = 357
         Width = 85
         Height = 83
@@ -579,7 +579,7 @@ object ImportSCMWizard: TImportSCMWizard
       end
       object btnLogin: TButton
         AlignWithMargins = True
-        Left = 234
+        Left = 232
         Top = 357
         Width = 85
         Height = 83
@@ -882,8 +882,6 @@ object ImportSCMWizard: TImportSCMWizard
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 657
-        ExplicitHeight = 540
         DesignSize = (
           661
           541)
@@ -2702,13 +2700,13 @@ object ImportSCMWizard: TImportSCMWizard
     UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
     UpdateOptions.CheckRequired = False
     UpdateOptions.AutoCommitUpdates = True
-    Left = 56
-    Top = 352
+    Left = 64
+    Top = 424
   end
   object DataSource1: TDataSource
     DataSet = FDMemTable1
-    Left = 160
-    Top = 352
+    Left = 152
+    Top = 424
   end
   object qryHR: TFDQuery
     ActiveStoredUsage = [auDesignTime]

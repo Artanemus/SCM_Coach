@@ -145,8 +145,8 @@ type
     fLastMethodState: integer;
     fImportDone: Boolean;
 
-    function AssertAllConnections: Boolean;
-    function MemberIsAssigned(obj: TObject; lbox: TListBox): Boolean;
+    function AssertConnection: Boolean;
+    function HasObjectInList(obj: TObject; lbox: TListBox): Boolean;
     procedure BuildListBoxSource();
     procedure TransferItems(SrcListBox, DestListBox: TObject);
     procedure NavButtonState; // improves UI ? NOT USED.
@@ -182,9 +182,7 @@ implementation
 
 {$R *.dfm}
 
-uses (*
-    dlgBasicLoginSCM,
-  *) System.Math, IniFiles, SCMUtility, SCMSimpleConnect, System.StrUtils;
+uses System.Math, IniFiles, SCMUtility, SCMSimpleConnect, System.StrUtils;
 
 // DON'T CALL HERE IF SCM NOT ISACTIVE
 procedure TImportSCMWizard.actnDisconnectExecute(Sender: TObject);
@@ -237,39 +235,35 @@ begin
   // INIT progress bar
   SendMessage(Self.Handle, SCM_PROGRESSBARBEGIN, 0, 0);
 
+  // U P D A T E   P R O F I L E  A N D   R A C E   H I S T O R Y .
+  if (rgrpMethod.ItemIndex = 0) then
+    cls.UpdateMembers(lbDest.Items)
   // I N T R O D U C E  N E W   M E M B E R (S)  T O   S QU A D .
-  if (rgrpMethod.ItemIndex = 1) then
-    cls.InsertMember(lbDest.Items)
-
-    // U P D A T E   P R O F I L E  A N D   R A C E   H I S T O R Y .
-    { TODO -oBSA -cGeneral : Complete Action GO }
-  else if (rgrpMethod.ItemIndex = 0) then
-    cls.UpdateMembers(lbDest.Items);
+  else if (rgrpMethod.ItemIndex = 1) then
+    cls.InsertMember(lbDest.Items);
 
   { TODO -oBSA -cGeneral : Progress bar }
   SendMessage(Self.Handle, SCM_PROGRESSBAREND, 0, 0);
 
   if (cls.State = 1) then // success - no errors.
   begin
-    fTrackState := 4;
-    TrackStateUpdate;
-    // move to the 'Method' tab-sheet.
-    pageCNTRL.SelectNextPage(true, true);
+    fTrackState := 4; // Import completed.
+    TrackStateUpdate; // Sync UI with track state.
+    pageCNTRL.SelectNextPage(true, true); // move to next tab-sheet.
   end;
 
   cls.Free;
-
 end;
 
 procedure TImportSCMWizard.actnGoUpdate(Sender: TObject);
 begin
-  if AssertAllConnections and (rgrpMethod.ItemIndex <> -1) and
+  if AssertConnection and (rgrpMethod.ItemIndex <> -1) and
     (lbDest.Items.Count > 0) and
     (chkbDoProfile.Checked or chkbDoRaceHistory.Checked) then
   begin
     if not TAction(Sender).Enabled then
     begin
-      { TODO -oBSA -cGeneral : Assign disabled button image on }
+      { TODO -oBSA -cGeneral : Assign a 'disabled' button image for btnGo}
       TAction(Sender).Enabled := true;
       lblGo.Enabled := true;
     end;
@@ -373,7 +367,7 @@ begin
   TransferItems(lbSrc, lbDest);
 end;
 
-function TImportSCMWizard.AssertAllConnections: Boolean;
+function TImportSCMWizard.AssertConnection: Boolean;
 begin
   result := false;
   if Assigned(COACH) and COACH.coachConnection.Connected and
@@ -403,11 +397,36 @@ begin
   if wizSCMConnection.Connected then
   begin
     // -------------------------------------------------------------------
-    // Method  : INTRODUCE
+    // Method : U P D A T E .
+    // Update the profiles and stats of your swimmers in your squad.
+    // Squad swimmers MUST have a SCMMemberID assigned.
+    // The must not be archived. They must be active active.
+    // -------------------------------------------------------------------
+    if (rgrpMethod.ItemIndex = 0) then
+    begin
+      qryHR.Connection := wizSCMConnection;
+      qryHR.Open; // A list of COACH swimmers who are SwimClubMeet members.
+      if qryHR.Active then
+      Begin
+        while not qryHR.eof do
+        begin
+          obj := TscmMemberObj.Create;
+          obj.SCMMemberID := qryHR.FieldByName('SCMMemberID').AsInteger;
+          obj.HRID := qryHR.FieldByName('HRID').AsInteger;
+          obj.Name := qryHR.FieldByName('FName').AsString;
+          j := scmMemberList.Add(obj);
+          s := qryHR.FieldByName('FName').AsString;
+          lbSrc.Items.AddObject(s, scmMemberList.Items[j]);
+        end;
+      End;
+      qryHR.Close;
+    end
+    // -------------------------------------------------------------------
+    // Method  : I N T R O D U C E . (CREATE)
     // Induct SwimClubMeet Members into your squad.
     // EXCLUDE from list SCM Members who are already in SCM_Coach.
     // -------------------------------------------------------------------
-    if (rgrpMethod.ItemIndex = 1) then
+    else if (rgrpMethod.ItemIndex = 1) then
     begin
       qrySCMSwimmer.Connection := wizSCMConnection;
       qrySCMSwimmer.Open;
@@ -418,7 +437,7 @@ begin
           Count := COACH.coachConnection.ExecSQLScalar
             ('SELECT COUNT(SCMMemberID) FROM HR WHERE HR.SCMMemberID = :ID',
             [qrySCMSwimmer.FieldByName('MemberID').AsInteger]);
-          // ZERO - SwimClubMeet NOT FOUND in dbo.HR
+          // Returns ZERO - SwimClubMeet NOT FOUND in dbo.HR
           if (Count = 0) then
           begin
             obj := TscmMemberObj.Create;
@@ -433,30 +452,6 @@ begin
       End;
       qrySCMSwimmer.Close;
     end
-    // -------------------------------------------------------------------
-    // Method : UPDATE.
-    // Update the profiles and stats of your swimmers in your squad.
-    // INCLUDE only SCM Members who are in the squad.
-    // -------------------------------------------------------------------
-    else if (rgrpMethod.ItemIndex = 0) then
-    begin
-      qryHR.Connection := wizSCMConnection;
-      qryHR.Open;
-      if qryHR.Active then
-      Begin
-        while not qryHR.eof do
-        begin
-          obj := TscmMemberObj.Create;
-          obj.SCMMemberID := qryHR.FieldByName('SCMMemberID').AsInteger;
-          obj.HRID := qryHR.FieldByName('HRID').AsInteger;
-          obj.Name := qryHR.FieldByName('FName').AsString;
-          j := scmMemberList.Add(obj);
-          s := qryHR.FieldByName('FName').AsString;
-          lbSrc.Items.AddObject(s, scmMemberList.Items[j]);
-        end;
-      End;
-    end;
-    qryHR.Close;
   end;
 end;
 
@@ -472,7 +467,7 @@ begin
   begin
     obj := (scmMemberList.Items[i] as TscmMemberObj);
     // Already assigned to right-listbox.
-    if MemberIsAssigned(obj, lbDest) then
+    if HasObjectInList(obj, lbDest) then
       continue;
     s := obj.Name;
     // DO ALL
@@ -539,6 +534,23 @@ begin
   scmMemberList.Clear;
 end;
 
+function TImportSCMWizard.HasObjectInList(obj: TObject; lbox: TListBox)
+  : Boolean;
+var
+  i: integer;
+begin
+  // check if obj is used by to lboxView
+  result := false;
+  for i := 0 to lbox.Count - 1 do
+  begin
+    if (obj = lbox.Items.Objects[i]) then
+    begin
+      result := true;
+      break;
+    end;
+  end;
+end;
+
 procedure TImportSCMWizard.ListBoxDestDragDrop(Sender, Source: TObject;
   X, Y: integer);
 begin
@@ -562,23 +574,6 @@ procedure TImportSCMWizard.ListBoxSrcDragOver(Sender, Source: TObject;
   X, Y: integer; State: TDragState; var Accept: Boolean);
 begin
   Accept := Source is TListBox;
-end;
-
-function TImportSCMWizard.MemberIsAssigned(obj: TObject;
-  lbox: TListBox): Boolean;
-var
-  i: integer;
-begin
-  // check if obj is used by to lboxView
-  result := false;
-  for i := 0 to lbox.Count - 1 do
-  begin
-    if (obj = lbox.Items.Objects[i]) then
-    begin
-      result := true;
-      break;
-    end;
-  end;
 end;
 
 procedure TImportSCMWizard.NavButtonState;

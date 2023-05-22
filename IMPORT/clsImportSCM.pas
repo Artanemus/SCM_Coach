@@ -83,8 +83,8 @@ begin
   begin
     obj := list.Objects[i];
     MemberID := TSCMMemberObj(obj).SCMMemberID;
-    // Test for duplicity. LookUp - SCM_coach.dbo.HR Field 'scmMemberID';
-    if not ImportData.IsDupSCMMember(MemberID) then
+    // Duplicity not allowed.
+    if not ImportData.MemberExistsSCM_Coach(MemberID) then
     begin
       // C R E A T E   N E W   S Q U A D   M E M B E R .
       // insert this SCM member into the squad ....
@@ -157,8 +157,10 @@ begin
     obj := list.Objects[i];
     SCMMemberID := TSCMMemberObj(obj).SCMMemberID;
     HRID := TSCMMemberObj(obj).HRID;
-    // Test for SwimClubMeet member.
-    if not ImportData.SCMMemberExists(SCMMemberID) then
+
+    // Check for member in SwimClubMeet member's table.
+    // Archived, isSwimmer, isActive is ignored...
+    if ImportData.MemberExistsSwimClubMeet(SCMMemberID) then
     begin
       // U P D A T E   S Q U A D   H R .
       success := ImportData.UpdateHR(HRID, SCMMemberID);

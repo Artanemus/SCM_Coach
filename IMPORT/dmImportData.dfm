@@ -10,28 +10,6 @@ object ImportData: TImportData
     Left = 96
     Top = 32
   end
-  object qryIsDupSCMMember: TFDQuery
-    ActiveStoredUsage = [auDesignTime]
-    Connection = TestSCMConnection
-    SQL.Strings = (
-      'USE SCM_Coach;'
-      ''
-      'DECLARE @scmMemberID AS INTEGER;'
-      'SET @scmMemberID = :MEMBERID;'
-      ''
-      'SELECT COUNT([SCMMemberID]) AS rtnValue'
-      'FROM SCM_Coach.dbo.HR'
-      'WHERE [scmMemberID] = @scmMemberID;')
-    Left = 376
-    Top = 128
-    ParamData = <
-      item
-        Name = 'MEMBERID'
-        DataType = ftInteger
-        ParamType = ptInput
-        Value = Null
-      end>
-  end
   object qryCheckMiddleInitial: TFDQuery
     ActiveStoredUsage = [auDesignTime]
     Connection = TestSCMConnection
@@ -260,17 +238,5 @@ object ImportData: TImportData
         ParamType = ptInput
         Value = Null
       end>
-  end
-  object tblSCMMember: TFDTable
-    ActiveStoredUsage = [auDesignTime]
-    IndexFieldNames = 'MemberID'
-    Connection = TestSCMConnection
-    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
-    UpdateOptions.EnableDelete = False
-    UpdateOptions.EnableInsert = False
-    UpdateOptions.EnableUpdate = False
-    TableName = 'SwimClubMeet.dbo.Member'
-    Left = 376
-    Top = 520
   end
 end
