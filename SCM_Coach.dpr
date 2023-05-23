@@ -43,7 +43,8 @@ uses
   dlgSquadNew in 'SQUAD\dlgSquadNew.pas' {SquadNew},
   dlgSwimmingPools in 'TOOLS\dlgSwimmingPools.pas' {SwimmingPools},
   dlgDOBPicker in 'TOOLS\dlgDOBPicker.pas' {DOBPicker},
-  dlgPreferences in 'dlgPreferences.pas' {Preferences};
+  dlgPreferences in 'dlgPreferences.pas' {Preferences},
+  ImportHY3 in 'IMPORT\ImportHY3.pas';
 
 {$R *.res}
 

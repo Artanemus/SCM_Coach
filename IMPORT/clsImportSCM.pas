@@ -108,7 +108,7 @@ begin
         // insert swimmer's SCM race-history (exclude duplications)
         if fDoRaceHistory then
         begin
-          count := ImportData.InsertRaceHistory(MemberID, HRID, fDoSplit);
+          count := ImportData.InsertRaceHistory(HRID, MemberID, fDoSplit);
           countRaces := countRaces + count;
         end;
       end;
@@ -163,7 +163,7 @@ begin
     if ImportData.MemberExistsSwimClubMeet(SCMMemberID) then
     begin
       // U P D A T E   S Q U A D   H R .
-      success := ImportData.UpdateHR(HRID, SCMMemberID);
+      success := ImportData.UpdateHR(SCMMemberID);
       // PROGRESS BAR
       PostMessage(TForm(Owner).Handle, SCM_PROGRESSBARUPDATE, i,
         (list.count - 1));
@@ -178,14 +178,14 @@ begin
       // C O N T A C T   N U M B E R S .
       if fDoContactNum then
       begin
-        count := ImportData.UpdateContacts(HRID, SCMMemberID);
+        count := ImportData.UpdateContacts(SCMMemberID);
         countContacts := countContacts + count;
       end;
       // R A C E   H I S T O R Y .
       // insert swimmer's SCM race-history (exclude duplications)
       if fDoRaceHistory then
       begin
-        count := ImportData.UpdateRaceHistory(HRID, SCMMemberID, fDoSplit);
+        count := ImportData.UpdateRaceHistory(SCMMemberID, fDoSplit);
         countRaces := countRaces + count;
       end;
     end;

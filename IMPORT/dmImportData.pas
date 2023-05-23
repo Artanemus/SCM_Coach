@@ -32,6 +32,7 @@ type
 
     function InsertSplits(RaceHistoryID, EntrantID: integer): boolean;
     function HasFieldMiddleInitial: boolean;
+    function Locate_scmMember(scmMemberID: integer): integer;
 
   public
     { Public declarations }
@@ -42,19 +43,19 @@ type
     // rtns SCM_Coach HRID
     function InsertMember(scmMemberID: integer): integer;
     // rtns count of races added
-    function InsertRaceHistory(scmMemberID, HRID: integer;
-      DoSplit: boolean): integer;
+    function InsertRaceHistory(HRID, scmMemberID: integer;
+      DoSplit: boolean = true): integer;
     // rtns count of contacts added
     function InsertContacts(HRID, scmMemberID: integer): integer;
 
     // U P D A T E   C O A C H   H R   S W I M M E R .
     // rtns SCM_Coach success
-    function UpdateHR(HRID, scmMemberID: integer): boolean;
+    function UpdateHR(scmMemberID: integer): boolean;
     // rtns count of races updated
-    function UpdateRaceHistory(HRID, scmMemberID: integer;
+    function UpdateRaceHistory(scmMemberID: integer;
       DoSplit: boolean): integer;
     // rtns count of contacts updated
-    function UpdateContacts(HRID, scmMemberID: integer): integer;
+    function UpdateContacts(scmMemberID: integer): integer;
 
     // STRING LOOKUP AND COMPARE (for use with .HY3 file type)
     function AssertUnique(scmMemberID: integer): boolean;
@@ -287,8 +288,8 @@ begin
   end;
 end;
 
-function TImportData.InsertRaceHistory(scmMemberID, HRID: integer;
-  DoSplit: boolean): integer;
+function TImportData.InsertRaceHistory(HRID, scmMemberID: integer;
+      DoSplit: boolean = true): integer;
 var
   IDENT, scmEntrantID: integer;
   SQL: string;
@@ -300,6 +301,12 @@ begin
   // Pull race history from SwimClubMeet
   qryRaceHistory.Connection := fscmConnection;
   qryRaceHistory.ParamByName('MEMBERID').AsInteger := scmMemberID;
+  {TODO -oBSA -cGeneral :
+    Insert only records after specific TDateTime
+  qryRaceHistory.ParamByName('FROMDT').AsDateTime := ADateTime;
+  qryRaceHistory.ParamByName('DORANGE').AsBoolean := DoRange;
+    }
+  {TODO -oBSA -cGeneral : Insert all race-data columns.}
   qryRaceHistory.Prepare;
   qryRaceHistory.Open;
 
@@ -342,7 +349,7 @@ begin
         tblRaceHistory.FieldByName('Lane').AsInteger :=
           qryRaceHistory.FieldByName('Lane').AsInteger;
 
-        { TODO -oBSA -cGeneral : Additional pool data }
+        { TODO -oBSA -cGeneral : Extended pool data }
         // tblRaceHistory.FieldByName('NumOfLanes').AsInteger :=
         // tblRaceHistory.FieldByName('LenOfPool').AsInteger :=
         // tblRaceHistory.FieldByName('PoolTypeID').AsInteger :=
@@ -448,61 +455,72 @@ begin
     result := true;
 end;
 
-function TImportData.UpdateContacts(HRID, scmMemberID: integer): integer;
+function TImportData.UpdateContacts(scmMemberID: integer): integer;
+var
+HRID: integer;
 begin
-  { TODO -oBSA -cGeneral : Update contact }
-  result := 0;
+  if not AssertConnection then
+    exit;
+  HRID := Locate_scmMember(scmMemberID);
+  if (HRID = 0) then
+    exit;
+  // remove all contact details
+  fcoachConnection.ExecSQLScalar
+    ('DELETE FROM tblContactNum WHERE SCM_Coach.dbo.HRID = :ID',
+    [HRID]);
+  // insert contact details
+  result := InsertContacts(HRID, scmMemberID);
 end;
 
-function TImportData.UpdateHR(HRID, scmMemberID: integer): boolean;
-var
-  LocateSuccess: boolean;
-  SearchOptions: TLocateOptions;
+function TImportData.UpdateHR(scmMemberID: integer): boolean;
 begin
-  LocateSuccess := false;
-  SearchOptions := [];
-
-  { TODO -oBSA -cGeneral : Update HR }
   result := false;
   if not AssertConnection then
+    exit;
+  if (Locate_scmMember(scmMemberID) = 0) then
     exit;
   qryMember.Connection := fscmConnection;
   qryMember.ParamByName('MEMBERID').AsInteger := scmMemberID;
   qryMember.Prepare;
   qryMember.Open;
-
-  if qryMember.Active and tblHR.Active and (qryMember.RecordCount > 0) then
+  if qryMember.Active and (qryMember.RecordCount > 0) then
   begin
-    try
-      begin
-        LocateSuccess := tblHR.Locate('scmMemberID', scmMemberID,
-          SearchOptions);
-      end;
-    except
-      on E: Exception do
-        LocateSuccess := false;
-    end;
-    if LocateSuccess then
-    begin
-      tblHR.Edit;
-      // Limited fields to update
-      { TODO -oBSA -cGeneral : Complete all registration fields }
-      // tblHR.FieldByName('RegisterNum').AsInteger :=
-      tblHR.FieldByName('ModifiedOn').AsDateTime := Now;
-      tblHR.FieldByName('RegisterStr').AsString :=
-        qryMember.FieldByName('MembershipStr').AsString;
-      tblHR.FieldByName('Email').AsString :=
-        qryMember.FieldByName('Email').AsString;
-      tblHR.Post;
-    end;
+    tblHR.Edit;
+    // Update subset...
+    { TODO -oBSA -cGeneral : Complete all registration fields }
+    // tblHR.FieldByName('RegisterNum').AsInteger :=
+    tblHR.FieldByName('ModifiedOn').AsDateTime := Now;
+    tblHR.FieldByName('RegisterStr').AsString :=
+      qryMember.FieldByName('MembershipStr').AsString;
+    tblHR.FieldByName('Email').AsString :=
+      qryMember.FieldByName('Email').AsString;
+    tblHR.Post;
+    result := true;
   end;
 end;
 
-function TImportData.UpdateRaceHistory(HRID, scmMemberID: integer;
+function TImportData.UpdateRaceHistory(scmMemberID: integer;
   DoSplit: boolean): integer;
+var
+HRID: integer;
 begin
-  { TODO -oBSA -cGeneral : Update race history }
   result := 0;
+  if not AssertConnection then
+    exit;
+  HRID := Locate_scmMember(scmMemberID);
+  if (HRID = 0) then
+    exit;
+  {TODO -oBSA -cGeneral :
+    Update only changed race-history events.
+    Retrieve last race-history record's DateTime.
+    Insert after DateTime.
+  }
+  // QUICK TRASH AND BURN ... remove all race-history
+  fcoachConnection.ExecSQLScalar
+    ('DELETE FROM tblRaceHistory WHERE SCM_Coach.dbo.HRID = :ID',
+    [HRID]);
+  // insert race history details
+  InsertRaceHistory(scmMemberID, HRID, true);
 end;
 
 function TImportData.IsDupRaceHistory(EntrantID: integer): boolean;
@@ -522,6 +540,26 @@ begin
     qryIsDupRaceHistory.Close;
   end;
 
+end;
+
+function TImportData.Locate_scmMember(scmMemberID: integer): integer;
+var
+  LocateSuccess: boolean;
+  SearchOptions: TLocateOptions;
+begin
+  LocateSuccess := false;
+  result := 0;
+  SearchOptions := [];
+  try
+    begin
+      LocateSuccess := tblHR.Locate('scmMemberID', scmMemberID, SearchOptions);
+    end;
+  except
+    on E: Exception do
+      LocateSuccess := false;
+  end;
+  if LocateSuccess then
+    result := tblHr.FieldByName('HRID').AsInteger;
 end;
 
 end.

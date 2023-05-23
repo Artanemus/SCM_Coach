@@ -242,6 +242,7 @@
             <Form>Preferences</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="IMPORT\ImportHY3.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
