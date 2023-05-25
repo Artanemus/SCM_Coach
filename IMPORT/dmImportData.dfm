@@ -1,6 +1,6 @@
 object ImportData: TImportData
-  Height = 634
-  Width = 640
+  Height = 541
+  Width = 564
   object TestSCMConnection: TFDConnection
     Params.Strings = (
       'ConnectionDef=MSSQL_SwimClubMeet')
@@ -34,7 +34,7 @@ object ImportData: TImportData
       ''
       'SELECT @rtn AS rtnValue;')
     Left = 96
-    Top = 232
+    Top = 112
   end
   object tblHR: TFDTable
     ActiveStoredUsage = [auDesignTime]
@@ -43,7 +43,7 @@ object ImportData: TImportData
     UpdateOptions.KeyFields = 'HRID'
     TableName = 'SCM_Coach.dbo.HR'
     Left = 376
-    Top = 248
+    Top = 280
   end
   object TestCoachConnection: TFDConnection
     Params.Strings = (
@@ -80,7 +80,7 @@ object ImportData: TImportData
       'WHERE IsSwimmer <> 0'
       '      AND MemberID = @MemberID;')
     Left = 96
-    Top = 304
+    Top = 160
     ParamData = <
       item
         Name = 'MEMBERID'
@@ -96,7 +96,7 @@ object ImportData: TImportData
     UpdateOptions.KeyFields = 'ContactNumID'
     TableName = 'SCM_Coach.dbo.ContactNum'
     Left = 376
-    Top = 312
+    Top = 336
   end
   object tblRaceHistory: TFDTable
     ActiveStoredUsage = [auDesignTime]
@@ -105,7 +105,7 @@ object ImportData: TImportData
     UpdateOptions.KeyFields = 'RaceHistoryID'
     TableName = 'SCM_Coach.dbo.RaceHistory'
     Left = 376
-    Top = 376
+    Top = 392
   end
   object qryContactNum: TFDQuery
     ActiveStoredUsage = [auDesignTime]
@@ -124,7 +124,7 @@ object ImportData: TImportData
       ''
       'SELECT * FROM [dbo].[ContactNum] WHERE [MemberID] = @MemberID;')
     Left = 96
-    Top = 368
+    Top = 208
     ParamData = <
       item
         Name = 'MEMBERID'
@@ -142,42 +142,80 @@ object ImportData: TImportData
     UpdateOptions.EnableInsert = False
     UpdateOptions.EnableUpdate = False
     SQL.Strings = (
-      'Use SwimClubMeet;'
+      'USE SwimClubMeet;'
       ''
       'DECLARE @MemberID AS INTEGER;'
+      'DECLARE @SeedDate AS DATETIME;'
+      'DECLARE @DoRange AS BIT = 0;'
       ''
       'SET @MemberID = :MEMBERID;'
+      'SET @SeedDate = :SEEDDATE;'
+      'SET @DoRange = :DORANGE;'
+      ''
+      'IF (@SeedDate IS NULL)'
+      '    SET @SeedDate = GETDATE();'
+      ''
       ''
       'SELECT SessionStart'
-      ',[Session].Caption AS SessionStr'
-      ', CONCAT(Distance.Caption, '#39' '#39', Stroke.Caption) as EventStr'
-      ', Entrant.RaceTime'
-      ', [Distance].DistanceID'
-      ', [Stroke].StrokeID'
-      ', [Entrant].EntrantID'
-      ',[Entrant].IsDisqualified'
-      ',[Entrant].IsScratched'
-      ',[Entrant].Lane'
+      '     , [Session].Caption AS SessionStr'
+      '     , CONCAT(Distance.Caption, '#39' '#39', Stroke.Caption) AS EventStr'
+      '     , Entrant.RaceTime'
+      '     , [Distance].DistanceID'
+      '     , [Stroke].StrokeID'
+      '     , [Entrant].EntrantID'
+      '     , [Entrant].IsDisqualified'
+      '     , [Entrant].IsScratched'
+      '     , [Entrant].Lane'
       '-- PoolType'
       '-- NumOfLanes'
       '-- LenOfPool (Metres)'
-      ' FROM [Session]'
-      'LEFT JOIN [Event] ON [Session].[SessionID] = [Event].[SessionID]'
-      'LEFT JOIN [Stroke] on [Event].StrokeID = Stroke.StrokeID'
-      'LEFT JOIN [Distance] on [Event].DistanceID = Distance.DistanceID'
-      
-        'LEFT JOIN [HeatIndividual] ON [Event].[EventID] = [HeatIndividua' +
-        'l].[EventID]'
-      'LEFT JOIN [Entrant] ON HeatIndividual.HeatID = [Entrant].HeatID'
-      'WHERE [Entrant].[MemberID] = @MemberID;')
+      'FROM [Session]'
+      '    LEFT JOIN [Event]'
+      '        ON [Session].[SessionID] = [Event].[SessionID]'
+      '    LEFT JOIN [Stroke]'
+      '        ON [Event].StrokeID = Stroke.StrokeID'
+      '    LEFT JOIN [Distance]'
+      '        ON [Event].DistanceID = Distance.DistanceID'
+      '    LEFT JOIN [HeatIndividual]'
+      '        ON [Event].[EventID] = [HeatIndividual].[EventID]'
+      '    LEFT JOIN [Entrant]'
+      '        ON HeatIndividual.HeatID = [Entrant].HeatID'
+      'WHERE [Entrant].[MemberID] = @MemberID'
+      '      AND'
+      '      ('
+      '          ('
+      '              @DoRange = 1'
+      '              AND SessionStart > @SeedDate'
+      '          )'
+      '          OR'
+      '          ('
+      '              @DoRange = 0'
+      '              AND SessionStart > 0'
+      '          )'
+      '      );'
+      ''
+      ''
+      '')
     Left = 96
-    Top = 440
+    Top = 256
     ParamData = <
       item
         Name = 'MEMBERID'
         DataType = ftInteger
         ParamType = ptInput
         Value = Null
+      end
+      item
+        Name = 'SEEDDATE'
+        DataType = ftDateTime
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'DORANGE'
+        DataType = ftBoolean
+        ParamType = ptInput
+        Value = False
       end>
   end
   object tblRaceHistorySplit: TFDTable
@@ -187,7 +225,7 @@ object ImportData: TImportData
     UpdateOptions.KeyFields = 'RaceHistorySplitID'
     TableName = 'SCM_Coach.dbo.RaceHistorySplit'
     Left = 376
-    Top = 440
+    Top = 448
   end
   object qryIsDupRaceHistory: TFDQuery
     ActiveStoredUsage = [auDesignTime]
@@ -202,7 +240,7 @@ object ImportData: TImportData
       'FROM RaceHistory'
       'WHERE EntrantID = @EntrantID;')
     Left = 376
-    Top = 192
+    Top = 144
     ParamData = <
       item
         Name = 'ENTRANTID'
@@ -229,11 +267,42 @@ object ImportData: TImportData
       ', SplitTime'
       'FROM dbo.Split'
       'WHERE EntrantID = @EntrantID;')
-    Left = 88
-    Top = 520
+    Left = 96
+    Top = 304
     ParamData = <
       item
         Name = 'ENTRANTID'
+        DataType = ftInteger
+        ParamType = ptInput
+        Value = Null
+      end>
+  end
+  object qryMaxRaceHistory: TFDQuery
+    ActiveStoredUsage = [auDesignTime]
+    IndexFieldNames = 'EntrantID'
+    Connection = TestSCMConnection
+    UpdateOptions.AssignedValues = [uvEDelete, uvEInsert, uvEUpdate]
+    UpdateOptions.EnableDelete = False
+    UpdateOptions.EnableInsert = False
+    UpdateOptions.EnableUpdate = False
+    SQL.Strings = (
+      'USE SCM_Coach;'
+      ''
+      'DECLARE @HRID AS INTEGER;'
+      'SET @HRID = :HRID '
+      ''
+      'SELECT TOP 1'
+      '       EntrantID'
+      '     , CreatedOn'
+      'FROM [SCM_Coach].[dbo].[RaceHistory]'
+      'WHERE HRID = @HRID'
+      'ORDER BY EntrantID DESC'
+      '       , CreatedOn DESC')
+    Left = 376
+    Top = 96
+    ParamData = <
+      item
+        Name = 'HRID'
         DataType = ftInteger
         ParamType = ptInput
         Value = Null

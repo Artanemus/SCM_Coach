@@ -24,6 +24,7 @@ type
     qryRaceHistory: TFDQuery;
     tblRaceHistorySplit: TFDTable;
     qrySplit: TFDQuery;
+    qryMaxRaceHistory: TFDQuery;
   private
     { Private declarations }
     fscmConnection: TFDConnection;
@@ -34,6 +35,10 @@ type
     function HasFieldMiddleInitial: boolean;
     function Locate_scmMember(scmMemberID: integer): integer;
 
+    // UPDATE - EXTENDED SUB-FUNCTIONS
+    function uInsertRaceHistory(HRID, scmMemberID: integer): boolean;
+    function uDeleteRaceHistory(RaceHistoryID: integer): boolean;
+
   public
     { Public declarations }
     constructor CreateWithConnection(AOwner: TComponent;
@@ -43,8 +48,8 @@ type
     // rtns SCM_Coach HRID
     function InsertMember(scmMemberID: integer): integer;
     // rtns count of races added
-    function InsertRaceHistory(HRID, scmMemberID: integer;
-      DoSplit: boolean = true): integer;
+    function InsertRaceHistory(HRID, scmMemberID: integer; ASeedDate: variant;
+      DoSplit: boolean = true; DoRange: boolean = false): integer;
     // rtns count of contacts added
     function InsertContacts(HRID, scmMemberID: integer): integer;
 
@@ -52,8 +57,7 @@ type
     // rtns SCM_Coach success
     function UpdateHR(scmMemberID: integer): boolean;
     // rtns count of races updated
-    function UpdateRaceHistory(scmMemberID: integer;
-      DoSplit: boolean): integer;
+    function UpdateRaceHistory(scmMemberID: integer; DoSplit: boolean): integer;
     // rtns count of contacts updated
     function UpdateContacts(scmMemberID: integer): integer;
 
@@ -289,7 +293,8 @@ begin
 end;
 
 function TImportData.InsertRaceHistory(HRID, scmMemberID: integer;
-      DoSplit: boolean = true): integer;
+  ASeedDate: variant; DoSplit: boolean = true;
+  DoRange: boolean = false): integer;
 var
   IDENT, scmEntrantID: integer;
   SQL: string;
@@ -301,12 +306,14 @@ begin
   // Pull race history from SwimClubMeet
   qryRaceHistory.Connection := fscmConnection;
   qryRaceHistory.ParamByName('MEMBERID').AsInteger := scmMemberID;
-  {TODO -oBSA -cGeneral :
-    Insert only records after specific TDateTime
-  qryRaceHistory.ParamByName('FROMDT').AsDateTime := ADateTime;
-  qryRaceHistory.ParamByName('DORANGE').AsBoolean := DoRange;
-    }
-  {TODO -oBSA -cGeneral : Insert all race-data columns.}
+
+  // query will use defaults and ignore select after seed-date.
+  if DoRange then
+  begin
+    qryRaceHistory.ParamByName('SEEDATE').AsDateTime := TDateTime(ASeedDate);
+    qryRaceHistory.ParamByName('DORANGE').AsBoolean := DoRange;
+  end;
+
   qryRaceHistory.Prepare;
   qryRaceHistory.Open;
 
@@ -455,21 +462,38 @@ begin
     result := true;
 end;
 
+function TImportData.uDeleteRaceHistory(RaceHistoryID: integer): boolean;
+begin
+
+end;
+
+function TImportData.uInsertRaceHistory(HRID, scmMemberID: integer): boolean;
+begin
+
+end;
+
 function TImportData.UpdateContacts(scmMemberID: integer): integer;
 var
-HRID: integer;
+  HRID: integer;
+  SQL: TStrings; // for code readability
 begin
   if not AssertConnection then
     exit;
   HRID := Locate_scmMember(scmMemberID);
-  if (HRID = 0) then
-    exit;
-  // remove all contact details
-  fcoachConnection.ExecSQLScalar
-    ('DELETE FROM tblContactNum WHERE SCM_Coach.dbo.HRID = :ID',
-    [HRID]);
-  // insert contact details
-  result := InsertContacts(HRID, scmMemberID);
+  // QUICK TRASH AND BURN ...
+  // NOTE: Only SwimClubMeet contacts will be deleted. (INNER JOIN)
+  // User defined contacts remain.
+  if (HRID > 0) then
+  Begin
+    SQL := TStrings.Create;
+    SQL.Add('DELETE FROM tblContactNum ');
+    SQL.Add('INNER JOIN dbo.HR ON ContactNum.HRID = HR.HRID ');
+    SQL.Add('WHERE SCM_Coach.dbo.HRID = :ID ');
+    fcoachConnection.ExecSQLScalar(SQL.Text, [HRID]);
+    // insert SwimClubMeet contact details for the given MemberID.
+    result := InsertContacts(HRID, scmMemberID);
+    SQL.Free;
+  End;
 end;
 
 function TImportData.UpdateHR(scmMemberID: integer): boolean;
@@ -502,7 +526,8 @@ end;
 function TImportData.UpdateRaceHistory(scmMemberID: integer;
   DoSplit: boolean): integer;
 var
-HRID: integer;
+  HRID, EntrantID: integer;
+  CreatedOn: TDateTime;
 begin
   result := 0;
   if not AssertConnection then
@@ -510,17 +535,20 @@ begin
   HRID := Locate_scmMember(scmMemberID);
   if (HRID = 0) then
     exit;
-  {TODO -oBSA -cGeneral :
-    Update only changed race-history events.
-    Retrieve last race-history record's DateTime.
-    Insert after DateTime.
-  }
-  // QUICK TRASH AND BURN ... remove all race-history
-  fcoachConnection.ExecSQLScalar
-    ('DELETE FROM tblRaceHistory WHERE SCM_Coach.dbo.HRID = :ID',
-    [HRID]);
-  // insert race history details
-  InsertRaceHistory(scmMemberID, HRID, true);
+  // Retrieve the last swimming event sum by the HR.
+  qryMaxRaceHistory.Connection := fcoachConnection;
+  qryMaxRaceHistory.ParamByName('HRID').AsInteger := HRID;
+  qryMaxRaceHistory.Prepare;
+  qryMaxRaceHistory.Open;
+  if not qryMaxRaceHistory.Active or qryMaxRaceHistory.IsEmpty then
+    exit;
+  CreatedOn := qryMaxRaceHistory.FieldByName('CreatedOn').AsDateTime;
+  // ASSERT NO DUPLICATE ENTRANTID's?
+  // EntrantID := qryMaxRaceHistory.FieldByName('EntrantID').AsInteger;
+  qryMaxRaceHistory.Close;
+  // Insert any race-history swum after seed-date.
+  InsertRaceHistory(HRID, scmMemberID, CreatedOn, true, true);
+  qryMaxRaceHistory.Close;
 end;
 
 function TImportData.IsDupRaceHistory(EntrantID: integer): boolean;
@@ -539,7 +567,6 @@ begin
     end;
     qryIsDupRaceHistory.Close;
   end;
-
 end;
 
 function TImportData.Locate_scmMember(scmMemberID: integer): integer;
@@ -559,7 +586,7 @@ begin
       LocateSuccess := false;
   end;
   if LocateSuccess then
-    result := tblHr.FieldByName('HRID').AsInteger;
+    result := tblHR.FieldByName('HRID').AsInteger;
 end;
 
 end.
