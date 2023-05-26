@@ -13,7 +13,6 @@ uses
 type
   TImportData = class(TDataModule)
     TestSCMConnection: TFDConnection;
-    qryIsDupRaceHistory: TFDQuery;
     qryCheckMiddleInitial: TFDQuery;
     tblHR: TFDTable;
     TestCoachConnection: TFDConnection;
@@ -65,7 +64,7 @@ type
     function AssertUnique(scmMemberID: integer): boolean;
     // IDENTITY LOOKUP
     function MemberExistsSCM_Coach(scmMemberID: integer): boolean;
-    function IsDupRaceHistory(EntrantID: integer): boolean;
+    function EntrantIDExists(HRID, EntrantID: integer): boolean;
 
     function MemberExistsSwimClubMeet(scmMemberID: integer): boolean;
 
@@ -324,7 +323,7 @@ begin
       // test for duplicity ... (using EntrantID)
       scmEntrantID := qryRaceHistory.FieldByName('EntrantID').AsInteger;
       // does the entrant ID (swimming race) already exists
-      if (scmEntrantID <> 0) AND (not IsDupRaceHistory(scmEntrantID)) then
+      if (scmEntrantID <> 0) AND (not EntrantIDExists(HRID, scmEntrantID)) then
       begin
         tblRaceHistory.Insert;
         tblRaceHistory.FieldByName('HRID').AsInteger := HRID;
@@ -481,15 +480,15 @@ begin
     exit;
   HRID := Locate_scmMember(scmMemberID);
   // QUICK TRASH AND BURN ...
-  // NOTE: Only SwimClubMeet contacts will be deleted. (INNER JOIN)
-  // User defined contacts remain.
+  // Only SwimClubMeet contacts will be deleted. User defined contacts remain.
   if (HRID > 0) then
   Begin
     SQL := TStrings.Create;
-    SQL.Add('DELETE FROM tblContactNum ');
+    SQL.Add('USE  SCM_Coach;');
+    SQL.Add('DELETE FROM SCM_Coach.dbo.tblContactNum ');
     SQL.Add('INNER JOIN dbo.HR ON ContactNum.HRID = HR.HRID ');
-    SQL.Add('WHERE SCM_Coach.dbo.HRID = :ID ');
-    fcoachConnection.ExecSQLScalar(SQL.Text, [HRID]);
+    SQL.Add('WHERE ContactNum.HRID = :ID AND HR.SCMMmberID IS NOT NULL;');
+    fcoachConnection.ExecSQL(SQL.Text, [HRID]);
     // insert SwimClubMeet contact details for the given MemberID.
     result := InsertContacts(HRID, scmMemberID);
     SQL.Free;
@@ -535,7 +534,7 @@ begin
   HRID := Locate_scmMember(scmMemberID);
   if (HRID = 0) then
     exit;
-  // Retrieve the last swimming event sum by the HR.
+  // Retrieve the most recent event data for the HR (held in COACH).
   qryMaxRaceHistory.Connection := fcoachConnection;
   qryMaxRaceHistory.ParamByName('HRID').AsInteger := HRID;
   qryMaxRaceHistory.Prepare;
@@ -543,29 +542,29 @@ begin
   if not qryMaxRaceHistory.Active or qryMaxRaceHistory.IsEmpty then
     exit;
   CreatedOn := qryMaxRaceHistory.FieldByName('CreatedOn').AsDateTime;
-  // ASSERT NO DUPLICATE ENTRANTID's?
-  // EntrantID := qryMaxRaceHistory.FieldByName('EntrantID').AsInteger;
   qryMaxRaceHistory.Close;
+  // DUPLICATE ENTRANTID's are asserted in Procedure.
   // Insert any race-history swum after seed-date.
   InsertRaceHistory(HRID, scmMemberID, CreatedOn, true, true);
-  qryMaxRaceHistory.Close;
 end;
 
-function TImportData.IsDupRaceHistory(EntrantID: integer): boolean;
+function TImportData.EntrantIDExists(HRID, EntrantID: integer): boolean;
+var
+  SQL: TStrings; // for code readability
+  v: Variant;
 begin
-  result := true;
+  result := false;
   if Assigned(fcoachConnection) AND fcoachConnection.Connected then
   begin
-    qryIsDupRaceHistory.Connection := fcoachConnection;
-    qryIsDupRaceHistory.ParamByName('ENTRANTID').AsInteger := EntrantID;
-    qryIsDupRaceHistory.Prepare;
-    qryIsDupRaceHistory.Open;
-    if qryIsDupRaceHistory.Active then
-    begin
-      if (qryIsDupRaceHistory.FieldByName('rtnValue').AsInteger = 0) then
-        result := false;
-    end;
-    qryIsDupRaceHistory.Close;
+    SQL := TStrings.Create;
+    SQL.Add('USE  SCM_Coach;');
+    SQL.Add('SELECT COUNT(dbo.RaceHistory.RaceHistoryID) ');
+    SQL.Add('FROM dbo.RaceHistory ');
+    SQL.Add('WHERE EntrantID = :EntrantID AND HRID = :HRID;');
+    v := fcoachConnection.ExecSQLScalar(SQL.Text, [EntrantID, HRID]);
+    if (CnvVarToInt(v) > 0) then
+      result := true;
+    SQL.Free;
   end;
 end;
 

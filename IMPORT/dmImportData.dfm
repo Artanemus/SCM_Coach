@@ -227,28 +227,6 @@ object ImportData: TImportData
     Left = 376
     Top = 448
   end
-  object qryIsDupRaceHistory: TFDQuery
-    ActiveStoredUsage = [auDesignTime]
-    Connection = TestSCMConnection
-    SQL.Strings = (
-      'USE SCM_Coach ;'
-      ''
-      'DECLARE @EntrantID AS INTEGER;'
-      'SET @EntrantID = :ENTRANTID;'
-      ''
-      'SELECT COUNT(RaceHistoryID) AS rtnValue'
-      'FROM RaceHistory'
-      'WHERE EntrantID = @EntrantID;')
-    Left = 376
-    Top = 144
-    ParamData = <
-      item
-        Name = 'ENTRANTID'
-        DataType = ftInteger
-        ParamType = ptInput
-        Value = Null
-      end>
-  end
   object qrySplit: TFDQuery
     ActiveStoredUsage = [auDesignTime]
     IndexFieldNames = 'SplitID'
