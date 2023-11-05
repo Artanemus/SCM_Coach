@@ -1,0 +1,61 @@
+PREAMBLE
+BLOCK 6 OF 20
+Full set of session scripts can be found at:
+    https://github.com/Artanemus/SCM_Coach/tree/main/ASSETS/TXT_PlayScripts
+
+Boonah Swimming Club weekly focus - 200M Freestyle.
+As of 20231105 no swimmers have committed to Woogaroo Sat 18th November 2023.
+------------------------------------------------------------------------------
+
+BOONAH SWIMMING POOL 
+Solar heated pool.
+LENGTH 25M. (with starter blocks)
+SQUAD uses 3 lanes of 8. (wit: 2 full sized lanes)
+Lanes are undersized.
+OVERCAST RAIN MAX 24
+WATER TEMP expect.23C
+
+JUNIORS 20231106 3.30pm 1HR
+(session may run short due to water temp)
+----------------------
+SWIM +500M
+KEEP-THEM-MOVING STAY WARM
+ATTENDEES varies 10-20 per session
+FOCUS: MIN DRILLS - A SWIMMING SESSION
+
+1x100M FS
+    - not sure : use fins
+4x50M IM +fins
+    - BF/BK/BS/FS
+    - dolphin kick for BS
+    - change stroke @15M
+4x25M FS r:15s
+2x25M BS r:15s
+DRILL 
+2x25M FS 2+6
+    - 2 strokes 
+    - streamline
+    - 6 kicks
+
+FS turns
+
+INTERMEDIATES 20231106 4.30pm 1 - 1.15HR
+----------------------
+SWIM 2K
+KEEP-THEM-MOVING STAY WARM
+ATTENDEES varies 10-20+ per session
+FOCUS: MIN DRILLS - A SWIMMING SESSION
++ ROUND ROBIN
+
+1x300M FS EASY
+6x50M Kick 
+    - 2 x {2xFS + 1xY-Choice}
+8x25M DRIM  
+    - 2 x {FS/BS/BK/BF} 
+    r:10s on each lap 
+    r:20s on each set
+1x200M Pull +Pad +P/Buoy
+4x100 FS e:2.00
+4x100 IM r:20s
+1x200M FS
+

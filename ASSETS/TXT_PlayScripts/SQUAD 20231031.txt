@@ -6,7 +6,7 @@ Focus Round-Robin 800M
 
 2x50M BK 
 2x50M BS 
-4x25M BS kick/B +fins streamline 
+4x25M BK kick +fins streamline 
 4x25M Dolphin kick/B +fins
 4x50M FS pull +paddles
 2x50M BS kick/B 
