@@ -1,0 +1,55 @@
+JUNIORS 20231122 3.30pm 1HR
+---------------------------
+1x100M FS
+
+2x75M KICK +k/Board r:20
+    1xfs/1xbs/1xfs
+1x50 BK KICK streamline r:15
+
+Dolphin kick 101 +fins
+push off
+    - prone,supine,l.side,r.side
+block start
+    - bf-prone
+    - bk-supine
+
+2xSET
+{
+    2X25m KICK +k/Board
+        - ODD FS
+        - EVEN BS
+    4x25M FS r:15s   
+        - ODD fast 
+        - EVEN medium
+    2x25M BK kick streamline +p/buoy (as kickboard)
+    2x25M BK r:10s
+}
+
+2x50 BS CD
+
+
+
+INTERMEDIATES 20231122 4.30pm 1HR
+---------------------------
+1x200M BS EASY
+1x200M BK EASY
+
+2x25M BF +fins single arm stroke - break to side
+2x25M BF +fins single arm stroke - break to front
+4x50M BF +fins
+
+2x100M FS pull +p/buoy
+
+4x50M BK e:1.10
+4x50M BS e:1.15
+
+Dolphin kick 101
+push off
+    - prone,supine,l.side,r.side
+block start
+    - bf-prone
+    - bk-supine
+
+4x15M BF starts from blocks
+
+1x200M FS EASY
