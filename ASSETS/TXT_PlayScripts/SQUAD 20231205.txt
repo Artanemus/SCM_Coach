@@ -35,7 +35,7 @@ INTERMEDIATES 20231205 4.30pm 1HR
     -25M NON-FS
     -REPEAT  
 
-10x25M FS Block starts (timed)
+8x25M FS Block starts (timed)
     1-2 MEDIUM
     3-4 FAST
     5-6 FASTER
