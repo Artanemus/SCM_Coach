@@ -2,7 +2,7 @@ JUNIORS 20231120 3.30pm 1HR
 ---------------------------
 1x100M FS
 
-2x25M BF +fins r:15s
+4x25M BF +fins r:15s
 8x25M FIM KICK r:15s
     - 2xFS/2xBK/2xBS/2xFS
     - BK done streamline - no board
@@ -14,8 +14,9 @@ JUNIORS 20231120 3.30pm 1HR
 2x25M catchup +p/buoy
 
 BS TURNS
+BF UW dolphin kick
 
-2x25M FS easy 
+2x50M FS easy 
 
 
 INTERMEDIATES 20231120 4.30pm 1HR
@@ -26,8 +27,10 @@ INTERMEDIATES 20231120 4.30pm 1HR
 4x100M BK r:20s
 
 BS DRILLS
-2x50M BS one up (breath) one down r:15s
-2x50M BS streamline kick on back (no board) r:15s
+2x50M BS heel tag supine r:15s
+    - flexibility, knee placement
+4x50M BS 2 x kicks 1 x pull
+    - focus on rhythm
 
 4x50M BK kick streamline r:15s
 

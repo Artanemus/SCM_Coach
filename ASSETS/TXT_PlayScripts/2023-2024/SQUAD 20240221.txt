@@ -1,0 +1,46 @@
+JUNIORS
+2x50M BR
+
+2x50M BK DRILL side-kick+12 rotate + FINS
+2x50M BK DRILL 3 Strokes + 6 kicks rotate + FINS
+2x25M DRILL dolphin kick with BK arms r:15s
+    - one stroke for one dolphin kick + FINS
+
+2x75M FS
+4x50M BK
+
+2xSET KICK
+    - 1x25M FS KICK
+    - 1x25M BR KICK
+    - 1x25M FS KICK
+
+2x50M FLY KICK + FINS
+
+1x50M side-stroke
+
+1 1 1 .5 1.5 2 1.5 1 .5
+
+
+
+INTERMEDIATES
+1x200M BR
+
+1x100M BK PULL p/b opt.pad
+1x100M BK DRILL side-kick+12 rotate + FINS
+1x100M BK DRILL 3 Strokes + 6 kicks rotate + FINS
+
+4x100M SWIM r:20s
+    - alternate BK/FS on the 25M
+
+4x75M BK r:15s 
+    - dolphin kicks of the wall 
+    - 3(start of lap1 ),4(lap 2),5(lap 3)
+
+2x100M IM +FINS
+
+4x25M DRILL dolphin kick with BK arms r:15s
+    - one stroke for one dolphin kick
+
+1x200M FS c\d    
+
+2 1 1 1 4 3 2 1 2

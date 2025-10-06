@@ -1,0 +1,50 @@
+JUNIORS
+2x50M FS EASY
+2x25M FS zipper +using BOARD 
+2x25M BS KICK +K/BOARD prone
+2x25M FS catchup +using BOARD
+2x25M BS KICK +K/BOARD supine
+4x25M FS single arm pull +using BOARD. Switch half/w
+2x25M FS PULL P/Bouy
+2x25M FS catchup bi-Lateral
+
+8x25M SPRINT MIXED-UP
+
+INTERMEDIATED
+1x100M FS EASY
+2xSET r:30s on each set. r:10s on each EV
+{
+    1X25m FS KICK +k/Board 
+    1x25M BS KICK +k/Board 
+    2x50M FS 
+    2x25M BK kick streamline +p/buoy (as kickboard)
+    1x50M BK
+}
+6x50M BR PACE r:15s
+1x100M FS PULL
+4x50M BS PULL + Dolphin kick + fins
+4x25M BS PULL + Freestyle kick + fins + quick hands
+1x100M FS PULL
+4x25M BS FASTEST + BLOCK START
+1x100M FS EASY
+
+SENIOR
+WU
+    1x300M FS: Start slow, building up to a strong pace. Focus on long strokes and a steady breathing rhythm.
+DRILL
+    4x50M FS, 3-5-7 Breathing Pattern: Breathe every 3 strokes on 1st 50M, every 5 strokes on 2nd, and every 7 strokes on the last 2 (rest 10 seconds).
+    2x50M BK Kick, alternating side-to-side balance, smooth rotation (rest 10 seconds).
+    2x50M FLY Drill: Single arm FLY (focus on rhythm and breathing). FINS
+MAIN 1
+    2x200M FS @ Moderate Pace, last 50M of each 200M all-out sprint (rest 20 seconds between each).
+    2x100M BR @ Threshold, fast finish in the last 25M (rest 15 seconds).
+MAIN 2
+    4x50M FS Sprint from dive, focus on explosive starts and fast turns (rest 1 minute between each).
+    2x75M FS PULL with Paddles & Buoy, focus on strong catch and pull-through (rest 15 seconds).
+    ------------------------------------------------------------------
+    8x25M FS Sprint rest 20 seconds between each.
+CD
+    1x100M BK or FS easy
+
+
+   

@@ -1,0 +1,118 @@
+JUNIORS 1
+1x100M FS WU
+2xSET
+    4x25M KICK/B even BS odd FS
+    2x50M FS ZIPPER + PB
+2xSET
+    2x50M KICK/B DOLPHIN switch half/w FS
+    1x50M BK KICK Streamline
+2x50M FS PULL + PB
+4x25M 
+    odd BS SWIM
+    even BK SWIM
+PICK    
+    - 1x100M IM 
+    OR   
+    - 2x50M IM 
+
+1 4 3 1 1 1
+
+JUNIORS 2
+1x50M FS WU
+2x50M IM 
+2x25M KICK/B DOLPHIN switch half/w FS
+4x25M BS KICK/B even PRONE odd SUPINE
+4x25M FS PULL + PB
+2x25M FS ZIPPER
+4x25M FS SWIM
+2x25M BK KICK streamline
+4x25M BK SWIM
+
+.5 1 .5 1 1 .5 1 .5 1 
+
+INTERMEDIATES 
+1x300M FS or swim 8mins - what ever comes first
+2xSET
+    50m FS PULL + PB
+    50m BK streamline KICK
+1x100M FS PULL
+2xSET
+    50M FS KICK/B SLAP
+    50m BK streamline KICK
+1x100M FS PULL
+2xSET
+    50M BS KICK
+    50m BK streamline KICK
+1x100M FS PULL
+4x100M IM
+1x100M FS
+1x100M BK
+1x100M BS
+1x50M BF
+
+
+3 2 1 2 1 2 1 4 1 1 1 .5
+
+SENIORS 
+...
+
+Sebastian 1
+1x100M FS WU
+KICK-DRILL
+6x50M BS KICK PRONE
+4x50M FS SWIM e1:00
+4x50M BS PULL + FINS
+2x50M FS SWIM e1:00
+2x200M BS
+2xSET
+    50m FS PULL + PB
+    50m BK streamline kick
+
+4x100M BS
+1x100M FS CD
+
+1 3 2 2 1 4 2 4 1
+
+Sebastian 2
+1x200M BS WU
+4x100M BS e2.20
+2x100M IM 
+1x100M FS PULL
+2x100M BS KICK/B 
+1x100M FS PULL
+2x100M BS KICK/B 
+2x100M IM (with fins)
+2x100M BS PULL + FINS
+1x200M FS CD
+
+2 4 2 1 2 1 2 2
+
+Sebastian 3
+1x100M FS W/U
+2xSETS
+    PULL 
+        4x25M Rubber/ring BS PULL
+    KICK 
+        2x100M BS KICK/B
+1x200M IM 
+2x100M FS PULL
+4x100M BS SWIM e2.20
+6x50M BS e1.20
+4x25M BS e0.40
+1x100M FS C/D
+
+1 6 2 2 4 5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
